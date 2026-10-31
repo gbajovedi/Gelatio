@@ -572,7 +572,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 
                 <div className="space-y-3.5">
                   {/* Meta Badges (Category & Custom & Variegato & Warning) */}
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center justify-between gap-2 min-h-[32px]">
                     <CategoryBadge category={recipe.category} />
 
                     <div className="flex items-center gap-1.5 flex-wrap">
@@ -607,12 +607,12 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                     </div>
                   </div>
 
-                  {/* Recipe Title: 100% full width, no line-clamp truncation */}
+                  {/* Recipe Title: Altura mínima para 2 linhas garantindo alinhamento uniforme do cockpit de dados */}
                   <h3
-                    className="font-bold text-base sm:text-lg text-white group-hover:text-amber-200 transition-colors leading-snug break-words"
+                    className="font-bold text-base sm:text-lg text-white group-hover:text-amber-200 transition-colors leading-snug break-words min-h-[2.85rem] sm:min-h-[3.35rem] flex items-start"
                     title={recipe.name}
                   >
-                    {recipe.name}
+                    <span>{recipe.name}</span>
                   </h3>
 
                   {/* Micro-Dashboard de Métricas Técnicas */}
