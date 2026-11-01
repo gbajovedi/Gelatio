@@ -211,26 +211,26 @@
     "name": "Gelatos Proteicos",
     "pacDivisor": 25,
     "min": {
-      "sugars": 0.06,
-      "fat": 0.03,
+      "sugars": 0,
+      "fat": 0.04,
       "msnf": 0.065,
       "otherSolids": 0.04,
       "totalSolids": 0.36,
       "water": 0.56,
-      "pod": 115,
-      "pac": 235,
+      "pod": 110,
+      "pac": 250,
       "protein": 0.08
     },
     "max": {
-      "sugars": 0.16,
-      "fat": 0.065,
-      "msnf": 0.12,
-      "otherSolids": 0.18,
+      "sugars": 0.21,
+      "fat": 0.075,
+      "msnf": 0.125,
+      "otherSolids": 0.25,
       "totalSolids": 0.44,
       "water": 0.64,
-      "pod": 170,
-      "pac": 290,
-      "protein": 0.115
+      "pod": 220,
+      "pac": 340,
+      "protein": 0.105
     }
   },
   "Sorbets Cítricos / Frutas Ácidas": {
