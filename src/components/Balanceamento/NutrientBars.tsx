@@ -7,7 +7,6 @@ import {
   ArrowDownCircle,
   ArrowUpCircle,
   Check,
-  Sparkles,
   Info,
   AlertTriangle,
   Store,
@@ -686,53 +685,6 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
                   </span>
                 </div>
               ))}
-            </div>
-
-            {/* Smart Culinary Advice */}
-            <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-700/80 text-xs text-slate-300 flex items-start gap-2.5">
-              <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <strong className="text-amber-300 font-bold block">
-                  Dica do Mestre Gelatiere para Calibração Rápida:
-                </strong>
-                <p className="text-slate-300 leading-relaxed">
-                  {validations.pac.status === 'Baixo' && (
-                    <span>
-                      • <strong>PAC Baixo:</strong> Substitua uma fração do Açúcar Sacarose por Dextrose (cada 10g de Dextrose aumentam ~19 pontos de PAC mantendo sólidos e reduzindo o dulçor).{' '}
-                    </span>
-                  )}
-                  {validations.pac.status === 'Alto' && (
-                    <span>
-                      • <strong>PAC Alto:</strong> Reduza a Dextrose ou reduza açúcares totais para evitar que o gelato derreta rápido na vitrine.{' '}
-                    </span>
-                  )}
-                  {validations.fat.status === 'Baixo' && (
-                    <span>
-                      • <strong>Gordura Baixa:</strong> Aumente o Creme de Leite 35% ou adicione manteiga/pasta oleaginosa para trazer cremosidade.{' '}
-                    </span>
-                  )}
-                  {validations.fat.status === 'Alto' && (
-                    <span>
-                      • <strong>Gordura Alta:</strong> Substitua parte do Creme de Leite por Leite Integral para manter a calda fluida.{' '}
-                    </span>
-                  )}
-                  {validations.totalSolids.status === 'Baixo' && (
-                    <span>
-                      • <strong>Sólidos Totais Baixos:</strong> Aumente o Leite em Pó Desnatado ou açúcares para evitar formação de cristais de gelo.{' '}
-                    </span>
-                  )}
-                  {corvitto?.neededPacForFreezer && corvitto.neededPacForFreezer > 0 && (
-                    <span>
-                      • <strong>Dica Corvitto para Potes de Entrega / Freezer Doméstico (-18°C):</strong> {corvitto.freezerAdvice}{' '}
-                    </span>
-                  )}
-                  {emulsion && emulsion.status === 'gorduroso' && (
-                    <span>
-                      • <strong>Estabilidade de Emulsão (Carpigiani):</strong> {emulsion.advice}{' '}
-                    </span>
-                  )}
-                </p>
-              </div>
             </div>
           </div>
         )}
