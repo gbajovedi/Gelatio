@@ -241,17 +241,6 @@ export function calculateBatchAnalysis(
     }
   }
 
-  // Allergens Label
-  let allergensLabel = "";
-  if (allergenItems.length > 0) {
-    const uniqueAllergens = Array.from(new Set(allergenItems)).join(", ");
-    allergensLabel = `CONTÉM: ${uniqueAllergens}.`;
-  } else {
-    allergensLabel = "NÃO CONTÉM ALERGÊNICOS DIRETOS.";
-  }
-  allergensLabel += containsLactose ? " CONTÉM LACTOSE." : " NÃO CONTÉM LACTOSE.";
-  allergensLabel += containsGluten ? " CONTÉM GLÚTEN." : " NÃO CONTÉM GLÚTEN.";
-
   // Post-Production (Variegatos / Mesclas) & Costing
   let totalVariegatoGrams = 0;
   let totalVariegatoCost = 0;
@@ -262,7 +251,40 @@ export function calculateBatchAnalysis(
     const ing = ingredientsMap.get(v.name.toLowerCase().trim());
     const costKg = v.costKg ?? (ing ? ing.costKg : 0);
     totalVariegatoCost += (v.grams * costKg) / 1000;
+
+    if (ing) {
+      if (ing.hasAllergen || /(leite|creme|queijo|nozes|amendoim|avelã|castanha|pistache|amêndoa|soja|ovo|glúten|trigo|nutella|brigadeiro|doce de leite)/i.test(ing.name)) {
+        allergenItems.push(ing.name.toUpperCase());
+      }
+      if (ing.msnf > 0 || /leite|creme|queijo|lactose/i.test(ing.name)) {
+        containsLactose = true;
+      }
+      if (/(trigo|croissant|biscoff|biscoito|panettone|aveia|sucrilhos|ovomaltine|malte)/i.test(ing.name)) {
+        containsGluten = true;
+      }
+    } else {
+      if (/(leite|creme|queijo|nozes|amendoim|avelã|castanha|pistache|amêndoa|soja|ovo|glúten|trigo|nutella|brigadeiro|doce de leite)/i.test(v.name)) {
+        allergenItems.push(v.name.toUpperCase());
+      }
+      if (/leite|creme|queijo|lactose/i.test(v.name)) {
+        containsLactose = true;
+      }
+      if (/(trigo|croissant|biscoff|biscoito|panettone|aveia|sucrilhos|ovomaltine|malte)/i.test(v.name)) {
+        containsGluten = true;
+      }
+    }
   }
+
+  // Allergens Label (Consolidado: Calda Base + Mesclas Pós-Produção)
+  let allergensLabel = "";
+  if (allergenItems.length > 0) {
+    const uniqueAllergens = Array.from(new Set(allergenItems)).join(", ");
+    allergensLabel = `CONTÉM: ${uniqueAllergens}.`;
+  } else {
+    allergensLabel = "NÃO CONTÉM ALERGÊNICOS DIRETOS.";
+  }
+  allergensLabel += containsLactose ? " CONTÉM LACTOSE." : " NÃO CONTÉM LACTOSE.";
+  allergensLabel += containsGluten ? " CONTÉM GLÚTEN." : " NÃO CONTÉM GLÚTEN.";
 
   const finalWeightGrams = totalCaldaGrams + totalVariegatoGrams;
   const totalBatchCost = totalCost + totalVariegatoCost;
