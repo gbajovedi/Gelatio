@@ -9,7 +9,9 @@ import {
   Store,
   Package,
   Snowflake,
-  Wind
+  Wind,
+  ShieldCheck,
+  Info
 } from 'lucide-react';
 
 interface NutrientBarsProps {
@@ -123,6 +125,7 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
 export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
   const { validations, isBalanced, servingTemperature } = analysis;
   const [thermalMode, setThermalMode] = useState<'vitrine' | 'freezer'>('vitrine');
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
   const corvitto = analysis.corvittoMetrics;
   const sandiness = analysis.sandinessRisk;
   const emulsion = analysis.emulsionMetrics;
@@ -160,6 +163,121 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
     freezerVerdictBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
   }
 
+  const renderCardHeaderTooltip = (
+    key: string,
+    meta: NutrientMeta,
+    valItem: NutrientValidation,
+    displayVal: string
+  ) => {
+    let icon = <Info className="w-3.5 h-3.5 text-slate-400 hover:text-slate-200 transition-colors" />;
+    let tooltipTitle = meta.label;
+    let tooltipBody = meta.description;
+    let tooltipExtra: React.ReactNode = null;
+    let isAlert = false;
+
+    if (key === 'msnf' && sandiness) {
+      if (sandiness.isAtRisk) {
+        isAlert = true;
+        icon = (
+          <span className="p-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/50 animate-pulse flex items-center">
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+          </span>
+        );
+        tooltipTitle = 'Alerta de Arenosidade (Caviezel)';
+        tooltipBody = `O teor de SLNG (${displayVal}%) excede o limite seguro de ${(sandiness.maxSafeMsnf * 100).toFixed(1)}% para a água disponível. Sob oscilação térmica na vitrine, a lactose pode precipitar em microcristais.`;
+        tooltipExtra = (
+          <div className="mt-2 pt-1.5 border-t border-amber-500/30 text-[11px] text-amber-300 font-medium">
+            <strong>Ação recomendada:</strong> Reduza leite em pó ou eleve a proporção de leite integral/água.
+          </div>
+        );
+      } else if (valItem.val > 0.03) {
+        icon = (
+          <span className="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center" title="Protegido contra arenosidade">
+            <ShieldCheck className="w-3.5 h-3.5" />
+          </span>
+        );
+        tooltipTitle = 'Proteção Anti-Arenosidade';
+        tooltipBody = `SLNG (${displayVal}%) está seguro dentro do teto seguro de ${(sandiness.maxSafeMsnf * 100).toFixed(1)}% para a água disponível. A lactose permanecerá estável em solução.`;
+      }
+    } else if (key === 'fat' && emulsion && emulsion.status !== 'sorbet') {
+      icon = (
+        <span className="text-purple-400/90 hover:text-purple-300 transition-colors flex items-center" title="Razão Lipídica Carpigiani">
+          <Wind className="w-3.5 h-3.5" />
+        </span>
+      );
+      tooltipTitle = 'Razão Lipídica (Gordura : SLNG)';
+      tooltipBody = `Proporção atual de ${emulsion.fatMsnfRatio} : 1 (faixa ideal: 0.75 a 1.25). Estimativa de aeração calculada em ~${emulsion.overrunEstimatePct}% de ar.`;
+      tooltipExtra = (
+        <div className="mt-2 pt-1.5 border-t border-purple-500/30 text-[11px] text-purple-300">
+          Consulte o card <em>Emulsão & Overrun</em> logo acima para o diagnóstico completo e gráfico de aeração.
+        </div>
+      );
+    } else if (key === 'pac' && corvitto) {
+      icon = (
+        <span className="text-cyan-400/90 hover:text-cyan-300 transition-colors flex items-center" title="PAC na Água Livre (Corvitto)">
+          <Snowflake className="w-3.5 h-3.5" />
+        </span>
+      );
+      tooltipTitle = 'PAC na Água Livre (Corvitto)';
+      tooltipBody = `Índice de ${corvitto.pacWater} PAC por kg de água pura disponível. Diagnóstico atual: ${corvitto.freezerLabel}.`;
+      tooltipExtra = (
+        <div className="mt-2 pt-1.5 border-t border-cyan-500/30 text-[11px] text-cyan-300">
+          Alterne para a aba <em>Pote Freezer (-18°C)</em> no painel acima para calibrar receitas de entrega/delivery.
+        </div>
+      );
+    }
+
+    const isRightCol = key === 'pac' || key === 'otherSolids';
+
+    return (
+      <div className="relative inline-flex items-center group/tip">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setActiveTooltip(prev => prev === key ? null : key);
+          }}
+          className="cursor-pointer focus:outline-none flex items-center p-0.5 rounded transition-transform active:scale-95"
+          title={tooltipTitle}
+          aria-label={tooltipTitle}
+        >
+          {icon}
+        </button>
+
+        {/* Floating Tooltip Dropdown */}
+        <div
+          onMouseLeave={() => setActiveTooltip(null)}
+          className={`absolute top-full mt-2 ${
+            isRightCol ? 'right-0' : 'left-0'
+          } ${
+            activeTooltip === key
+              ? 'opacity-100 pointer-events-auto scale-100'
+              : 'opacity-0 pointer-events-none group-hover/tip:opacity-100 group-hover/tip:pointer-events-auto scale-95 group-hover/tip:scale-100'
+          } transition-all duration-200 z-50 w-64 p-3 rounded-xl bg-slate-950/95 border ${
+            isAlert ? 'border-amber-500/60 shadow-amber-950/50' : 'border-slate-700/80 shadow-slate-950/70'
+          } shadow-2xl backdrop-blur-md text-left text-xs leading-relaxed`}
+        >
+          {/* Arrow Pointer */}
+          <div
+            className={`absolute -top-1.5 w-3 h-3 rotate-45 bg-slate-950 border-l border-t ${
+              isAlert ? 'border-amber-500/60' : 'border-slate-700/80'
+            } ${isRightCol ? 'right-2.5' : 'left-2.5'}`}
+          />
+
+          <div className={`font-bold flex items-center gap-1.5 mb-1 ${
+            isAlert ? 'text-amber-300' : 'text-slate-200'
+          }`}>
+            {isAlert && <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
+            <span>{tooltipTitle}</span>
+          </div>
+
+          <p className="text-slate-300 text-[11px] leading-relaxed">{tooltipBody}</p>
+          {tooltipExtra}
+        </div>
+      </div>
+    );
+  };
+
   const renderBulletCard = (key: string, valItem: NutrientValidation) => {
     const meta = NUTRIENT_METAS[key] || {
       label: key,
@@ -178,15 +296,12 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
     const displayVal = isPercent ? (val * 100).toFixed(1) : val.toFixed(0);
     const displayMin = isPercent ? (min * 100).toFixed(1) : min.toFixed(0);
     const displayMax = isPercent ? (max * 100).toFixed(1) : max.toFixed(0);
-    const midVal = (min + max) / 2;
-    const displayMid = isPercent ? (midVal * 100).toFixed(1) : midVal.toFixed(0);
 
     // Dynamic upper bound so bar never clips
     const upperLimit = Math.max(max * 1.35, val * 1.15, 0.01);
     const progressPct = Math.min(Math.max((val / upperLimit) * 100, 0), 100);
     const minMarkerPct = Math.min(Math.max((min / upperLimit) * 100, 0), 100);
     const maxMarkerPct = Math.min(Math.max((max / upperLimit) * 100, 0), 100);
-    const midMarkerPct = (minMarkerPct + maxMarkerPct) / 2;
 
     // Delta calculation
     let deltaStr = '';
@@ -200,31 +315,31 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
 
     // Color definitions
     let cardBorder = 'border-slate-700/80 hover:border-slate-600 bg-slate-900/90';
-    let barGradient = `bg-gradient-to-r ${meta.barGradient}`;
     let valColor = 'text-white';
 
     if (status === 'Baixo') {
       cardBorder = 'border-amber-500/50 bg-amber-950/20';
-      barGradient = 'bg-gradient-to-r from-amber-500 to-yellow-500';
       valColor = 'text-amber-300';
     } else if (status === 'Alto') {
       cardBorder = 'border-rose-500/50 bg-rose-950/20';
-      barGradient = 'bg-gradient-to-r from-rose-500 to-red-500';
       valColor = 'text-rose-300';
     }
 
     return (
       <div
         key={key}
-        className={`p-4 rounded-2xl border ${cardBorder} transition-all flex flex-col justify-between shadow-lg relative group`}
+        className={`p-4 rounded-2xl border ${cardBorder} transition-all flex flex-col justify-between shadow-lg relative min-h-[148px]`}
       >
-        {/* Top Header: Nutrient Name & Status */}
+        {/* Top Header: Nutrient Name, Tooltip Indicator & Status */}
         <div>
           <div className="flex items-center justify-between gap-1.5 mb-1.5 min-h-[26px]">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 min-w-0">
               <span className="text-sm select-none shrink-0">{meta.icon}</span>
-              <span className="truncate" title={meta.label}>{meta.label}</span>
-            </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300 truncate" title={meta.label}>
+                {meta.label}
+              </span>
+              {renderCardHeaderTooltip(key, meta, valItem, displayVal)}
+            </div>
 
             {/* Status Pill with Actionable Delta */}
             {status === 'Ok' ? (
@@ -298,60 +413,6 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
               Máx: <strong className="text-white font-bold">{displayMax}{unit}</strong>
             </span>
           </div>
-
-          {/* Razão Gordura : SLNG & Overrun (Carpigiani) */}
-          {key === 'fat' && emulsion && emulsion.status !== 'sorbet' && (
-            <div className="mt-2.5 pt-2 border-t border-slate-800/80 text-xs text-slate-300 flex items-center justify-between">
-              <span title="Relação Lipídica Carpigiani: Gordura / SLNG (Alvo ideal: 0.75 a 1.25)">
-                Razão Gordura:SLNG:
-              </span>
-              <span className="flex items-center gap-1.5 font-mono font-bold">
-                <strong className={
-                  emulsion.status === 'ideal' ? 'text-emerald-300' :
-                  emulsion.status === 'gorduroso' ? 'text-amber-300' : 'text-sky-300'
-                }>
-                  {emulsion.fatMsnfRatio} : 1
-                </strong>
-                <span className="text-xs text-slate-400 font-normal">
-                  (~{emulsion.overrunEstimatePct}% ar)
-                </span>
-              </span>
-            </div>
-          )}
-
-          {/* Alerta Dinâmico de Arenosidade (Luca Caviezel) */}
-          {key === 'msnf' && sandiness && (
-            <div className={`mt-2.5 pt-2 border-t text-xs flex items-start gap-1.5 transition-all ${sandiness.isAtRisk ? 'border-amber-500/50 text-amber-200 bg-amber-950/40 p-2.5 rounded-xl border' : 'border-slate-800/80 text-slate-300'}`}>
-              {sandiness.isAtRisk ? (
-                <>
-                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold text-amber-100">Alerta Arenosidade (Caviezel):</span>
-                    <span className="block text-xs text-amber-200/90 leading-relaxed mt-0.5">
-                      SLNG ({displayVal}%) excede teto seguro de {(sandiness.maxSafeMsnf * 100).toFixed(1)}% p/ água disponível. Risco de cristalizar lactose.
-                    </span>
-                  </div>
-                </>
-              ) : valItem.val > 0.03 ? (
-                <div className="flex items-center gap-1.5 text-xs text-emerald-300">
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Teto seguro anti-arenosidade: {(sandiness.maxSafeMsnf * 100).toFixed(1)}%</span>
-                </div>
-              ) : null}
-            </div>
-          )}
-
-          {/* Diagnóstico Corvitto de PAC na Água Livre */}
-          {key === 'pac' && corvitto && (
-            <div className="mt-2.5 pt-2 border-t border-slate-800/80 text-xs text-slate-300 flex items-center justify-between">
-              <span title="Índice Angelo Corvitto: PAC por kg de água pura disponível">
-                PAC Água Livre (Corvitto):
-              </span>
-              <strong className="text-cyan-300 font-mono font-bold text-sm">
-                {corvitto.pacWater}
-              </strong>
-            </div>
-          )}
         </div>
       </div>
     );
