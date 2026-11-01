@@ -365,125 +365,47 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16">
       {/* Top Header Card (z-30 so search combobox dropdown floats above subsequent cards without clipping) */}
-      <div className="relative z-30 bg-slate-800/95 rounded-2xl border border-slate-700/80 p-5 shadow-xl">
+      <div className="relative z-30 bg-slate-800/95 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-3.5">
         {/* Dynamic Category Accent Line */}
         <div className={`absolute top-0 left-0 right-0 h-1 rounded-t-2xl bg-gradient-to-r ${getCategoryTheme(targetStyleName).gradient}`} />
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          {/* Recipe Selection & Title */}
-          <div className="space-y-2 flex-1">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 uppercase tracking-wider flex items-center gap-1.5">
-                <ChefHat className="w-3.5 h-3.5" />
-                Bancada de Balanceamento
-              </span>
-              {selectedRecipeId === 'new' ? (
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5 animate-pulse">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  Cadastrando Nova Receita
-                </span>
-              ) : isDirty ? (
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                  Edições ativas na bancada
-                </span>
-              ) : null}
-            </div>
+        
+        {/* Badge de Status / Contexto */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/40 uppercase tracking-wider flex items-center gap-1.5">
+            <ChefHat className="w-3.5 h-3.5" />
+            Bancada de Balanceamento
+          </span>
+          {selectedRecipeId === 'new' ? (
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5 animate-pulse">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              Cadastrando Nova Receita
+            </span>
+          ) : isDirty ? (
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              Edições ativas na bancada
+            </span>
+          ) : null}
+        </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              {/* Recipe Name Input with Integrated Catalog Search */}
-              <RecipeSearchCombobox
-                recipes={recipes}
-                selectedRecipeId={selectedRecipeId}
-                onSelectRecipe={handleSelectRecipe}
-                recipeName={recipeName}
-                onRecipeNameChange={name => {
-                  setRecipeName(name);
-                  setIsDirty(true);
-                }}
-              />
-
-              {/* Single Unified Target Style Selector */}
-              <div
-                className="flex items-center gap-2 bg-slate-900 border border-slate-700 hover:border-slate-600 focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20 rounded-xl px-3.5 py-2.5 transition-all shadow-inner shrink-0"
-                title="Estilo Alvo de Balanceamento (define os limites nutricionais recomendados)"
-              >
-                <span className="shrink-0">{getCategoryTheme(targetStyleName).icon}</span>
-                <div className="relative flex items-center">
-                  <select
-                    value={targetStyleName}
-                    onChange={e => {
-                      setTargetStyleName(e.target.value);
-                      setIsDirty(true);
-                    }}
-                    className="appearance-none bg-transparent pr-6 text-xs sm:text-sm font-bold text-slate-200 focus:outline-none cursor-pointer"
-                  >
-                    {Object.keys(stylesDataMap).map(s => (
-                      <option key={s} value={s} className="bg-slate-900 text-slate-200">
-                        Estilo: {s}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-0 pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Presets Rápidos e Ajuste de Metas (3 Botões) */}
-              <div className="flex items-center gap-1.5 flex-wrap">
-                {/* 1. Padrão Ouro */}
-                <button
-                  type="button"
-                  onClick={() => applyGoldStandardPreset()}
-                  className={`flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-bold transition-all shadow-inner shrink-0 border ${
-                    activePresetId === 'gold'
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm shadow-emerald-500/10'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700 hover:border-slate-600'
-                  }`}
-                  title="Ativar Padrão Ouro Híbrido Protegido (Recomendado: proteção contra arenosidade de Caviezel e PAC Carpigiani)"
-                >
-                  <ShieldCheck className={`w-3.5 h-3.5 ${activePresetId === 'gold' ? 'text-emerald-400' : 'text-slate-400'}`} />
-                  <span>Padrão Ouro</span>
-                </button>
-
-                {/* 2. Carpigiani Estrito (exibido apenas se houver dados da Carpigiani para o estilo) */}
-                {hasCarpigianiData(targetStyleName) && (
-                  <button
-                    type="button"
-                    onClick={() => applyCarpigianiPreset()}
-                    className={`flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-bold transition-all shadow-inner shrink-0 border ${
-                      activePresetId === 'carpigiani'
-                        ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm shadow-sky-500/10'
-                        : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700 hover:border-slate-600'
-                    }`}
-                    title="Ativar réguas estritas da Carpigiani Gelato University (Apostila 2025/2026)"
-                  >
-                    <GraduationCap className={`w-3.5 h-3.5 ${activePresetId === 'carpigiani' ? 'text-sky-400' : 'text-slate-400'}`} />
-                    <span>Carpigiani Estrito</span>
-                  </button>
-                )}
-
-                {/* 3. Ajustar Metas */}
-                <button
-                  type="button"
-                  onClick={() => setIsStyleModalOpen(true)}
-                  className={`flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-bold transition-all shadow-inner shrink-0 group border ${
-                    activePresetId === 'custom'
-                      ? 'bg-purple-500/20 text-purple-300 border-purple-500/50 shadow-sm'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 border-slate-700 hover:border-amber-500/50'
-                  }`}
-                  title="Ajustar manualmente metas e limites físico-químicos deste estilo"
-                >
-                  <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-45 transition-transform" />
-                  <span>Ajustar Metas</span>
-                  {activePresetId === 'custom' && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400 ml-0.5 animate-pulse" />
-                  )}
-                </button>
-              </div>
-            </div>
+        {/* LINHA 1: Caixa de Sabor do Gelato alinhada com os Botões de Ação */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div className="flex-1 max-w-2xl">
+            {/* Recipe Name Input with Integrated Catalog Search */}
+            <RecipeSearchCombobox
+              recipes={recipes}
+              selectedRecipeId={selectedRecipeId}
+              onSelectRecipe={handleSelectRecipe}
+              recipeName={recipeName}
+              onRecipeNameChange={name => {
+                setRecipeName(name);
+                setIsDirty(true);
+              }}
+            />
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             {selectedRecipeId === 'new' ? (
               <button
                 type="button"
@@ -534,6 +456,87 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             >
               <Printer className="w-4 h-4" />
               <span className="hidden sm:inline">Imprimir Ficha</span>
+            </button>
+          </div>
+        </div>
+
+        {/* LINHA 2: Caixa de Estilo alinhada com Padrão Ouro, Carpigiani Estrito e Ajustar Metas */}
+        <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-slate-700/60">
+          {/* Single Unified Target Style Selector */}
+          <div
+            className="flex items-center gap-2 bg-slate-900 border border-slate-700 hover:border-slate-600 focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20 rounded-xl px-3.5 py-2 transition-all shadow-inner shrink-0"
+            title="Estilo Alvo de Balanceamento (define os limites nutricionais recomendados)"
+          >
+            <span className="shrink-0">{getCategoryTheme(targetStyleName).icon}</span>
+            <div className="relative flex items-center">
+              <select
+                value={targetStyleName}
+                onChange={e => {
+                  setTargetStyleName(e.target.value);
+                  setIsDirty(true);
+                }}
+                className="appearance-none bg-transparent pr-6 text-xs sm:text-sm font-bold text-slate-200 focus:outline-none cursor-pointer"
+              >
+                {Object.keys(stylesDataMap).map(s => (
+                  <option key={s} value={s} className="bg-slate-900 text-slate-200">
+                    Estilo: {s}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-0 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Presets Rápidos e Ajuste de Metas (3 Botões alinhados com o estilo) */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* 1. Padrão Ouro */}
+            <button
+              type="button"
+              onClick={() => applyGoldStandardPreset()}
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 border ${
+                activePresetId === 'gold'
+                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm shadow-emerald-500/10'
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700 hover:border-slate-600'
+              }`}
+              title="Ativar Padrão Ouro Híbrido Protegido (Recomendado: proteção contra arenosidade de Caviezel e PAC Carpigiani)"
+            >
+              <ShieldCheck className={`w-3.5 h-3.5 ${activePresetId === 'gold' ? 'text-emerald-400' : 'text-slate-400'}`} />
+              <span>Padrão Ouro</span>
+            </button>
+
+            {/* 2. Carpigiani Estrito (exibido apenas se houver dados da Carpigiani para o estilo) */}
+            {hasCarpigianiData(targetStyleName) && (
+              <button
+                type="button"
+                onClick={() => applyCarpigianiPreset()}
+                className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 border ${
+                  activePresetId === 'carpigiani'
+                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm shadow-sky-500/10'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700 hover:border-slate-600'
+                }`}
+                title="Ativar réguas estritas da Carpigiani Gelato University (Apostila 2025/2026)"
+              >
+                <GraduationCap className={`w-3.5 h-3.5 ${activePresetId === 'carpigiani' ? 'text-sky-400' : 'text-slate-400'}`} />
+                <span>Carpigiani Estrito</span>
+              </button>
+            )}
+
+            {/* 3. Ajustar Metas */}
+            <button
+              type="button"
+              onClick={() => setIsStyleModalOpen(true)}
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 group border ${
+                activePresetId === 'custom'
+                  ? 'bg-purple-500/20 text-purple-300 border-purple-500/50 shadow-sm'
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 border-slate-700 hover:border-amber-500/50'
+              }`}
+              title="Ajustar manualmente metas e limites físico-químicos deste estilo"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-45 transition-transform" />
+              <span>Ajustar Metas</span>
+              {activePresetId === 'custom' && (
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 ml-0.5 animate-pulse" />
+              )}
             </button>
           </div>
         </div>
