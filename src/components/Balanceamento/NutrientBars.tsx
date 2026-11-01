@@ -299,11 +299,30 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
     const midVal = (min + max) / 2;
     const displayMid = isPercent ? (midVal * 100).toFixed(1) : midVal.toFixed(0);
 
-    // Dynamic upper bound so bar never clips
-    const upperLimit = Math.max(max * 1.35, val * 1.15, 0.01);
-    const progressPct = Math.min(Math.max((val / upperLimit) * 100, 0), 100);
-    const minMarkerPct = Math.min(Math.max((min / upperLimit) * 100, 0), 100);
-    const maxMarkerPct = Math.min(Math.max((max / upperLimit) * 100, 0), 100);
+    // Janela de Escala Adaptativa (Adaptive Focus Window)
+    // Para métricas com base elevada (Água, Sólidos, PAC, POD, etc.), expande a visualização
+    // do alvo para ocupar ~40% da largura da barra, eliminando o espaço vazio e garantindo alta visibilidade.
+    const span = Math.max(max - min, 0);
+    const isZeroBaseline = min === 0 || min < span * 0.5;
+
+    let trackMin = 0;
+    let trackMax = 1;
+
+    if (isZeroBaseline || span === 0) {
+      trackMin = 0;
+      trackMax = Math.max(max * 1.35, val * 1.15, 0.01);
+    } else {
+      // Faixa alvo ocupa ~40% do comprimento da barra por padrão
+      const idealPadding = span * 0.75;
+      trackMin = Math.max(0, Math.min(min - idealPadding, val - span * 0.2));
+      trackMax = Math.max(max + idealPadding, val + span * 0.2);
+    }
+
+    const totalRange = Math.max(trackMax - trackMin, 0.001);
+    const progressPct = Math.min(Math.max(((val - trackMin) / totalRange) * 100, 0), 100);
+    const minMarkerPct = Math.min(Math.max(((min - trackMin) / totalRange) * 100, 0), 100);
+    const maxMarkerPct = Math.min(Math.max(((max - trackMin) / totalRange) * 100, 0), 100);
+    const bandWidthPct = Math.max(maxMarkerPct - minMarkerPct, span === 0 ? 0 : 2);
 
     // Delta calculation
     let deltaStr = '';
@@ -375,24 +394,26 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
         <div>
           <div className="relative w-full h-4 bg-slate-950/90 rounded-full border border-slate-800 shadow-inner flex items-center">
             {/* 1. Faixa Colorida: Intervalo Recomendado [Mínimo -> Máximo] */}
-            <div
-              className={`absolute top-0.5 bottom-0.5 rounded-full transition-all duration-300 bg-gradient-to-r ${meta.barGradient} shadow-md opacity-90`}
-              style={{
-                left: `${minMarkerPct}%`,
-                width: `${Math.max(maxMarkerPct - minMarkerPct, 2)}%`
-              }}
-              title={`Faixa Recomendada: ${displayMin} a ${displayMax}${unit}`}
-            >
-              {/* Delimitadores discretos nas pontas da faixa */}
-              <div className="absolute left-0 top-0 bottom-0 w-[1.5px] bg-white/60 rounded-l" />
-              <div className="absolute right-0 top-0 bottom-0 w-[1.5px] bg-white/60 rounded-r" />
-
-              {/* Centro de referência da faixa (Alvo Médio Ideal) - Discreto e contido na barra */}
+            {(span > 0 || max > 0) && (
               <div
-                className="absolute top-0 bottom-0 w-[1.5px] -translate-x-1/2 left-1/2 bg-white/65 pointer-events-none"
-                title={`Centro da Faixa (Alvo Ideal): ${displayMid}${unit}`}
-              />
-            </div>
+                className={`absolute top-0.5 bottom-0.5 rounded-full transition-all duration-300 bg-gradient-to-r ${meta.barGradient} shadow-md opacity-90`}
+                style={{
+                  left: `${minMarkerPct}%`,
+                  width: `${bandWidthPct}%`
+                }}
+                title={`Faixa Recomendada: ${displayMin} a ${displayMax}${unit}`}
+              >
+                {/* Delimitadores discretos nas pontas da faixa */}
+                <div className="absolute left-0 top-0 bottom-0 w-[1.5px] bg-white/60 rounded-l" />
+                <div className="absolute right-0 top-0 bottom-0 w-[1.5px] bg-white/60 rounded-r" />
+
+                {/* Centro de referência da faixa (Alvo Médio Ideal) - Discreto e contido na barra */}
+                <div
+                  className="absolute top-0 bottom-0 w-[1.5px] -translate-x-1/2 left-1/2 bg-white/65 pointer-events-none"
+                  title={`Centro da Faixa (Alvo Ideal): ${displayMid}${unit}`}
+                />
+              </div>
+            )}
 
             {/* 2. Marcador Vertical Bem Visível (Agulha de Alta Precisão) no Valor Calculado */}
             <div
