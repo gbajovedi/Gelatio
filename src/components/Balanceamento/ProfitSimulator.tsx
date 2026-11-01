@@ -700,6 +700,13 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                 <span className="text-slate-400">Taxas & Imp:</span>
                 <strong className="text-white font-mono">R$ {totalDeductionsR$.toFixed(2)}</strong>
               </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
+                <span className="text-slate-400">Lucro Líquido:</span>
+                <strong className={`font-mono ${netProfitUnit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  R$ {netProfitUnit.toFixed(2)}
+                </strong>
+              </div>
             </div>
           </div>
         </div>
