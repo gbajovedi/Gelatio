@@ -962,7 +962,12 @@
     "pod": 0.5,
     "pac": 0.5,
     "protein": 0.063,
-    "hasAllergen": true
+    "hasAllergen": true,
+    "allergenDetails": [
+      "Leite / Lactose",
+      "Castanhas & Nozes",
+      "Soja"
+    ]
   },
   {
     "name": "Creme De Leite 40%",
@@ -3299,6 +3304,11 @@
     "pac": 0.4391,
     "protein": 0.0445,
     "hasAllergen": true,
+    "allergenDetails": [
+      "Leite / Lactose",
+      "Castanhas & Nozes",
+      "Soja"
+    ],
     "preparationId": "prep_variegato_de_nutella"
   },
   {
