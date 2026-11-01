@@ -20,6 +20,104 @@ export const DEFAULT_PRICING: PricingSettings = {
   salesTaxPercent: 0
 };
 
+/**
+ * Extrai os alérgenos regulamentares (RDC Anvisa) de um insumo ou mescla,
+ * priorizando os detalhes específicos de alérgenos cadastrados (`allergenDetails`)
+ * e realizando inferência inteligente caso não estejam preenchidos.
+ */
+export function extractItemAllergens(
+  name: string,
+  ing?: Ingredient
+): { allergens: string[]; hasLactose: boolean; hasGluten: boolean } {
+  const allergens: string[] = [];
+  let hasLactose = false;
+  let hasGluten = false;
+
+  const normalizeAllergen = (a: string): string => {
+    const clean = a.trim();
+    if (/leite|lactose/i.test(clean)) return 'LEITE';
+    if (/castanha|noz|avelã|pistache|amêndoa|macadâmia/i.test(clean)) return 'CASTANHAS & NOZES';
+    if (/glúten|trigo|cevada|aveia|centeio/i.test(clean)) return 'TRIGO / GLÚTEN';
+    if (/ovo/i.test(clean)) return 'OVOS';
+    if (/soja/i.test(clean)) return 'SOJA';
+    if (/amendoim/i.test(clean)) return 'AMENDOIM';
+    return clean.toUpperCase();
+  };
+
+  // 1. Prioridade máxima: detalhes de alérgenos cadastrados no insumo (ex: Nutella -> Leite, Castanhas & Nozes, Soja)
+  if (ing?.allergenDetails && ing.allergenDetails.length > 0) {
+    for (const d of ing.allergenDetails) {
+      allergens.push(normalizeAllergen(d));
+      if (/leite|lactose/i.test(d)) hasLactose = true;
+      if (/glúten|trigo|aveia|cevada/i.test(d)) hasGluten = true;
+    }
+  }
+
+  // 2. Inferência bromatológica e textual complementar
+  const textToScan = `${name} ${ing?.category || ''}`.toLowerCase();
+
+  // Presença de lactose / laticínios
+  if (ing && (ing.msnf > 0 || ing.category === 'Laticínios')) {
+    hasLactose = true;
+    allergens.push('LEITE');
+  } else if (/leite|creme|queijo|iogurte|lactose|manteiga|soro|ricota|mascarpone/i.test(textToScan)) {
+    hasLactose = true;
+    allergens.push('LEITE');
+  }
+
+  // Glúten / Trigo
+  if (/(trigo|croissant|biscoff|biscoito|panettone|aveia|sucrilhos|ovomaltine|malte|cevada|centeio|glúten)/i.test(textToScan)) {
+    hasGluten = true;
+    allergens.push('TRIGO / GLÚTEN');
+  }
+
+  // Nutella específica (Avelã / Nozes, Leite, Soja) caso não haja detalhes cadastrados
+  if (/nutella/i.test(textToScan)) {
+    allergens.push('LEITE', 'CASTANHAS & NOZES', 'SOJA');
+    hasLactose = true;
+  }
+
+  // Soja
+  if (/soja|lecitina de soja/i.test(textToScan)) {
+    allergens.push('SOJA');
+  }
+
+  // Ovos
+  if (/ovo|gema|clara/i.test(textToScan) || ing?.category === 'Ovos & Proteínas') {
+    allergens.push('OVOS');
+  }
+
+  // Amendoim
+  if (/amendoim/i.test(textToScan)) {
+    allergens.push('AMENDOIM');
+  }
+
+  // Castanhas e Nozes em geral
+  if (/avelã|castanha|nozes|noz|pistache|amêndoa|macadâmia|pecã/i.test(textToScan) || ing?.category === 'Pastas & Oleaginosas') {
+    if (/avelã|castanha|nozes|noz|pistache|amêndoa|macadâmia|pecã/i.test(textToScan)) {
+      allergens.push('CASTANHAS & NOZES');
+    }
+  }
+
+  // Se o insumo tiver a flag hasAllergen = true mas nenhuma categoria acima pegou, preservar alerta
+  if (ing?.hasAllergen && allergens.length === 0) {
+    if (ing.category === 'Laticínios') {
+      allergens.push('LEITE');
+      hasLactose = true;
+    } else if (ing.category === 'Pastas & Oleaginosas') {
+      allergens.push('CASTANHAS & NOZES');
+    } else {
+      allergens.push(ing.name.toUpperCase());
+    }
+  }
+
+  return {
+    allergens: Array.from(new Set(allergens)),
+    hasLactose,
+    hasGluten
+  };
+}
+
 export function calculateBatchAnalysis(
   items: RecipeItem[],
   variegatos: VariegatoItem[] = [],
@@ -60,17 +158,13 @@ export function calculateBatchAnalysis(
       totalPac += g * ing.pac;
       totalProtein += g * ing.protein;
       totalCost += (g * ing.costKg) / 1000;
-
-      if (ing.hasAllergen) {
-        allergenItems.push(ing.name.toUpperCase());
-      }
-      if (ing.msnf > 0 || /leite|creme|queijo|lactose/i.test(ing.name)) {
-        containsLactose = true;
-      }
-      if (/(trigo|croissant|biscoff|biscoito|panettone|aveia|sucrilhos|ovomaltine|malte)/i.test(ing.name)) {
-        containsGluten = true;
-      }
     }
+
+    // Extração padronizada de alérgenos da calda base
+    const allergenData = extractItemAllergens(item.name, ing);
+    allergenItems.push(...allergenData.allergens);
+    if (allergenData.hasLactose) containsLactose = true;
+    if (allergenData.hasGluten) containsGluten = true;
   }
 
   const safeWeight = totalCaldaGrams > 0 ? totalCaldaGrams : 1000;
@@ -252,34 +346,28 @@ export function calculateBatchAnalysis(
     const costKg = v.costKg ?? (ing ? ing.costKg : 0);
     totalVariegatoCost += (v.grams * costKg) / 1000;
 
-    if (ing) {
-      if (ing.hasAllergen || /(leite|creme|queijo|nozes|amendoim|avelã|castanha|pistache|amêndoa|soja|ovo|glúten|trigo|nutella|brigadeiro|doce de leite)/i.test(ing.name)) {
-        allergenItems.push(ing.name.toUpperCase());
-      }
-      if (ing.msnf > 0 || /leite|creme|queijo|lactose/i.test(ing.name)) {
-        containsLactose = true;
-      }
-      if (/(trigo|croissant|biscoff|biscoito|panettone|aveia|sucrilhos|ovomaltine|malte)/i.test(ing.name)) {
-        containsGluten = true;
-      }
-    } else {
-      if (/(leite|creme|queijo|nozes|amendoim|avelã|castanha|pistache|amêndoa|soja|ovo|glúten|trigo|nutella|brigadeiro|doce de leite)/i.test(v.name)) {
-        allergenItems.push(v.name.toUpperCase());
-      }
-      if (/leite|creme|queijo|lactose/i.test(v.name)) {
-        containsLactose = true;
-      }
-      if (/(trigo|croissant|biscoff|biscoito|panettone|aveia|sucrilhos|ovomaltine|malte)/i.test(v.name)) {
-        containsGluten = true;
-      }
-    }
+    // Extração padronizada de alérgenos da mescla / pós-produção
+    const allergenData = extractItemAllergens(v.name, ing);
+    allergenItems.push(...allergenData.allergens);
+    if (allergenData.hasLactose) containsLactose = true;
+    if (allergenData.hasGluten) containsGluten = true;
   }
 
   // Allergens Label (Consolidado: Calda Base + Mesclas Pós-Produção)
   let allergensLabel = "";
   if (allergenItems.length > 0) {
-    const uniqueAllergens = Array.from(new Set(allergenItems)).join(", ");
-    allergensLabel = `CONTÉM: ${uniqueAllergens}.`;
+    const ALLERGEN_ORDER = ['LEITE', 'SOJA', 'OVOS', 'AMENDOIM', 'CASTANHAS & NOZES', 'TRIGO / GLÚTEN'];
+    const uniqueList = Array.from(new Set(allergenItems));
+    uniqueList.sort((a, b) => {
+      const idxA = ALLERGEN_ORDER.indexOf(a);
+      const idxB = ALLERGEN_ORDER.indexOf(b);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a.localeCompare(b);
+    });
+
+    allergensLabel = `CONTÉM: ${uniqueList.join(', ')}.`;
   } else {
     allergensLabel = "NÃO CONTÉM ALERGÊNICOS DIRETOS.";
   }
