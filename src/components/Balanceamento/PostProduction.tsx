@@ -5,12 +5,14 @@ import { Plus, Trash2 } from 'lucide-react';
 interface PostProductionProps {
   variegatos: VariegatoItem[];
   availableIngredients: Ingredient[];
+  caldaWeightGrams?: number;
   onUpdateVariegatos: (variegatos: VariegatoItem[]) => void;
 }
 
 export const PostProduction: React.FC<PostProductionProps> = ({
   variegatos,
   availableIngredients,
+  caldaWeightGrams = 0,
   onUpdateVariegatos
 }) => {
   const handleAdd = () => {
@@ -74,51 +76,70 @@ export const PostProduction: React.FC<PostProductionProps> = ({
         </div>
       ) : (
         <div className="space-y-2.5">
-          {variegatos.map((item, idx) => (
-            <div
-              key={idx}
-              className="flex items-center gap-3 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700/80"
-            >
-              <div className="flex-1">
-                <input
-                  type="text"
-                  list="variegatos-options"
-                  placeholder="Nome do variegato ou recheio..."
-                  value={item.name}
-                  onChange={e => handleChangeName(idx, e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
-                />
-              </div>
+          {variegatos.map((item, idx) => {
+            const gPerKg = caldaWeightGrams > 0
+              ? Math.round((item.grams / caldaWeightGrams) * 1000)
+              : 0;
+            const pctCalda = caldaWeightGrams > 0
+              ? (item.grams / caldaWeightGrams) * 100
+              : 0;
 
-              <div className="w-32 flex items-center gap-1">
-                <input
-                  type="number"
-                  min="0"
-                  step="5"
-                  value={item.grams || ''}
-                  onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-sm text-right font-black font-mono text-amber-300 focus:outline-none focus:border-amber-500"
-                />
-                <span className="text-xs font-mono font-bold text-slate-400">g</span>
-              </div>
-
-              <div className="w-28 text-right pr-2">
-                <span className="text-sm font-mono font-bold text-slate-200">
-                  R$ {(item.costKg ?? 0).toFixed(2)}
-                </span>
-                <span className="text-xs block text-slate-400 font-medium">/kg</span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => handleRemove(idx)}
-                className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors"
-                title="Remover"
+            return (
+              <div
+                key={idx}
+                className="flex items-center gap-3 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700/80"
               >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    list="variegatos-options"
+                    placeholder="Nome do variegato ou recheio..."
+                    value={item.name}
+                    onChange={e => handleChangeName(idx, e.target.value)}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+
+                <div className="w-32 flex items-center gap-1">
+                  <input
+                    type="number"
+                    min="0"
+                    step="5"
+                    value={item.grams || ''}
+                    onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-sm text-right font-black font-mono text-amber-300 focus:outline-none focus:border-amber-500"
+                  />
+                  <span className="text-xs font-mono font-bold text-slate-400">g</span>
+                </div>
+
+                <div
+                  className="w-24 text-right pr-2 shrink-0"
+                  title={`${gPerKg}g de mescla por 1kg de calda base (${pctCalda.toFixed(1)}%)`}
+                >
+                  <span className="text-sm font-mono font-bold text-amber-300">
+                    {gPerKg} g/kg
+                  </span>
+                  <span className="text-xs block text-slate-400 font-medium">mescla</span>
+                </div>
+
+                <div className="w-28 text-right pr-2">
+                  <span className="text-sm font-mono font-bold text-slate-200">
+                    R$ {(item.costKg ?? 0).toFixed(2)}
+                  </span>
+                  <span className="text-xs block text-slate-400 font-medium">/kg</span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleRemove(idx)}
+                  className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors"
+                  title="Remover"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            );
+          })}
         </div>
       )}
 

@@ -778,6 +778,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           <PostProduction
             variegatos={variegatos}
             availableIngredients={ingredients}
+            caldaWeightGrams={analysis.caldaWeight}
             onUpdateVariegatos={v => {
               setVariegatos(v);
               setIsDirty(true);
