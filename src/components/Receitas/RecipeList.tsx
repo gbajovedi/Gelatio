@@ -459,15 +459,21 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                     onClick={() => setBalanceFilter('all')}
                     className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                       balanceFilter === 'all'
-                        ? 'bg-slate-700 text-white shadow-sm font-black'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                        ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-black'
+                        : 'text-slate-400 hover:text-amber-300 hover:bg-amber-500/10'
                     }`}
                   >
-                    <Layers className="w-3.5 h-3.5 text-slate-300" />
+                    <Layers
+                      className={`w-3.5 h-3.5 ${
+                        balanceFilter === 'all' ? 'text-slate-950 stroke-[2.4]' : 'text-slate-400'
+                      }`}
+                    />
                     <span>Todas</span>
                     <span
                       className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
-                        balanceFilter === 'all' ? 'bg-slate-900 text-white' : 'bg-slate-800 text-slate-400'
+                        balanceFilter === 'all'
+                          ? 'bg-amber-600/35 text-slate-950 font-black'
+                          : 'bg-slate-800 text-slate-400'
                       }`}
                     >
                       {balanceStatusCounts.all}
