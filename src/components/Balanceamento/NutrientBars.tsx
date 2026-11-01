@@ -383,13 +383,13 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
               }}
               title={`Faixa Recomendada: ${displayMin} a ${displayMax}${unit}`}
             >
-              {/* Delimitadores visíveis nas pontas da faixa */}
-              <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/80 rounded-l shadow-sm" />
-              <div className="absolute right-0 top-0 bottom-0 w-[2px] bg-white/80 rounded-r shadow-sm" />
+              {/* Delimitadores discretos nas pontas da faixa */}
+              <div className="absolute left-0 top-0 bottom-0 w-[1.5px] bg-white/60 rounded-l" />
+              <div className="absolute right-0 top-0 bottom-0 w-[1.5px] bg-white/60 rounded-r" />
 
-              {/* Centro de referência da faixa (Alvo Médio Ideal) - Bem Visível */}
+              {/* Centro de referência da faixa (Alvo Médio Ideal) - Discreto e contido na barra */}
               <div
-                className="absolute -top-0.5 -bottom-0.5 w-[2px] -translate-x-1/2 left-1/2 bg-white shadow-[0_0_4px_rgba(0,0,0,1)] pointer-events-none z-10 rounded-full"
+                className="absolute top-0 bottom-0 w-[1.5px] -translate-x-1/2 left-1/2 bg-white/65 pointer-events-none"
                 title={`Centro da Faixa (Alvo Ideal): ${displayMid}${unit}`}
               />
             </div>
