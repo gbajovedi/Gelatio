@@ -283,11 +283,13 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
                 onChange={e => handleSelectStyle(e.target.value)}
                 className="w-full bg-slate-800 border border-slate-700 text-slate-100 text-sm font-semibold rounded-xl px-3 py-2 pr-8 focus:outline-none focus:border-amber-500 transition-colors shadow-inner"
               >
-                {Object.keys(stylesMap).map(s => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
+                {Object.keys(stylesMap)
+                  .sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }))
+                  .map(s => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>

@@ -13,11 +13,21 @@ import {
   Layers,
   AlertCircle,
   CheckCircle2,
-  SlidersHorizontal
+  SlidersHorizontal,
+  ShieldCheck,
+  GraduationCap
 } from 'lucide-react';
 import { db, stylesDataMap } from '../../db/database';
 import { calculateBatchAnalysis } from '../../core/calculator';
-import { STYLES_UPDATED_EVENT } from '../../core/stylesStorage';
+import {
+  STYLES_UPDATED_EVENT,
+  getActivePresetId,
+  applyGoldStandardPreset,
+  applyCarpigianiPreset,
+  saveStoredStyles,
+  getStoredStyles,
+  StylePresetId
+} from '../../core/stylesStorage';
 import { RecipeViewerModal } from './RecipeViewerModal';
 import { StyleSettingsModal } from '../Balanceamento/StyleSettingsModal';
 import { getCategoryTheme, CategoryBadge } from '../../core/categoryThemes';
@@ -42,11 +52,13 @@ export const RecipeList: React.FC<RecipeListProps> = ({
   const [viewingRecipe, setViewingRecipe] = useState<Recipe | null>(null);
   const [isStyleModalOpen, setIsStyleModalOpen] = useState(false);
   const [stylesRevision, setStylesRevision] = useState(0);
+  const [activePreset, setActivePreset] = useState<StylePresetId>(() => getActivePresetId());
 
   // Reage imediatamente a alterações nas metas físico-químicas
   useEffect(() => {
     const handleStylesUpdate = () => {
       setStylesRevision(prev => prev + 1);
+      setActivePreset(getActivePresetId());
     };
     window.addEventListener(STYLES_UPDATED_EVENT, handleStylesUpdate);
     window.addEventListener('storage', handleStylesUpdate);
@@ -55,6 +67,23 @@ export const RecipeList: React.FC<RecipeListProps> = ({
       window.removeEventListener('storage', handleStylesUpdate);
     };
   }, []);
+
+  const handleSelectPreset = (preset: StylePresetId) => {
+    if (preset === 'gold') {
+      applyGoldStandardPreset();
+      setActivePreset('gold');
+    } else if (preset === 'carpigiani') {
+      applyCarpigianiPreset();
+      setActivePreset('carpigiani');
+    } else if (preset === 'custom') {
+      if (activePreset !== 'custom') {
+        saveStoredStyles(getStoredStyles(), 'custom');
+        setActivePreset('custom');
+      } else {
+        setIsStyleModalOpen(true);
+      }
+    }
+  };
 
   // Fast ingredient lookup map
   const ingredientsMap = useMemo(() => {
@@ -204,7 +233,10 @@ export const RecipeList: React.FC<RecipeListProps> = ({
     for (const r of recipes) {
       if (r.category) set.add(r.category);
     }
-    return ['Todas', ...Array.from(set)];
+    const sorted = Array.from(set).sort((a, b) =>
+      a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })
+    );
+    return ['Todas', ...sorted];
   }, [recipes]);
 
   const categoryCounts = useMemo(() => {
@@ -360,86 +392,142 @@ export const RecipeList: React.FC<RecipeListProps> = ({
               )}
             </div>
 
-            {/* Status de Balanceamento: Cockpit de Ação Rápida (Opção 1) */}
-            <div className="flex flex-wrap items-center gap-2 pt-0.5 pb-1">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">
-                Fórmula:
-              </span>
-              <div className="inline-flex p-1 bg-slate-900/90 border border-slate-700/80 rounded-2xl gap-1 shadow-inner flex-wrap">
-                {/* Todas */}
-                <button
-                  type="button"
-                  onClick={() => setBalanceFilter('all')}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                    balanceFilter === 'all'
-                      ? 'bg-slate-700 text-white shadow-sm font-black'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                  }`}
-                >
-                  <Layers className="w-3.5 h-3.5 text-slate-300" />
-                  <span>Todas</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
-                      balanceFilter === 'all' ? 'bg-slate-900 text-white' : 'bg-slate-800 text-slate-400'
+            {/* Linha de Controles: Seletor de Fórmula (Metodologia) + Cockpit de Status */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5 pt-0.5 pb-1">
+              {/* Seletor de Metodologia/Fórmula */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-0.5">
+                  Fórmula:
+                </span>
+                <div className="inline-flex p-1 bg-slate-900/90 border border-slate-700/80 rounded-2xl gap-1 shadow-inner flex-wrap">
+                  {/* Padrão Ouro */}
+                  <button
+                    type="button"
+                    onClick={() => handleSelectPreset('gold')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      activePreset === 'gold'
+                        ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-black'
+                        : 'text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10'
+                    }`}
+                    title="Padrão Ouro Híbrido Protegido (PAC Carpigiani + Caviezel Anti-Arenosidade)"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 stroke-[2.4]" />
+                    <span>Padrão Ouro</span>
+                  </button>
+
+                  {/* Carpigiani Estrito */}
+                  <button
+                    type="button"
+                    onClick={() => handleSelectPreset('carpigiani')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      activePreset === 'carpigiani'
+                        ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/20 font-black'
+                        : 'text-slate-400 hover:text-sky-300 hover:bg-sky-500/10'
+                    }`}
+                    title="Carpigiani Gelato University - Diretrizes Acadêmicas Estritas"
+                  >
+                    <GraduationCap className="w-3.5 h-3.5 stroke-[2.4]" />
+                    <span>Carpigiani Estrito</span>
+                  </button>
+
+                  {/* Personalizado */}
+                  <button
+                    type="button"
+                    onClick={() => handleSelectPreset('custom')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      activePreset === 'custom'
+                        ? 'bg-purple-500 text-slate-950 shadow-md shadow-purple-500/20 font-black'
+                        : 'text-slate-400 hover:text-purple-300 hover:bg-purple-500/10'
+                    }`}
+                    title="Metas Customizadas do Mestre Gelatiere (clique para abrir edição)"
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5 stroke-[2.4]" />
+                    <span>Personalizado</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Status de Balanceamento: Cockpit de Ação Rápida */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-0.5">
+                  Status:
+                </span>
+                <div className="inline-flex p-1 bg-slate-900/90 border border-slate-700/80 rounded-2xl gap-1 shadow-inner flex-wrap">
+                  {/* Todas */}
+                  <button
+                    type="button"
+                    onClick={() => setBalanceFilter('all')}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                      balanceFilter === 'all'
+                        ? 'bg-slate-700 text-white shadow-sm font-black'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                     }`}
                   >
-                    {balanceStatusCounts.all}
-                  </span>
-                </button>
+                    <Layers className="w-3.5 h-3.5 text-slate-300" />
+                    <span>Todas</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
+                        balanceFilter === 'all' ? 'bg-slate-900 text-white' : 'bg-slate-800 text-slate-400'
+                      }`}
+                    >
+                      {balanceStatusCounts.all}
+                    </span>
+                  </button>
 
-                {/* Balanceadas */}
-                <button
-                  type="button"
-                  onClick={() => setBalanceFilter('balanced')}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                    balanceFilter === 'balanced'
-                      ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-black'
-                      : 'text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10'
-                  }`}
-                >
-                  <CheckCircle2
-                    className={`w-3.5 h-3.5 ${
-                      balanceFilter === 'balanced' ? 'text-slate-950 stroke-[2.6]' : 'text-emerald-400'
-                    }`}
-                  />
-                  <span>Balanceadas</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
+                  {/* Balanceadas */}
+                  <button
+                    type="button"
+                    onClick={() => setBalanceFilter('balanced')}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                       balanceFilter === 'balanced'
-                        ? 'bg-emerald-600/35 text-slate-950 font-black'
-                        : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-black'
+                        : 'text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10'
                     }`}
                   >
-                    {balanceStatusCounts.balanced}
-                  </span>
-                </button>
+                    <CheckCircle2
+                      className={`w-3.5 h-3.5 ${
+                        balanceFilter === 'balanced' ? 'text-slate-950 stroke-[2.6]' : 'text-emerald-400'
+                      }`}
+                    />
+                    <span>Balanceadas</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
+                        balanceFilter === 'balanced'
+                          ? 'bg-emerald-600/35 text-slate-950 font-black'
+                          : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      }`}
+                    >
+                      {balanceStatusCounts.balanced}
+                    </span>
+                  </button>
 
-                {/* Precisam de Ajuste */}
-                <button
-                  type="button"
-                  onClick={() => setBalanceFilter('critical')}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                    balanceFilter === 'critical'
-                      ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-black'
-                      : 'text-slate-400 hover:text-amber-300 hover:bg-amber-500/10'
-                  }`}
-                >
-                  <AlertCircle
-                    className={`w-3.5 h-3.5 ${
-                      balanceFilter === 'critical' ? 'text-slate-950 stroke-[2.6]' : 'text-amber-400'
-                    }`}
-                  />
-                  <span>Precisam de Ajuste</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
+                  {/* Precisam de Ajuste */}
+                  <button
+                    type="button"
+                    onClick={() => setBalanceFilter('critical')}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                       balanceFilter === 'critical'
-                        ? 'bg-amber-600/35 text-slate-950 font-black'
-                        : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                        ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-black'
+                        : 'text-slate-400 hover:text-amber-300 hover:bg-amber-500/10'
                     }`}
                   >
-                    {balanceStatusCounts.critical}
-                  </span>
-                </button>
+                    <AlertCircle
+                      className={`w-3.5 h-3.5 ${
+                        balanceFilter === 'critical' ? 'text-slate-950 stroke-[2.6]' : 'text-amber-400'
+                      }`}
+                    />
+                    <span>Precisam de Ajuste</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
+                        balanceFilter === 'critical'
+                          ? 'bg-amber-600/35 text-slate-950 font-black'
+                          : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                      }`}
+                    >
+                      {balanceStatusCounts.critical}
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
 
