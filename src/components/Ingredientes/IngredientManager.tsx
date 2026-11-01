@@ -1068,18 +1068,27 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
                   </div>
 
                   {/* Toggle Switch */}
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={newHasAllergen}
-                      onChange={e => {
-                        setNewHasAllergen(e.target.checked);
-                        if (!e.target.checked) setSelectedAllergens([]);
-                      }}
-                      className="sr-only peer"
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={newHasAllergen}
+                    onClick={() => {
+                      const next = !newHasAllergen;
+                      setNewHasAllergen(next);
+                      if (!next) setSelectedAllergens([]);
+                    }}
+                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-rose-500/50 ${
+                      newHasAllergen ? 'bg-rose-500' : 'bg-slate-800'
+                    }`}
+                  >
+                    <span className="sr-only">Alérgenos regulamentares</span>
+                    <span
+                      aria-hidden="true"
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                        newHasAllergen ? 'translate-x-5' : 'translate-x-0'
+                      }`}
                     />
-                    <div className="w-10 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-500"></div>
-                  </label>
+                  </button>
                 </div>
 
                 {newHasAllergen && (
