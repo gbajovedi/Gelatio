@@ -615,55 +615,31 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                     <span>{recipe.name}</span>
                   </h3>
 
-                  {/* Micro-Dashboard de Métricas Técnicas */}
-                  <div className="grid grid-cols-4 gap-1.5 p-2 bg-slate-900/90 rounded-xl border border-slate-700/70 text-center font-mono shadow-inner">
-                    <div
-                      className="flex flex-col items-center justify-center py-1 px-0.5 rounded-lg bg-slate-800/70"
-                      title="PAC (Poder Anticongelante / Maciez na Vitrine)"
-                    >
-                      <span className="text-[10px] text-sky-400 font-bold tracking-wider">PAC</span>
-                      <span className="text-xs sm:text-sm font-black text-white">{m?.pac ? m.pac : '--'}</span>
-                    </div>
-
-                    <div
-                      className="flex flex-col items-center justify-center py-1 px-0.5 rounded-lg bg-slate-800/70"
-                      title="POD (Poder Adoçante / Doçura Percebida)"
-                    >
-                      <span className="text-[10px] text-amber-400 font-bold tracking-wider">POD</span>
-                      <span className="text-xs sm:text-sm font-black text-white">{m?.pod ? m.pod : '--'}</span>
-                    </div>
-
-                    <div
-                      className="flex flex-col items-center justify-center py-1 px-0.5 rounded-lg bg-slate-800/70"
-                      title="Teor de Gordura Total"
-                    >
-                      <span className="text-[10px] text-emerald-400 font-bold tracking-wider">GORD.</span>
-                      <span className="text-xs sm:text-sm font-black text-white">
-                        {m?.fatPct !== undefined && m.fatPct > 0 ? `${m.fatPct.toFixed(1)}%` : '0%'}
-                      </span>
-                    </div>
-
-                    <div
-                      className="flex flex-col items-center justify-center py-1 px-0.5 rounded-lg bg-slate-800/70"
-                      title="Custo Base Estimado por Kg"
-                    >
-                      <span className="text-[10px] text-amber-300 font-bold tracking-wider">CUSTO/KG</span>
-                      <span className="text-xs sm:text-sm font-black text-amber-300">
-                        {m?.costKg !== undefined && m.costKg > 0 ? `R$${m.costKg.toFixed(1)}` : 'R$--'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Technical metadata */}
-                  <div className="flex items-center justify-between text-xs sm:text-sm text-slate-400 font-mono font-medium pt-0.5">
-                    <span className="flex items-center gap-1">
-                      <Layers className="w-3.5 h-3.5 text-slate-500" />
+                  {/* Linha unificada: Insumos, Peso base e Custo/kg */}
+                  <div className="flex items-center justify-between gap-2 text-xs sm:text-sm text-slate-400 font-mono font-medium pt-1">
+                    <span className="flex items-center gap-1.5" title="Quantidade de insumos na fórmula">
+                      <Layers className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                       <span>
-                        Insumos: <strong className="text-slate-200">{recipe.ingredients?.length ?? 0}</strong>
+                        Insumos: <strong className="text-slate-200 font-bold">{recipe.ingredients?.length ?? 0}</strong>
                       </span>
                     </span>
-                    <span>
-                      Peso base: <strong className="text-slate-200">{Math.round(totalWeight)} g</strong>
+
+                    <span className="flex items-center gap-1.5" title="Peso base da calda">
+                      <Scale className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                      <span>
+                        Peso: <strong className="text-slate-200 font-bold">{Math.round(totalWeight)} g</strong>
+                      </span>
+                    </span>
+
+                    <span
+                      className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/25 text-amber-300 font-bold text-xs"
+                      title="Custo estimado por kg de insumos"
+                    >
+                      <span>
+                        {m?.costKg !== undefined && m.costKg > 0
+                          ? `R$ ${m.costKg.toFixed(2).replace('.', ',')}/kg`
+                          : 'R$ --/kg'}
+                      </span>
                     </span>
                   </div>
                 </div>
