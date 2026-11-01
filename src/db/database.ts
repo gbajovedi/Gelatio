@@ -645,6 +645,36 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v16 rename zero styles:', e);
       }
     });
+
+    // Versão 17: Reclassificação taxonômica de 6 receitas (Proteico, Chocolate com Leite e Oleaginosas)
+    this.version(17).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const reclassifications: Record<string, { category: string; targetStyle: string }> = {
+          'rec_29': { category: 'Gelatos Proteicos', targetStyle: 'Gelatos Proteicos' },
+          'rec_37': { category: 'Gelatos de Leite com Chocolate', targetStyle: 'Gelatos de Leite com Chocolate' },
+          'rec_51': { category: 'Gelatos de Leite com Chocolate', targetStyle: 'Gelatos de Leite com Chocolate' },
+          'rec_55': { category: 'Gelatos de Leite com Chocolate', targetStyle: 'Gelatos de Leite com Chocolate' },
+          'rec_56': { category: 'Gelatos de Leite com Chocolate', targetStyle: 'Gelatos de Leite com Chocolate' },
+          'rec_47': { category: 'Gelatos de Oleaginosas', targetStyle: 'Gelatos de Oleaginosas' }
+        };
+        for (const [id, target] of Object.entries(reclassifications)) {
+          const rec = await tx.table('recipes').get(id);
+          if (rec && !rec.isCustom) {
+            await tx.table('recipes').update(id, {
+              category: target.category,
+              targetStyle: target.targetStyle
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Migration to v17 recipe reclassifications:', e);
+      }
+    });
   }
 
   async initializeSeedData(): Promise<void> {
@@ -1053,6 +1083,29 @@ export class GelatoDatabase extends Dexie {
             }
           }
           await this.settings.put({ key: 'zero_renamed_v16', value: 1 });
+        }
+
+        // Garantir reclassificação taxonômica das 6 receitas
+        const reclassFlag = await this.settings.get('reclassified_recipes_v17');
+        if (!reclassFlag) {
+          const reclassifications: Record<string, { category: string; targetStyle: string }> = {
+            'rec_29': { category: 'Gelatos Proteicos', targetStyle: 'Gelatos Proteicos' },
+            'rec_37': { category: 'Gelatos de Leite com Chocolate', targetStyle: 'Gelatos de Leite com Chocolate' },
+            'rec_51': { category: 'Gelatos de Leite com Chocolate', targetStyle: 'Gelatos de Leite com Chocolate' },
+            'rec_55': { category: 'Gelatos de Leite com Chocolate', targetStyle: 'Gelatos de Leite com Chocolate' },
+            'rec_56': { category: 'Gelatos de Leite com Chocolate', targetStyle: 'Gelatos de Leite com Chocolate' },
+            'rec_47': { category: 'Gelatos de Oleaginosas', targetStyle: 'Gelatos de Oleaginosas' }
+          };
+          for (const [id, target] of Object.entries(reclassifications)) {
+            const rec = await this.recipes.get(id);
+            if (rec && !rec.isCustom) {
+              await this.recipes.update(id, {
+                category: target.category,
+                targetStyle: target.targetStyle
+              });
+            }
+          }
+          await this.settings.put({ key: 'reclassified_recipes_v17', value: 1 });
         }
       }
 

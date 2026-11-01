@@ -1178,8 +1178,8 @@
   {
     "id": "rec_29",
     "name": "Gelato de Whey Protein com Brownie (Addolcire)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
+    "category": "Gelatos Proteicos",
+    "targetStyle": "Gelatos Proteicos",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -1526,8 +1526,8 @@
   {
     "id": "rec_37",
     "name": "Gelato de Brigadeiro (Addolcire)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -1944,8 +1944,8 @@
   {
     "id": "rec_47",
     "name": "Gelato Kinder Bueno (Addolcire)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
+    "category": "Gelatos de Oleaginosas",
+    "targetStyle": "Gelatos de Oleaginosas",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -2112,8 +2112,8 @@
   {
     "id": "rec_51",
     "name": "Gelato de Ovomaltine (Addolcire)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -2276,8 +2276,8 @@
   {
     "id": "rec_55",
     "name": "Gelato Snickers (Addolcire)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -2329,8 +2329,8 @@
   {
     "id": "rec_56",
     "name": "Gelato Sonho de Valsa (Addolcire)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
       {
         "name": "Leite Integral",
