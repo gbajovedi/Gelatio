@@ -552,6 +552,29 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v13 zero recipes rebalancing:', e);
       }
     });
+
+    // Versão 14: Migração dos 6 gelatos veganos da categoria Zero para a categoria Vegano
+    this.version(14).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const veganZeroIds = ['rec_154', 'rec_155', 'rec_158', 'rec_159', 'rec_162', 'rec_163'];
+        for (const id of veganZeroIds) {
+          const existing = await tx.table('recipes').get(id);
+          if (existing && !existing.isCustom) {
+            await tx.table('recipes').update(id, {
+              category: 'Vegano',
+              targetStyle: 'Zero'
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Migration to v14 vegan recipes category:', e);
+      }
+    });
   }
 
   async initializeSeedData(): Promise<void> {
@@ -888,6 +911,22 @@ export class GelatoDatabase extends Dexie {
             }
           }
           await this.settings.put({ key: 'zero_rebalance_v13', value: 1 });
+        }
+
+        // Garantir atualização da categoria dos 6 gelatos veganos
+        const veganMoveFlag = await this.settings.get('vegan_category_move_v14');
+        if (!veganMoveFlag) {
+          const veganZeroIds = ['rec_154', 'rec_155', 'rec_158', 'rec_159', 'rec_162', 'rec_163'];
+          for (const id of veganZeroIds) {
+            const existing = await this.recipes.get(id);
+            if (existing && !existing.isCustom) {
+              await this.recipes.update(id, {
+                category: 'Vegano',
+                targetStyle: 'Zero'
+              });
+            }
+          }
+          await this.settings.put({ key: 'vegan_category_move_v14', value: 1 });
         }
       }
 

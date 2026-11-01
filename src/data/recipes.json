@@ -6067,7 +6067,7 @@
   {
     "id": "rec_154",
     "name": "Gelato de Coco Vegano - Polióis (Sem Açúcar)",
-    "category": "Zero",
+    "category": "Vegano",
     "targetStyle": "Zero",
     "ingredients": [
       {
@@ -6108,7 +6108,7 @@
   {
     "id": "rec_155",
     "name": "Gelato de Coco Vegano - Menos Polióis (Sem Açúcar)",
-    "category": "Zero",
+    "category": "Vegano",
     "targetStyle": "Zero",
     "ingredients": [
       {
@@ -6235,7 +6235,7 @@
   {
     "id": "rec_158",
     "name": "Gelato de Pistache Vegano - Polióis (Sem Açúcar)",
-    "category": "Zero",
+    "category": "Vegano",
     "targetStyle": "Zero",
     "ingredients": [
       {
@@ -6268,7 +6268,7 @@
   {
     "id": "rec_159",
     "name": "Gelato de Pistache Vegano - Menos Polióis (Sem Açúcar)",
-    "category": "Zero",
+    "category": "Vegano",
     "targetStyle": "Zero",
     "ingredients": [
       {
@@ -6387,7 +6387,7 @@
   {
     "id": "rec_162",
     "name": "Gelato Intenso de Cacau com Laranja Vegano - Polióis (Sem Açúcar)",
-    "category": "Zero",
+    "category": "Vegano",
     "targetStyle": "Zero",
     "ingredients": [
       {
@@ -6424,7 +6424,7 @@
   {
     "id": "rec_163",
     "name": "Gelato Intenso de Cacau com Laranja Vegano - Redução Polióis (Sem Açúcar)",
-    "category": "Zero",
+    "category": "Vegano",
     "targetStyle": "Zero",
     "ingredients": [
       {
