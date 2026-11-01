@@ -75,71 +75,103 @@ export const PostProduction: React.FC<PostProductionProps> = ({
           Nenhuma mescla ou variegato adicionado. A calda base corresponde a 100% do gelato final.
         </div>
       ) : (
-        <div className="space-y-2.5">
-          {variegatos.map((item, idx) => {
-            const gPerKg = caldaWeightGrams > 0
-              ? Math.round((item.grams / caldaWeightGrams) * 1000)
-              : 0;
-            const pctCalda = caldaWeightGrams > 0
-              ? (item.grams / caldaWeightGrams) * 100
-              : 0;
+        <div className="overflow-x-auto pb-1">
+          <div className="min-w-[620px] space-y-2">
+            {/* Cabeçalho de Colunas Explicativo */}
+            <div className="flex items-center gap-3 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-700/60 select-none">
+              <div className="flex-1 pl-1">Mescla / Inclusão</div>
+              <div className="w-32 text-right pr-2">Peso no Lote</div>
+              <div className="w-36 text-center">Dosagem Calculada</div>
+              <div className="w-32 text-right pr-2">Custo</div>
+              <div className="w-10 text-center">Ação</div>
+            </div>
 
-            return (
-              <div
-                key={idx}
-                className="flex items-center gap-3 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700/80"
-              >
-                <div className="flex-1">
-                  <input
-                    type="text"
-                    list="variegatos-options"
-                    placeholder="Nome do variegato ou recheio..."
-                    value={item.name}
-                    onChange={e => handleChangeName(idx, e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
-                  />
-                </div>
+            {/* Linhas de Mesclas */}
+            {variegatos.map((item, idx) => {
+              const ing = availableIngredients.find(
+                i => i.name.toLowerCase() === item.name.toLowerCase().trim()
+              );
+              const costKg = item.costKg ?? (ing ? ing.costKg : 0);
+              const totalItemCost = (item.grams * costKg) / 1000;
+              const gPerKg = caldaWeightGrams > 0
+                ? Math.round((item.grams / caldaWeightGrams) * 1000)
+                : 0;
+              const pctCalda = caldaWeightGrams > 0
+                ? (item.grams / caldaWeightGrams) * 100
+                : 0;
 
-                <div className="w-32 flex items-center gap-1">
-                  <input
-                    type="number"
-                    min="0"
-                    step="5"
-                    value={item.grams || ''}
-                    onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-sm text-right font-black font-mono text-amber-300 focus:outline-none focus:border-amber-500"
-                  />
-                  <span className="text-xs font-mono font-bold text-slate-400">g</span>
-                </div>
-
+              return (
                 <div
-                  className="w-24 text-right pr-2 shrink-0"
-                  title={`${gPerKg}g de mescla por 1kg de calda base (${pctCalda.toFixed(1)}%)`}
+                  key={idx}
+                  className="flex items-center gap-3 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700/80 hover:border-slate-600 transition-colors"
                 >
-                  <span className="text-sm font-mono font-bold text-amber-300">
-                    {gPerKg} g/kg
-                  </span>
-                  <span className="text-xs block text-slate-400 font-medium">mescla</span>
-                </div>
+                  {/* Nome da Mescla */}
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      list="variegatos-options"
+                      placeholder="Nome do variegato, pasta ou inclusão..."
+                      value={item.name}
+                      onChange={e => handleChangeName(idx, e.target.value)}
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+                    />
+                  </div>
 
-                <div className="w-28 text-right pr-2">
-                  <span className="text-sm font-mono font-bold text-slate-200">
-                    R$ {(item.costKg ?? 0).toFixed(2)}
-                  </span>
-                  <span className="text-xs block text-slate-400 font-medium">/kg</span>
-                </div>
+                  {/* Campo de Peso no Lote (Editável) */}
+                  <div className="w-32 flex items-center bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-lg px-2.5 py-1.5 shadow-inner transition-colors">
+                    <input
+                      type="number"
+                      min="0"
+                      step="5"
+                      value={item.grams || ''}
+                      onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
+                      className="w-full bg-transparent text-sm text-right font-black font-mono text-amber-300 focus:outline-none"
+                      placeholder="0"
+                    />
+                    <span className="text-xs font-mono font-bold text-slate-400 pl-1.5 shrink-0">g</span>
+                  </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleRemove(idx)}
-                  className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors"
-                  title="Remover"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            );
-          })}
+                  {/* Pílula Informativa de Dosagem (Resultado Calculado) */}
+                  <div
+                    className="w-36 flex flex-col items-center justify-center bg-slate-800/80 border border-slate-700/60 rounded-lg py-1 px-2 shrink-0 shadow-inner"
+                    title={`${gPerKg}g de mescla por 1kg de calda base (${pctCalda.toFixed(1)}% do peso da calda)`}
+                  >
+                    <span className="text-xs font-mono font-bold text-cyan-300">
+                      {gPerKg} g/kg
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-medium">
+                      ~{pctCalda.toFixed(1)}% da calda
+                    </span>
+                  </div>
+
+                  {/* Custo no Lote e Custo por Kg */}
+                  <div className="w-32 text-right pr-2 shrink-0">
+                    <span className="text-sm font-mono font-bold text-emerald-400 block tracking-tight">
+                      R$ {totalItemCost.toFixed(2)}
+                    </span>
+                    <span
+                      className="text-[10px] text-slate-400 font-mono block"
+                      title={`Preço da matéria-prima: R$ ${costKg.toFixed(2)}/kg`}
+                    >
+                      R$ {costKg.toFixed(2)}/kg
+                    </span>
+                  </div>
+
+                  {/* Botão Remover */}
+                  <div className="w-10 flex justify-center shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(idx)}
+                      className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors"
+                      title="Remover mescla"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
