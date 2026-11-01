@@ -528,6 +528,30 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v12 chocolate naming & polyols:', e);
       }
     });
+
+    // Versão 13: Rebalanceamento anti-arenosidade de 6 receitas Zero (substituição de leite em pó por leite integral líquido)
+    this.version(13).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const targetIds = ['rec_121', 'rec_122', 'rec_123', 'rec_126', 'rec_160', 'rec_161'];
+        const targetMap = new Map((initialRecipes as Recipe[]).filter(r => targetIds.includes(r.id)).map(r => [r.id, r]));
+        for (const id of targetIds) {
+          const updated = targetMap.get(id);
+          if (updated) {
+            const existing = await tx.table('recipes').get(id);
+            if (existing && !existing.isCustom) {
+              await tx.table('recipes').update(id, { ingredients: updated.ingredients });
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Migration to v13 zero recipes rebalancing:', e);
+      }
+    });
   }
 
   async initializeSeedData(): Promise<void> {
@@ -848,6 +872,23 @@ export class GelatoDatabase extends Dexie {
       if (recCount === 0) {
         console.log('Populando receitas iniciais...');
         await this.recipes.bulkPut(initialRecipes as Recipe[]);
+      } else {
+        // Garantir sincronização das 6 receitas Zero rebalanceadas
+        const zeroRebalanceFlag = await this.settings.get('zero_rebalance_v13');
+        if (!zeroRebalanceFlag) {
+          const targetIds = ['rec_121', 'rec_122', 'rec_123', 'rec_126', 'rec_160', 'rec_161'];
+          const targetMap = new Map((initialRecipes as Recipe[]).filter(r => targetIds.includes(r.id)).map(r => [r.id, r]));
+          for (const id of targetIds) {
+            const updated = targetMap.get(id);
+            if (updated) {
+              const existing = await this.recipes.get(id);
+              if (existing && !existing.isCustom) {
+                await this.recipes.update(id, { ingredients: updated.ingredients });
+              }
+            }
+          }
+          await this.settings.put({ key: 'zero_rebalance_v13', value: 1 });
+        }
       }
 
       // 3. Pré-preparos & Variegatos
