@@ -451,13 +451,13 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                 key={fmt}
                 type="button"
                 onClick={() => setSelectedFormat(fmt)}
-                className={`py-3 px-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center gap-1 relative ${
+                className={`h-full py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center justify-center gap-1.5 relative ${
                   isSelected
                     ? 'bg-amber-500/20 border-amber-500/70 text-amber-200 shadow-md ring-1 ring-amber-500/40'
                     : 'bg-slate-900/80 border-slate-700/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
-                <span className="text-xl select-none leading-none mb-0.5">{config.icon}</span>
+                <span className="text-2xl select-none leading-none">{config.icon}</span>
                 <span className="text-xs font-bold leading-tight truncate max-w-full">
                   {config.title}
                 </span>
@@ -469,11 +469,7 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                   >
                     {subtitleText}
                   </span>
-                ) : (
-                  <span className="text-xs leading-tight opacity-0 select-none pointer-events-none" aria-hidden="true">
-                    &nbsp;
-                  </span>
-                )}
+                ) : null}
               </button>
             );
           })}
