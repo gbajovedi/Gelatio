@@ -37,8 +37,7 @@ import {
   PieChart,
   SlidersHorizontal,
   ShieldCheck,
-  GraduationCap,
-  ArrowDown
+  GraduationCap
 } from 'lucide-react';
 
 const getIngredientCategoryPill = (category?: string) => {
@@ -925,26 +924,6 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                   </div>
                 </div>
               )}
-
-              {/* Indicador de Precificação abaixo */}
-              <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
-                <span>Precificação Comercial & Potes:</span>
-                <span className="text-emerald-400 font-bold flex items-center gap-1">
-                  <span>Disponível abaixo</span>
-                  <ArrowDown className="w-3.5 h-3.5" />
-                </span>
-              </div>
-            </div>
-
-            {/* Quick tips */}
-            <div className="text-xs text-slate-300 space-y-1.5 pt-3 border-t border-slate-700">
-              <div className="flex items-center gap-1.5 text-amber-300 font-bold">
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span>Dica do Mestre Gelatiere:</span>
-              </div>
-              <p className="leading-relaxed">
-                Para servir na mesma vitrine com sorbets e cremes, mantenha o PAC entre <strong>240 e 280</strong> para garantir textura homogênea e firmeza de espátula idêntica em todas as cubas.
-              </p>
             </div>
           </div>
         </div>
