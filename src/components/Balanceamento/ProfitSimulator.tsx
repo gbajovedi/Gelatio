@@ -118,7 +118,7 @@ const FORMAT_CONFIGS: Record<SalesFormat, FormatConfig> = {
     id: 'custom',
     name: 'Personalizado',
     title: 'Personalizado',
-    subtitle: 'Configurável',
+    subtitle: '',
     icon: '⚖️',
     type: 'volume',
     packagingCost: 1.00,
@@ -461,13 +461,19 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                 <span className="text-xs font-bold leading-tight truncate max-w-full">
                   {config.title}
                 </span>
-                <span
-                  className={`text-xs font-mono font-medium leading-tight ${
-                    isSelected ? 'text-amber-300 font-bold' : 'text-slate-400'
-                  }`}
-                >
-                  {subtitleText}
-                </span>
+                {subtitleText ? (
+                  <span
+                    className={`text-xs font-mono font-medium leading-tight ${
+                      isSelected ? 'text-amber-300 font-bold' : 'text-slate-400'
+                    }`}
+                  >
+                    {subtitleText}
+                  </span>
+                ) : (
+                  <span className="text-xs leading-tight opacity-0 select-none pointer-events-none" aria-hidden="true">
+                    &nbsp;
+                  </span>
+                )}
               </button>
             );
           })}
