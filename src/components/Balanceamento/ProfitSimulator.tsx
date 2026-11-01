@@ -444,10 +444,7 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
           {(Object.keys(FORMAT_CONFIGS) as SalesFormat[]).map(fmt => {
             const config = FORMAT_CONFIGS[fmt];
             const isSelected = selectedFormat === fmt;
-            const subtitleText =
-              fmt === 'custom'
-                ? customMeasureType === 'volume' ? `${customVolumeInput}ml` : `${customWeightInput}g`
-                : config.subtitle;
+            const subtitleText = config.subtitle;
 
             return (
               <button
