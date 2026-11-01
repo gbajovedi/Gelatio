@@ -65,19 +65,19 @@
   },
   {
     "id": "ing_184",
-    "name": "Nesquik / Ovomaltine",
+    "name": "Nesquik",
     "category": "Confeitaria & Inclusões",
-    "costKg": 35,
-    "sugars": 0.75,
-    "fat": 0.03,
-    "msnf": 0.05,
-    "otherSolids": 0.14,
+    "costKg": 40,
+    "sugars": 0.785,
+    "fat": 0,
+    "msnf": 0,
+    "otherSolids": 0.185,
     "totalSolids": 0.97,
     "water": 0.03,
-    "pod": 0.75,
-    "pac": 0.8,
-    "protein": 0.04,
-    "hasAllergen": true
+    "pod": 0.81,
+    "pac": 0.85,
+    "protein": 0,
+    "hasAllergen": false
   },
   {
     "id": "ing_8",
@@ -3373,5 +3373,21 @@
     "pac": 2.2,
     "protein": 0,
     "hasAllergen": false
+  },
+  {
+    "id": "ing_217",
+    "name": "Ovomaltine",
+    "category": "Confeitaria & Inclusões",
+    "costKg": 54,
+    "sugars": 0.55,
+    "fat": 0.02,
+    "msnf": 0.05,
+    "otherSolids": 0.35,
+    "totalSolids": 0.97,
+    "water": 0.03,
+    "pod": 0.58,
+    "pac": 0.67,
+    "protein": 0.04,
+    "hasAllergen": true
   }
 ]

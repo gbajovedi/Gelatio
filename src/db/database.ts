@@ -675,6 +675,41 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v17 recipe reclassifications:', e);
       }
     });
+
+    // Versão 18: Separação de Nesquik / Ovomaltine em dois insumos independentes
+    this.version(18).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const nesquikIng = (initialIngredients as Ingredient[]).find(i => i.name === 'Nesquik');
+        const ovomaltineIng = (initialIngredients as Ingredient[]).find(i => i.name === 'Ovomaltine');
+        if (nesquikIng) await tx.table('ingredients').put(nesquikIng);
+        if (ovomaltineIng) await tx.table('ingredients').put(ovomaltineIng);
+
+        // Atualizar rec_8 para Nesquik
+        const r8 = await tx.table('recipes').get('rec_8');
+        if (r8 && !r8.isCustom) {
+          const updated = r8.ingredients.map((it: any) =>
+            it.name === 'Nesquik / Ovomaltine' ? { ...it, name: 'Nesquik' } : it
+          );
+          await tx.table('recipes').update('rec_8', { ingredients: updated });
+        }
+
+        // Atualizar rec_51 para Ovomaltine
+        const r51 = await tx.table('recipes').get('rec_51');
+        if (r51 && !r51.isCustom) {
+          const updated = r51.ingredients.map((it: any) =>
+            it.name === 'Nesquik / Ovomaltine' ? { ...it, name: 'Ovomaltine' } : it
+          );
+          await tx.table('recipes').update('rec_51', { ingredients: updated });
+        }
+      } catch (e) {
+        console.warn('Migration to v18 nesquik/ovomaltine split:', e);
+      }
+    });
   }
 
   async initializeSeedData(): Promise<void> {
@@ -1106,6 +1141,32 @@ export class GelatoDatabase extends Dexie {
             }
           }
           await this.settings.put({ key: 'reclassified_recipes_v17', value: 1 });
+        }
+
+        // Garantir separação de Nesquik e Ovomaltine
+        const splitFlag = await this.settings.get('nesquik_ovomaltine_split_v18');
+        if (!splitFlag) {
+          const nesquikIng = (initialIngredients as Ingredient[]).find(i => i.name === 'Nesquik');
+          const ovomaltineIng = (initialIngredients as Ingredient[]).find(i => i.name === 'Ovomaltine');
+          if (nesquikIng) await this.ingredients.put(nesquikIng);
+          if (ovomaltineIng) await this.ingredients.put(ovomaltineIng);
+
+          const r8 = await this.recipes.get('rec_8');
+          if (r8 && !r8.isCustom) {
+            const updated = r8.ingredients.map((it: any) =>
+              it.name === 'Nesquik / Ovomaltine' ? { ...it, name: 'Nesquik' } : it
+            );
+            await this.recipes.update('rec_8', { ingredients: updated });
+          }
+
+          const r51 = await this.recipes.get('rec_51');
+          if (r51 && !r51.isCustom) {
+            const updated = r51.ingredients.map((it: any) =>
+              it.name === 'Nesquik / Ovomaltine' ? { ...it, name: 'Ovomaltine' } : it
+            );
+            await this.recipes.update('rec_51', { ingredients: updated });
+          }
+          await this.settings.put({ key: 'nesquik_ovomaltine_split_v18', value: 1 });
         }
       }
 
