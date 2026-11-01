@@ -575,6 +575,37 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v14 vegan recipes category:', e);
       }
     });
+
+    // Versão 15: Remoção do Mix Zero e das 22 receitas associadas
+    this.version(15).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const mixZeroRecipeIds = [
+          'rec_120', 'rec_121', 'rec_122', 'rec_123', 'rec_124', 'rec_125', 'rec_126', 'rec_127', 'rec_128', 'rec_129', 'rec_130',
+          'rec_131', 'rec_132', 'rec_133', 'rec_134', 'rec_135', 'rec_136', 'rec_137', 'rec_138', 'rec_139', 'rec_140', 'rec_141'
+        ];
+        for (const id of mixZeroRecipeIds) {
+          const r = await tx.table('recipes').get(id);
+          if (r && !r.isCustom) {
+            await tx.table('recipes').delete(id);
+          }
+        }
+        const ing = await tx.table('ingredients').get('ing_169');
+        if (ing && !ing.isCustom) {
+          await tx.table('ingredients').delete('ing_169');
+        }
+        const prep = await tx.table('preparations').get('prep_mix_zero');
+        if (prep && !prep.isCustom) {
+          await tx.table('preparations').delete('prep_mix_zero');
+        }
+      } catch (e) {
+        console.warn('Migration to v15 delete mix zero:', e);
+      }
+    });
   }
 
   async initializeSeedData(): Promise<void> {
@@ -927,6 +958,30 @@ export class GelatoDatabase extends Dexie {
             }
           }
           await this.settings.put({ key: 'vegan_category_move_v14', value: 1 });
+        }
+
+        // Garantir remoção do Mix Zero e das 22 receitas associadas
+        const mixZeroDeleteFlag = await this.settings.get('mix_zero_deleted_v15');
+        if (!mixZeroDeleteFlag) {
+          const mixZeroRecipeIds = [
+            'rec_120', 'rec_121', 'rec_122', 'rec_123', 'rec_124', 'rec_125', 'rec_126', 'rec_127', 'rec_128', 'rec_129', 'rec_130',
+            'rec_131', 'rec_132', 'rec_133', 'rec_134', 'rec_135', 'rec_136', 'rec_137', 'rec_138', 'rec_139', 'rec_140', 'rec_141'
+          ];
+          for (const id of mixZeroRecipeIds) {
+            const r = await this.recipes.get(id);
+            if (r && !r.isCustom) {
+              await this.recipes.delete(id);
+            }
+          }
+          const ing = await this.ingredients.get('ing_169');
+          if (ing && !ing.isCustom) {
+            await this.ingredients.delete('ing_169');
+          }
+          const prep = await this.preparations.get('prep_mix_zero');
+          if (prep && !prep.isCustom) {
+            await this.preparations.delete('prep_mix_zero');
+          }
+          await this.settings.put({ key: 'mix_zero_deleted_v15', value: 1 });
         }
       }
 

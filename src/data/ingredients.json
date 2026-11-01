@@ -2411,23 +2411,6 @@
     "hasAllergen": true
   },
   {
-    "id": "ing_169",
-    "name": "MIX ZERO",
-    "category": "Bases & Pré-preparos",
-    "costKg": 35.69,
-    "sugars": 0,
-    "fat": 0,
-    "msnf": 0,
-    "otherSolids": 0.9635,
-    "totalSolids": 0.9635,
-    "water": 0.0365,
-    "pod": 0.3799,
-    "pac": 1.184,
-    "protein": 0,
-    "hasAllergen": false,
-    "preparationId": "prep_mix_zero"
-  },
-  {
     "id": "ing_126",
     "name": "Morango",
     "category": "Frutas & Polpas",

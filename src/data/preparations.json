@@ -24,30 +24,6 @@
     ]
   },
   {
-    "id": "prep_mix_zero",
-    "name": "MIX ZERO",
-    "category": "Pré-preparo",
-    "instructions": "",
-    "ingredients": [
-      {
-        "name": "Polidextrose - Fibra",
-        "grams": 730
-      },
-      {
-        "name": "Eritritol",
-        "grams": 245
-      },
-      {
-        "name": "Farinha De Semente De Alfarroba",
-        "grams": 20
-      },
-      {
-        "name": "Stevia em pó",
-        "grams": 5
-      }
-    ]
-  },
-  {
     "id": "prep_brigadeiro",
     "name": "Brigadeiro",
     "category": "Pré-preparo",
