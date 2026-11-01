@@ -4,10 +4,7 @@ import {
   CheckCircle2,
   AlertCircle,
   ThermometerSnowflake,
-  ArrowDownCircle,
-  ArrowUpCircle,
   Check,
-  Info,
   AlertTriangle,
   Store,
   Package,
@@ -129,39 +126,6 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
   const corvitto = analysis.corvittoMetrics;
   const sandiness = analysis.sandinessRisk;
   const emulsion = analysis.emulsionMetrics;
-
-  const pendingIssues = Object.entries(validations)
-    .filter(([key, item]) => item.status !== 'Ok' && (key !== 'protein' || validations.protein.max > 0))
-    .map(([key, item]) => {
-      const meta = NUTRIENT_METAS[key] || {
-        label: key,
-        icon: '📊',
-        unit: '%',
-        isPercent: true
-      };
-      const isPercent = meta.isPercent;
-      const unit = meta.unit;
-      const valStr = isPercent ? (item.val * 100).toFixed(1) : item.val.toFixed(0);
-      const minStr = isPercent ? (item.min * 100).toFixed(1) : item.min.toFixed(0);
-      const maxStr = isPercent ? (item.max * 100).toFixed(1) : item.max.toFixed(0);
-
-      const delta =
-        item.status === 'Baixo'
-          ? Math.max(0, item.min - item.val)
-          : Math.max(0, item.val - item.max);
-      const deltaStr = isPercent ? (delta * 100).toFixed(1) : delta.toFixed(0);
-
-      return {
-        key,
-        name: meta.label,
-        icon: meta.icon,
-        status: item.status,
-        valStr: `${valStr}${unit}`,
-        minStr: `${minStr}${unit}`,
-        maxStr: `${maxStr}${unit}`,
-        deltaStr: `${deltaStr}${unit}`
-      };
-    });
 
   // Texture and scoopability assessment based on Cryoscopic Serving Temperature
   const pacValue = analysis.totals.pac;
@@ -625,69 +589,6 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
 
           </div>
         </div>
-
-        {/* Alerta Destacado de Arenosidade (Caviezel) */}
-        {sandiness?.isAtRisk && (
-          <div className="mt-3.5 p-3.5 bg-amber-950/40 rounded-xl border border-amber-500/50 text-xs text-amber-200 flex items-start gap-2.5 shadow-sm">
-            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-            <div className="space-y-0.5">
-              <strong className="text-amber-300 font-bold block text-sm">
-                Alerta de Arenosidade (Regra Áurea de Luca Caviezel):
-              </strong>
-              <p className="text-amber-200/90 leading-relaxed text-xs sm:text-sm">
-                O teor de sólidos do leite (SLNG: {(sandiness.currentMsnf * 100).toFixed(1)}%) ultrapassa o limite seguro de saturação da água livre (máx. {(sandiness.maxSafeMsnf * 100).toFixed(1)}%). Sob oscilação térmica na vitrine, a lactose pode precipitar em microcristais perceptíveis na língua. Recomenda-se reduzir leite em pó ou elevar a proporção de leite integral/água.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Detailed Explanation Pills of Out-of-Range Parameters */}
-        {!isBalanced && pendingIssues.length > 0 && (
-          <div className="mt-4 pt-3.5 border-t border-slate-700/80 space-y-2.5">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                <Info className="w-4 h-4" />
-                <span>O que precisa ser calibrado na calda:</span>
-              </span>
-              <span className="text-xs text-slate-400">
-                Altere os pesos dos insumos na tabela abaixo para entrar na meta.
-              </span>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              {pendingIssues.map(issue => (
-                <div
-                  key={issue.key}
-                  className={`px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-2 transition-colors shadow-sm ${
-                    issue.status === 'Baixo'
-                      ? 'bg-amber-500/10 text-slate-100 border-amber-500/40'
-                      : 'bg-rose-500/10 text-slate-100 border-rose-500/40'
-                  }`}
-                >
-                  {issue.status === 'Baixo' ? (
-                    <ArrowDownCircle className="w-4 h-4 text-amber-400 shrink-0" />
-                  ) : (
-                    <ArrowUpCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                  )}
-                  <span>
-                    <strong className="font-bold text-white">{issue.name}:</strong>{' '}
-                    está em{' '}
-                    <span
-                      className={`font-mono font-black ${
-                        issue.status === 'Baixo' ? 'text-amber-300' : 'text-rose-300'
-                      }`}
-                    >
-                      {issue.valStr}
-                    </span>{' '}
-                    <span className="text-slate-300 font-medium">
-                      ({issue.status === 'Baixo' ? `faltam ${issue.deltaStr} p/ mín. ${issue.minStr}` : `excesso de ${issue.deltaStr} sobre máx. ${issue.maxStr}`})
-                    </span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Grid of 8 Nutrient Bullet Cards */}

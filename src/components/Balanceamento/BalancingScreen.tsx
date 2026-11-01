@@ -12,6 +12,7 @@ import {
 } from '../../core/stylesStorage';
 import { stylesDataMap, db } from '../../db/database';
 import { NutrientBars } from './NutrientBars';
+import { CalibrationAlerts } from './CalibrationAlerts';
 import { AllergensBadge } from './AllergensBadge';
 import { PostProduction } from './PostProduction';
 import { SaveRecipeModal } from './SaveRecipeModal';
@@ -926,6 +927,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               )}
             </div>
           </div>
+
+          {/* Avisos de Calibração e Arenosidade na Coluna Lateral */}
+          <CalibrationAlerts analysis={analysis} />
         </div>
       </div>
 
