@@ -792,15 +792,6 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                 {Math.round(formatWeightGrams)} g
               </strong>
             </div>
-
-            {activeFormat.type === 'volume' && activeFormat.capacityMl && (
-              <div className="flex items-center justify-between text-xs px-1 text-slate-400">
-                <span>Economia por Aeração:</span>
-                <span className="text-emerald-400 font-mono font-bold">
-                  -{Math.max(0, Math.round(activeFormat.capacityMl - formatWeightGrams))}g de calda/pote
-                </span>
-              </div>
-            )}
           </div>
 
           <div className="pt-3 border-t border-slate-800 space-y-1.5">
