@@ -557,19 +557,21 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
         )}
       </div>
 
-      {/* 3. Cockpit Executivo em 3 Colunas Espaçosas */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      {/* 3. Cockpit Executivo em 2 Colunas Equilibradas (50% / 50%) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
         
-        {/* COLUNA 1: Controles de Margem/Preço e DRE do Pote (5 Colunas) */}
-        <div className="lg:col-span-5 space-y-4">
+        {/* COLUNA ESQUERDA: Parâmetros de Precificação & Estrutura de Custos (DRE) */}
+        <div className="flex flex-col justify-between space-y-4">
+          
+          {/* Card 1: Controle de Margem ou Preço */}
           {mode === 'margin' ? (
-            <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-3">
+            <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-3.5 shadow-inner">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5 uppercase tracking-wider">
                   <Sliders className="w-4 h-4 text-amber-400" />
                   <span>Margem de Lucro Alvo:</span>
                 </span>
-                <span className="text-2xl font-black font-mono text-amber-400 tracking-tight">
+                <span className="text-2xl sm:text-3xl font-black font-mono text-amber-400 tracking-tight">
                   {simulatedMargin}%
                 </span>
               </div>
@@ -582,11 +584,11 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                 step="1"
                 value={simulatedMargin}
                 onChange={e => setSimulatedMargin(parseInt(e.target.value) || 50)}
-                className="w-full accent-amber-500 bg-slate-800 h-2 rounded-lg cursor-pointer transition-all"
+                className="w-full accent-amber-500 bg-slate-800 h-2.5 rounded-lg cursor-pointer transition-all"
               />
 
               {/* Atalhos Rápidos de Margem */}
-              <div className="flex items-center justify-between gap-1.5 pt-1">
+              <div className="flex items-center justify-between gap-1.5">
                 {[35, 50, 60, 70].map(m => (
                   <button
                     key={m}
@@ -602,11 +604,17 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                   </button>
                 ))}
               </div>
+
+              {/* Resumo da Porção / Embalagem Selecionada */}
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
+                <span>Capacidade: <strong className="text-slate-200">{formatCapacityDisplay}</strong></span>
+                <span>Peso Real de Gelato: <strong className="text-amber-300 font-bold">{Math.round(formatWeightGrams)} g</strong></span>
+              </div>
             </div>
           ) : (
-            <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-3">
+            <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-3.5 shadow-inner">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5 uppercase tracking-wider">
                   <Percent className="w-4 h-4 text-emerald-400" />
                   <span>Preço de Venda Praticado (R$):</span>
                 </span>
@@ -629,24 +637,26 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                   className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-11 pr-4 py-2.5 text-2xl font-mono font-black text-white focus:outline-none focus:border-emerald-500 shadow-inner"
                 />
               </div>
-              <span className="text-xs text-slate-400 block">
-                Digite o valor da sua etiqueta na loja para conferir a margem líquida real.
-              </span>
+
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
+                <span>Capacidade: <strong className="text-slate-200">{formatCapacityDisplay}</strong></span>
+                <span>Peso Real de Gelato: <strong className="text-amber-300 font-bold">{Math.round(formatWeightGrams)} g</strong></span>
+              </div>
             </div>
           )}
 
-          {/* DRE Visual do Recipiente: Waterfall Bar */}
-          <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 space-y-2.5">
+          {/* Card 2: DRE Visual do Recipiente (Waterfall Bar & Tabela de Decomposição) */}
+          <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-3 shadow-inner">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <PieChart className="w-3.5 h-3.5 text-cyan-400" />
-                Decomposição de Cada Real Cobrado
+              <span className="font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <PieChart className="w-4 h-4 text-cyan-400" />
+                <span>Decomposição de Cada Real Cobrado</span>
               </span>
-              <span className="text-xs font-mono text-slate-400">100% Preço</span>
+              <span className="text-xs font-mono text-slate-400 font-bold">100% Preço</span>
             </div>
 
             {/* Barra Colorida Empilhada */}
-            <div className="h-3 w-full bg-slate-900 rounded-full overflow-hidden flex shadow-inner border border-slate-800">
+            <div className="h-3.5 w-full bg-slate-900 rounded-full overflow-hidden flex shadow-inner border border-slate-800">
               <div
                 className="h-full bg-sky-400"
                 style={{ width: `${Math.max(0, pGelato)}%` }}
@@ -674,144 +684,163 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
               />
             </div>
 
-            {/* Legenda DRE */}
-            <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-slate-300 pt-0.5">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-sky-400 shrink-0" />
-                <span className="text-slate-400">Insumos ({Math.round(formatWeightGrams)}g):</span>
+            {/* Legenda DRE Organizada */}
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-slate-300 pt-1">
+              <div className="flex items-center justify-between gap-1">
+                <span className="flex items-center gap-1.5 text-slate-400">
+                  <span className="w-2.5 h-2.5 rounded-full bg-sky-400 shrink-0" />
+                  <span>Insumos ({Math.round(formatWeightGrams)}g):</span>
+                </span>
                 <strong className="text-white font-mono">R$ {productCost.toFixed(2)}</strong>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" />
-                <span className="text-slate-400">Embalagem:</span>
+              <div className="flex items-center justify-between gap-1">
+                <span className="flex items-center gap-1.5 text-slate-400">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" />
+                  <span>Embalagem:</span>
+                </span>
                 <strong className="text-white font-mono">R$ {formatPackCost.toFixed(2)}</strong>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shrink-0" />
-                <span className="text-slate-400">Rateio Fixo:</span>
+              <div className="flex items-center justify-between gap-1">
+                <span className="flex items-center gap-1.5 text-slate-400">
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shrink-0" />
+                  <span>Rateio Fixo:</span>
+                </span>
                 <strong className="text-white font-mono">R$ {overheadPerUnit.toFixed(2)}</strong>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0" />
-                <span className="text-slate-400">Taxas & Imp:</span>
+              <div className="flex items-center justify-between gap-1">
+                <span className="flex items-center gap-1.5 text-slate-400">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0" />
+                  <span>Taxas & Impostos:</span>
+                </span>
                 <strong className="text-white font-mono">R$ {totalDeductionsR$.toFixed(2)}</strong>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
-                <span className="text-slate-400">Lucro Líquido:</span>
-                <strong className={`font-mono ${netProfitUnit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  R$ {netProfitUnit.toFixed(2)}
+              <div className="col-span-2 flex items-center justify-between gap-1 pt-1.5 border-t border-slate-800/80">
+                <span className="flex items-center gap-1.5 text-slate-300 font-bold">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
+                  <span>Lucro Líquido Unitário:</span>
+                </span>
+                <strong className={`font-mono font-bold text-sm ${netProfitUnit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  R$ {netProfitUnit.toFixed(2)} ({effectiveMargin.toFixed(1)}%)
                 </strong>
               </div>
             </div>
           </div>
         </div>
 
-        {/* COLUNA 2: Preço & Lucro Unitário em Destaque (3 Colunas) */}
-        <div className="lg:col-span-3 flex flex-col justify-between p-4 rounded-xl bg-gradient-to-br from-emerald-950/70 to-slate-900 border border-emerald-600/40 shadow-md space-y-4">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 block">
-              Preço Sugerido de Venda
-            </span>
-            <div className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight mt-1">
-              R$ {effectivePrice.toFixed(2)}
-            </div>
-            <span className="text-xs text-slate-300 font-mono block mt-0.5">
-              por {selectedFormat === 'custom' ? `unidade (${formatCapacityDisplay})` : activeFormat.name.toLowerCase()}
-            </span>
-          </div>
-
-          <div className="pt-3 border-t border-emerald-900/60">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 block">
-              Lucro Líquido Unitário
-            </span>
-            <div className={`text-2xl sm:text-3xl font-black font-mono tracking-tight mt-1 ${netProfitUnit >= 0 ? 'text-emerald-300' : 'text-rose-400'}`}>
-              R$ {netProfitUnit.toFixed(2)}
-            </div>
-            <span className={`text-xs font-bold font-mono block mt-0.5 ${effectiveMargin >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-              ({effectiveMargin.toFixed(1)}% margem líquida)
-            </span>
-          </div>
-
-          {/* Diagnóstico & Salvar Padrão */}
-          <div className="pt-3 border-t border-emerald-900/60 flex items-center justify-between text-xs">
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <span>{marginHealth.icon}</span>
-              <strong className={marginHealth.color}>{marginHealth.label}</strong>
-            </span>
-
-            {mode === 'margin' && Math.round(effectiveMargin) !== pricingParams.targetMargin && (
-              <button
-                type="button"
-                onClick={handleSaveAsGlobalDefault}
-                className="text-xs font-bold text-amber-300 hover:text-amber-200 underline flex items-center gap-1"
-                title="Salvar esta margem como padrão para toda a loja"
-              >
-                {isSaved ? (
-                  <span className="text-emerald-400 flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" /> Salvo!
-                  </span>
-                ) : (
-                  <span>Salvar Padrão</span>
-                )}
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* COLUNA 3: Rendimento Físico & Finanças do Lote (4 Colunas) */}
-        <div className="lg:col-span-4 flex flex-col justify-between p-4 rounded-xl bg-slate-900/95 border border-slate-700/80 shadow-md space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <Package className="w-4 h-4 text-amber-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-200">
-                Rendimento Físico do Lote
+        {/* COLUNA DIREITA: Retorno Financeiro & Rendimento da Produção */}
+        <div className="flex flex-col justify-between space-y-4">
+          
+          {/* Card 1: Visão Unitária do Pote (Destaque Comercial) */}
+          <div className="bg-gradient-to-br from-emerald-950/50 via-slate-900 to-slate-900/90 p-4 rounded-2xl border border-emerald-500/40 shadow-md space-y-3.5">
+            <div className="flex items-center justify-between pb-2 border-b border-emerald-900/40 text-xs">
+              <span className="font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+                <DollarSign className="w-4 h-4 text-emerald-400" />
+                <span>Resultado por Embalagem ({activeFormat.name})</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-slate-300">
+                <span>{marginHealth.icon}</span>
+                <strong className={marginHealth.color}>{marginHealth.label}</strong>
               </span>
             </div>
 
-            <span className="text-sm font-mono font-black text-amber-300">
-              {unitsInBatch.toFixed(1)} un
-            </span>
+            <div className="grid grid-cols-2 gap-4 items-center">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  Preço Sugerido de Venda
+                </span>
+                <div className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono tracking-tight mt-0.5">
+                  R$ {effectivePrice.toFixed(2)}
+                </div>
+                <span className="text-[11px] text-slate-400 font-mono block mt-0.5">
+                  por pote de {formatCapacityDisplay}
+                </span>
+              </div>
+
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                  Lucro Líquido Unitário
+                </span>
+                <div className={`text-2xl sm:text-3xl font-black font-mono tracking-tight mt-0.5 ${netProfitUnit >= 0 ? 'text-emerald-300' : 'text-rose-400'}`}>
+                  R$ {netProfitUnit.toFixed(2)}
+                </div>
+                <span className={`text-[11px] font-bold font-mono block mt-0.5 ${effectiveMargin >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {effectiveMargin.toFixed(1)}% margem líquida
+                </span>
+              </div>
+            </div>
+
+            {mode === 'margin' && Math.round(effectiveMargin) !== pricingParams.targetMargin && (
+              <div className="pt-2 border-t border-emerald-900/40 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleSaveAsGlobalDefault}
+                  className="text-xs font-bold text-amber-300 hover:text-amber-200 underline flex items-center gap-1"
+                  title="Salvar esta margem como padrão para toda a loja"
+                >
+                  {isSaved ? (
+                    <span className="text-emerald-400 flex items-center gap-1">
+                      <Check className="w-3.5 h-3.5" /> Salvo como padrão da loja!
+                    </span>
+                  ) : (
+                    <span>Salvar margem como padrão</span>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
 
-          <div className="space-y-2 text-xs">
-            <div className="flex items-center justify-between bg-slate-950/70 p-2 rounded-lg border border-slate-800/80">
-              <span className="text-slate-400">Embalagens Preenchidas:</span>
-              <strong className="text-white font-mono font-bold">
-                {fullUnits} cheias {remainderUnitPct > 0 ? `+ 1 (${remainderUnitPct}%)` : ''}
-              </strong>
+          {/* Card 2: Visão Consolidada do Lote (Volume & Caixa) */}
+          <div className="bg-slate-900/95 p-4 rounded-2xl border border-slate-700/80 shadow-md space-y-3.5">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-xs">
+              <span className="font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <Package className="w-4 h-4 text-amber-400" />
+                <span>Rendimento da Produção ({totalBatchVolLiters.toFixed(2)} L)</span>
+              </span>
+
+              <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold">
+                {fullUnits} cheias {remainderUnitPct > 0 ? `+ 1 (${remainderUnitPct}%)` : ''} ({unitsInBatch.toFixed(1)} un)
+              </span>
             </div>
 
-            <div className="flex items-center justify-between bg-slate-950/70 p-2 rounded-lg border border-slate-800/80">
-              <span className="text-slate-400">Peso Real de Gelato no Pote:</span>
-              <strong className="text-amber-300 font-mono font-bold text-sm">
-                {Math.round(formatWeightGrams)} g
-              </strong>
-            </div>
-          </div>
+            {/* Grid com Faturamento Bruto e Lucro no Bolso */}
+            <div className="grid grid-cols-2 gap-3.5 pt-0.5">
+              <div className="bg-slate-950/70 p-3 rounded-xl border border-slate-800 space-y-1">
+                <span className="text-[11px] uppercase font-bold text-slate-400 block tracking-wider">
+                  Faturamento do Lote
+                </span>
+                <span className="text-xl sm:text-2xl font-black font-mono text-white block tracking-tight">
+                  R$ {totalBatchGrossRevenue.toFixed(2)}
+                </span>
+                <span className="text-[10px] text-slate-400 block font-mono">
+                  {unitsInBatch.toFixed(1)} un × R$ {effectivePrice.toFixed(2)}
+                </span>
+              </div>
 
-          <div className="pt-3 border-t border-slate-800 space-y-1.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400">Faturamento Bruto do Lote:</span>
-              <strong className="text-white font-mono font-bold">
-                R$ {totalBatchGrossRevenue.toFixed(2)}
-              </strong>
+              <div className="bg-gradient-to-br from-emerald-950/40 to-slate-950 p-3 rounded-xl border border-emerald-500/40 space-y-1 shadow-sm">
+                <span className="text-[11px] uppercase font-bold text-emerald-300 block tracking-wider">
+                  Lucro no Bolso ⭐
+                </span>
+                <span className="text-xl sm:text-2xl font-black font-mono text-emerald-400 block tracking-tight">
+                  R$ {totalBatchNetProfit.toFixed(2)}
+                </span>
+                <span className="text-[10px] text-emerald-300/80 block font-mono">
+                  Livre de custos e insumos
+                </span>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400">Lucro Líquido no Bolso:</span>
-              <strong className="text-emerald-400 font-mono font-black text-base">
-                R$ {totalBatchNetProfit.toFixed(2)}
-              </strong>
-            </div>
-
-            <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5">
-              <span>Overrun Efetivo c/ Mescla:</span>
+            {/* Rodapé Informativo: Overrun Efetivo */}
+            <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <span className="flex items-center gap-1">
+                <Wind className="w-3.5 h-3.5 text-purple-400" />
+                <span>Overrun Efetivo c/ Mescla:</span>
+              </span>
               <span className="text-purple-300 font-mono font-bold">
                 ~{effectiveBatchOverrun.toFixed(1)}%
               </span>
             </div>
           </div>
+
         </div>
 
       </div>
