@@ -141,8 +141,8 @@ export const getCategoryTheme = (category: string = ''): CategoryTheme => {
     };
   }
 
-  // 9. Sorbets Zero -> Citrus
-  if (cat.includes('sorbet zero') || cat.includes('sorbets zero')) {
+  // 9. Sorbets Zero Açúcar -> Citrus
+  if (cat.includes('sorbet') && cat.includes('zero')) {
     return {
       gradient: 'from-teal-400 via-emerald-400 to-cyan-500',
       badge: 'bg-teal-500/15 text-teal-300 border-teal-500/40',

@@ -181,15 +181,15 @@
       "protein": 0
     }
   },
-  "Zero": {
-    "name": "Zero",
+  "Gelatos Zero Açúcar": {
+    "name": "Gelatos Zero Açúcar",
     "pacDivisor": 25,
     "min": {
       "sugars": 0,
       "fat": 0,
       "msnf": 0,
       "otherSolids": 0.05,
-      "totalSolids": 0.30,
+      "totalSolids": 0.3,
       "water": 0.56,
       "pod": 65,
       "pac": 228,
@@ -201,7 +201,7 @@
       "msnf": 0.125,
       "otherSolids": 0.29,
       "totalSolids": 0.44,
-      "water": 0.70,
+      "water": 0.7,
       "pod": 310,
       "pac": 335,
       "protein": 0
@@ -337,14 +337,14 @@
       "protein": 0
     }
   },
-  "Sorbets Zero": {
-    "name": "Sorbets Zero",
+  "Sorbets Zero Açúcar": {
+    "name": "Sorbets Zero Açúcar",
     "pacDivisor": 24,
     "min": {
       "sugars": 0,
       "fat": 0,
       "msnf": 0,
-      "otherSolids": 0.10,
+      "otherSolids": 0.1,
       "totalSolids": 0.24,
       "water": 0.62,
       "pod": 90,

@@ -211,6 +211,14 @@ export function getStoredStyles(): Record<string, StyleStandard> {
     const raw = localStorage.getItem(STYLES_STORAGE_KEY);
     if (!raw) return GOLD_STANDARD_STYLES;
     const parsed = JSON.parse(raw);
+    if (parsed['Zero']) {
+      parsed['Gelatos Zero Açúcar'] = { ...parsed['Zero'], name: 'Gelatos Zero Açúcar' };
+      delete parsed['Zero'];
+    }
+    if (parsed['Sorbets Zero']) {
+      parsed['Sorbets Zero Açúcar'] = { ...parsed['Sorbets Zero'], name: 'Sorbets Zero Açúcar' };
+      delete parsed['Sorbets Zero'];
+    }
     return { ...GOLD_STANDARD_STYLES, ...parsed };
   } catch (e) {
     console.warn('Erro ao carregar estilos customizados do localStorage:', e);

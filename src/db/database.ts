@@ -606,6 +606,45 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v15 delete mix zero:', e);
       }
     });
+
+    // Versão 16: Renomeação dos estilos e categorias Zero -> Gelatos Zero Açúcar e Sorbets Zero -> Sorbets Zero Açúcar
+    this.version(16).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const recs = await tx.table('recipes').toArray();
+        for (const rec of recs) {
+          let dirty = false;
+          let newCategory = rec.category;
+          let newTargetStyle = rec.targetStyle;
+          if (rec.category === 'Zero') {
+            newCategory = 'Gelatos Zero Açúcar';
+            dirty = true;
+          } else if (rec.category === 'Sorbets Zero') {
+            newCategory = 'Sorbets Zero Açúcar';
+            dirty = true;
+          }
+          if (rec.targetStyle === 'Zero') {
+            newTargetStyle = 'Gelatos Zero Açúcar';
+            dirty = true;
+          } else if (rec.targetStyle === 'Sorbets Zero') {
+            newTargetStyle = 'Sorbets Zero Açúcar';
+            dirty = true;
+          }
+          if (dirty) {
+            await tx.table('recipes').update(rec.id, {
+              category: newCategory,
+              targetStyle: newTargetStyle
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Migration to v16 rename zero styles:', e);
+      }
+    });
   }
 
   async initializeSeedData(): Promise<void> {
@@ -982,6 +1021,38 @@ export class GelatoDatabase extends Dexie {
             await this.preparations.delete('prep_mix_zero');
           }
           await this.settings.put({ key: 'mix_zero_deleted_v15', value: 1 });
+        }
+
+        // Garantir renomeação das categorias e estilos Zero -> Gelatos Zero Açúcar e Sorbets Zero -> Sorbets Zero Açúcar
+        const zeroRenameFlag = await this.settings.get('zero_renamed_v16');
+        if (!zeroRenameFlag) {
+          const recs = await this.recipes.toArray();
+          for (const rec of recs) {
+            let dirty = false;
+            let newCategory = rec.category;
+            let newTargetStyle = rec.targetStyle;
+            if (rec.category === 'Zero') {
+              newCategory = 'Gelatos Zero Açúcar';
+              dirty = true;
+            } else if (rec.category === 'Sorbets Zero') {
+              newCategory = 'Sorbets Zero Açúcar';
+              dirty = true;
+            }
+            if (rec.targetStyle === 'Zero') {
+              newTargetStyle = 'Gelatos Zero Açúcar';
+              dirty = true;
+            } else if (rec.targetStyle === 'Sorbets Zero') {
+              newTargetStyle = 'Sorbets Zero Açúcar';
+              dirty = true;
+            }
+            if (dirty) {
+              await this.recipes.update(rec.id, {
+                category: newCategory,
+                targetStyle: newTargetStyle
+              });
+            }
+          }
+          await this.settings.put({ key: 'zero_renamed_v16', value: 1 });
         }
       }
 

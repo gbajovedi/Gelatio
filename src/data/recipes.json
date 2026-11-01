@@ -4957,8 +4957,8 @@
   {
     "id": "rec_142",
     "name": "Sorbet de Morango e Manjericão Diet (Addolcire)",
-    "category": "Sorbets Zero",
-    "targetStyle": "Sorbets Zero",
+    "category": "Sorbets Zero Açúcar",
+    "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
       {
         "name": "Água",
@@ -4998,8 +4998,8 @@
   {
     "id": "rec_143",
     "name": "Gelato de Coco com Cumaru Diet (Addolcire)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5035,8 +5035,8 @@
   {
     "id": "rec_144",
     "name": "Sorbet de Framboesa - Polióis (Sem Açúcar)",
-    "category": "Sorbets Zero",
-    "targetStyle": "Sorbets Zero",
+    "category": "Sorbets Zero Açúcar",
+    "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
       {
         "name": "Framboesa",
@@ -5076,8 +5076,8 @@
   {
     "id": "rec_145",
     "name": "Sorbet de Framboesa - Redução de Polióis (Sem Açúcar)",
-    "category": "Sorbets Zero",
-    "targetStyle": "Sorbets Zero",
+    "category": "Sorbets Zero Açúcar",
+    "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
       {
         "name": "Framboesa",
@@ -5117,8 +5117,8 @@
   {
     "id": "rec_146",
     "name": "Fior di Latte 17% - Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5154,8 +5154,8 @@
   {
     "id": "rec_147",
     "name": "Fior di Latte 17% - Menos Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5195,8 +5195,8 @@
   {
     "id": "rec_148",
     "name": "Chocolate 17% - Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5244,8 +5244,8 @@
   {
     "id": "rec_149",
     "name": "Chocolate 17% - Redução Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5297,8 +5297,8 @@
   {
     "id": "rec_150",
     "name": "Fragola / Morango ao Leite - Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Morango",
@@ -5338,8 +5338,8 @@
   {
     "id": "rec_151",
     "name": "Fragola / Morango ao Leite - Redução Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Morango",
@@ -5383,8 +5383,8 @@
   {
     "id": "rec_152",
     "name": "Gelato de Coco - Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5420,8 +5420,8 @@
   {
     "id": "rec_153",
     "name": "Gelato de Coco - Menos Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5462,7 +5462,7 @@
     "id": "rec_154",
     "name": "Gelato de Coco Vegano - Polióis (Sem Açúcar)",
     "category": "Vegano",
-    "targetStyle": "Zero",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Água",
@@ -5503,7 +5503,7 @@
     "id": "rec_155",
     "name": "Gelato de Coco Vegano - Menos Polióis (Sem Açúcar)",
     "category": "Vegano",
-    "targetStyle": "Zero",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Água",
@@ -5543,8 +5543,8 @@
   {
     "id": "rec_156",
     "name": "Gelato de Pistache - Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5584,8 +5584,8 @@
   {
     "id": "rec_157",
     "name": "Gelato de Pistache - Menos Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5630,7 +5630,7 @@
     "id": "rec_158",
     "name": "Gelato de Pistache Vegano - Polióis (Sem Açúcar)",
     "category": "Vegano",
-    "targetStyle": "Zero",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Água",
@@ -5663,7 +5663,7 @@
     "id": "rec_159",
     "name": "Gelato de Pistache Vegano - Menos Polióis (Sem Açúcar)",
     "category": "Vegano",
-    "targetStyle": "Zero",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Água",
@@ -5699,8 +5699,8 @@
   {
     "id": "rec_160",
     "name": "Gelato de Iogurte - Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5740,8 +5740,8 @@
   {
     "id": "rec_161",
     "name": "Gelato de Iogurte - Redução de Polióis (Sem Açúcar)",
-    "category": "Zero",
-    "targetStyle": "Zero",
+    "category": "Gelatos Zero Açúcar",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5782,7 +5782,7 @@
     "id": "rec_162",
     "name": "Gelato Intenso de Cacau com Laranja Vegano - Polióis (Sem Açúcar)",
     "category": "Vegano",
-    "targetStyle": "Zero",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Água",
@@ -5819,7 +5819,7 @@
     "id": "rec_163",
     "name": "Gelato Intenso de Cacau com Laranja Vegano - Redução Polióis (Sem Açúcar)",
     "category": "Vegano",
-    "targetStyle": "Zero",
+    "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
         "name": "Água",
@@ -5855,8 +5855,8 @@
   {
     "id": "rec_164",
     "name": "Sorbet de Manga - Polióis (Sem Açúcar)",
-    "category": "Sorbets Zero",
-    "targetStyle": "Sorbets Zero",
+    "category": "Sorbets Zero Açúcar",
+    "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
       {
         "name": "Manga",
@@ -5892,8 +5892,8 @@
   {
     "id": "rec_165",
     "name": "Sorbet de Manga - Redução de Polióis (Sem Açúcar)",
-    "category": "Sorbets Zero",
-    "targetStyle": "Sorbets Zero",
+    "category": "Sorbets Zero Açúcar",
+    "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
       {
         "name": "Manga",
