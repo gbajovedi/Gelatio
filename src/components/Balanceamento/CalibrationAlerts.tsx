@@ -58,23 +58,7 @@ export const CalibrationAlerts: React.FC<CalibrationAlertsProps> = ({ analysis }
 
   return (
     <div className="space-y-3">
-      {/* Alerta de Arenosidade (Luca Caviezel) */}
-      {sandiness?.isAtRisk && (
-        <div className="p-4 bg-amber-950/40 rounded-2xl border border-amber-500/50 text-xs text-amber-200 shadow-md space-y-1.5">
-          <div className="flex items-center gap-2 text-amber-300 font-bold">
-            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-            <span className="text-sm">Alerta de Arenosidade (Caviezel)</span>
-          </div>
-          <p className="text-amber-200/90 leading-relaxed text-xs">
-            O teor de sólidos do leite (<strong className="text-amber-300 font-mono">SLNG: {(sandiness.currentMsnf * 100).toFixed(1)}%</strong>) ultrapassa o limite seguro de saturação da água livre (<strong className="text-amber-300 font-mono">máx. {(sandiness.maxSafeMsnf * 100).toFixed(1)}%</strong>).
-          </p>
-          <p className="text-amber-300/80 text-[11px] leading-relaxed">
-            Sob oscilação térmica na vitrine, a lactose pode precipitar em microcristais. Recomenda-se reduzir leite em pó ou elevar a proporção de leite integral/água.
-          </p>
-        </div>
-      )}
-
-      {/* Checklist de Parâmetros Fora da Meta */}
+      {/* 1. Checklist de Parâmetros Fora da Meta (Calibração Necessária) */}
       {!isBalanced && pendingIssues.length > 0 && (
         <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-4 shadow-xl space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-slate-700/80">
@@ -122,6 +106,22 @@ export const CalibrationAlerts: React.FC<CalibrationAlertsProps> = ({ analysis }
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* 2. Alerta de Arenosidade (Luca Caviezel) */}
+      {sandiness?.isAtRisk && (
+        <div className="p-4 bg-amber-950/40 rounded-2xl border border-amber-500/50 text-xs text-amber-200 shadow-md space-y-1.5">
+          <div className="flex items-center gap-2 text-amber-300 font-bold">
+            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+            <span className="text-sm">Alerta de Arenosidade (Caviezel)</span>
+          </div>
+          <p className="text-amber-200/90 leading-relaxed text-xs">
+            O teor de sólidos do leite (<strong className="text-amber-300 font-mono">SLNG: {(sandiness.currentMsnf * 100).toFixed(1)}%</strong>) ultrapassa o limite seguro de saturação da água livre (<strong className="text-amber-300 font-mono">máx. {(sandiness.maxSafeMsnf * 100).toFixed(1)}%</strong>).
+          </p>
+          <p className="text-amber-300/80 text-[11px] leading-relaxed">
+            Sob oscilação térmica na vitrine, a lactose pode precipitar em microcristais. Recomenda-se reduzir leite em pó ou elevar a proporção de leite integral/água.
+          </p>
         </div>
       )}
     </div>

@@ -791,6 +791,10 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
 
         {/* Right Column: Financial & Factory Cost Summary (4 Cols) */}
         <div className="lg:col-span-4 space-y-4">
+          {/* 1. Calibração Necessária & 2. Alerta de Arenosidade */}
+          <CalibrationAlerts analysis={analysis} />
+
+          {/* 3. Engenharia de Custos */}
           <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-700/80 pb-3">
               <div className="flex items-center gap-2">
@@ -927,9 +931,6 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               )}
             </div>
           </div>
-
-          {/* Avisos de Calibração e Arenosidade na Coluna Lateral */}
-          <CalibrationAlerts analysis={analysis} />
         </div>
       </div>
 
