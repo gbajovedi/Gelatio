@@ -8,6 +8,17 @@ import initialPreparations from '../data/preparations.json';
 import { DEFAULT_PRICING } from '../core/calculator';
 import { STORAGE_KEY as PRICING_STORAGE_KEY, PRICING_UPDATED_EVENT } from '../core/pricingStorage';
 import { THEME_STORAGE_KEY, THEME_CHANGE_EVENT } from '../core/theme';
+import {
+  getUserCustomStyles,
+  saveUserCustomStyles,
+  getActivePresetId,
+  saveStoredStyles,
+  applyGoldStandardPreset,
+  STYLES_UPDATED_EVENT,
+  USER_CUSTOM_STYLES_KEY,
+  STYLES_STORAGE_KEY,
+  getStoredStyles
+} from '../core/stylesStorage';
 
 export interface AppSetting {
   key: string;
@@ -57,6 +68,7 @@ export interface BackupResult {
   ingredientsCount: number;
   pricingImported: boolean;
   themeImported: boolean;
+  customStylesImported: boolean;
 }
 
 export class GelatoDatabase extends Dexie {
@@ -1212,15 +1224,27 @@ export class GelatoDatabase extends Dexie {
       console.warn('Erro ao ler themeMode para backup:', e);
     }
 
+    // Capturar estilos e balanceamentos personalizados do usuário
+    let customStyles = null;
+    let activePresetId = null;
+    try {
+      customStyles = getUserCustomStyles();
+      activePresetId = getActivePresetId();
+    } catch (e) {
+      console.warn('Erro ao ler customStyles para backup:', e);
+    }
+
     const backup = {
-      version: 3,
+      version: 4,
       exportedAt: new Date().toISOString(),
       ingredients,
       recipes,
       preparations,
       settings,
       pricingParams,
-      themeMode
+      themeMode,
+      customStyles,
+      activePresetId
     };
 
     return JSON.stringify(backup, null, 2);
@@ -1255,6 +1279,7 @@ export class GelatoDatabase extends Dexie {
 
     let pricingImported = false;
     let themeImported = false;
+    let customStylesImported = false;
 
     // Restaurar custos fixos e taxas Cielo caso existam no backup
     if (data.pricingParams && typeof window !== 'undefined') {
@@ -1278,11 +1303,31 @@ export class GelatoDatabase extends Dexie {
       }
     }
 
+    // Restaurar estilos e balanceamentos personalizados caso existam no backup
+    if (data.customStyles && typeof window !== 'undefined') {
+      try {
+        if (mode === 'replace') {
+          saveUserCustomStyles(data.customStyles);
+        } else {
+          const existing = getUserCustomStyles();
+          const merged = { ...existing, ...data.customStyles };
+          saveUserCustomStyles(merged);
+        }
+
+        const presetToSet = data.activePresetId || 'custom';
+        saveStoredStyles(getUserCustomStyles(), presetToSet);
+        customStylesImported = true;
+      } catch (err) {
+        console.warn('Erro ao restaurar customStyles do backup:', err);
+      }
+    }
+
     return {
       recipesCount: data.recipes.length,
       ingredientsCount: data.ingredients.length,
       pricingImported,
-      themeImported
+      themeImported,
+      customStylesImported
     };
   }
 
@@ -1306,11 +1351,16 @@ export class GelatoDatabase extends Dexie {
       } catch (e) {
         console.warn('Erro ao redefinir pricingParams no reset:', e);
       }
+      try {
+        localStorage.removeItem(USER_CUSTOM_STYLES_KEY);
+        localStorage.removeItem(STYLES_STORAGE_KEY);
+        applyGoldStandardPreset();
+      } catch (e) {
+        console.warn('Erro ao resetar customStyles:', e);
+      }
     }
   }
 }
-
-import { getStoredStyles } from '../core/stylesStorage';
 
 export const db = new GelatoDatabase();
 

@@ -7,6 +7,7 @@ import {
   getActivePresetId,
   applyGoldStandardPreset,
   applyCarpigianiPreset,
+  applyCustomPreset,
   hasCarpigianiData,
   StylePresetId
 } from '../../core/stylesStorage';
@@ -521,22 +522,34 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               </button>
             )}
 
-            {/* 3. Ajustar Metas */}
+            {/* 3. Personalizado (Atalho Rápido de 1 Clique) */}
+            <button
+              type="button"
+              onClick={() => applyCustomPreset()}
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 border ${
+                activePresetId === 'custom'
+                  ? 'bg-purple-500/20 text-purple-300 border-purple-500/50 shadow-sm shadow-purple-500/10'
+                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700 hover:border-slate-600'
+              }`}
+              title={
+                currentStyle.customProfileName
+                  ? `Ativar perfil customizado: "${currentStyle.customProfileName}"`
+                  : 'Ativar balanceamento personalizado do Mestre Gelatiere para este estilo'
+              }
+            >
+              <Sparkles className={`w-3.5 h-3.5 ${activePresetId === 'custom' ? 'text-purple-400' : 'text-slate-400'}`} />
+              <span>{currentStyle.customProfileName || 'Personalizado'}</span>
+            </button>
+
+            {/* 4. Ajustar Metas (Abre Modal de Edição) */}
             <button
               type="button"
               onClick={() => setIsStyleModalOpen(true)}
-              className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 group border ${
-                activePresetId === 'custom'
-                  ? 'bg-purple-500/20 text-purple-300 border-purple-500/50 shadow-sm'
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 border-slate-700 hover:border-amber-500/50'
-              }`}
-              title="Ajustar manualmente metas e limites físico-químicos deste estilo"
+              className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 group border bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 border-slate-700 hover:border-amber-500/50"
+              title="Ajustar manualmente metas, limites físico-químicos e nome deste perfil"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-45 transition-transform" />
               <span>Ajustar Metas</span>
-              {activePresetId === 'custom' && (
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 ml-0.5 animate-pulse" />
-              )}
             </button>
           </div>
         </div>

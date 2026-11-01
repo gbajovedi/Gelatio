@@ -33,6 +33,7 @@ interface StyleSettingsModalProps {
 }
 
 interface EditableFormState {
+  profileName: string;
   sugarsMin: number;
   sugarsMax: number;
   fatMin: number;
@@ -56,6 +57,7 @@ interface EditableFormState {
 
 function styleToFormState(style: StyleStandard): EditableFormState {
   return {
+    profileName: style.customProfileName || '',
     sugarsMin: +(style.min.sugars * 100).toFixed(2),
     sugarsMax: +(style.max.sugars * 100).toFixed(2),
     fatMin: +(style.min.fat * 100).toFixed(2),
@@ -160,6 +162,7 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
 
     const updatedStyle: StyleStandard = {
       name: selectedStyleName,
+      customProfileName: form.profileName.trim() || undefined,
       pacDivisor: form.pacDivisor || 24,
       min: {
         sugars: +(form.sugarsMin / 100).toFixed(4),
@@ -371,6 +374,28 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
               ))}
             </div>
           )}
+
+          {/* Nome do Balanceamento Personalizado */}
+          <div className="p-3.5 bg-slate-950/60 rounded-2xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
+            <div className="space-y-0.5">
+              <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                <span>Nome do Balanceamento Personalizado:</span>
+              </label>
+              <p className="text-[11px] text-slate-400">
+                Este nome será exibido diretamente no botão de atalho rápido na bancada de balanceamento.
+              </p>
+            </div>
+            <div className="w-full sm:w-72">
+              <input
+                type="text"
+                value={form.profileName}
+                onChange={e => setForm(prev => ({ ...prev, profileName: e.target.value }))}
+                placeholder="Ex: Minha Fórmula da Casa"
+                className="w-full bg-slate-900 border border-slate-700 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 rounded-xl px-3 py-2 text-xs font-semibold text-slate-100 placeholder:text-slate-500 transition-colors shadow-inner"
+              />
+            </div>
+          </div>
 
           {/* Variables Table Header */}
           <div className="grid grid-cols-12 gap-3 pb-2 border-b border-slate-800 text-xs font-bold text-slate-400 uppercase tracking-wider">

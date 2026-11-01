@@ -38,7 +38,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       setStatusMessage({
-        text: 'Backup exportado com sucesso! Inclui receitas, matérias-primas, pré-preparos e todos os custos fixos e taxas de precificação.',
+        text: 'Backup exportado com sucesso! Inclui receitas, matérias-primas, pré-preparos, custos fixos e taxas de precificação, além de todos os balanceamentos e metas personalizadas.',
         type: 'success'
       });
     } catch (err) {
@@ -58,9 +58,10 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
       const text = await file.text();
       const result = await db.importBackup(text, importMode);
       const extras: string[] = [];
-      if (result.pricingImported) extras.push('parâmetros de precificação (custos fixos e taxas Cielo)');
+      if (result.pricingImported) extras.push('parâmetros de precificação');
+      if (result.customStylesImported) extras.push('balanceamentos e metas personalizadas');
       if (result.themeImported) extras.push('preferência de tema');
-      const extraMsg = extras.length > 0 ? ` (incluindo ${extras.join(' e ')})` : '';
+      const extraMsg = extras.length > 0 ? ` (incluindo ${extras.join(', ')})` : '';
 
       setStatusMessage({
         text: `Importação concluída com sucesso! ${result.recipesCount} receitas e ${result.ingredientsCount} insumos carregados${extraMsg}.`,
@@ -182,6 +183,10 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
                 <span>💰</span>
                 <span>Custos Fixos & Taxas de Precificação</span>
               </span>
+              <span className="px-2.5 py-1 rounded-lg bg-purple-500/15 border border-purple-500/35 text-purple-300 font-bold flex items-center gap-1">
+                <span>🎯</span>
+                <span>Balanceamentos & Metas Personalizadas</span>
+              </span>
             </div>
           </div>
 
@@ -190,7 +195,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
             <div>
               <h4 className="text-sm sm:text-base font-black text-white">Importar Backup ou Restaurar Dados</h4>
               <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                Carregue um arquivo <code className="font-mono text-amber-300 font-bold">.JSON</code> gerado anteriormente para restaurar receitas, custos de matérias-primas e <strong>suas configurações de precificação financeira</strong>.
+                Carregue um arquivo <code className="font-mono text-amber-300 font-bold">.JSON</code> gerado anteriormente para restaurar receitas, custos de matérias-primas, <strong>suas configurações de precificação financeira</strong> e <strong>seus balanceamentos personalizados</strong>.
               </p>
             </div>
 

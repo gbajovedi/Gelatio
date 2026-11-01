@@ -35,6 +35,7 @@ export interface NutrientValues {
 
 export interface StyleStandard {
   name: string;
+  customProfileName?: string;
   pacDivisor: number;
   min: NutrientValues;
   max: NutrientValues;

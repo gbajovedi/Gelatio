@@ -2,6 +2,7 @@ import { StyleStandard } from '../types/gelato';
 import initialStyles from '../data/styles.json';
 
 export const STYLES_STORAGE_KEY = 'gelato_custom_styles_v1';
+export const USER_CUSTOM_STYLES_KEY = 'gelato_user_custom_styles_v2';
 export const STYLES_PRESET_KEY = 'gelato_active_styles_preset_v1';
 export const STYLES_UPDATED_EVENT = 'gelato-styles-updated';
 
@@ -203,13 +204,22 @@ export const CARPIGIANI_STRICT_STYLES: Record<string, StyleStandard> = {
 };
 
 /**
- * Carrega estilos efetivos mesclando Padrão Ouro com eventuais ajustes do localStorage
+ * Retorna os estilos e perfis personalizados do usuário armazenados de forma isolada.
+ * Não é sobrescrito ao alternar entre Padrão Ouro ou Carpigiani.
  */
-export function getStoredStyles(): Record<string, StyleStandard> {
-  if (typeof window === 'undefined') return GOLD_STANDARD_STYLES;
+export function getUserCustomStyles(): Record<string, StyleStandard> {
+  if (typeof window === 'undefined') return { ...GOLD_STANDARD_STYLES };
   try {
-    const raw = localStorage.getItem(STYLES_STORAGE_KEY);
-    if (!raw) return GOLD_STANDARD_STYLES;
+    let raw = localStorage.getItem(USER_CUSTOM_STYLES_KEY);
+    // Migração de v1 caso não exista v2 ainda
+    if (!raw) {
+      const v1Preset = localStorage.getItem(STYLES_PRESET_KEY);
+      if (v1Preset === 'custom') {
+        raw = localStorage.getItem(STYLES_STORAGE_KEY);
+      }
+    }
+    if (!raw) return { ...GOLD_STANDARD_STYLES };
+
     const parsed = JSON.parse(raw);
     if (parsed['Zero']) {
       parsed['Gelatos Zero Açúcar'] = { ...parsed['Zero'], name: 'Gelatos Zero Açúcar' };
@@ -221,8 +231,20 @@ export function getStoredStyles(): Record<string, StyleStandard> {
     }
     return { ...GOLD_STANDARD_STYLES, ...parsed };
   } catch (e) {
-    console.warn('Erro ao carregar estilos customizados do localStorage:', e);
-    return GOLD_STANDARD_STYLES;
+    console.warn('Erro ao carregar estilos customizados do usuário:', e);
+    return { ...GOLD_STANDARD_STYLES };
+  }
+}
+
+/**
+ * Persiste os estilos personalizados do usuário no armazenamento dedicado
+ */
+export function saveUserCustomStyles(styles: Record<string, StyleStandard>): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(USER_CUSTOM_STYLES_KEY, JSON.stringify(styles));
+  } catch (e) {
+    console.error('Erro ao salvar USER_CUSTOM_STYLES_KEY:', e);
   }
 }
 
@@ -241,6 +263,26 @@ export function getActivePresetId(): StylePresetId {
 }
 
 /**
+ * Carrega estilos efetivos de acordo com o preset ativo
+ */
+export function getStoredStyles(): Record<string, StyleStandard> {
+  if (typeof window === 'undefined') return GOLD_STANDARD_STYLES;
+  try {
+    const activePreset = getActivePresetId();
+    if (activePreset === 'carpigiani') {
+      return CARPIGIANI_STRICT_STYLES;
+    }
+    if (activePreset === 'custom') {
+      return getUserCustomStyles();
+    }
+    return GOLD_STANDARD_STYLES;
+  } catch (e) {
+    console.warn('Erro ao carregar estilos vigentes:', e);
+    return GOLD_STANDARD_STYLES;
+  }
+}
+
+/**
  * Salva estilos e dispara evento global de atualização imediata
  */
 export function saveStoredStyles(
@@ -251,6 +293,9 @@ export function saveStoredStyles(
   try {
     localStorage.setItem(STYLES_STORAGE_KEY, JSON.stringify(styles));
     localStorage.setItem(STYLES_PRESET_KEY, presetId);
+    if (presetId === 'custom') {
+      localStorage.setItem(USER_CUSTOM_STYLES_KEY, JSON.stringify(styles));
+    }
     currentStylesMap = { ...styles };
     window.dispatchEvent(
       new CustomEvent(STYLES_UPDATED_EVENT, { detail: { styles, presetId } })
@@ -261,42 +306,67 @@ export function saveStoredStyles(
 }
 
 /**
- * Restaura o Padrão Ouro Recomendado com 1 clique
+ * Ativa o preset Personalizado do Mestre Gelatiere com 1 clique rápido
+ */
+export function applyCustomPreset(): Record<string, StyleStandard> {
+  const customStyles = getUserCustomStyles();
+  saveStoredStyles(customStyles, 'custom');
+  return customStyles;
+}
+
+/**
+ * Restaura o Padrão Ouro Recomendado com 1 clique (preservando o armazenamento customizado)
  */
 export function applyGoldStandardPreset(): Record<string, StyleStandard> {
-  saveStoredStyles(GOLD_STANDARD_STYLES, 'gold');
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STYLES_PRESET_KEY, 'gold');
+    localStorage.setItem(STYLES_STORAGE_KEY, JSON.stringify(GOLD_STANDARD_STYLES));
+    currentStylesMap = { ...GOLD_STANDARD_STYLES };
+    window.dispatchEvent(
+      new CustomEvent(STYLES_UPDATED_EVENT, { detail: { styles: GOLD_STANDARD_STYLES, presetId: 'gold' } })
+    );
+  }
   return GOLD_STANDARD_STYLES;
 }
 
 /**
- * Aplica o preset estrito Carpigiani Gelato University com 1 clique
+ * Aplica o preset estrito Carpigiani Gelato University com 1 clique (preservando o armazenamento customizado)
  */
 export function applyCarpigianiPreset(): Record<string, StyleStandard> {
-  saveStoredStyles(CARPIGIANI_STRICT_STYLES, 'carpigiani');
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STYLES_PRESET_KEY, 'carpigiani');
+    localStorage.setItem(STYLES_STORAGE_KEY, JSON.stringify(CARPIGIANI_STRICT_STYLES));
+    currentStylesMap = { ...CARPIGIANI_STRICT_STYLES };
+    window.dispatchEvent(
+      new CustomEvent(STYLES_UPDATED_EVENT, { detail: { styles: CARPIGIANI_STRICT_STYLES, presetId: 'carpigiani' } })
+    );
+  }
   return CARPIGIANI_STRICT_STYLES;
 }
 
 /**
- * Restaura um único estilo específico para o seu valor Padrão Ouro
+ * Restaura um único estilo específico para o seu valor Padrão Ouro no armazenamento customizado
  */
 export function resetSingleStyleToGold(styleName: string): Record<string, StyleStandard> {
-  const current = getStoredStyles();
+  const customStyles = getUserCustomStyles();
   const gold = GOLD_STANDARD_STYLES[styleName];
-  if (!gold) return current;
-  const updated = { ...current, [styleName]: JSON.parse(JSON.stringify(gold)) };
+  if (!gold) return customStyles;
+  const updated = { ...customStyles, [styleName]: JSON.parse(JSON.stringify(gold)) };
+  saveUserCustomStyles(updated);
   saveStoredStyles(updated, 'custom');
   return updated;
 }
 
 /**
- * Atualiza um único estilo mantendo os outros
+ * Atualiza um único estilo customizado mantendo os outros e ativa o preset customizado
  */
 export function saveSingleStyle(
   styleName: string,
   updatedStyle: StyleStandard
 ): Record<string, StyleStandard> {
-  const current = getStoredStyles();
-  const updated = { ...current, [styleName]: updatedStyle };
+  const customStyles = getUserCustomStyles();
+  const updated = { ...customStyles, [styleName]: updatedStyle };
+  saveUserCustomStyles(updated);
   saveStoredStyles(updated, 'custom');
   return updated;
 }

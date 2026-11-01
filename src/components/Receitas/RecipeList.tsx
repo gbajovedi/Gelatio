@@ -24,6 +24,7 @@ import {
   getActivePresetId,
   applyGoldStandardPreset,
   applyCarpigianiPreset,
+  applyCustomPreset,
   saveStoredStyles,
   getStoredStyles,
   StylePresetId
@@ -77,7 +78,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
       setActivePreset('carpigiani');
     } else if (preset === 'custom') {
       if (activePreset !== 'custom') {
-        saveStoredStyles(getStoredStyles(), 'custom');
+        applyCustomPreset();
         setActivePreset('custom');
       } else {
         setIsStyleModalOpen(true);
