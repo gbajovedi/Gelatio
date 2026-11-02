@@ -15,7 +15,8 @@ import {
   CheckCircle2,
   SlidersHorizontal,
   ShieldCheck,
-  GraduationCap
+  GraduationCap,
+  FileText
 } from 'lucide-react';
 import { db, stylesDataMap } from '../../db/database';
 import { calculateBatchAnalysis } from '../../core/calculator';
@@ -30,6 +31,7 @@ import {
   StylePresetId
 } from '../../core/stylesStorage';
 import { RecipeViewerModal } from './RecipeViewerModal';
+import { AnvisaNutritionalModal } from './AnvisaNutritionalModal';
 import { StyleSettingsModal } from '../Balanceamento/StyleSettingsModal';
 import { getCategoryTheme, CategoryBadge } from '../../core/categoryThemes';
 
@@ -51,6 +53,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
   const [balanceFilter, setBalanceFilter] = useState<'all' | 'balanced' | 'critical'>('all');
   const [sortBy, setSortBy] = useState<'name-asc' | 'custom-first' | 'cost-asc' | 'pac-desc'>('name-asc');
   const [viewingRecipe, setViewingRecipe] = useState<Recipe | null>(null);
+  const [nutritionalRecipe, setNutritionalRecipe] = useState<Recipe | null>(null);
   const [isStyleModalOpen, setIsStyleModalOpen] = useState(false);
   const [stylesRevision, setStylesRevision] = useState(0);
   const [activePreset, setActivePreset] = useState<StylePresetId>(() => getActivePresetId());
@@ -764,6 +767,16 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                     <span>Balancear</span>
                   </button>
 
+                  {/* Botão Tabela Nutricional ANVISA (ao lado esquerdo do botão de duplicar) */}
+                  <button
+                    type="button"
+                    onClick={() => setNutritionalRecipe(recipe)}
+                    className="p-2.5 shrink-0 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/15 rounded-xl transition-colors border border-slate-700 active:scale-95"
+                    title={`Tabela Nutricional ANVISA de "${recipe.name}"`}
+                  >
+                    <FileText className="w-4 h-4" />
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => handleDuplicateRecipe(recipe)}
@@ -800,6 +813,14 @@ export const RecipeList: React.FC<RecipeListProps> = ({
         isOpen={!!viewingRecipe}
         onClose={() => setViewingRecipe(null)}
         onOpenInCalculator={onSelectRecipe}
+      />
+
+      {/* Modal da Tabela Nutricional Oficial ANVISA */}
+      <AnvisaNutritionalModal
+        recipe={nutritionalRecipe}
+        isOpen={!!nutritionalRecipe}
+        onClose={() => setNutritionalRecipe(null)}
+        ingredients={ingredients}
       />
 
       {/* Modal de Ajuste de Metas Físico-Químicas */}
