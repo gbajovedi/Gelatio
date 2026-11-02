@@ -9,6 +9,9 @@ import {
   applyCarpigianiPreset,
   applyCustomPreset,
   hasCarpigianiData,
+  isOfficialStyle,
+  isStyleModifiedFromOfficial,
+  resetSingleStyleToReference,
   StylePresetId
 } from '../../core/stylesStorage';
 import { stylesDataMap, db } from '../../db/database';
@@ -164,6 +167,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   const currentStyle: StyleStandard = useMemo(() => {
     return stylesDataMap[targetStyleName] || stylesDataMap['Gelatos de Leite'];
   }, [targetStyleName, stylesRevision]);
+
+  const isTargetOfficial = useMemo(() => {
+    return isOfficialStyle(targetStyleName);
+  }, [targetStyleName]);
+
+  const isTargetModified = useMemo(() => {
+    return isStyleModifiedFromOfficial(targetStyleName);
+  }, [targetStyleName, stylesRevision, activePresetId]);
 
   // Sincronização em tempo real com os parâmetros da aba Precificação
   const [pricingParams, setPricingParams] = useState<PricingParams>(getStoredPricingParams);
@@ -470,7 +481,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           </div>
         </div>
 
-        {/* LINHA 2: Caixa de Estilo com busca instantânea alinhada com Padrão Ouro, Carpigiani Estrito e Ajustar Metas */}
+        {/* LINHA 2: Barra Contextual Limpa e Unificada de Estilos */}
         <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-slate-700/60">
           {/* Seletor Combobox Inteligente com busca instantânea e gestão de estilos */}
           <StyleSearchCombobox
@@ -484,65 +495,73 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             }}
           />
 
-          {/* Presets Rápidos e Ajuste de Metas (3 Botões alinhados com o estilo) */}
+          {/* Controles Contextuais (Oficial vs Estilo da Casa) */}
           <div className="flex items-center gap-2 flex-wrap">
-            {/* 1. Padrão Ouro */}
-            <button
-              type="button"
-              onClick={() => applyGoldStandardPreset()}
-              className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 border ${
-                activePresetId === 'gold'
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm shadow-emerald-500/10'
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700 hover:border-slate-600'
-              }`}
-              title="Ativar Padrão Ouro Híbrido Protegido (Recomendado: proteção contra arenosidade de Caviezel e PAC Carpigiani)"
-            >
-              <ShieldCheck className={`w-3.5 h-3.5 ${activePresetId === 'gold' ? 'text-emerald-400' : 'text-slate-400'}`} />
-              <span>Padrão Ouro</span>
-            </button>
+            {isTargetOfficial ? (
+              <>
+                {/* Segmented Switch: Referência Bibliográfica (Padrão Ouro | Carpigiani) */}
+                <div className="inline-flex items-center bg-slate-900 p-0.5 rounded-xl border border-slate-700/80 shadow-inner">
+                  <button
+                    type="button"
+                    onClick={() => applyGoldStandardPreset()}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      activePresetId === 'gold' && !isTargetModified
+                        ? 'bg-emerald-500/25 text-emerald-300 shadow-sm border border-emerald-500/40'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                    title="Padrão Ouro Híbrido Protegido (Recomendado: Caviezel + PAC Carpigiani)"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Padrão Ouro</span>
+                  </button>
 
-            {/* 2. Carpigiani Estrito (exibido apenas se houver dados da Carpigiani para o estilo) */}
-            {hasCarpigianiData(targetStyleName) && (
-              <button
-                type="button"
-                onClick={() => applyCarpigianiPreset()}
-                className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 border ${
-                  activePresetId === 'carpigiani'
-                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm shadow-sky-500/10'
-                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700 hover:border-slate-600'
-                }`}
-                title="Ativar réguas estritas da Carpigiani Gelato University (Apostila 2025/2026)"
-              >
-                <GraduationCap className={`w-3.5 h-3.5 ${activePresetId === 'carpigiani' ? 'text-sky-400' : 'text-slate-400'}`} />
-                <span>Carpigiani Estrito</span>
-              </button>
+                  {hasCarpigianiData(targetStyleName) && (
+                    <button
+                      type="button"
+                      onClick={() => applyCarpigianiPreset()}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        activePresetId === 'carpigiani' && !isTargetModified
+                          ? 'bg-sky-500/25 text-sky-300 shadow-sm border border-sky-500/40'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                      title="Carpigiani Gelato University Estrito (Apostila 2025/2026)"
+                    >
+                      <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
+                      <span>Carpigiani</span>
+                    </button>
+                  )}
+                </div>
+
+                {/* Indicador de metas modificadas pelo usuário com atalho para resetar */}
+                {isTargetModified && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetSingleStyleToReference(targetStyleName);
+                      setStylesRevision(prev => prev + 1);
+                    }}
+                    className="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 hover:bg-amber-500/25 transition-all shadow-inner"
+                    title="Este estilo oficial possui metas editadas. Clique para restaurar ao padrão."
+                  >
+                    <RotateCcw className="w-3 h-3 text-amber-400" />
+                    <span>Metas Editadas (Resetar)</span>
+                  </button>
+                )}
+              </>
+            ) : (
+              /* Estilo da Gelateria */
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 text-xs font-bold shadow-inner">
+                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                <span>Estilo da Casa</span>
+              </div>
             )}
 
-            {/* 3. Personalizado (Atalho Rápido de 1 Clique) */}
-            <button
-              type="button"
-              onClick={() => applyCustomPreset()}
-              className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 border ${
-                activePresetId === 'custom'
-                  ? 'bg-purple-500/20 text-purple-300 border-purple-500/50 shadow-sm shadow-purple-500/10'
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700 hover:border-slate-600'
-              }`}
-              title={
-                currentStyle.customProfileName
-                  ? `Ativar perfil customizado: "${currentStyle.customProfileName}"`
-                  : 'Ativar balanceamento personalizado do Mestre Gelatiere para este estilo'
-              }
-            >
-              <Sparkles className={`w-3.5 h-3.5 ${activePresetId === 'custom' ? 'text-purple-400' : 'text-slate-400'}`} />
-              <span>{currentStyle.customProfileName || 'Personalizado'}</span>
-            </button>
-
-            {/* 4. Ajustar Metas (Abre Modal de Edição) */}
+            {/* Ajustar Metas (Abre a Modal Técnica) */}
             <button
               type="button"
               onClick={() => handleOpenStyleSettings(targetStyleName, false)}
               className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 group border bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 border-slate-700 hover:border-amber-500/50"
-              title="Ajustar manualmente metas, limites físico-químicos e nome deste perfil"
+              title="Ajustar manualmente metas e limites físico-químicos"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-45 transition-transform" />
               <span>Ajustar Metas</span>

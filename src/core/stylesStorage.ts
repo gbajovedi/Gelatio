@@ -439,16 +439,41 @@ export function applyCarpigianiPreset(): Record<string, StyleStandard> {
 }
 
 /**
+ * Verifica se um estilo oficial foi modificado pelo usuário em relação à sua referência ativa (Padrão Ouro ou Carpigiani)
+ */
+export function isStyleModifiedFromOfficial(styleName: string): boolean {
+  if (!isOfficialStyle(styleName)) return false;
+  const current = getStoredStyles()[styleName];
+  const activePreset = getActivePresetId();
+  const reference = (activePreset === 'carpigiani' && hasCarpigianiData(styleName))
+    ? CARPIGIANI_STRICT_STYLES[styleName]
+    : GOLD_STANDARD_STYLES[styleName];
+  if (!current || !reference) return false;
+
+  return JSON.stringify(current.min) !== JSON.stringify(reference.min) ||
+         JSON.stringify(current.max) !== JSON.stringify(reference.max) ||
+         current.pacDivisor !== reference.pacDivisor;
+}
+
+/**
+ * Restaura um único estilo oficial para a sua referência padrão ativa
+ */
+export function resetSingleStyleToReference(styleName: string): Record<string, StyleStandard> {
+  const customStyles = getUserCustomStyles();
+  const activePreset = getActivePresetId();
+  const updated = { ...customStyles };
+  delete updated[styleName];
+  saveUserCustomStyles(updated);
+  const targetPreset = activePreset === 'carpigiani' ? 'carpigiani' : 'gold';
+  saveStoredStyles(updated, targetPreset);
+  return getStoredStyles();
+}
+
+/**
  * Restaura um único estilo específico para o seu valor Padrão Ouro no armazenamento customizado
  */
 export function resetSingleStyleToGold(styleName: string): Record<string, StyleStandard> {
-  const customStyles = getUserCustomStyles();
-  const gold = GOLD_STANDARD_STYLES[styleName];
-  if (!gold) return customStyles;
-  const updated = { ...customStyles, [styleName]: JSON.parse(JSON.stringify(gold)) };
-  saveUserCustomStyles(updated);
-  saveStoredStyles(updated, 'custom');
-  return updated;
+  return resetSingleStyleToReference(styleName);
 }
 
 /**

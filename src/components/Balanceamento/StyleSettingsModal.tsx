@@ -12,7 +12,8 @@ import {
   Save,
   Sparkles,
   PlusCircle,
-  Trash2
+  Trash2,
+  BookmarkPlus
 } from 'lucide-react';
 import {
   getStoredStyles,
@@ -39,7 +40,6 @@ interface StyleSettingsModalProps {
 }
 
 interface EditableFormState {
-  profileName: string;
   sugarsMin: number;
   sugarsMax: number;
   fatMin: number;
@@ -63,7 +63,6 @@ interface EditableFormState {
 
 function styleToFormState(style: StyleStandard): EditableFormState {
   return {
-    profileName: style.customProfileName || '',
     sugarsMin: +(style.min.sugars * 100).toFixed(2),
     sugarsMax: +(style.max.sugars * 100).toFixed(2),
     fatMin: +(style.min.fat * 100).toFixed(2),
@@ -225,6 +224,61 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
     }));
   };
 
+  // Salvar parâmetros atuais como um novo estilo da casa
+  const handleSaveAsNewStyle = () => {
+    const suggestedName = `${selectedStyleName} (Fórmula da Casa)`;
+    const newName = window.prompt('Informe o nome para o novo estilo da casa:', suggestedName);
+    if (!newName || !newName.trim()) return;
+
+    const cleanName = newName.trim();
+    if (stylesMap[cleanName]) {
+      alert(`Já existe um estilo com o nome "${cleanName}". Escolha outro nome.`);
+      return;
+    }
+
+    const newStyle: StyleStandard = {
+      name: cleanName,
+      baseCategory: stylesMap[selectedStyleName]?.baseCategory || selectedStyleName,
+      isCustom: true,
+      pacDivisor: form.pacDivisor || 24,
+      min: {
+        sugars: +(form.sugarsMin / 100).toFixed(4),
+        fat: +(form.fatMin / 100).toFixed(4),
+        msnf: +(form.msnfMin / 100).toFixed(4),
+        otherSolids: +(form.otherSolidsMin / 100).toFixed(4),
+        totalSolids: +(form.totalSolidsMin / 100).toFixed(4),
+        water: +(form.waterMin / 100).toFixed(4),
+        pod: Math.round(form.podMin),
+        pac: Math.round(form.pacMin),
+        protein: +(form.proteinMin / 100).toFixed(4)
+      },
+      max: {
+        sugars: +(form.sugarsMax / 100).toFixed(4),
+        fat: +(form.fatMax / 100).toFixed(4),
+        msnf: +(form.msnfMax / 100).toFixed(4),
+        otherSolids: +(form.otherSolidsMax / 100).toFixed(4),
+        totalSolids: +(form.totalSolidsMax / 100).toFixed(4),
+        water: +(form.waterMax / 100).toFixed(4),
+        pod: Math.round(form.podMax),
+        pac: Math.round(form.pacMax),
+        protein: +(form.proteinMax / 100).toFixed(4)
+      }
+    };
+
+    createCustomStyle(newStyle);
+    const newMap = getStoredStyles();
+    setStylesMap(newMap);
+    setSelectedStyleName(cleanName);
+    setIsCreating(false);
+    setPresetId(getActivePresetId());
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 2000);
+
+    if (onStyleUpdated) {
+      onStyleUpdated(cleanName);
+    }
+  };
+
   // Save changes (ou criar novo estilo)
   const handleSave = () => {
     if (errors.length > 0) return;
@@ -235,7 +289,6 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
         name: cleanName,
         baseCategory: newBaseCategory,
         isCustom: true,
-        customProfileName: form.profileName.trim() || undefined,
         pacDivisor: form.pacDivisor || 24,
         min: {
           sugars: +(form.sugarsMin / 100).toFixed(4),
@@ -278,7 +331,8 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
 
     const updatedStyle: StyleStandard = {
       name: selectedStyleName,
-      customProfileName: form.profileName.trim() || undefined,
+      baseCategory: stylesMap[selectedStyleName]?.baseCategory,
+      isCustom: stylesMap[selectedStyleName]?.isCustom,
       pacDivisor: form.pacDivisor || 24,
       min: {
         sugars: +(form.sugarsMin / 100).toFixed(4),
@@ -471,7 +525,7 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
                     className="w-full bg-slate-800 border border-slate-700 text-slate-100 text-sm font-semibold rounded-xl px-3 py-2 pr-8 focus:outline-none focus:border-amber-500 transition-colors shadow-inner"
                   >
                     {customStyleKeys.length > 0 && (
-                      <optgroup label="⭐ Meus Estilos Personalizados">
+                      <optgroup label="⭐ Meus Estilos da Casa">
                         {customStyleKeys.map(s => (
                           <option key={s} value={s}>
                             {s}
@@ -493,10 +547,10 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
                   type="button"
                   onClick={handleStartCreate}
                   className="px-3 py-2 rounded-xl text-xs font-bold bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/40 flex items-center gap-1.5 transition-all shrink-0"
-                  title="Criar um novo estilo personalizado do zero"
+                  title="Criar um novo estilo da casa do zero"
                 >
                   <PlusCircle className="w-3.5 h-3.5 text-purple-400" />
-                  <span className="hidden sm:inline">+ Novo Estilo</span>
+                  <span className="hidden sm:inline">+ Novo Estilo da Casa</span>
                 </button>
               </div>
 
@@ -580,27 +634,36 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
             </div>
           )}
 
-          {/* Nome do Balanceamento Personalizado */}
-          <div className="p-3.5 bg-slate-950/60 rounded-2xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
-            <div className="space-y-0.5">
-              <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                <span>Nome do Balanceamento Personalizado:</span>
-              </label>
-              <p className="text-[11px] text-slate-400">
-                Este nome será exibido diretamente no botão de atalho rápido na bancada de balanceamento.
-              </p>
+          {/* Card Contextual: Estilo Oficial vs Estilo da Casa */}
+          {!isCreating && (
+            <div className="p-3.5 bg-slate-950/60 rounded-2xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-xs text-white">
+                    {isCurrentCustom ? '⭐ Estilo da Casa' : '🏛️ Estilo Oficial Protegido'}
+                  </span>
+                  <span className="text-[11px] text-slate-400">({selectedStyleName})</span>
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  {isCurrentCustom
+                    ? 'Este estilo pertence exclusivamente à sua gelateria e pode ser ajustado ou excluído a qualquer momento.'
+                    : 'Ajuste as metas para este estilo ou salve uma cópia independente com o nome que desejar.'}
+                </p>
+              </div>
+
+              {!isCurrentCustom && (
+                <button
+                  type="button"
+                  onClick={handleSaveAsNewStyle}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/40 flex items-center gap-1.5 transition-all shrink-0 shadow-inner"
+                  title="Salvar estas metas como um novo estilo da casa com nome exclusivo"
+                >
+                  <BookmarkPlus className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Salvar como Novo Estilo da Casa</span>
+                </button>
+              )}
             </div>
-            <div className="w-full sm:w-72">
-              <input
-                type="text"
-                value={form.profileName}
-                onChange={e => setForm(prev => ({ ...prev, profileName: e.target.value }))}
-                placeholder="Ex: Minha Fórmula da Casa"
-                className="w-full bg-slate-900 border border-slate-700 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 rounded-xl px-3 py-2 text-xs font-semibold text-slate-100 placeholder:text-slate-500 transition-colors shadow-inner"
-              />
-            </div>
-          </div>
+          )}
 
           {/* Variables Table Header */}
           <div className="grid grid-cols-12 gap-3 pb-2 border-b border-slate-800 text-xs font-bold text-slate-400 uppercase tracking-wider">

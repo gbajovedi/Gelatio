@@ -170,7 +170,7 @@ export const StyleSearchCombobox: React.FC<StyleSearchComboboxProps> = ({
           {isSelectedCustom && (
             <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold shrink-0 flex items-center gap-1">
               <Sparkles className="w-2.5 h-2.5 text-purple-400" />
-              <span>Personalizado</span>
+              <span>Estilo da Casa</span>
             </span>
           )}
         </div>
@@ -218,7 +218,7 @@ export const StyleSearchCombobox: React.FC<StyleSearchComboboxProps> = ({
                 <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-400 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <Sparkles className="w-3 h-3 text-purple-400" />
-                    Meus Estilos Personalizados
+                    Meus Estilos da Casa
                   </span>
                   <span className="text-purple-400/80 font-mono text-[10px]">({customStyles.length})</span>
                 </div>
@@ -244,11 +244,6 @@ export const StyleSearchCombobox: React.FC<StyleSearchComboboxProps> = ({
                           <span className="font-semibold text-white truncate block">
                             {style.name}
                           </span>
-                          {style.customProfileName && (
-                            <span className="text-[10px] text-purple-300 block truncate">
-                              {style.customProfileName}
-                            </span>
-                          )}
                         </div>
                       </div>
 
@@ -366,8 +361,8 @@ export const StyleSearchCombobox: React.FC<StyleSearchComboboxProps> = ({
               }}
               className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-purple-500/20 hover:from-amber-500/30 hover:to-purple-500/30 border border-amber-500/30 text-amber-200 text-xs font-bold flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
-              <PlusCircle className="w-4 h-4 text-amber-400" />
-              <span>+ Novo Estilo Personalizado</span>
+              <PlusCircle className="w-4 h-4 text-purple-400" />
+              <span>+ Novo Estilo da Casa</span>
             </button>
           </div>
 
