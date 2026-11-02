@@ -431,7 +431,7 @@ export function calculateBatchAnalysis(
   const suggestedPrice500g =
     marginDivisor > 0 && totalDeductionsAndMargin < 1
       ? totalCostWithOverhead / marginDivisor
-      : 0;
+      : (totalCostWithOverhead * (1 + targetMarginDecimal)) / Math.max(0.01, 1 - totalSalesDeductions);
   const variegatoRatioPercent = finalWeightGrams > 0 ? (totalVariegatoGrams / finalWeightGrams) * 100 : 0;
 
   return {

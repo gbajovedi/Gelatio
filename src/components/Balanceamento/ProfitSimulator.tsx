@@ -239,7 +239,10 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
   // Direct Calculation: Price from Simulated Margin (Official Sebrae Markup Divisor)
   const totalMarginAndDeductions = (simulatedMargin / 100) + salesDeductionsRate;
   const marginDivisor = Math.max(0.001, 1 - totalMarginAndDeductions);
-  const calculatedPrice = totalMarginAndDeductions < 1 ? totalCostUnit / marginDivisor : 0;
+  const calculatedPrice =
+    totalMarginAndDeductions < 1
+      ? totalCostUnit / marginDivisor
+      : (totalCostUnit * (1 + simulatedMargin / 100)) / Math.max(0.01, 1 - salesDeductionsRate);
 
   // Reverse Calculation: Margin from Simulated Price (Lucro Líquido / Preço de Venda)
   const manualPrice = parseFloat(simulatedPriceInput) || 0;

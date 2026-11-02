@@ -34,6 +34,7 @@ export interface PricingParams {
   tubWeightGrams: number;
   tubPackCost: number;
   targetMargin: number;
+  pricingMethod?: 'margin' | 'markup';
 
   // Taxa de Cartão manual (fallback)
   cardFee: number;
@@ -116,6 +117,7 @@ export const DEFAULT_PRICING_PARAMS: PricingParams = {
   tubWeightGrams: 500,
   tubPackCost: 1.50,
   targetMargin: 40,
+  pricingMethod: 'margin',
   cardFee: 2.03,
   useSalesMix: true,
   cieloPlan: 'padrao',

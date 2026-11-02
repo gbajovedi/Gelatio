@@ -64,6 +64,9 @@ export const PricingCalculator: React.FC = () => {
   const [tubWeightGrams, setTubWeightGrams] = useState<number>(initial.tubWeightGrams);
   const [tubPackCost, setTubPackCost] = useState<number>(initial.tubPackCost);
   const [targetMargin, setTargetMargin] = useState<number>(initial.targetMargin);
+  const [pricingMethod, setPricingMethod] = useState<'margin' | 'markup'>(
+    initial.pricingMethod || (initial.targetMargin >= 100 ? 'markup' : 'margin')
+  );
   const [salesTaxPercent, setSalesTaxPercent] = useState<number>(initial.salesTaxPercent);
   const [sampleCaldaCostKg, setSampleCaldaCostKg] = useState<number>(initial.sampleCaldaCostKg);
 
@@ -228,6 +231,7 @@ export const PricingCalculator: React.FC = () => {
       setTubWeightGrams(def.tubWeightGrams);
       setTubPackCost(def.tubPackCost);
       setTargetMargin(def.targetMargin);
+      setPricingMethod(def.pricingMethod || 'margin');
       setCardFeeManual(def.cardFee);
       setUseSalesMix(def.useSalesMix);
       setCieloPlan(def.cieloPlan);
