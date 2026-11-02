@@ -153,7 +153,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
                   </span>
                 </h4>
                 <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                  Gera um arquivo <code className="font-mono text-amber-300 font-bold">.JSON</code> com 100% dos seus dados: receitas, insumos & custos, pré-preparos e <strong>todos os parâmetros de Precificação (custos fixos e taxas Cielo)</strong>.
+                  Gera um arquivo <code className="font-mono text-amber-300 font-bold">.JSON</code> com 100% dos seus dados: receitas, insumos & custos, pré-preparos e <strong>todos os parâmetros de Precificação (custos fixos e taxas de maquininha)</strong>.
                 </p>
               </div>
               <button

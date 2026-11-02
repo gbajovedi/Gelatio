@@ -1281,7 +1281,7 @@ export class GelatoDatabase extends Dexie {
     let themeImported = false;
     let customStylesImported = false;
 
-    // Restaurar custos fixos e taxas Cielo caso existam no backup
+    // Restaurar custos fixos e taxas de maquininha caso existam no backup
     if (data.pricingParams && typeof window !== 'undefined') {
       try {
         localStorage.setItem(PRICING_STORAGE_KEY, JSON.stringify(data.pricingParams));

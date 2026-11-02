@@ -66,7 +66,7 @@ export const PricingCalculator: React.FC = () => {
   const [salesTaxPercent, setSalesTaxPercent] = useState<number>(initial.salesTaxPercent);
   const [sampleCaldaCostKg, setSampleCaldaCostKg] = useState<number>(initial.sampleCaldaCostKg);
 
-  // Configurações Maquininha Cielo / Adquirentes
+  // Configurações Maquininha / Adquirentes
   const [useSalesMix, setUseSalesMix] = useState<boolean>(initial.useSalesMix ?? true);
   const [cieloPlan, setCieloPlan] = useState<'padrao' | 'negociado' | 'fluxo' | 'custom'>(
     initial.cieloPlan ?? 'padrao'
@@ -168,7 +168,7 @@ export const PricingCalculator: React.FC = () => {
     sampleCaldaCostKg
   ]);
 
-  // Aplicar Preset Cielo
+  // Aplicar Preset de Maquininha
   const applyCieloPreset = (plan: 'padrao' | 'negociado' | 'fluxo') => {
     const p = CIELO_PRESETS[plan];
     setCieloPlan(plan);
@@ -299,7 +299,7 @@ export const PricingCalculator: React.FC = () => {
             <span>Gestão Financeira & Engenharia de Preços</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-0.5">
-            Simulador de rateio fixo avançado para gelaterias, taxas Cielo (Pix/Débito/Crédito) e markup de venda.
+            Simulador de rateio fixo avançado para gelaterias, taxas de cartão/adquirentes (Pix/Débito/Crédito) e markup de venda.
           </p>
         </div>
         <button
@@ -612,7 +612,7 @@ export const PricingCalculator: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column: Markup, Cielo Terminals & Pricing */}
+        {/* Right Column: Markup, Terminals & Pricing */}
         <div className="lg:col-span-6 space-y-4">
           <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-700 pb-3">
@@ -667,14 +667,14 @@ export const PricingCalculator: React.FC = () => {
               </div>
             </div>
 
-            {/* MÓDULO MAQUININHA CIELO / MEIOS DE PAGAMENTO */}
+            {/* MÓDULO MAQUININHA / MEIOS DE PAGAMENTO */}
             <div className="bg-slate-900/90 p-4 rounded-xl border border-emerald-500/40 space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
                 <div className="flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-emerald-400" />
                   <div>
                     <h4 className="text-sm font-bold text-white leading-tight">
-                      Maquininha & Taxas de Pagamento (Modelo Cielo)
+                      Maquininha & Taxas de Pagamento
                     </h4>
                     <span className="text-[11px] text-slate-400">
                       Configure as taxas reais da sua maquininha e o mix do balcão
@@ -709,11 +709,11 @@ export const PricingCalculator: React.FC = () => {
                 </div>
               </div>
 
-              {/* Botões de Presets da Cielo */}
+              {/* Botões de Presets de Maquininha */}
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="text-[11px] text-slate-400 font-semibold mr-1 flex items-center gap-1">
                   <Zap className="w-3 h-3 text-amber-400" />
-                  Planos Cielo:
+                  Planos / Presets:
                 </span>
                 <button
                   type="button"
@@ -725,7 +725,7 @@ export const PricingCalculator: React.FC = () => {
                   }`}
                   title={CIELO_PRESETS.padrao.description}
                 >
-                  ⭐ Cielo D+1 Padrão
+                  ⭐ D+1 Padrão
                 </button>
                 <button
                   type="button"
@@ -755,7 +755,7 @@ export const PricingCalculator: React.FC = () => {
 
               {useSalesMix ? (
                 <div className="space-y-3 pt-1">
-                  {/* Grid das 4 modalidades Cielo */}
+                  {/* Grid das 4 modalidades de pagamento */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                     {/* 1. Pix */}
                     <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">

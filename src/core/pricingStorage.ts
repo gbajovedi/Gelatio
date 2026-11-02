@@ -38,7 +38,7 @@ export interface PricingParams {
   // Taxa de Cartão manual (fallback)
   cardFee: number;
 
-  // Maquininha Cielo / Adquirentes detalhadas
+  // Maquininha / Adquirentes detalhadas
   useSalesMix: boolean;
   cieloPlan: 'padrao' | 'negociado' | 'fluxo' | 'custom';
   cardFeePix: number;
@@ -58,7 +58,7 @@ export interface PricingParams {
 
 export const CIELO_PRESETS = {
   padrao: {
-    name: 'Cielo Padrão D+1 (Sem Aluguel)',
+    name: 'Padrão D+1 (Sem Aluguel)',
     description: 'Plano padrão com recebimento no dia útil seguinte para faturamentos até R$ 15 mil.',
     posRentalMonthly: 0,
     cardFeePix: 0.00,
@@ -67,7 +67,7 @@ export const CIELO_PRESETS = {
     cardFeeCreditInstallment: 9.90
   },
   negociado: {
-    name: 'Cielo Negociado (> R$ 15k / Aluguel Isento)',
+    name: 'Negociado (> R$ 15k / Aluguel Isento)',
     description: 'Taxas reduzidas para estabelecimentos com faturamento maior negociado.',
     posRentalMonthly: 0,
     cardFeePix: 0.00,
@@ -76,7 +76,7 @@ export const CIELO_PRESETS = {
     cardFeeCreditInstallment: 6.90
   },
   fluxo: {
-    name: 'Cielo no Fluxo (D+30 tradicional)',
+    name: 'No Fluxo (D+30 tradicional)',
     description: 'Sem antecipação: recebe o crédito em 30 dias e parcelas a cada mês.',
     posRentalMonthly: 0,
     cardFeePix: 0.00,
@@ -119,7 +119,7 @@ export const DEFAULT_PRICING_PARAMS: PricingParams = {
   cardFee: 2.03,
   useSalesMix: true,
   cieloPlan: 'padrao',
-  // Auto-preenchimento oficial Cielo:
+  // Auto-preenchimento oficial de taxas:
   cardFeePix: 0.00,
   cardFeeDebit: 1.49,
   cardFeeCreditSight: 4.30,
