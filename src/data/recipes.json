@@ -766,6 +766,47 @@
     "totalGrams": 1004
   },
   {
+    "id": "rec_19",
+    "name": "Gelato de Pistache (Direto ao Ponto)",
+    "category": "Gelatos de Oleaginosas",
+    "targetStyle": "Gelatos de Oleaginosas",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 610
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 90
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 40
+      },
+      {
+        "name": "Açúcar Sacarose",
+        "grams": 125
+      },
+      {
+        "name": "Açúcar - Dextrose",
+        "grams": 40
+      },
+      {
+        "name": "Pasta De Pistache 100%",
+        "grams": 90
+      },
+      {
+        "name": "Sal",
+        "grams": 1
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1001
+  },
+  {
     "id": "rec_21",
     "name": "Gelato de Caffè Bianco (Addolcire)",
     "category": "Gelatos de Leite",
