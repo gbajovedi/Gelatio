@@ -393,7 +393,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
 
         {/* Precision Target Range Bar & Needle Marker */}
         <div>
-          <div className="relative w-full h-4 bg-slate-950/90 rounded-full border border-slate-800 shadow-inner flex items-center">
+          <div className="nutrient-progress-track relative w-full h-4 bg-slate-950/90 rounded-full border border-slate-800 shadow-inner flex items-center">
             {/* 1. Faixa Colorida: Intervalo Recomendado [Mínimo -> Máximo] */}
             {(span > 0 || max > 0) && (
               <div
@@ -420,10 +420,10 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
             <div
               className={`absolute top-[-3px] bottom-[-3px] w-[4px] rounded-full z-20 transition-all duration-300 pointer-events-none ${
                 status === 'Ok'
-                  ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,1),0_0_14px_rgba(52,211,153,0.9)] ring-1 ring-emerald-400'
+                  ? 'nutrient-needle-ok bg-white shadow-[0_0_8px_rgba(255,255,255,1),0_0_14px_rgba(52,211,153,0.9)] ring-1 ring-emerald-400'
                   : status === 'Baixo'
-                  ? 'bg-amber-300 shadow-[0_0_10px_rgba(245,158,11,1)] ring-1 ring-amber-400 animate-pulse'
-                  : 'bg-rose-400 shadow-[0_0_10px_rgba(244,63,94,1)] ring-1 ring-rose-500 animate-pulse'
+                  ? 'nutrient-needle-warn bg-amber-300 shadow-[0_0_10px_rgba(245,158,11,1)] ring-1 ring-amber-400 animate-pulse'
+                  : 'nutrient-needle-err bg-rose-400 shadow-[0_0_10px_rgba(244,63,94,1)] ring-1 ring-rose-500 animate-pulse'
               }`}
               style={{ left: `calc(${progressPct}% - 2px)` }}
               title={`Valor Calculado: ${displayVal}${unit}`}
@@ -595,7 +595,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
             </div>
 
             {/* CARD 2: Emulsão & Overrun (Aeração) — SEMPRE VISÍVEL E DESTACADO */}
-            <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/30 p-4 rounded-2xl border border-purple-500/30 shadow-md flex flex-col justify-between space-y-3">
+            <div className="emulsao-overrun-card bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/30 p-4 rounded-2xl border border-purple-500/30 shadow-md flex flex-col justify-between space-y-3">
               {/* Header do Card de Overrun */}
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2 text-purple-300">
@@ -659,7 +659,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
 
               {/* Mini-Gauge de Nível de Aeração */}
               <div className="space-y-1.5 pt-1">
-                <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                <div className="nutrient-progress-track w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
                   <div
                     className="h-full bg-gradient-to-r from-sky-400 via-purple-400 to-emerald-400 rounded-full transition-all duration-500 shadow-sm"
                     style={{

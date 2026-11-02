@@ -328,7 +328,7 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
   const pProfit = effectivePrice > 0 ? (netProfitUnit / effectivePrice) * 100 : 0;
 
   return (
-    <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-slate-900/95 via-slate-900 to-slate-950 border border-slate-700/80 shadow-2xl space-y-5">
+    <div className="profit-simulator-card p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-slate-900/95 via-slate-900 to-slate-950 border border-slate-700/80 shadow-2xl space-y-5">
       {/* 1. Header do Simulador Executivo com Alternância e Overrun Integrados */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-700/80">
         <div className="space-y-1">
@@ -731,7 +731,7 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
         <div className="flex flex-col justify-between space-y-4">
           
           {/* Card 1: Visão Unitária do Pote (Destaque Comercial) */}
-          <div className="bg-gradient-to-br from-emerald-950/50 via-slate-900 to-slate-900/90 p-4 rounded-2xl border border-emerald-500/40 shadow-md space-y-3.5">
+          <div className="profit-card-highlight bg-gradient-to-br from-emerald-950/50 via-slate-900 to-slate-900/90 p-4 rounded-2xl border border-emerald-500/40 shadow-md space-y-3.5">
             <div className="flex items-center justify-between pb-2 border-b border-emerald-900/40 text-xs">
               <span className="font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
                 <DollarSign className="w-4 h-4 text-emerald-400" />
@@ -816,7 +816,7 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                 </span>
               </div>
 
-              <div className="bg-gradient-to-br from-emerald-950/40 to-slate-950 p-3 rounded-xl border border-emerald-500/40 space-y-1 shadow-sm">
+              <div className="profit-card-highlight bg-gradient-to-br from-emerald-950/40 to-slate-950 p-3 rounded-xl border border-emerald-500/40 space-y-1 shadow-sm">
                 <span className="text-[11px] uppercase font-bold text-emerald-300 block tracking-wider">
                   Lucro no Bolso ⭐
                 </span>

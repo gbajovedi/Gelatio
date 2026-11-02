@@ -80,12 +80,20 @@ html.light .bg-slate-800\/70 {
 
 /* Nested cards, secondary containers, and data cards */
 html.light .bg-slate-950,
+html.light .bg-slate-950\/95,
+html.light .bg-slate-950\/90,
 html.light .bg-slate-950\/80,
 html.light .bg-slate-950\/70,
 html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/50,
+html.light .bg-slate-950\/40,
+html.light .bg-slate-950\/30,
+html.light .bg-slate-950\/20,
+html.light .bg-slate-950\/10,
 html.light .bg-slate-900\/80,
 html.light .bg-slate-900\/70,
 html.light .bg-slate-900\/60,
+html.light .bg-slate-900\/50,
 html.light .bg-slate-900\/40,
 html.light .bg-slate-850,
 html.light .bg-slate-750,
@@ -101,12 +109,19 @@ html.light .hover\:bg-slate-750:hover,
 html.light .hover\:bg-slate-700:hover,
 html.light .hover\:bg-slate-700\/60:hover,
 html.light .hover\:bg-slate-700\/50:hover,
-html.light .hover\:bg-slate-800:hover {
+html.light .hover\:bg-slate-800:hover,
+html.light .hover\:bg-slate-900:hover,
+html.light .hover\:bg-slate-950:hover {
   background-color: #f1f5f9 !important;
   color: #0f172a !important;
 }
 
 /* Borders */
+html.light .border-slate-950,
+html.light .border-slate-950\/80,
+html.light .border-slate-950\/60,
+html.light .border-slate-950\/50,
+html.light .border-slate-900,
 html.light .border-slate-800,
 html.light .border-slate-700,
 html.light .border-slate-700\/80,
@@ -152,7 +167,7 @@ html.light .text-slate-500 {
 /* ==========================================================================
    Colored Typography Overrides for High Contrast (WCAG AAA)
    ========================================================================== */
-/* Amber / Gold: replace pale yellows with rich warm caramel/bronze */
+/* Amber / Gold */
 html.light .text-amber-200,
 html.light .text-amber-300,
 html.light .text-amber-300\/80 {
@@ -160,44 +175,121 @@ html.light .text-amber-300\/80 {
 }
 
 html.light .text-amber-400,
+html.light .text-amber-400\/80,
 html.light .text-amber-400\/90,
 html.light .text-amber-500 {
   color: #b45309 !important; /* amber-700 */
 }
 
-/* Emerald / Green: replace neon greens with deep forest emerald */
-html.light .text-emerald-300 {
+/* Emerald / Green */
+html.light .text-emerald-200,
+html.light .text-emerald-300,
+html.light .text-emerald-300\/80 {
   color: #065f46 !important; /* emerald-800 */
 }
 
-html.light .text-emerald-400 {
+html.light .text-emerald-400,
+html.light .text-emerald-500 {
   color: #047857 !important; /* emerald-700 */
 }
 
-/* Cyan / Sky: replace pale ice cyan with deep ocean blue */
+/* Cyan / Sky */
 html.light .text-cyan-100,
 html.light .text-cyan-200,
 html.light .text-cyan-300 {
   color: #0e7490 !important; /* cyan-700 */
 }
 
-html.light .text-cyan-400 {
+html.light .text-cyan-400,
+html.light .text-cyan-500 {
   color: #0369a1 !important; /* sky-700 */
 }
 
-/* Rose / Red: replace pale pinks with rich ruby wine */
+html.light .text-sky-200,
+html.light .text-sky-300,
+html.light .text-sky-400 {
+  color: #0284c7 !important; /* sky-600 */
+}
+
+html.light .text-sky-500 {
+  color: #0369a1 !important; /* sky-700 */
+}
+
+/* Purple / Violet */
+html.light .text-purple-200,
+html.light .text-purple-300,
+html.light .text-purple-400,
+html.light .text-purple-400\/80,
+html.light .text-purple-400\/90 {
+  color: #7e22ce !important; /* purple-700 */
+}
+
+html.light .text-purple-500 {
+  color: #6b21a8 !important; /* purple-800 */
+}
+
+/* Rose / Red */
 html.light .text-rose-200,
 html.light .text-rose-300 {
   color: #9f1239 !important; /* rose-800 */
 }
 
-html.light .text-rose-400 {
+html.light .text-rose-400,
+html.light .text-rose-500 {
   color: #be123c !important; /* rose-700 */
 }
 
 /* Blue */
+html.light .text-blue-200,
 html.light .text-blue-300 {
   color: #1d4ed8 !important; /* blue-700 */
+}
+
+html.light .text-blue-400,
+html.light .text-blue-500 {
+  color: #1e40af !important; /* blue-800 */
+}
+
+/* Teal */
+html.light .text-teal-200,
+html.light .text-teal-300,
+html.light .text-teal-400 {
+  color: #0f766e !important; /* teal-700 */
+}
+
+/* Yellow */
+html.light .text-yellow-200,
+html.light .text-yellow-300,
+html.light .text-yellow-400 {
+  color: #854d0e !important; /* yellow-800 */
+}
+
+/* Orange */
+html.light .text-orange-200,
+html.light .text-orange-300,
+html.light .text-orange-400 {
+  color: #c2410c !important; /* orange-700 */
+}
+
+/* Pink */
+html.light .text-pink-200,
+html.light .text-pink-300,
+html.light .text-pink-400 {
+  color: #be185d !important; /* pink-700 */
+}
+
+/* Lime */
+html.light .text-lime-200,
+html.light .text-lime-300,
+html.light .text-lime-400 {
+  color: #3f6212 !important; /* lime-800 */
+}
+
+/* Indigo */
+html.light .text-indigo-200,
+html.light .text-indigo-300,
+html.light .text-indigo-400 {
+  color: #4338ca !important; /* indigo-700 */
 }
 
 /* Hover typography */
@@ -259,11 +351,18 @@ html.light .bg-emerald-500 * {
   color: #020617 !important;
 }
 
-/* Badges and metric cards with soft pastel backgrounds */
+/* ==========================================================================
+   Badges and Metric Cards com Fundos Pastéis Suaves
+   ========================================================================== */
 html.light .bg-amber-500\/10,
 html.light .bg-amber-500\/15,
 html.light .bg-amber-500\/20,
-html.light .bg-amber-500\/25 {
+html.light .bg-amber-500\/25,
+html.light .bg-amber-600\/20,
+html.light .bg-amber-950\/20,
+html.light .bg-amber-950\/40,
+html.light .bg-amber-950\/50,
+html.light .bg-amber-950\/70 {
   background-color: #fef3c7 !important;
   color: #92400e !important;
   border-color: #fcd34d !important;
@@ -291,34 +390,80 @@ html.light .bg-cyan-950\/50 {
   border-color: #7dd3fc !important;
 }
 
+html.light .bg-sky-500\/5,
+html.light .bg-sky-500\/10,
+html.light .bg-sky-500\/15,
+html.light .bg-sky-500\/20,
+html.light .bg-sky-500\/25 {
+  background-color: #e0f2fe !important;
+  color: #0369a1 !important;
+  border-color: #7dd3fc !important;
+}
+
+html.light .bg-purple-500\/10,
+html.light .bg-purple-500\/15,
+html.light .bg-purple-500\/20,
+html.light .bg-purple-500\/25,
+html.light .bg-purple-950\/20,
+html.light .bg-purple-950\/30 {
+  background-color: #f3e8ff !important;
+  color: #7e22ce !important;
+  border-color: #d8b4fe !important;
+}
+
 html.light .bg-rose-500\/10,
 html.light .bg-rose-500\/15,
 html.light .bg-rose-500\/20,
-html.light .bg-rose-500\/25 {
+html.light .bg-rose-500\/25,
+html.light .bg-rose-950\/20,
+html.light .bg-rose-950\/40 {
   background-color: #ffe4e6 !important;
   color: #9f1239 !important;
   border-color: #fca5a5 !important;
 }
 
-html.light .bg-blue-500\/15 {
+html.light .bg-blue-500\/15,
+html.light .bg-blue-500\/20 {
   background-color: #dbeafe !important;
   color: #1e40af !important;
   border-color: #bfdbfe !important;
 }
 
-/* ==========================================================================
-   Card Preço Sugerido: Substitui gradiente preto por cartão menta/esmeralda suave
-   ========================================================================== */
-html.light .from-emerald-950\/70,
-html.light .from-emerald-950\/60 {
-  --tw-gradient-from: #f0fdf4 !important;
-  --tw-gradient-to: #ecfdf5 !important;
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
-  background-image: linear-gradient(to bottom right, #f0fdf4, #ecfdf5) !important;
-  border-color: #a7f3d0 !important;
-  box-shadow: 0 4px 6px -1px rgb(16 185 129 / 0.08), 0 2px 4px -2px rgb(16 185 129 / 0.08) !important;
+html.light .bg-teal-500\/15,
+html.light .bg-teal-500\/20 {
+  background-color: #ccfbf1 !important;
+  color: #0f766e !important;
+  border-color: #5eead4 !important;
 }
 
+html.light .bg-yellow-500\/15,
+html.light .bg-yellow-500\/20,
+html.light .bg-yellow-600\/15 {
+  background-color: #fef9c3 !important;
+  color: #854d0e !important;
+  border-color: #fde047 !important;
+}
+
+html.light .bg-orange-500\/15,
+html.light .bg-orange-600\/20 {
+  background-color: #ffedd5 !important;
+  color: #c2410c !important;
+  border-color: #fed7aa !important;
+}
+
+html.light .bg-pink-500\/15 {
+  background-color: #fce7f3 !important;
+  color: #be185d !important;
+  border-color: #fbcfe8 !important;
+}
+
+html.light .bg-lime-500\/15 {
+  background-color: #ecfccb !important;
+  color: #3f6212 !important;
+  border-color: #bef264 !important;
+}
+
+/* Border overrides */
 html.light .border-emerald-900\/60,
 html.light .border-emerald-700\/50,
 html.light .border-emerald-500\/50,
@@ -334,6 +479,23 @@ html.light .border-cyan-500\/30 {
   border-color: #7dd3fc !important;
 }
 
+html.light .border-sky-500,
+html.light .border-sky-500\/10,
+html.light .border-sky-500\/30,
+html.light .border-sky-500\/40,
+html.light .border-sky-500\/50,
+html.light .border-sky-400\/60 {
+  border-color: #7dd3fc !important;
+}
+
+html.light .border-purple-500,
+html.light .border-purple-500\/30,
+html.light .border-purple-500\/35,
+html.light .border-purple-500\/40,
+html.light .border-purple-500\/50 {
+  border-color: #d8b4fe !important;
+}
+
 html.light .border-amber-500\/50,
 html.light .border-amber-500\/40,
 html.light .border-amber-500\/30,
@@ -347,22 +509,159 @@ html.light .border-rose-500\/30 {
   border-color: #fca5a5 !important;
 }
 
-/* Trilhos de Barras de Progresso no Modo Claro */
-html.light .rounded-full.h-2\.5.bg-slate-900\/90,
-html.light .rounded-full.bg-slate-900\/90,
-html.light .rounded-full.h-3.bg-slate-900 {
-  background-color: #e2e8f0 !important;
-  border-color: #cbd5e1 !important;
+html.light .border-teal-500\/30,
+html.light .border-teal-500\/40 {
+  border-color: #5eead4 !important;
 }
 
-/* Tables in Light Mode */
-html.light th {
+html.light .border-yellow-500\/30,
+html.light .border-yellow-500\/40,
+html.light .border-yellow-600\/30 {
+  border-color: #fde047 !important;
+}
+
+html.light .border-orange-500\/30,
+html.light .border-orange-500\/40 {
+  border-color: #fed7aa !important;
+}
+
+html.light .border-pink-500\/40 {
+  border-color: #fbcfe8 !important;
+}
+
+html.light .border-lime-500\/40 {
+  border-color: #bef264 !important;
+}
+
+/* ==========================================================================
+   Gradientes Escuros -> Cartões Claros e Elegantes
+   ========================================================================== */
+/* Card Emulsão & Overrun (Carpigiani): substitui gradiente escuro por cartão branco/lavanda suave */
+html.light .emulsao-overrun-card,
+html.light [class*="from-slate-900"][class*="to-purple-950"],
+html.light [class*="to-purple-950\/30"] {
+  --tw-gradient-from: #ffffff !important;
+  --tw-gradient-to: #faf5ff !important;
+  --tw-gradient-stops: #ffffff, #ffffff, #faf5ff !important;
+  background-image: linear-gradient(to bottom right, #ffffff, #faf5ff) !important;
+  background-color: #ffffff !important;
+  border-color: #e9d5ff !important;
+  box-shadow: 0 4px 6px -1px rgb(168 85 247 / 0.08), 0 2px 4px -2px rgb(168 85 247 / 0.08) !important;
+}
+
+/* Simulador de Lucro por Volume: substitui gradiente escuro por cartão branco limpo */
+html.light .profit-simulator-card,
+html.light [class*="from-slate-900"][class*="to-slate-950"] {
+  background-image: none !important;
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Cards de Preço de Venda / Lucro no Bolso: substitui gradiente escuro por menta suave */
+html.light .profit-card-highlight,
+html.light .pricing-card-highlight,
+html.light [class*="from-emerald-950"] {
+  --tw-gradient-from: #f0fdf4 !important;
+  --tw-gradient-to: #ecfdf5 !important;
+  --tw-gradient-stops: #f0fdf4, #ecfdf5 !important;
+  background-image: linear-gradient(to bottom right, #f0fdf4, #ecfdf5) !important;
+  background-color: #f0fdf4 !important;
+  border-color: #a7f3d0 !important;
+  box-shadow: 0 4px 6px -1px rgb(16 185 129 / 0.08), 0 2px 4px -2px rgb(16 185 129 / 0.08) !important;
+}
+
+/* ==========================================================================
+   Trilhos de Barras de Progresso e Marcadores no Modo Claro
+   ========================================================================== */
+html.light .nutrient-progress-track,
+html.light .vitrine-track,
+html.light .h-4.bg-slate-950\/90,
+html.light .h-4.bg-slate-950,
+html.light .h-3.bg-slate-950,
+html.light .h-2\.5.bg-slate-950,
+html.light .h-2.bg-slate-950,
+html.light .h-3.bg-slate-900,
+html.light .rounded-full.bg-slate-950\/90,
+html.light .rounded-full.bg-slate-950,
+html.light .rounded-full.bg-slate-900\/90,
+html.light .rounded-full.bg-slate-900 {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: inset 0 1px 2px 0 rgb(0 0 0 / 0.06) !important;
+}
+
+/* Agulhas de Alta Precisão nas Barras de Nutrientes */
+html.light .nutrient-needle-ok {
+  background-color: #047857 !important; /* emerald-700 */
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 0 6px rgba(4, 120, 87, 0.7) !important;
+}
+
+html.light .nutrient-needle-warn {
+  background-color: #d97706 !important; /* amber-600 */
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 0 6px rgba(217, 119, 6, 0.7) !important;
+}
+
+html.light .nutrient-needle-err {
+  background-color: #e11d48 !important; /* rose-600 */
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 0 6px rgba(225, 29, 72, 0.7) !important;
+}
+
+/* Marcador do Simulador Térmico da Vitrine */
+html.light .vitrine-marker-ring {
+  border-color: #0f172a !important;
+}
+
+html.light .vitrine-marker-dot {
+  background-color: #0f172a !important;
+}
+
+/* ==========================================================================
+   Elementos Sólidos Pretos e Tabela Oficial ANVISA (Preservação Regulamentar)
+   ========================================================================== */
+html.light .bg-black,
+html.light .bg-black * {
+  color: #ffffff !important;
+}
+
+html.light #anvisa-label,
+html.light #anvisa-label *,
+html.light .anvisa-label,
+html.light .anvisa-label * {
+  color: #000000 !important;
+}
+
+html.light #anvisa-label th,
+html.light .anvisa-label th {
+  background-color: transparent !important;
+  color: #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+}
+
+html.light #anvisa-label tr:hover,
+html.light .anvisa-label tr:hover {
+  background-color: transparent !important;
+}
+
+html.light #anvisa-label .bg-black,
+html.light #anvisa-label .bg-black *,
+html.light .anvisa-label .bg-black,
+html.light .anvisa-label .bg-black * {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Tables in Light Mode (exceto rótulo regulamentar ANVISA) */
+html.light table:not(.anvisa-table) th:not(#anvisa-label th),
+html.light th:not(#anvisa-label th):not(.anvisa-table th) {
   background-color: #f8fafc !important;
   color: #475569 !important;
   border-bottom: 1px solid #e2e8f0 !important;
 }
 
-html.light tbody tr:hover {
+html.light tbody:not(#anvisa-label tbody) tr:not(#anvisa-label tr):hover {
   background-color: #f8fafc !important;
 }
 

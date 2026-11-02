@@ -1017,7 +1017,7 @@ export const PricingCalculator: React.FC = () => {
             </div>
 
             {/* Preço de Venda Sugerido */}
-            <div className="p-4 sm:p-5 bg-gradient-to-br from-emerald-950/70 to-slate-900 border border-emerald-500/50 rounded-xl space-y-3 shadow-lg">
+            <div className="pricing-card-highlight p-4 sm:p-5 bg-gradient-to-br from-emerald-950/70 to-slate-900 border border-emerald-500/50 rounded-xl space-y-3 shadow-lg">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">
                   Preço de Venda Sugerido (Pote {tubWeightGrams}g):

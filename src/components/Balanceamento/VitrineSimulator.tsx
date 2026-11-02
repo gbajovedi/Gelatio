@@ -206,7 +206,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         {/* Trilho Visual com Marcador Dinâmico */}
         <div className="relative py-2 flex items-center">
           {/* Barra Gradiente com Zonas de Textura */}
-          <div className="h-3 w-full rounded-full bg-slate-900 border border-slate-700 overflow-hidden flex shadow-inner">
+          <div className="vitrine-track h-3 w-full rounded-full bg-slate-900 border border-slate-700 overflow-hidden flex shadow-inner">
             <div style={{ width: '27.5%' }} className="bg-amber-500/30 border-r border-slate-950/50" title="Muito Macio (< 56%)" />
             <div style={{ width: '20%' }} className="bg-amber-500/50 border-r border-slate-950/50" title="Macio & Cremoso (56% a 64%)" />
             <div style={{ width: '27.5%' }} className="bg-emerald-500/80 border-r border-slate-950/50 ring-1 ring-emerald-400" title="Spatolabile Ideal (64% a 75%)" />
@@ -219,8 +219,8 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
             className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none"
             style={{ left: `${markerPosition}%` }}
           >
-            <div className="w-5 h-5 rounded-full bg-amber-400 border-2 border-slate-950 shadow-md shadow-amber-500/50 flex items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />
+            <div className="vitrine-marker-ring w-5 h-5 rounded-full bg-amber-400 border-2 border-slate-950 shadow-md shadow-amber-500/50 flex items-center justify-center">
+              <div className="vitrine-marker-dot w-1.5 h-1.5 rounded-full bg-slate-950" />
             </div>
           </div>
         </div>
