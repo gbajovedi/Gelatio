@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { db } from '../../db/database';
-import { Download, Upload, RotateCcw, X, CheckCircle, AlertTriangle, Database } from 'lucide-react';
+import { Download, Upload, RotateCcw, X, CheckCircle, AlertTriangle, Database, Share2, ExternalLink } from 'lucide-react';
+import { shareOrDownloadBackup, downloadBlob } from '../../core/backupShare';
 
 interface ImportExportModalProps {
   isOpen: boolean;
@@ -18,31 +19,59 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
     null
   );
   const [loading, setLoading] = useState(false);
+  const [showWhatsAppPrompt, setShowWhatsAppPrompt] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
 
-  // Export full JSON
+  // Export full JSON (Direct Download)
   const handleExport = async () => {
     try {
       setLoading(true);
+      setShowWhatsAppPrompt(false);
       const json = await db.exportFullBackup();
       const blob = new Blob([json], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
       const dateStr = new Date().toISOString().split('T')[0];
-      a.href = url;
-      a.download = `gelato_backup_${dateStr}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      downloadBlob(blob, `gelato_backup_${dateStr}.json`);
       setStatusMessage({
-        text: 'Backup exportado com sucesso! Inclui receitas, matérias-primas, pré-preparos, custos fixos e taxas de precificação, além de todos os balanceamentos e metas personalizadas.',
+        text: 'Backup exportado com sucesso! Arquivo .JSON salvo na sua pasta de Downloads.',
         type: 'success'
       });
     } catch (err) {
       setStatusMessage({ text: 'Erro ao exportar backup: ' + err, type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Share full JSON (Native Share Sheet or Desktop WhatsApp Web prompt)
+  const handleShare = async () => {
+    try {
+      setLoading(true);
+      setShowWhatsAppPrompt(false);
+      const json = await db.exportFullBackup();
+      const dateStr = new Date().toISOString().split('T')[0];
+      const filename = `gelato_backup_${dateStr}.json`;
+      const result = await shareOrDownloadBackup(json, filename);
+
+      if (result.method === 'cancelled') {
+        return;
+      }
+
+      if (result.method === 'native') {
+        setStatusMessage({
+          text: 'Backup compartilhado com sucesso!',
+          type: 'success'
+        });
+      } else if (result.method === 'download_with_whatsapp_prompt') {
+        setShowWhatsAppPrompt(true);
+        setStatusMessage({
+          text: 'Backup baixado com sucesso! Clique no botão abaixo para abrir o WhatsApp Web e anexar o arquivo.',
+          type: 'success'
+        });
+      }
+    } catch (err) {
+      setStatusMessage({ text: 'Erro ao compartilhar backup: ' + err, type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -103,7 +132,11 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md">
       <div className="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-xl p-5 sm:p-7 shadow-2xl relative space-y-5 max-h-[92vh] overflow-y-auto">
         <button
-          onClick={onClose}
+          onClick={() => {
+            setShowWhatsAppPrompt(false);
+            setStatusMessage(null);
+            onClose();
+          }}
           className="absolute top-5 right-5 text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition-colors"
           title="Fechar"
         >
@@ -156,15 +189,29 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
                   Gera um arquivo <code className="font-mono text-amber-300 font-bold">.JSON</code> com 100% dos seus dados: receitas, insumos & custos, pré-preparos e <strong>todos os parâmetros de Precificação (custos fixos e taxas de maquininha)</strong>.
                 </p>
               </div>
-              <button
-                type="button"
-                disabled={loading}
-                onClick={handleExport}
-                className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 shrink-0 active:scale-95"
-              >
-                <Download className="w-4 h-4" />
-                <span>Exportar (.JSON)</span>
-              </button>
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={handleExport}
+                  className="px-3.5 sm:px-4 py-2.5 bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm shrink-0 active:scale-95"
+                  title="Baixar arquivo JSON para o armazenamento local"
+                >
+                  <Download className="w-4 h-4 text-slate-400" />
+                  <span>Baixar (.JSON)</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={handleShare}
+                  className="px-4 sm:px-4.5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 shrink-0 active:scale-95"
+                  title="Compartilhar via WhatsApp, Drive, E-mail ou aplicativos do sistema"
+                >
+                  <Share2 className="w-4 h-4 text-slate-950" />
+                  <span>Compartilhar</span>
+                </button>
+              </div>
             </div>
 
             {/* Chips Informativos do Conteúdo do Backup */}
@@ -188,6 +235,28 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
                 <span>Balanceamentos & Metas Personalizadas</span>
               </span>
             </div>
+
+            {/* Prompt Amigável para WhatsApp Web em Desktops */}
+            {showWhatsAppPrompt && (
+              <div className="mt-2 p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-emerald-300 animate-fadeIn">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xl shrink-0">💬</span>
+                  <div className="leading-snug">
+                    <p className="font-bold text-emerald-200">Arquivo baixado na pasta Downloads!</p>
+                    <p className="text-slate-300 text-[11px] mt-0.5">Deseja abrir o WhatsApp Web para anexar e enviar para um contato ou grupo?</p>
+                  </div>
+                </div>
+                <a
+                  href="https://web.whatsapp.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs whitespace-nowrap transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5 self-start sm:self-auto shrink-0"
+                >
+                  <span>Abrir WhatsApp Web</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            )}
           </div>
 
           {/* Import Box */}
