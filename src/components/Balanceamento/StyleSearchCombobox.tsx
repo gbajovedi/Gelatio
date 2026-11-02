@@ -376,3 +376,4 @@ export const StyleSearchCombobox: React.FC<StyleSearchComboboxProps> = ({
     </div>
   );
 };
+

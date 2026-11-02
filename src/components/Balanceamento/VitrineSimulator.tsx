@@ -202,7 +202,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
 
         {/* Trilho Visual com Marcador Dinâmico */}
-        <div className="relative pt-2 pb-1">
+        <div className="relative py-2 flex items-center">
           {/* Barra Gradiente com Zonas de Textura */}
           <div className="h-3 w-full rounded-full bg-slate-900 border border-slate-700 overflow-hidden flex shadow-inner">
             <div style={{ width: '27.5%' }} className="bg-amber-500/30 border-r border-slate-950/50" title="Muito Macio (< 56%)" />
@@ -212,15 +212,13 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
             <div style={{ width: '7.5%' }} className="bg-purple-500/70" title="Ponto de Freezer (> 82%)" />
           </div>
 
-          {/* Marcador do Ponto Atual com Indicador de Posição */}
+          {/* Marcador do Ponto Atual com Indicador de Posição (Centralizado perfeitamente e estático) */}
           <div
-            className="absolute top-0 -ml-2.5 transition-all duration-300 pointer-events-none"
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none"
             style={{ left: `${markerPosition}%` }}
           >
-            <div className="flex flex-col items-center">
-              <div className="w-5 h-5 rounded-full bg-amber-400 border-2 border-slate-950 shadow-md shadow-amber-500/50 flex items-center justify-center animate-pulse">
-                <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />
-              </div>
+            <div className="w-5 h-5 rounded-full bg-amber-400 border-2 border-slate-950 shadow-md shadow-amber-500/50 flex items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />
             </div>
           </div>
         </div>
