@@ -670,26 +670,12 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
             {showFOP && (
               <>
                 {nutrition.frontOfPack.hasAny ? (
-                  <div className="mb-4 pb-4 border-b-2 border-black flex flex-col sm:flex-row items-center sm:items-start justify-between gap-3 animate-in fade-in duration-200">
-                    <div className="flex flex-col items-center sm:items-start gap-1">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-black/60 print:hidden">
-                        Rotulagem Nutricional Frontal
-                      </span>
-                      <AnvisaFopSeal
-                        highAddedSugars={nutrition.frontOfPack.highAddedSugars}
-                        highSaturatedFat={nutrition.frontOfPack.highSaturatedFat}
-                        highSodium={nutrition.frontOfPack.highSodium}
-                      />
-                    </div>
-
-                    <div className="hidden sm:flex flex-col justify-center text-[10.5px] text-black/75 bg-slate-100 p-2.5 rounded-xl border border-black/10 max-w-[260px] leading-snug print:hidden">
-                      <span className="font-bold text-black uppercase mb-0.5">
-                        Selo Obrigatório (IN 75/2020)
-                      </span>
-                      <span>
-                        Padrão oficial da ANVISA com a lupa regulamentar e os destaques dos nutrientes com limites excedidos.
-                      </span>
-                    </div>
+                  <div className="mb-4 pb-3 border-b-2 border-black animate-in fade-in duration-200">
+                    <AnvisaFopSeal
+                      highAddedSugars={nutrition.frontOfPack.highAddedSugars}
+                      highSaturatedFat={nutrition.frontOfPack.highSaturatedFat}
+                      highSodium={nutrition.frontOfPack.highSodium}
+                    />
                   </div>
                 ) : (
                   <div className="mb-4 p-2.5 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs flex items-center gap-2 print:hidden animate-in fade-in duration-200">
@@ -707,21 +693,12 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
               <h1 className="text-base sm:text-lg font-black uppercase tracking-tight text-black m-0 leading-tight">
                 INFORMAÇÃO NUTRICIONAL
               </h1>
-              <div className="mt-1 space-y-0.5 text-xs text-black font-medium leading-snug">
-                <p>
-                  Porções por embalagem: cerca de <strong>{nutrition.servingsPerContainer}</strong> porções
-                </p>
-                <p>
-                  Porção: <strong>{nutrition.portionHousehold}</strong>
-                </p>
-                <p>
-                  {containerUnit === 'ml' ? (
-                    <>Conteúdo líquido da embalagem: <strong>{containerValue} ml ({effectiveContainerWeightGrams} g)</strong></>
-                  ) : (
-                    <>Peso líquido da embalagem: <strong>{containerValue} g</strong></>
-                  )}
-                </p>
-              </div>
+              <p className="text-xs text-black font-medium leading-snug mt-1">
+                Porções por embalagem: cerca de <strong>{nutrition.servingsPerContainer}</strong> porções
+              </p>
+              <p className="text-xs text-black font-medium leading-snug">
+                Porção: <strong>{nutrition.portionHousehold}</strong>
+              </p>
             </div>
 
             {/* 3. TABELA COM 3 COLUNAS OFICIAIS */}
