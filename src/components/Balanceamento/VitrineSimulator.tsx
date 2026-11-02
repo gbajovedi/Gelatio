@@ -90,6 +90,51 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           <span className={`text-xs px-3 py-1 rounded-full font-bold border shadow-sm ${state.statusBadgeColor} ${state.statusBorderColor}`}>
             {state.statusLabel}
           </span>
+
+          {/* Ícone de Diagnóstico com Tooltip Flutuante ao Passar o Mouse (Zero Layout Shift) */}
+          <div className="relative group/tip flex items-center">
+            <button
+              type="button"
+              className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-colors shadow-inner"
+              title="Ver diagnóstico e faixa ideal"
+              aria-label="Ver diagnóstico e faixa ideal"
+            >
+              {state.status === 'ideal' ? (
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              ) : (
+                <Info className="w-4 h-4 text-cyan-400" />
+              )}
+            </button>
+
+            {/* Popover Flutuante com Seta */}
+            <div className="absolute right-0 top-full mt-2 opacity-0 pointer-events-none group-hover/tip:opacity-100 group-hover/tip:pointer-events-auto transition-all duration-200 z-50 w-72 sm:w-80 p-3.5 rounded-xl bg-slate-950/95 border border-slate-700/90 shadow-2xl backdrop-blur-md text-left text-xs leading-relaxed space-y-2">
+              <div className="absolute -top-1.5 right-2.5 w-3 h-3 rotate-45 bg-slate-950 border-l border-t border-slate-700/90" />
+
+              <div className="flex items-center gap-1.5 font-bold text-slate-100 border-b border-slate-800 pb-1.5">
+                {state.status === 'ideal' ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                ) : (
+                  <Info className="w-4 h-4 text-cyan-400 shrink-0" />
+                )}
+                <span>Diagnóstico Térmico da Receita</span>
+              </div>
+
+              <p className="text-slate-300 text-xs leading-relaxed">
+                {state.diagnostic}
+              </p>
+
+              <div className="pt-1.5 border-t border-slate-800 text-[11px] text-slate-400">
+                🌡️ <strong>Faixa ideal para esta receita:</strong>{' '}
+                <span className="font-mono font-bold text-amber-300">
+                  {state.idealTempRange.minTemp.toFixed(1)}°C
+                </span>{' '}
+                a{' '}
+                <span className="font-mono font-bold text-amber-300">
+                  {state.idealTempRange.maxTemp.toFixed(1)}°C
+                </span>.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -189,28 +234,6 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           </span>
           <span className="text-sky-300">Firme</span>
           <span className="text-purple-300">Freezer (-18°C)</span>
-        </div>
-      </div>
-
-      {/* Diagnóstico Inteligente & Recomendações Técnicas */}
-      <div className={`p-3 rounded-xl border text-xs leading-relaxed flex items-start gap-2.5 ${state.statusBoxBg} ${state.statusBoxBorder} ${state.statusBoxText}`}>
-        {state.status === 'ideal' ? (
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-        ) : (
-          <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-        )}
-        <div className="space-y-1">
-          <p className="font-medium text-slate-200">{state.diagnostic}</p>
-          <p className="text-[11px] text-slate-300">
-            🌡️ <strong>Faixa ideal de serviço para esta receita:</strong> entre{' '}
-            <span className="font-mono font-bold text-white">
-              {state.idealTempRange.minTemp.toFixed(1)}°C
-            </span>{' '}
-            e{' '}
-            <span className="font-mono font-bold text-white">
-              {state.idealTempRange.maxTemp.toFixed(1)}°C
-            </span>.
-          </p>
         </div>
       </div>
     </div>
