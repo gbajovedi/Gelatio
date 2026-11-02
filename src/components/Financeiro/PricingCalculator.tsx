@@ -775,29 +775,18 @@ export const PricingCalculator: React.FC = () => {
             </div>
 
             {customCosts.length === 0 ? (
-              <div className="text-center py-2.5 px-3 bg-slate-950/40 rounded-lg border border-dashed border-slate-800 space-y-2">
-                <p className="text-[11px] text-slate-400">
-                  Nenhum custo extra cadastrado. Adicione despesas específicas da sua operação (consultorias, financiamentos, segurança, etc.).
+              <div className="text-center py-3 px-3.5 bg-slate-950/40 rounded-lg border border-dashed border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                <p className="text-[11px] text-slate-400 text-left">
+                  Nenhum custo extra cadastrado. Clique em <strong>Adicionar</strong> para cadastrar novas despesas fixas da sua operação.
                 </p>
-                <div className="flex flex-wrap items-center justify-center gap-1.5 pt-0.5">
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mr-1">Sugestões:</span>
-                  {[
-                    'Taxa de Resíduos Sólidos',
-                    'Consultoria Sanitária / RT',
-                    'Financiamento / Maquinário',
-                    'Segurança & Alarme 24h',
-                    'Lavanderia & Uniformes'
-                  ].map(sug => (
-                    <button
-                      key={sug}
-                      type="button"
-                      onClick={() => handleAddCustomCost(sug)}
-                      className="text-[10px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 font-medium transition-all cursor-pointer"
-                    >
-                      + {sug}
-                    </button>
-                  ))}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => handleAddCustomCost()}
+                  className="px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 rounded text-xs font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer shrink-0"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Adicionar Custo</span>
+                </button>
               </div>
             ) : (
               <div className="space-y-2">
