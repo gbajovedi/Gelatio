@@ -46,7 +46,8 @@
 }
 
 /* ==========================================================================
-   Light Mode Theme Overrides (html.light) - Alta Legibilidade e Elegância
+   Light Mode Theme Overrides (html.light) - Opção 2: Panna Linho Gastronômico
+   Luminância ~90%, sem luz azul, contraste de elevação suave e repousante
    ========================================================================== */
 html.light {
   color-scheme: light;
@@ -54,14 +55,14 @@ html.light {
 
 html.light body,
 html.light .min-h-screen.bg-slate-900 {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
+  background-color: #f6f5f0 !important; /* Panna Linho: off-white aquecido suave */
+  color: #1c1917 !important; /* Stone 900 */
 }
 
 /* Base header and navbars */
 html.light header {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  border-color: #e2e8f0 !important;
+  background-color: rgba(246, 245, 240, 0.95) !important;
+  border-color: #e5e2d9 !important;
 }
 
 /* Primary cards & panels */
@@ -74,8 +75,9 @@ html.light .bg-slate-800\/90,
 html.light .bg-slate-800\/80,
 html.light .bg-slate-800\/70 {
   background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #e2e8f0 !important;
+  color: #1c1917 !important;
+  border-color: #e5e2d9 !important;
+  box-shadow: 0 1px 3px 0 rgb(28 25 23 / 0.04), 0 1px 2px -1px rgb(28 25 23 / 0.04) !important;
 }
 
 /* Nested cards, secondary containers, and data cards */
@@ -99,9 +101,9 @@ html.light .bg-slate-850,
 html.light .bg-slate-750,
 html.light .bg-slate-750\/40,
 html.light .bg-slate-750\/50 {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-  border-color: #e2e8f0 !important;
+  background-color: #faf9f6 !important; /* Soft warm ivory */
+  color: #1c1917 !important;
+  border-color: #e8e5dc !important;
 }
 
 /* Hover states */
@@ -112,8 +114,8 @@ html.light .hover\:bg-slate-700\/50:hover,
 html.light .hover\:bg-slate-800:hover,
 html.light .hover\:bg-slate-900:hover,
 html.light .hover\:bg-slate-950:hover {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
+  background-color: #edeae3 !important;
+  color: #1c1917 !important;
 }
 
 /* Borders */
@@ -129,7 +131,7 @@ html.light .border-slate-700\/70,
 html.light .border-slate-700\/60,
 html.light .border-slate-700\/50,
 html.light .border-slate-700\/40 {
-  border-color: #e2e8f0 !important;
+  border-color: #e5e2d9 !important;
 }
 
 /* Dividers in tables and lists */
@@ -139,29 +141,29 @@ html.light .divide-slate-700,
 html.light .divide-slate-700\/50,
 html.light .divide-slate-700\/40,
 html.light .divide-y > * + * {
-  border-color: #e2e8f0 !important;
+  border-color: #e8e5dc !important;
 }
 
-/* Typography contrast - High-legibility neutral scale */
+/* Typography contrast - Warm neutral scale (Stone) */
 html.light .text-white,
 html.light .text-slate-100 {
-  color: #0f172a !important;
+  color: #1c1917 !important; /* Stone 900 */
 }
 
 html.light .text-slate-200 {
-  color: #1e293b !important;
+  color: #292524 !important; /* Stone 800 */
 }
 
 html.light .text-slate-300 {
-  color: #334155 !important;
+  color: #44403c !important; /* Stone 700 */
 }
 
 html.light .text-slate-400 {
-  color: #475569 !important;
+  color: #57534e !important; /* Stone 600 */
 }
 
 html.light .text-slate-500 {
-  color: #64748b !important;
+  color: #78716c !important; /* Stone 500 */
 }
 
 /* ==========================================================================
@@ -311,20 +313,20 @@ html.light input:not([type="checkbox"]):not([type="radio"]),
 html.light select,
 html.light textarea {
   background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #cbd5e1 !important;
+  color: #1c1917 !important;
+  border-color: #dcd8cc !important;
 }
 
 html.light input:focus,
 html.light select:focus,
 html.light textarea:focus {
-  border-color: #f59e0b !important;
-  box-shadow: 0 0 0 1px #f59e0b !important;
+  border-color: #d97706 !important;
+  box-shadow: 0 0 0 1px #d97706 !important;
 }
 
 html.light ::placeholder,
 html.light .placeholder-slate-500::placeholder {
-  color: #94a3b8 !important;
+  color: #a8a29e !important;
 }
 
 /* Action Buttons: solid amber retains high contrast with dark label */
@@ -554,7 +556,7 @@ html.light .profit-simulator-card,
 html.light [class*="from-slate-900"][class*="to-slate-950"] {
   background-image: none !important;
   background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
+  border-color: #e5e2d9 !important;
 }
 
 /* Cards de Preço de Venda / Lucro no Bolso: substitui gradiente escuro por menta suave */
@@ -585,9 +587,9 @@ html.light .rounded-full.bg-slate-950\/90,
 html.light .rounded-full.bg-slate-950,
 html.light .rounded-full.bg-slate-900\/90,
 html.light .rounded-full.bg-slate-900 {
-  background-color: #e2e8f0 !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: inset 0 1px 2px 0 rgb(0 0 0 / 0.06) !important;
+  background-color: #eae7df !important;
+  border-color: #dcd8cc !important;
+  box-shadow: inset 0 1px 2px 0 rgb(28 25 23 / 0.05) !important;
 }
 
 /* Agulhas de Alta Precisão nas Barras de Nutrientes */
@@ -656,65 +658,65 @@ html.light .anvisa-label .bg-black * {
 /* Tables in Light Mode (exceto rótulo regulamentar ANVISA) */
 html.light table:not(.anvisa-table) th:not(#anvisa-label th),
 html.light th:not(#anvisa-label th):not(.anvisa-table th) {
-  background-color: #f8fafc !important;
-  color: #475569 !important;
-  border-bottom: 1px solid #e2e8f0 !important;
+  background-color: #faf9f6 !important;
+  color: #57534e !important;
+  border-bottom: 1px solid #e5e2d9 !important;
 }
 
 html.light tbody:not(#anvisa-label tbody) tr:not(#anvisa-label tr):hover {
-  background-color: #f8fafc !important;
+  background-color: #faf9f6 !important;
 }
 
 /* Navigation tabs in Light Mode */
 html.light nav button.text-slate-300 {
-  color: #475569 !important;
+  color: #57534e !important;
 }
 
 html.light nav button.text-slate-300:hover {
-  color: #0f172a !important;
-  background-color: #f1f5f9 !important;
+  color: #1c1917 !important;
+  background-color: #edeae3 !important;
 }
 
 html.light .bg-slate-900.border-t.border-slate-800 {
   background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
+  border-color: #e5e2d9 !important;
 }
 
 /* Shadows */
 html.light .shadow-xl {
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05) !important;
+  box-shadow: 0 10px 15px -3px rgb(28 25 23 / 0.05), 0 4px 6px -4px rgb(28 25 23 / 0.05) !important;
 }
 
 html.light .shadow-inner {
-  box-shadow: inset 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+  box-shadow: inset 0 1px 2px 0 rgb(28 25 23 / 0.05) !important;
 }
 
 /* 3-Phase Theme Switch Control */
 html.light .theme-switch-track {
-  background-color: #e2e8f0 !important;
-  border-color: #cbd5e1 !important;
+  background-color: #eae7df !important;
+  border-color: #dcd8cc !important;
 }
 
 html.light .theme-switch-inactive {
-  color: #64748b !important;
+  color: #78716c !important;
 }
 
 html.light .theme-switch-inactive:hover {
-  color: #0f172a !important;
-  background-color: #f1f5f9 !important;
+  color: #1c1917 !important;
+  background-color: #edeae3 !important;
 }
 
 /* Scrollbars for light mode */
 html.light ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f6f5f0;
 }
 
 html.light ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #dcd8cc;
 }
 
 html.light ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #b8b2a5;
 }
 
 /* ==========================================================================
