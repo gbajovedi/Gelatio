@@ -741,6 +741,60 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v19 style rename:', e);
       }
     });
+
+    // Versão 20: Padronização de nomes de receitas com prefixo 'Gelato' ou 'Sorbet'
+    this.version(20).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const recipeNameMap: Record<string, string> = {
+          'rec_1': 'Gelato Fior di Latte (Direto ao Ponto)',
+          'rec_2': 'Gelato de Café Bianco Flocado (Direto ao Ponto)',
+          'rec_3': 'Gelato de Chocolate com Gostosuras (Direto ao Ponto)',
+          'rec_4': 'Gelato de Crema (Direto ao Ponto)',
+          'rec_5': 'Gelato Crema di Santa Fina (Direto ao Ponto)',
+          'rec_6': 'Gelato de Baunilha com Mascavo (Direto ao Ponto)',
+          'rec_7': 'Gelato de Doce de Leite (Direto ao Ponto)',
+          'rec_8': 'Gelato de Nesquik (Direto ao Ponto)',
+          'rec_9': 'Gelato de Cream Cheese (Direto ao Ponto)',
+          'rec_10': 'Gelato de Parmesão (Direto ao Ponto)',
+          'rec_11': 'Gelato de Gorgonzola (Direto ao Ponto)',
+          'rec_12': 'Gelato de Chocolate Branco Assado com Missô (Direto ao Ponto)',
+          'rec_13': 'Gelato de Iogurte (Direto ao Ponto)',
+          'rec_14': 'Gelato de Milho (Direto ao Ponto)',
+          'rec_15': 'Gelato de Coco Fresco (Direto ao Ponto)',
+          'rec_16': 'Gelato de Sucrilhos (Direto ao Ponto)',
+          'rec_17': 'Gelato Intenso de Cacau (Direto ao Ponto)',
+          'rec_18': 'Gelato de Chocolate 70% (Direto ao Ponto)',
+          'rec_19': 'Gelato de Pistache - Base Oleaginosas (Direto ao Ponto)',
+          'rec_57': 'Gelato Soft - Calda Base de Leite (Addolcire)',
+          'rec_58': 'Gelato Soft de Pistache (Addolcire)',
+          'rec_59': 'Gelato Soft de Chocolate (Addolcire)',
+          'rec_61': 'Gelato de Mousse de Maracujá (Direto ao Ponto)',
+          'rec_62': 'Gelato de Banana Assada (Direto ao Ponto)',
+          'rec_63': 'Gelato de Morango / Fragola (Direto ao Ponto)',
+          'rec_106': 'Gelato Calda Base Vegana de Aveia (Addolcire)',
+          'rec_146': 'Gelato Fior di Latte 17% - Polióis (Sem Açúcar)',
+          'rec_147': 'Gelato Fior di Latte 17% - Menos Polióis (Sem Açúcar)',
+          'rec_148': 'Gelato de Chocolate 17% - Polióis (Sem Açúcar)',
+          'rec_149': 'Gelato de Chocolate 17% - Redução Polióis (Sem Açúcar)',
+          'rec_150': 'Gelato de Fragola / Morango ao Leite - Polióis (Sem Açúcar)',
+          'rec_151': 'Gelato de Fragola / Morango ao Leite - Redução Polióis (Sem Açúcar)'
+        };
+
+        for (const [id, newName] of Object.entries(recipeNameMap)) {
+          const existing = await tx.table('recipes').get(id);
+          if (existing && !existing.isCustom) {
+            await tx.table('recipes').update(id, { name: newName });
+          }
+        }
+      } catch (e) {
+        console.warn('Migration to v20 recipe names standardization:', e);
+      }
+    });
   }
 
   async initializeSeedData(): Promise<void> {
@@ -1230,6 +1284,53 @@ export class GelatoDatabase extends Dexie {
             }
           }
           await this.settings.put({ key: 'vegan_alco_renamed_v19', value: 1 });
+        }
+
+        // Garantir padronização de nomes de receitas com prefixo Gelato ou Sorbet
+        const nameStandardizeFlag = await this.settings.get('recipe_names_standardized_v20');
+        if (!nameStandardizeFlag) {
+          const recipeNameMap: Record<string, string> = {
+            'rec_1': 'Gelato Fior di Latte (Direto ao Ponto)',
+            'rec_2': 'Gelato de Café Bianco Flocado (Direto ao Ponto)',
+            'rec_3': 'Gelato de Chocolate com Gostosuras (Direto ao Ponto)',
+            'rec_4': 'Gelato de Crema (Direto ao Ponto)',
+            'rec_5': 'Gelato Crema di Santa Fina (Direto ao Ponto)',
+            'rec_6': 'Gelato de Baunilha com Mascavo (Direto ao Ponto)',
+            'rec_7': 'Gelato de Doce de Leite (Direto ao Ponto)',
+            'rec_8': 'Gelato de Nesquik (Direto ao Ponto)',
+            'rec_9': 'Gelato de Cream Cheese (Direto ao Ponto)',
+            'rec_10': 'Gelato de Parmesão (Direto ao Ponto)',
+            'rec_11': 'Gelato de Gorgonzola (Direto ao Ponto)',
+            'rec_12': 'Gelato de Chocolate Branco Assado com Missô (Direto ao Ponto)',
+            'rec_13': 'Gelato de Iogurte (Direto ao Ponto)',
+            'rec_14': 'Gelato de Milho (Direto ao Ponto)',
+            'rec_15': 'Gelato de Coco Fresco (Direto ao Ponto)',
+            'rec_16': 'Gelato de Sucrilhos (Direto ao Ponto)',
+            'rec_17': 'Gelato Intenso de Cacau (Direto ao Ponto)',
+            'rec_18': 'Gelato de Chocolate 70% (Direto ao Ponto)',
+            'rec_19': 'Gelato de Pistache - Base Oleaginosas (Direto ao Ponto)',
+            'rec_57': 'Gelato Soft - Calda Base de Leite (Addolcire)',
+            'rec_58': 'Gelato Soft de Pistache (Addolcire)',
+            'rec_59': 'Gelato Soft de Chocolate (Addolcire)',
+            'rec_61': 'Gelato de Mousse de Maracujá (Direto ao Ponto)',
+            'rec_62': 'Gelato de Banana Assada (Direto ao Ponto)',
+            'rec_63': 'Gelato de Morango / Fragola (Direto ao Ponto)',
+            'rec_106': 'Gelato Calda Base Vegana de Aveia (Addolcire)',
+            'rec_146': 'Gelato Fior di Latte 17% - Polióis (Sem Açúcar)',
+            'rec_147': 'Gelato Fior di Latte 17% - Menos Polióis (Sem Açúcar)',
+            'rec_148': 'Gelato de Chocolate 17% - Polióis (Sem Açúcar)',
+            'rec_149': 'Gelato de Chocolate 17% - Redução Polióis (Sem Açúcar)',
+            'rec_150': 'Gelato de Fragola / Morango ao Leite - Polióis (Sem Açúcar)',
+            'rec_151': 'Gelato de Fragola / Morango ao Leite - Redução Polióis (Sem Açúcar)'
+          };
+
+          for (const [id, newName] of Object.entries(recipeNameMap)) {
+            const existing = await this.recipes.get(id);
+            if (existing && !existing.isCustom) {
+              await this.recipes.update(id, { name: newName });
+            }
+          }
+          await this.settings.put({ key: 'recipe_names_standardized_v20', value: 1 });
         }
       }
 

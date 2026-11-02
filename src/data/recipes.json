@@ -1,7 +1,7 @@
 [
   {
     "id": "rec_1",
-    "name": "Fior di Latte (Direto ao Ponto)",
+    "name": "Gelato Fior di Latte (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -42,7 +42,7 @@
   },
   {
     "id": "rec_2",
-    "name": "Café Bianco Flocado (Direto ao Ponto)",
+    "name": "Gelato de Café Bianco Flocado (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -83,7 +83,7 @@
   },
   {
     "id": "rec_3",
-    "name": "Chocolate com Gostosuras (Direto ao Ponto)",
+    "name": "Gelato de Chocolate com Gostosuras (Direto ao Ponto)",
     "category": "Gelatos de Leite com Chocolate",
     "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
@@ -128,7 +128,7 @@
   },
   {
     "id": "rec_4",
-    "name": "Crema (Direto ao Ponto)",
+    "name": "Gelato de Crema (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -173,7 +173,7 @@
   },
   {
     "id": "rec_5",
-    "name": "Crema di Santa Fina (Direto ao Ponto)",
+    "name": "Gelato Crema di Santa Fina (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -222,7 +222,7 @@
   },
   {
     "id": "rec_6",
-    "name": "Baunilha com Mascavo (Direto ao Ponto)",
+    "name": "Gelato de Baunilha com Mascavo (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -271,7 +271,7 @@
   },
   {
     "id": "rec_7",
-    "name": "Doce de Leite (Direto ao Ponto)",
+    "name": "Gelato de Doce de Leite (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -304,7 +304,7 @@
   },
   {
     "id": "rec_8",
-    "name": "Nesquik (Direto ao Ponto)",
+    "name": "Gelato de Nesquik (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -345,7 +345,7 @@
   },
   {
     "id": "rec_9",
-    "name": "Cream Cheese (Direto ao Ponto)",
+    "name": "Gelato de Cream Cheese (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -386,7 +386,7 @@
   },
   {
     "id": "rec_10",
-    "name": "Parmesão (Direto ao Ponto)",
+    "name": "Gelato de Parmesão (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -427,7 +427,7 @@
   },
   {
     "id": "rec_11",
-    "name": "Gorgonzola (Direto ao Ponto)",
+    "name": "Gelato de Gorgonzola (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -464,7 +464,7 @@
   },
   {
     "id": "rec_12",
-    "name": "Chocolate Branco Assado com Missô (Direto ao Ponto)",
+    "name": "Gelato de Chocolate Branco Assado com Missô (Direto ao Ponto)",
     "category": "Gelatos de Leite com Chocolate",
     "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
@@ -505,7 +505,7 @@
   },
   {
     "id": "rec_13",
-    "name": "Iogurte (Direto ao Ponto)",
+    "name": "Gelato de Iogurte (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -550,7 +550,7 @@
   },
   {
     "id": "rec_14",
-    "name": "Milho (Direto ao Ponto)",
+    "name": "Gelato de Milho (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -595,7 +595,7 @@
   },
   {
     "id": "rec_15",
-    "name": "Coco Fresco (Direto ao Ponto)",
+    "name": "Gelato de Coco Fresco (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -640,7 +640,7 @@
   },
   {
     "id": "rec_16",
-    "name": "Sucrilhos (Direto ao Ponto)",
+    "name": "Gelato de Sucrilhos (Direto ao Ponto)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -685,7 +685,7 @@
   },
   {
     "id": "rec_17",
-    "name": "Intenso de Cacau (Direto ao Ponto)",
+    "name": "Gelato Intenso de Cacau (Direto ao Ponto)",
     "category": "Gelatos de Leite com Chocolate",
     "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
@@ -726,7 +726,7 @@
   },
   {
     "id": "rec_18",
-    "name": "Chocolate 70% (Direto ao Ponto)",
+    "name": "Gelato de Chocolate 70% (Direto ao Ponto)",
     "category": "Gelatos de Leite com Chocolate",
     "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
@@ -767,7 +767,7 @@
   },
   {
     "id": "rec_19",
-    "name": "Pistache - Base Oleaginosas (Direto ao Ponto)",
+    "name": "Gelato de Pistache - Base Oleaginosas (Direto ao Ponto)",
     "category": "Gelatos de Oleaginosas",
     "targetStyle": "Gelatos de Oleaginosas",
     "ingredients": [
@@ -2373,7 +2373,7 @@
   },
   {
     "id": "rec_57",
-    "name": "Sorvete Soft - Calda Base de Leite (Addolcire)",
+    "name": "Gelato Soft - Calda Base de Leite (Addolcire)",
     "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
@@ -2406,7 +2406,7 @@
   },
   {
     "id": "rec_58",
-    "name": "Sorvete Soft de Pistache (Addolcire)",
+    "name": "Gelato Soft de Pistache (Addolcire)",
     "category": "Gelatos de Oleaginosas",
     "targetStyle": "Gelatos de Oleaginosas",
     "ingredients": [
@@ -2443,7 +2443,7 @@
   },
   {
     "id": "rec_59",
-    "name": "Sorvete Soft de Chocolate (Addolcire)",
+    "name": "Gelato Soft de Chocolate (Addolcire)",
     "category": "Gelatos de Leite com Chocolate",
     "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
@@ -2529,7 +2529,7 @@
   },
   {
     "id": "rec_61",
-    "name": "Mousse Maracujá (Direto ao Ponto)",
+    "name": "Gelato de Mousse de Maracujá (Direto ao Ponto)",
     "category": "Gelatos de Leite com Fruta",
     "targetStyle": "Gelatos de Leite com Fruta",
     "ingredients": [
@@ -2578,7 +2578,7 @@
   },
   {
     "id": "rec_62",
-    "name": "Banana Assada (Direto ao Ponto)",
+    "name": "Gelato de Banana Assada (Direto ao Ponto)",
     "category": "Gelatos de Leite com Fruta",
     "targetStyle": "Gelatos de Leite com Fruta",
     "ingredients": [
@@ -2623,7 +2623,7 @@
   },
   {
     "id": "rec_63",
-    "name": "Morango / Fragola (Direto ao Ponto)",
+    "name": "Gelato de Morango / Fragola (Direto ao Ponto)",
     "category": "Gelatos de Leite com Fruta",
     "targetStyle": "Gelatos de Leite com Fruta",
     "ingredients": [
@@ -4354,7 +4354,7 @@
   },
   {
     "id": "rec_106",
-    "name": "Calda Base Vegana de Aveia (Addolcire)",
+    "name": "Gelato Calda Base Vegana de Aveia (Addolcire)",
     "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Veganos",
     "ingredients": [
@@ -5116,7 +5116,7 @@
   },
   {
     "id": "rec_146",
-    "name": "Fior di Latte 17% - Polióis (Sem Açúcar)",
+    "name": "Gelato Fior di Latte 17% - Polióis (Sem Açúcar)",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5153,7 +5153,7 @@
   },
   {
     "id": "rec_147",
-    "name": "Fior di Latte 17% - Menos Polióis (Sem Açúcar)",
+    "name": "Gelato Fior di Latte 17% - Menos Polióis (Sem Açúcar)",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5194,7 +5194,7 @@
   },
   {
     "id": "rec_148",
-    "name": "Chocolate 17% - Polióis (Sem Açúcar)",
+    "name": "Gelato de Chocolate 17% - Polióis (Sem Açúcar)",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5243,7 +5243,7 @@
   },
   {
     "id": "rec_149",
-    "name": "Chocolate 17% - Redução Polióis (Sem Açúcar)",
+    "name": "Gelato de Chocolate 17% - Redução Polióis (Sem Açúcar)",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5296,7 +5296,7 @@
   },
   {
     "id": "rec_150",
-    "name": "Fragola / Morango ao Leite - Polióis (Sem Açúcar)",
+    "name": "Gelato de Fragola / Morango ao Leite - Polióis (Sem Açúcar)",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5337,7 +5337,7 @@
   },
   {
     "id": "rec_151",
-    "name": "Fragola / Morango ao Leite - Redução Polióis (Sem Açúcar)",
+    "name": "Gelato de Fragola / Morango ao Leite - Redução Polióis (Sem Açúcar)",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
