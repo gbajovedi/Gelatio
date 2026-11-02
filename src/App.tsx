@@ -151,40 +151,48 @@ export function App() {
       />
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8">
-        {activeTab === 'balanceamento' && (
+        <div style={{ display: activeTab === 'balanceamento' ? 'block' : 'none' }}>
           <BalancingScreen
             recipes={recipes}
             ingredients={ingredients}
             initialRecipeId={activeRecipeId}
             onRecipeSaved={refreshData}
+            onActiveRecipeChange={(id) => {
+              setActiveRecipeId(id);
+              try {
+                localStorage.setItem(STORAGE_RECIPE_KEY, id);
+              } catch {}
+            }}
           />
-        )}
+        </div>
 
-        {activeTab === 'receitas' && (
+        <div style={{ display: activeTab === 'receitas' ? 'block' : 'none' }}>
           <RecipeList
             recipes={recipes}
             ingredients={ingredients}
             onSelectRecipe={handleSelectRecipeFromCatalog}
             onRefresh={refreshData}
           />
-        )}
+        </div>
 
-        {activeTab === 'ingredientes' && (
+        <div style={{ display: activeTab === 'ingredientes' ? 'block' : 'none' }}>
           <IngredientManager
             ingredients={ingredients}
             onRefresh={refreshData}
           />
-        )}
+        </div>
 
-        {activeTab === 'preparos' && (
+        <div style={{ display: activeTab === 'preparos' ? 'block' : 'none' }}>
           <PrePreparosList
             preparations={preparations}
             availableIngredients={ingredients}
             onRefresh={refreshData}
           />
-        )}
+        </div>
 
-        {activeTab === 'financeiro' && <PricingCalculator />}
+        <div style={{ display: activeTab === 'financeiro' ? 'block' : 'none' }}>
+          <PricingCalculator />
+        </div>
       </main>
 
       {/* Backup and Import/Export Modal */}

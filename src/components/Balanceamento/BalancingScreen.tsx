@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Recipe, Ingredient, StyleStandard, VariegatoItem, RecipeItem } from '../../types/gelato';
 import { calculateBatchAnalysis } from '../../core/calculator';
 import { getStoredPricingParams, getPricingSettings, PRICING_UPDATED_EVENT, PricingParams } from '../../core/pricingStorage';
@@ -85,15 +85,18 @@ interface BalancingScreenProps {
   ingredients: Ingredient[];
   initialRecipeId?: string;
   onRecipeSaved: () => void;
+  onActiveRecipeChange?: (id: string) => void;
 }
 
 export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   recipes,
   ingredients,
   initialRecipeId,
-  onRecipeSaved
+  onRecipeSaved,
+  onActiveRecipeChange
 }) => {
   const [selectedRecipeId, setSelectedRecipeId] = useState<string>(initialRecipeId || (recipes[0]?.id ?? ''));
+  const lastLoadedRecipeIdRef = useRef<string | null>(initialRecipeId || null);
   const [recipeName, setRecipeName] = useState<string>('Receita sem título');
   const [targetStyleName, setTargetStyleName] = useState<string>('Gelatos de Leite');
   const [items, setItems] = useState<RecipeItem[]>([]);
@@ -126,7 +129,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   // Load recipe into editor
   const loadRecipe = (rec: Recipe) => {
     setSelectedRecipeId(rec.id);
-    if (rec.id !== 'new') { setLastActiveRecipeId(rec.id); try { localStorage.setItem('gelato_active_recipe_id', rec.id); } catch {} }
+    lastLoadedRecipeIdRef.current = rec.id;
+    if (rec.id !== 'new') {
+      setLastActiveRecipeId(rec.id);
+      try {
+        localStorage.setItem('gelato_active_recipe_id', rec.id);
+      } catch {}
+      if (onActiveRecipeChange) onActiveRecipeChange(rec.id);
+    }
     setRecipeName(rec.name);
     setTargetStyleName(rec.targetStyle || rec.category || 'Gelatos de Leite');
     setItems(rec.ingredients ? JSON.parse(JSON.stringify(rec.ingredients)) : []);
@@ -137,11 +147,18 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   };
 
   useEffect(() => {
-    if (initialRecipeId) {
+    if (initialRecipeId && initialRecipeId !== lastLoadedRecipeIdRef.current) {
       const found = recipes.find(r => r.id === initialRecipeId);
-      if (found) loadRecipe(found);
-    } else if (recipes.length > 0 && items.length === 0) {
-      loadRecipe(recipes[0]);
+      if (found) {
+        lastLoadedRecipeIdRef.current = initialRecipeId;
+        loadRecipe(found);
+      }
+    } else if (!lastLoadedRecipeIdRef.current && recipes.length > 0 && items.length === 0) {
+      const target = initialRecipeId ? recipes.find(r => r.id === initialRecipeId) || recipes[0] : recipes[0];
+      if (target) {
+        lastLoadedRecipeIdRef.current = target.id;
+        loadRecipe(target);
+      }
     }
   }, [initialRecipeId, recipes]);
 
@@ -255,6 +272,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   const handleSelectRecipe = (id: string) => {
     if (id === 'new') {
       setSelectedRecipeId('new');
+      lastLoadedRecipeIdRef.current = 'new';
       setRecipeName('Novo Gelato Artesanal');
       setTargetStyleName('Gelatos de Leite');
       setItems([
@@ -372,6 +390,11 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
 
     await db.recipes.put(newRecipe);
     setSelectedRecipeId(newId);
+    lastLoadedRecipeIdRef.current = newId;
+    if (onActiveRecipeChange) onActiveRecipeChange(newId);
+    try {
+      localStorage.setItem('gelato_active_recipe_id', newId);
+    } catch {}
     setRecipeName(name);
     setIsDirty(false);
     onRecipeSaved();

@@ -72,6 +72,16 @@ export const RecipeList: React.FC<RecipeListProps> = ({
     };
   }, []);
 
+  // Sincroniza a receita aberta em visualização caso seus dados sejam atualizados externamente
+  useEffect(() => {
+    if (viewingRecipe) {
+      const fresh = recipes.find(r => r.id === viewingRecipe.id);
+      if (fresh && fresh !== viewingRecipe) {
+        setViewingRecipe(fresh);
+      }
+    }
+  }, [recipes, viewingRecipe]);
+
   const handleSelectPreset = (preset: StylePresetId) => {
     if (preset === 'gold') {
       applyGoldStandardPreset();
