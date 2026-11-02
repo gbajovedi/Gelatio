@@ -73,11 +73,20 @@ export function App() {
       setIngredients(finalIngs);
       setPreparations(finalPreps);
 
-      // Restaurar receita ativa previamente salva ou primeira do catálogo
+      // Restaurar receita ativa previamente salva ou a primeira em ordem alfabética do catálogo
       const savedRecId = getInitialRecipeId();
-      const hasSavedRec = savedRecId && finalRecs.some(r => r.id === savedRecId);
-      if (!activeRecipeId && finalRecs.length > 0) {
-        setActiveRecipeId(hasSavedRec ? savedRecId : finalRecs[0].id);
+      const hasSavedRec = savedRecId && savedRecId !== 'new' && finalRecs.some(r => r.id === savedRecId);
+      const firstAlphabeticalRec = [...finalRecs].sort((a, b) =>
+        a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })
+      )[0];
+
+      if (hasSavedRec) {
+        setActiveRecipeId(savedRecId);
+      } else if (firstAlphabeticalRec) {
+        setActiveRecipeId(firstAlphabeticalRec.id);
+        try {
+          localStorage.setItem(STORAGE_RECIPE_KEY, firstAlphabeticalRec.id);
+        } catch {}
       }
     } catch (err) {
       console.error('Falha ao carregar do IndexedDB, ativando base de segurança em memória:', err);
@@ -89,8 +98,11 @@ export function App() {
       setIngredients(fallbackIngs);
       setPreparations(fallbackPreps);
 
-      if (!activeRecipeId && fallbackRecs.length > 0) {
-        setActiveRecipeId(fallbackRecs[0].id);
+      const firstFallback = [...fallbackRecs].sort((a, b) =>
+        a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })
+      )[0];
+      if (!activeRecipeId && firstFallback) {
+        setActiveRecipeId(firstFallback.id);
       }
     } finally {
       setIsLoading(false);

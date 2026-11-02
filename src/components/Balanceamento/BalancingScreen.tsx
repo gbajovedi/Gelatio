@@ -89,6 +89,14 @@ interface BalancingScreenProps {
   onActiveRecipeChange?: (id: string) => void;
 }
 
+/**
+ * Retorna a primeira receita em ordem alfabética do catálogo.
+ */
+const getFirstAlphabeticalRecipe = (recs: Recipe[]): Recipe | undefined => {
+  if (!recs || recs.length === 0) return undefined;
+  return [...recs].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }))[0];
+};
+
 export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   recipes,
   ingredients,
@@ -97,7 +105,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   onRecipeSaved,
   onActiveRecipeChange
 }) => {
-  const [selectedRecipeId, setSelectedRecipeId] = useState<string>(initialRecipeId || (recipes[0]?.id ?? ''));
+  const [selectedRecipeId, setSelectedRecipeId] = useState<string>(initialRecipeId || (getFirstAlphabeticalRecipe(recipes)?.id ?? ''));
   const lastLoadedRecipeIdRef = useRef<string | null>(initialRecipeId || null);
   const lastActionTokenRef = useRef<number>(recipeSelectionToken || 0);
   const [recipeName, setRecipeName] = useState<string>('Receita sem título');
@@ -112,7 +120,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   const [stylesRevision, setStylesRevision] = useState<number>(0);
   const [activePresetId, setActivePresetId] = useState<StylePresetId>(() => getActivePresetId());
   const [batchScaleInput, setBatchScaleInput] = useState<string>('1000');
-  const [lastActiveRecipeId, setLastActiveRecipeId] = useState<string>(initialRecipeId || (recipes[0]?.id ?? ''));
+  const [lastActiveRecipeId, setLastActiveRecipeId] = useState<string>(initialRecipeId || (getFirstAlphabeticalRecipe(recipes)?.id ?? ''));
 
   const handleOpenStyleSettings = (styleName?: string, createMode?: boolean) => {
     setStyleModalInitialName(styleName || targetStyleName);
@@ -177,7 +185,8 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
         loadRecipe(found);
       }
     } else if (!lastLoadedRecipeIdRef.current && recipes.length > 0 && items.length === 0) {
-      const target = initialRecipeId ? recipes.find(r => r.id === initialRecipeId) || recipes[0] : recipes[0];
+      const firstAlpha = getFirstAlphabeticalRecipe(recipes);
+      const target = initialRecipeId ? recipes.find(r => r.id === initialRecipeId) || firstAlpha : firstAlpha;
       if (target) {
         loadRecipe(target);
       }
@@ -284,8 +293,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
       if (!confirmCancel) return;
     }
 
-    const fallbackId = lastActiveRecipeId && lastActiveRecipeId !== 'new' ? lastActiveRecipeId : recipes[0]?.id;
-    const rec = recipes.find(r => r.id === fallbackId) || recipes[0];
+    const firstAlpha = getFirstAlphabeticalRecipe(recipes);
+    const fallbackId = lastActiveRecipeId && lastActiveRecipeId !== 'new' ? lastActiveRecipeId : firstAlpha?.id;
+    const rec = recipes.find(r => r.id === fallbackId) || firstAlpha;
     if (rec) {
       loadRecipe(rec);
     }
