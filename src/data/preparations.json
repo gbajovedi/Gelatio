@@ -18,7 +18,7 @@
         "grams": 800
       },
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 160
       }
     ]
@@ -66,7 +66,7 @@
         "grams": 250
       },
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 50
       },
       {
@@ -90,7 +90,7 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 170
       },
       {
@@ -134,7 +134,7 @@
         "grams": 300
       },
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 200
       },
       {
@@ -174,15 +174,15 @@
         "grams": 485
       },
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 300
       },
       {
-        "name": "Açúcar - Glucose em pó",
+        "name": "Glucose em pó",
         "grams": 104
       },
       {
-        "name": "Açúcar - Dextrose",
+        "name": "Dextrose",
         "grams": 55
       },
       {
@@ -218,15 +218,15 @@
         "grams": 45
       },
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 110
       },
       {
-        "name": "Açúcar - Dextrose",
+        "name": "Dextrose",
         "grams": 35
       },
       {
-        "name": "Açúcar - Glucose em pó",
+        "name": "Glucose em pó",
         "grams": 30
       },
       {
@@ -258,15 +258,15 @@
         "grams": 50
       },
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 120
       },
       {
-        "name": "Açúcar - Dextrose",
+        "name": "Dextrose",
         "grams": 30
       },
       {
-        "name": "Açúcar - Glucose em pó",
+        "name": "Glucose em pó",
         "grams": 25
       },
       {
@@ -302,15 +302,15 @@
         "grams": 45
       },
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 120
       },
       {
-        "name": "Açúcar - Dextrose",
+        "name": "Dextrose",
         "grams": 30
       },
       {
-        "name": "Açúcar - Glucose em pó",
+        "name": "Glucose em pó",
         "grams": 30
       },
       {
@@ -330,7 +330,7 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 669.6
       },
       {
@@ -366,7 +366,7 @@
         "grams": 250
       },
       {
-        "name": "Açúcar - Glucose Líquida",
+        "name": "Glucose Líquida",
         "grams": 100
       },
       {
@@ -390,7 +390,7 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 279
       },
       {
@@ -426,11 +426,11 @@
         "grams": 100
       },
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 300
       },
       {
-        "name": "Açúcar - Glucose Líquida",
+        "name": "Glucose Líquida",
         "grams": 150
       },
       {
@@ -442,7 +442,7 @@
         "grams": 100
       },
       {
-        "name": "Açúcar - Dextrose",
+        "name": "Dextrose",
         "grams": 50
       },
       {
@@ -474,7 +474,7 @@
         "grams": 400
       },
       {
-        "name": "Açúcar - Glucose Líquida",
+        "name": "Glucose Líquida",
         "grams": 80
       },
       {

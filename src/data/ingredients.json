@@ -81,7 +81,7 @@
   },
   {
     "id": "ing_8",
-    "name": "Açúcar - Dextrose",
+    "name": "Dextrose",
     "category": "Açúcares",
     "costKg": 32,
     "sugars": 0.92,
@@ -97,7 +97,7 @@
   },
   {
     "id": "ing_9",
-    "name": "Açúcar - Frutose",
+    "name": "Frutose",
     "category": "Açúcares",
     "costKg": 38,
     "sugars": 1,
@@ -113,7 +113,7 @@
   },
   {
     "id": "ing_10",
-    "name": "Açúcar - Glucose em pó",
+    "name": "Glucose em pó",
     "category": "Açúcares",
     "costKg": 38,
     "sugars": 0.95,
@@ -128,7 +128,7 @@
     "hasAllergen": false
   },
   {
-    "name": "Açúcar - Glucose em pó (28-30 DE)",
+    "name": "Glucose em pó (28-30 DE)",
     "category": "Açúcares",
     "costKg": 0,
     "sugars": 0.95,
@@ -145,7 +145,7 @@
   },
   {
     "id": "ing_11",
-    "name": "Açúcar - Glucose Líquida",
+    "name": "Glucose Líquida",
     "category": "Açúcares",
     "costKg": 18,
     "sugars": 0.8,
@@ -161,7 +161,7 @@
   },
   {
     "id": "ing_12",
-    "name": "Açúcar - Lactose",
+    "name": "Lactose",
     "category": "Açúcares",
     "costKg": 45,
     "sugars": 1,
@@ -177,7 +177,7 @@
   },
   {
     "id": "ing_13",
-    "name": "Açúcar - Maltodextrina",
+    "name": "Maltodextrina",
     "category": "Açúcares",
     "costKg": 28,
     "sugars": 0.95,
@@ -241,7 +241,7 @@
   },
   {
     "id": "ing_16",
-    "name": "Açúcar Sacarose",
+    "name": "Açúcar",
     "category": "Açúcares",
     "costKg": 4,
     "sugars": 1,

@@ -48,6 +48,24 @@ export const RESTORED_BRAND_NAMES: Record<string, { newName: string; newCategory
   'Licor Triple Sec (Laranja)': { newName: 'Cointreau', newCategory: 'Álcoois & Bebidas' }
 };
 
+export const SUGAR_NAME_REPLACEMENTS: Record<string, string> = {
+  'Açúcar Sacarose': 'Açúcar',
+  'Açúcar - Dextrose': 'Dextrose',
+  'Açúcar - Frutose': 'Frutose',
+  'Açúcar - Glucose em pó': 'Glucose em pó',
+  'Açúcar - Glucose em pó (28-30 DE)': 'Glucose em pó (28-30 DE)',
+  'Açúcar - Glucose Líquida': 'Glucose Líquida',
+  'Açúcar - Lactose': 'Lactose',
+  'Açúcar - Maltodextrina': 'Maltodextrina',
+  'Açúcar – Dextrose': 'Dextrose',
+  'Açúcar – Frutose': 'Frutose',
+  'Açúcar – Glucose em pó': 'Glucose em pó',
+  'Açúcar – Glucose em pó (28-30 DE)': 'Glucose em pó (28-30 DE)',
+  'Açúcar – Glucose Líquida': 'Glucose Líquida',
+  'Açúcar – Lactose': 'Lactose',
+  'Açúcar – Maltodextrina': 'Maltodextrina'
+};
+
 export const CANONICAL_NAME_REPLACEMENTS: Record<string, string> = {
   'Limão Suco': 'Suco de Limão',
   'Suco De Limão': 'Suco de Limão',
@@ -896,6 +914,77 @@ export class GelatoDatabase extends Dexie {
       }
     });
 
+    // Versão 24: Simplificação dos nomes de açúcares (Açúcar Sacarose -> Açúcar, Açúcar - * -> *)
+    this.version(24).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const ingTable = tx.table('ingredients');
+        const recTable = tx.table('recipes');
+        const prepTable = tx.table('preparations');
+
+        const allIngs = await ingTable.toArray();
+        for (const ing of allIngs) {
+          if (SUGAR_NAME_REPLACEMENTS[ing.name]) {
+            await ingTable.update(ing.id, { name: SUGAR_NAME_REPLACEMENTS[ing.name] });
+          }
+        }
+
+        const allRecs = await recTable.toArray();
+        for (const rec of allRecs) {
+          let dirty = false;
+          const updatedItems = rec.ingredients?.map((item: any) => {
+            if (SUGAR_NAME_REPLACEMENTS[item.name]) {
+              dirty = true;
+              return { ...item, name: SUGAR_NAME_REPLACEMENTS[item.name] };
+            }
+            return item;
+          });
+          const updatedVars = rec.variegatos?.map((v: any) => {
+            if (SUGAR_NAME_REPLACEMENTS[v.name]) {
+              dirty = true;
+              return { ...v, name: SUGAR_NAME_REPLACEMENTS[v.name] };
+            }
+            return v;
+          });
+          if (dirty) {
+            await recTable.update(rec.id, {
+              ingredients: updatedItems,
+              ...(updatedVars ? { variegatos: updatedVars } : {})
+            });
+          }
+        }
+
+        const allPreps = await prepTable.toArray();
+        for (const prep of allPreps) {
+          let dirty = false;
+          let newName = prep.name;
+          if (SUGAR_NAME_REPLACEMENTS[prep.name]) {
+            newName = SUGAR_NAME_REPLACEMENTS[prep.name];
+            dirty = true;
+          }
+          const updatedItems = prep.ingredients?.map((item: any) => {
+            if (SUGAR_NAME_REPLACEMENTS[item.name]) {
+              dirty = true;
+              return { ...item, name: SUGAR_NAME_REPLACEMENTS[item.name] };
+            }
+            return item;
+          });
+          if (dirty) {
+            await prepTable.update(prep.id, {
+              name: newName,
+              ...(updatedItems ? { ingredients: updatedItems } : {})
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Migration to v24 sugar names simplification:', e);
+      }
+    });
+
   }
 
   async initializeSeedData(): Promise<void> {
@@ -1460,6 +1549,65 @@ export class GelatoDatabase extends Dexie {
         await this.preparations.bulkPut(initialPreparations as Preparation[]);
       }
 
+      // Sincronizar simplificação de nomes de açúcares no catálogo existente
+      const sugarSyncSetting = await this.settings.get('sugar_names_v24');
+      if (!sugarSyncSetting) {
+        console.log('Sincronizando simplificação de nomes de açúcares no catálogo...');
+        const allIngs = await this.ingredients.toArray();
+        for (const ing of allIngs) {
+          if (SUGAR_NAME_REPLACEMENTS[ing.name]) {
+            await this.ingredients.update(ing.id, { name: SUGAR_NAME_REPLACEMENTS[ing.name] });
+          }
+        }
+        const allRecs = await this.recipes.toArray();
+        for (const rec of allRecs) {
+          let dirty = false;
+          const updatedItems = rec.ingredients.map(item => {
+            if (SUGAR_NAME_REPLACEMENTS[item.name]) {
+              dirty = true;
+              return { ...item, name: SUGAR_NAME_REPLACEMENTS[item.name] };
+            }
+            return item;
+          });
+          const updatedVars = rec.variegatos?.map(v => {
+            if (SUGAR_NAME_REPLACEMENTS[v.name]) {
+              dirty = true;
+              return { ...v, name: SUGAR_NAME_REPLACEMENTS[v.name] };
+            }
+            return v;
+          });
+          if (dirty) {
+            await this.recipes.update(rec.id, {
+              ingredients: updatedItems,
+              ...(updatedVars ? { variegatos: updatedVars } : {})
+            });
+          }
+        }
+        const allPreps = await this.preparations.toArray();
+        for (const prep of allPreps) {
+          let dirty = false;
+          let newName = prep.name;
+          if (SUGAR_NAME_REPLACEMENTS[prep.name]) {
+            newName = SUGAR_NAME_REPLACEMENTS[prep.name];
+            dirty = true;
+          }
+          const updatedItems = prep.ingredients?.map(item => {
+            if (SUGAR_NAME_REPLACEMENTS[item.name]) {
+              dirty = true;
+              return { ...item, name: SUGAR_NAME_REPLACEMENTS[item.name] };
+            }
+            return item;
+          });
+          if (dirty) {
+            await this.preparations.update(prep.id, {
+              name: newName,
+              ...(updatedItems ? { ingredients: updatedItems } : {})
+            });
+          }
+        }
+        await this.settings.put({ key: 'sugar_names_v24', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {
@@ -1535,11 +1683,36 @@ export class GelatoDatabase extends Dexie {
         await this.preparations.clear();
       }
 
-      await this.ingredients.bulkPut(data.ingredients);
-      await this.recipes.bulkPut(data.recipes);
+      // Normalizar nomes de açúcares legados ao importar backup
+      const normalizedIngredients = data.ingredients.map((ing: any) => ({
+        ...ing,
+        name: SUGAR_NAME_REPLACEMENTS[ing.name] || ing.name
+      }));
+      const normalizedRecipes = data.recipes.map((rec: any) => ({
+        ...rec,
+        ingredients: rec.ingredients?.map((item: any) => ({
+          ...item,
+          name: SUGAR_NAME_REPLACEMENTS[item.name] || item.name
+        })),
+        variegatos: rec.variegatos?.map((v: any) => ({
+          ...v,
+          name: SUGAR_NAME_REPLACEMENTS[v.name] || v.name
+        }))
+      }));
+      const normalizedPreps = data.preparations ? data.preparations.map((prep: any) => ({
+        ...prep,
+        name: SUGAR_NAME_REPLACEMENTS[prep.name] || prep.name,
+        ingredients: prep.ingredients?.map((item: any) => ({
+          ...item,
+          name: SUGAR_NAME_REPLACEMENTS[item.name] || item.name
+        }))
+      })) : undefined;
 
-      if (data.preparations) {
-        await this.preparations.bulkPut(data.preparations);
+      await this.ingredients.bulkPut(normalizedIngredients);
+      await this.recipes.bulkPut(normalizedRecipes);
+
+      if (normalizedPreps) {
+        await this.preparations.bulkPut(normalizedPreps);
       }
       if (data.settings) {
         for (const s of data.settings) {

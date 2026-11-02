@@ -315,8 +315,8 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
         { name: 'Leite Integral', grams: 620 },
         { name: 'Creme De Leite Fresco 35%', grams: 150 },
         { name: 'Leite Em Pó Desnatado', grams: 45 },
-        { name: 'Açúcar Sacarose', grams: 120 },
-        { name: 'Açúcar - Dextrose', grams: 35 },
+        { name: 'Açúcar', grams: 120 },
+        { name: 'Dextrose', grams: 35 },
         { name: 'Neutro', grams: 5 }
       ]);
       setVariegatos([]);

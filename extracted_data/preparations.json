@@ -6,7 +6,7 @@
     "ingredients": [
       {
         "name": "Ovo Galinha",
-        "grams": 350.0
+        "grams": 350
       }
     ]
   },
@@ -17,7 +17,7 @@
     "ingredients": [
       {
         "name": "Leite Condensado",
-        "grams": 800.0
+        "grams": 800
       }
     ]
   },
@@ -28,7 +28,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 800.0
+        "grams": 800
       }
     ]
   },
@@ -38,8 +38,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 160.0
+        "name": "Açúcar",
+        "grams": 160
       }
     ]
   },
@@ -50,7 +50,7 @@
     "ingredients": [
       {
         "name": "Polidextrose - Fibra",
-        "grams": 730.0
+        "grams": 730
       }
     ]
   },
@@ -61,7 +61,7 @@
     "ingredients": [
       {
         "name": "Eritritol",
-        "grams": 245.0
+        "grams": 245
       }
     ]
   },
@@ -72,7 +72,7 @@
     "ingredients": [
       {
         "name": "Farinha De Semente De Alfarroba",
-        "grams": 20.0
+        "grams": 20
       }
     ]
   },
@@ -83,7 +83,7 @@
     "ingredients": [
       {
         "name": "Stevia em pó",
-        "grams": 5.0
+        "grams": 5
       }
     ]
   },
@@ -94,7 +94,7 @@
     "ingredients": [
       {
         "name": "Leite Condensado",
-        "grams": 395.0
+        "grams": 395
       }
     ]
   },
@@ -105,7 +105,7 @@
     "ingredients": [
       {
         "name": "Creme De Leite UHT 25%",
-        "grams": 200.0
+        "grams": 200
       }
     ]
   },
@@ -116,7 +116,7 @@
     "ingredients": [
       {
         "name": "Chocolate Ao Leite 33.7%",
-        "grams": 160.0
+        "grams": 160
       }
     ]
   },
@@ -127,7 +127,7 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 155.0
+        "grams": 155
       }
     ]
   },
@@ -138,7 +138,7 @@
     "ingredients": [
       {
         "name": "Farinha de trigo",
-        "grams": 500.0
+        "grams": 500
       }
     ]
   },
@@ -149,7 +149,7 @@
     "ingredients": [
       {
         "name": "Manteiga",
-        "grams": 250.0
+        "grams": 250
       }
     ]
   },
@@ -160,7 +160,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 250.0
+        "grams": 250
       }
     ]
   },
@@ -170,8 +170,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 50.0
+        "name": "Açúcar",
+        "grams": 50
       }
     ]
   },
@@ -182,7 +182,7 @@
     "ingredients": [
       {
         "name": "Ovo Galinha",
-        "grams": 50.0
+        "grams": 50
       }
     ]
   },
@@ -193,7 +193,7 @@
     "ingredients": [
       {
         "name": "Sal",
-        "grams": 12.0
+        "grams": 12
       }
     ]
   },
@@ -214,8 +214,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 170.0
+        "name": "Açúcar",
+        "grams": 170
       }
     ]
   },
@@ -226,7 +226,7 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 100.0
+        "grams": 100
       }
     ]
   },
@@ -237,7 +237,7 @@
     "ingredients": [
       {
         "name": "Pasta De Castanha De Caju 100%",
-        "grams": 85.0
+        "grams": 85
       }
     ]
   },
@@ -248,7 +248,7 @@
     "ingredients": [
       {
         "name": "Óleo de coco",
-        "grams": 20.0
+        "grams": 20
       }
     ]
   },
@@ -259,7 +259,7 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 840.0
+        "grams": 840
       }
     ]
   },
@@ -270,7 +270,7 @@
     "ingredients": [
       {
         "name": "Pasta De Castanha De Caju 100%",
-        "grams": 170.0
+        "grams": 170
       }
     ]
   },
@@ -281,7 +281,7 @@
     "ingredients": [
       {
         "name": "Amendoim Torrado",
-        "grams": 300.0
+        "grams": 300
       }
     ]
   },
@@ -291,8 +291,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 200.0
+        "name": "Açúcar",
+        "grams": 200
       }
     ]
   },
@@ -303,7 +303,7 @@
     "ingredients": [
       {
         "name": "Óleo de coco",
-        "grams": 30.0
+        "grams": 30
       }
     ]
   },
@@ -314,7 +314,7 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 130.0
+        "grams": 130
       }
     ]
   },
@@ -325,7 +325,7 @@
     "ingredients": [
       {
         "name": "Chocolate Amargo 60%",
-        "grams": 70.0
+        "grams": 70
       }
     ]
   },
@@ -336,7 +336,7 @@
     "ingredients": [
       {
         "name": "Cacau Em Pó 11% gordura",
-        "grams": 40.0
+        "grams": 40
       }
     ]
   },
@@ -347,7 +347,7 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 485.0
+        "grams": 485
       }
     ]
   },
@@ -357,8 +357,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 300.0
+        "name": "Açúcar",
+        "grams": 300
       }
     ]
   },
@@ -368,8 +368,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Glucose em pó",
-        "grams": 104.0
+        "name": "Glucose em pó",
+        "grams": 104
       }
     ]
   },
@@ -379,8 +379,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Dextrose",
-        "grams": 55.0
+        "name": "Dextrose",
+        "grams": 55
       }
     ]
   },
@@ -391,7 +391,7 @@
     "ingredients": [
       {
         "name": "Açúcar Invertido",
-        "grams": 30.0
+        "grams": 30
       }
     ]
   },
@@ -402,7 +402,7 @@
     "ingredients": [
       {
         "name": "Inulina - Fibra Vegetal",
-        "grams": 10.0
+        "grams": 10
       }
     ]
   },
@@ -413,7 +413,7 @@
     "ingredients": [
       {
         "name": "Neutro Fabbri",
-        "grams": 7.0
+        "grams": 7
       }
     ]
   },
@@ -424,7 +424,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 580.0
+        "grams": 580
       }
     ]
   },
@@ -435,7 +435,7 @@
     "ingredients": [
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 165.0
+        "grams": 165
       }
     ]
   },
@@ -446,7 +446,7 @@
     "ingredients": [
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 45.0
+        "grams": 45
       }
     ]
   },
@@ -456,8 +456,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 110.0
+        "name": "Açúcar",
+        "grams": 110
       }
     ]
   },
@@ -467,8 +467,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Dextrose",
-        "grams": 35.0
+        "name": "Dextrose",
+        "grams": 35
       }
     ]
   },
@@ -478,8 +478,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Glucose em pó",
-        "grams": 30.0
+        "name": "Glucose em pó",
+        "grams": 30
       }
     ]
   },
@@ -490,7 +490,7 @@
     "ingredients": [
       {
         "name": "Inulina - Fibra Vegetal",
-        "grams": 33.0
+        "grams": 33
       }
     ]
   },
@@ -501,7 +501,7 @@
     "ingredients": [
       {
         "name": "Neutro Fabbri",
-        "grams": 4.0
+        "grams": 4
       }
     ]
   },
@@ -512,7 +512,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 489.0
+        "grams": 489
       }
     ]
   },
@@ -523,7 +523,7 @@
     "ingredients": [
       {
         "name": "Creme De Leite UHT 17% - Piracanjuba",
-        "grams": 240.0
+        "grams": 240
       }
     ]
   },
@@ -534,7 +534,7 @@
     "ingredients": [
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 50.0
+        "grams": 50
       }
     ]
   },
@@ -544,8 +544,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 120.0
+        "name": "Açúcar",
+        "grams": 120
       }
     ]
   },
@@ -555,8 +555,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Dextrose",
-        "grams": 30.0
+        "name": "Dextrose",
+        "grams": 30
       }
     ]
   },
@@ -566,8 +566,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Glucose em pó",
-        "grams": 25.0
+        "name": "Glucose em pó",
+        "grams": 25
       }
     ]
   },
@@ -578,7 +578,7 @@
     "ingredients": [
       {
         "name": "Inulina - Fibra Vegetal",
-        "grams": 40.0
+        "grams": 40
       }
     ]
   },
@@ -589,7 +589,7 @@
     "ingredients": [
       {
         "name": "Neutro Fabbri",
-        "grams": 5.0
+        "grams": 5
       }
     ]
   },
@@ -600,7 +600,7 @@
     "ingredients": [
       {
         "name": "Sal",
-        "grams": 1.0
+        "grams": 1
       }
     ]
   },
@@ -611,7 +611,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 620.0
+        "grams": 620
       }
     ]
   },
@@ -622,7 +622,7 @@
     "ingredients": [
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 150.0
+        "grams": 150
       }
     ]
   },
@@ -633,7 +633,7 @@
     "ingredients": [
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 45.0
+        "grams": 45
       }
     ]
   },
@@ -643,8 +643,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 120.0
+        "name": "Açúcar",
+        "grams": 120
       }
     ]
   },
@@ -654,8 +654,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Dextrose",
-        "grams": 30.0
+        "name": "Dextrose",
+        "grams": 30
       }
     ]
   },
@@ -665,8 +665,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Glucose em pó",
-        "grams": 30.0
+        "name": "Glucose em pó",
+        "grams": 30
       }
     ]
   },
@@ -677,7 +677,7 @@
     "ingredients": [
       {
         "name": "Neutro Fabbri",
-        "grams": 5.0
+        "grams": 5
       }
     ]
   },
@@ -688,7 +688,7 @@
     "ingredients": [
       {
         "name": "Sal",
-        "grams": 1.0
+        "grams": 1
       }
     ]
   },
@@ -698,7 +698,7 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
+        "name": "Açúcar",
         "grams": 669.6
       }
     ]
@@ -710,7 +710,7 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 288.0
+        "grams": 288
       }
     ]
   },
@@ -754,7 +754,7 @@
     "ingredients": [
       {
         "name": "Leite Condensado",
-        "grams": 500.0
+        "grams": 500
       }
     ]
   },
@@ -765,7 +765,7 @@
     "ingredients": [
       {
         "name": "Creme De Leite UHT 17% - Piracanjuba",
-        "grams": 250.0
+        "grams": 250
       }
     ]
   },
@@ -775,8 +775,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Glucose Líquida",
-        "grams": 100.0
+        "name": "Glucose Líquida",
+        "grams": 100
       }
     ]
   },
@@ -787,7 +787,7 @@
     "ingredients": [
       {
         "name": "Cacau Em Pó 11% gordura",
-        "grams": 25.0
+        "grams": 25
       }
     ]
   },
@@ -798,7 +798,7 @@
     "ingredients": [
       {
         "name": "Manteiga",
-        "grams": 50.0
+        "grams": 50
       }
     ]
   },
@@ -809,7 +809,7 @@
     "ingredients": [
       {
         "name": "Chocolate Ao Leite 33.7%",
-        "grams": 30.0
+        "grams": 30
       }
     ]
   },
@@ -819,8 +819,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 279.0
+        "name": "Açúcar",
+        "grams": 279
       }
     ]
   },
@@ -853,7 +853,7 @@
     "ingredients": [
       {
         "name": "Leite Condensado",
-        "grams": 81.0
+        "grams": 81
       }
     ]
   },
@@ -875,7 +875,7 @@
     "ingredients": [
       {
         "name": "Coco",
-        "grams": 300.0
+        "grams": 300
       }
     ]
   },
@@ -886,7 +886,7 @@
     "ingredients": [
       {
         "name": "Coco Ralado Seco",
-        "grams": 100.0
+        "grams": 100
       }
     ]
   },
@@ -896,8 +896,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar Sacarose",
-        "grams": 300.0
+        "name": "Açúcar",
+        "grams": 300
       }
     ]
   },
@@ -907,8 +907,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Glucose Líquida",
-        "grams": 150.0
+        "name": "Glucose Líquida",
+        "grams": 150
       }
     ]
   },
@@ -919,7 +919,7 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 100.0
+        "grams": 100
       }
     ]
   },
@@ -930,7 +930,7 @@
     "ingredients": [
       {
         "name": "Leite Condensado",
-        "grams": 100.0
+        "grams": 100
       }
     ]
   },
@@ -940,8 +940,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Dextrose",
-        "grams": 50.0
+        "name": "Dextrose",
+        "grams": 50
       }
     ]
   },
@@ -952,7 +952,7 @@
     "ingredients": [
       {
         "name": "Manteiga",
-        "grams": 15.0
+        "grams": 15
       }
     ]
   },
@@ -963,7 +963,7 @@
     "ingredients": [
       {
         "name": "Sal",
-        "grams": 2.0
+        "grams": 2
       }
     ]
   },
@@ -974,7 +974,7 @@
     "ingredients": [
       {
         "name": "Suco De Limão",
-        "grams": 20.0
+        "grams": 20
       }
     ]
   },
@@ -985,7 +985,7 @@
     "ingredients": [
       {
         "name": "Nutella",
-        "grams": 750.0
+        "grams": 750
       }
     ]
   },
@@ -996,7 +996,7 @@
     "ingredients": [
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 400.0
+        "grams": 400
       }
     ]
   },
@@ -1006,8 +1006,8 @@
     "instructions": "",
     "ingredients": [
       {
-        "name": "Açúcar - Glucose Líquida",
-        "grams": 80.0
+        "name": "Glucose Líquida",
+        "grams": 80
       }
     ]
   },
@@ -1018,7 +1018,7 @@
     "ingredients": [
       {
         "name": "Açúcar Invertido",
-        "grams": 60.0
+        "grams": 60
       }
     ]
   },
@@ -1029,7 +1029,7 @@
     "ingredients": [
       {
         "name": "Sal",
-        "grams": 3.0
+        "grams": 3
       }
     ]
   },
@@ -1040,7 +1040,7 @@
     "ingredients": [
       {
         "name": "Cacau Em Pó 11% gordura",
-        "grams": 5.0
+        "grams": 5
       }
     ]
   }
