@@ -101,7 +101,8 @@ export function calculateAnvisaNutrition(
   recipe: Recipe,
   ingredients: Ingredient[],
   portionGrams: number = 60,
-  containerWeightGrams: number = 500
+  containerWeightGrams: number = 500,
+  customHouseholdMeasure?: string
 ): AnvisaNutritionalData {
   const ingMap = new Map<string, Ingredient>();
   ingredients.forEach(i => ingMap.set(i.name.toLowerCase().trim(), i));
@@ -359,7 +360,9 @@ export function calculateAnvisaNutrition(
 
   return {
     portionGrams,
-    portionHousehold: `${portionGrams} g (${portionGrams === 60 ? '1 bola' : portionGrams === 120 ? '2 bolas' : 'porção'})`,
+    portionHousehold: customHouseholdMeasure && customHouseholdMeasure.trim()
+      ? `${portionGrams} g (${customHouseholdMeasure.trim()})`
+      : `${portionGrams} g (${portionGrams === 60 ? '1 bola' : portionGrams === 120 ? '2 bolas' : 'porção'})`,
     servingsPerContainer,
     containerWeightGrams,
     items,

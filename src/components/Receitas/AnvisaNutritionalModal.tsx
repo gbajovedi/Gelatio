@@ -12,7 +12,10 @@ import {
   ChevronDown,
   ChevronUp,
   Info,
-  ShieldCheck
+  ShieldCheck,
+  Scale,
+  Package,
+  Settings2
 } from 'lucide-react';
 
 interface AnvisaNutritionalModalProps {
@@ -28,17 +31,40 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
   recipe,
   ingredients
 }) => {
+  // Configuração da Porção
   const [portionGrams, setPortionGrams] = useState<number>(60);
-  const [containerWeight, setContainerWeight] = useState<number>(500);
+  const [householdMeasure, setHouseholdMeasure] = useState<string>('1 bola');
+
+  // Configuração da Embalagem (Suporte a Gramas e ML)
+  const [containerUnit, setContainerUnit] = useState<'g' | 'ml'>('ml'); // ML por padrão para sorvetes/gelatos
+  const [containerValue, setContainerValue] = useState<number>(500); // Ex: 500 ml ou 500 g
+  const [density, setDensity] = useState<number>(0.75); // Densidade média do gelato artesanal (~30-35% overrun)
+  const [showDensitySettings, setShowDensitySettings] = useState<boolean>(false);
+
+  // Estados de Interface
   const [showFOP, setShowFOP] = useState<boolean>(true); // Toggle switch para a Lupa Frontal
   const [showFopDetails, setShowFopDetails] = useState<boolean>(false); // Painel de limites ANVISA
   const [copied, setCopied] = useState<boolean>(false);
 
+  // Converte o tamanho da embalagem em gramas líquidas efetivas
+  const effectiveContainerWeightGrams = useMemo(() => {
+    if (containerUnit === 'ml') {
+      return Math.max(1, Math.round(containerValue * density));
+    }
+    return Math.max(1, containerValue);
+  }, [containerUnit, containerValue, density]);
+
   // Calcula a nutrição ANVISA
   const nutrition = useMemo(() => {
     if (!recipe) return null;
-    return calculateAnvisaNutrition(recipe, ingredients, portionGrams, containerWeight);
-  }, [recipe, ingredients, portionGrams, containerWeight]);
+    return calculateAnvisaNutrition(
+      recipe,
+      ingredients,
+      portionGrams,
+      effectiveContainerWeightGrams,
+      householdMeasure
+    );
+  }, [recipe, ingredients, portionGrams, effectiveContainerWeightGrams, householdMeasure]);
 
   if (!isOpen || !recipe || !nutrition) return null;
 
@@ -56,7 +82,8 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
   const handleCopyText = () => {
     let text = `INFORMAÇÃO NUTRICIONAL - ${recipe.name.toUpperCase()}\n`;
     text += `Porções por embalagem: cerca de ${nutrition.servingsPerContainer} porções\n`;
-    text += `Porção: ${nutrition.portionHousehold}\n\n`;
+    text += `Porção: ${nutrition.portionHousehold}\n`;
+    text += `Embalagem: ${containerValue} ${containerUnit}${containerUnit === 'ml' ? ` (aprox. ${effectiveContainerWeightGrams} g)` : ''}\n\n`;
     text += `Nutriente | 100g | ${portionGrams}g | %VD*\n`;
     text += `------------------------------------------------\n`;
 
@@ -99,7 +126,7 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
       <div className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-2xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden print:border-none print:shadow-none print:max-w-none print:max-h-none print:bg-white">
         
         {/* Header (Ocultado na impressão) */}
-        <div className="px-5 py-4 border-b border-slate-800 bg-slate-950/70 flex items-center justify-between gap-3 print:hidden shrink-0">
+        <div className="px-5 py-3.5 border-b border-slate-800 bg-slate-950/70 flex items-center justify-between gap-3 print:hidden shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
               <FileText className="w-5 h-5" />
@@ -128,15 +155,16 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
           </button>
         </div>
 
-        {/* Toolbar de Parâmetros e Toggle Switch (Ocultado na impressão) */}
-        <div className="p-4 border-b border-slate-800 bg-slate-900/90 flex flex-col gap-3 text-xs print:hidden shrink-0">
+        {/* Toolbar de Parâmetros e Personalização (Ocultado na impressão) */}
+        <div className="p-3.5 sm:p-4 border-b border-slate-800 bg-slate-900/95 flex flex-col gap-3 text-xs print:hidden shrink-0">
           
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          {/* Linha 1: Controles da Lupa Frontal e Limites */}
+          <div className="flex flex-wrap items-center justify-between gap-2.5">
             {/* Toggle Switch para Lupa Frontal (FOP) - Área inteira clicável */}
             <button
               type="button"
               onClick={() => setShowFOP(!showFOP)}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-xl border transition-all cursor-pointer shadow-inner ${
+              className={`flex items-center gap-2.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer shadow-inner ${
                 showFOP
                   ? nutrition.frontOfPack.hasAny
                     ? 'bg-amber-500/10 border-amber-500/40 text-amber-200 hover:bg-amber-500/15'
@@ -183,53 +211,21 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
               </span>
             </button>
 
-            {/* Seletores de Porção e Embalagem */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <div className="flex items-center gap-1.5 bg-slate-950/70 px-2.5 py-1.5 rounded-xl border border-slate-800">
-                <span className="text-slate-400 font-semibold text-[11px]">Porção:</span>
-                <select
-                  value={portionGrams}
-                  onChange={e => setPortionGrams(Number(e.target.value))}
-                  className="bg-slate-900 border border-slate-700 text-slate-200 text-xs font-bold rounded-lg px-2 py-1 focus:outline-none focus:border-amber-500"
-                >
-                  <option value={60}>60 g (1 bola - Padrão)</option>
-                  <option value={100}>100 g (Decimal)</option>
-                  <option value={120}>120 g (2 bolas)</option>
-                  <option value={500}>500 g (Pote P)</option>
-                  <option value={1000}>1.000 g (Pote G)</option>
-                </select>
-              </div>
-
-              <div className="flex items-center gap-1.5 bg-slate-950/70 px-2.5 py-1.5 rounded-xl border border-slate-800">
-                <span className="text-slate-400 font-semibold text-[11px]">Embalagem:</span>
-                <select
-                  value={containerWeight}
-                  onChange={e => setContainerWeight(Number(e.target.value))}
-                  className="bg-slate-900 border border-slate-700 text-slate-200 text-xs font-bold rounded-lg px-2 py-1 focus:outline-none focus:border-amber-500"
-                >
-                  <option value={500}>Pote 500 g</option>
-                  <option value={1000}>Pote 1.000 g</option>
-                  <option value={250}>Pote 250 g</option>
-                  <option value={60}>Individual (60 g)</option>
-                </select>
-              </div>
-
-              {/* Botão de Detalhes dos Limites ANVISA */}
-              <button
-                type="button"
-                onClick={() => setShowFopDetails(!showFopDetails)}
-                className={`p-2 rounded-xl border transition-colors flex items-center gap-1 text-[11px] font-semibold ${
-                  showFopDetails
-                    ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
-                    : 'bg-slate-950/70 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}
-                title="Ver valores da receita comparados com os limites da ANVISA por 100g"
-              >
-                <Info className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Limites</span>
-                {showFopDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-              </button>
-            </div>
+            {/* Botão de Detalhes dos Limites ANVISA */}
+            <button
+              type="button"
+              onClick={() => setShowFopDetails(!showFopDetails)}
+              className={`px-3 py-1.5 rounded-xl border transition-colors flex items-center gap-1.5 text-xs font-semibold ${
+                showFopDetails
+                  ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
+                  : 'bg-slate-950/70 border-slate-800 text-slate-400 hover:text-slate-200'
+              }`}
+              title="Ver valores da receita comparados com os limites da ANVISA por 100g"
+            >
+              <Info className="w-3.5 h-3.5" />
+              <span>Limites ANVISA</span>
+              {showFopDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            </button>
           </div>
 
           {/* Painel Expansível de Detalhes dos Limites ANVISA */}
@@ -302,6 +298,265 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
               </div>
             </div>
           )}
+
+          {/* Linha 2: Personalização da Porção e da Embalagem (com suporte a ML) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+            
+            {/* Card 1: Personalização da Porção */}
+            <div className="bg-slate-950/70 p-3 rounded-2xl border border-slate-800 flex flex-col gap-2.5">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-200 flex items-center gap-1.5 text-xs">
+                  <Scale className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Porção Individual</span>
+                </span>
+                <span className="text-[10px] text-slate-400 font-medium">
+                  Ref. ANVISA: 60g (1 bola)
+                </span>
+              </div>
+
+              {/* Inputs de Peso (g) e Medida Caseira */}
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[10px] text-slate-400 font-medium block mb-1">
+                    Peso da Porção:
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min={1}
+                      max={2000}
+                      value={portionGrams || ''}
+                      onChange={e => {
+                        const val = Math.max(1, Number(e.target.value) || 0);
+                        setPortionGrams(val);
+                      }}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-100 focus:outline-none focus:border-amber-500 font-mono pr-6"
+                      placeholder="60"
+                    />
+                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-bold">
+                      g
+                    </span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] text-slate-400 font-medium block mb-1">
+                    Medida Caseira:
+                  </label>
+                  <input
+                    type="text"
+                    list="household-presets"
+                    value={householdMeasure}
+                    onChange={e => setHouseholdMeasure(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-100 focus:outline-none focus:border-amber-500"
+                    placeholder="1 bola"
+                  />
+                  <datalist id="household-presets">
+                    <option value="1 bola" />
+                    <option value="2 bolas" />
+                    <option value="1 fatia" />
+                    <option value="1 copo" />
+                    <option value="1 picolé" />
+                    <option value="1 pote" />
+                    <option value="porção" />
+                  </datalist>
+                </div>
+              </div>
+
+              {/* Presets Rápidos de Porção */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[10px] text-slate-500 font-semibold">Atalhos:</span>
+                {[
+                  { g: 60, label: '60g (1 bola)' },
+                  { g: 100, label: '100g' },
+                  { g: 120, label: '120g (2 bolas)' },
+                  { g: 50, label: '50g (Picolé)' }
+                ].map(p => (
+                  <button
+                    key={p.g}
+                    type="button"
+                    onClick={() => {
+                      setPortionGrams(p.g);
+                      if (p.g === 60) setHouseholdMeasure('1 bola');
+                      else if (p.g === 120) setHouseholdMeasure('2 bolas');
+                      else if (p.g === 50) setHouseholdMeasure('1 picolé');
+                      else setHouseholdMeasure('porção');
+                    }}
+                    className={`px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-colors ${
+                      portionGrams === p.g
+                        ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                        : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Card 2: Personalização da Embalagem (Gramas ou ML) */}
+            <div className="bg-slate-950/70 p-3 rounded-2xl border border-slate-800 flex flex-col gap-2.5">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-200 flex items-center gap-1.5 text-xs">
+                  <Package className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Embalagem / Pote</span>
+                </span>
+                
+                {/* Segmented Control Unidade: [ g | ml ] */}
+                <div className="flex items-center bg-slate-900 p-0.5 rounded-lg border border-slate-800 text-[10px] font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setContainerUnit('g')}
+                    className={`px-2 py-0.5 rounded-md transition-all ${
+                      containerUnit === 'g'
+                        ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    Gramas (g)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setContainerUnit('ml')}
+                    className={`px-2 py-0.5 rounded-md transition-all ${
+                      containerUnit === 'ml'
+                        ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    Volume (ml)
+                  </button>
+                </div>
+              </div>
+
+              {/* Input Numérico da Embalagem e Conversão */}
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <input
+                    type="number"
+                    min={1}
+                    max={50000}
+                    value={containerValue || ''}
+                    onChange={e => {
+                      const val = Math.max(1, Number(e.target.value) || 0);
+                      setContainerValue(val);
+                    }}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-100 focus:outline-none focus:border-amber-500 font-mono pr-8"
+                    placeholder="500"
+                  />
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 font-bold uppercase">
+                    {containerUnit}
+                  </span>
+                </div>
+
+                {/* Badge de Rendimento / Porções Calculadas */}
+                <div className="bg-slate-900/90 border border-slate-700/80 px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 text-slate-300 text-xs shrink-0 font-medium">
+                  <span>Rende:</span>
+                  <span className="font-mono font-bold text-amber-400 text-sm">
+                    ~{nutrition.servingsPerContainer}
+                  </span>
+                  <span className="text-[10px] text-slate-400">porções</span>
+                </div>
+              </div>
+
+              {/* Informação e Conversão de ML -> Gramas (quando em ML) */}
+              {containerUnit === 'ml' && (
+                <div className="flex items-center justify-between text-[10px] bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-800 text-slate-400">
+                  <span>
+                    Equivalente: <strong className="text-slate-200">{effectiveContainerWeightGrams} g</strong> líquidas (densidade: {density} g/ml)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowDensitySettings(!showDensitySettings)}
+                    className="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-2 flex items-center gap-1"
+                  >
+                    <Settings2 className="w-3 h-3" />
+                    <span>Densidade</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Painel Expansível de Ajuste de Densidade (quando em ML) */}
+              {containerUnit === 'ml' && showDensitySettings && (
+                <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-xl flex flex-col gap-2 text-[10px] animate-in fade-in duration-150">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-300 font-bold">Densidade do Gelato / Sorvete:</span>
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="number"
+                        step={0.05}
+                        min={0.3}
+                        max={1.5}
+                        value={density}
+                        onChange={e => setDensity(Number(e.target.value) || 0.75)}
+                        className="w-16 bg-slate-950 border border-slate-700 text-amber-300 font-bold px-1.5 py-0.5 rounded text-right text-[11px]"
+                      />
+                      <span className="text-slate-400 font-mono">g/ml</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    <span className="text-slate-500 font-semibold">Padrões:</span>
+                    {[
+                      { d: 0.75, name: 'Gelato Artesanal (0.75)' },
+                      { d: 0.85, name: 'Sorbet (0.85)' },
+                      { d: 0.60, name: 'Sorvete Areado (0.60)' },
+                      { d: 0.50, name: 'Industrial (0.50)' }
+                    ].map(item => (
+                      <button
+                        key={item.d}
+                        type="button"
+                        onClick={() => setDensity(item.d)}
+                        className={`px-1.5 py-0.5 rounded border transition-colors ${
+                          density === item.d
+                            ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                            : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        {item.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Presets Rápidos de Embalagem */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[10px] text-slate-500 font-semibold">Atalhos:</span>
+                {(containerUnit === 'ml'
+                  ? [
+                      { val: 500, label: '500 ml' },
+                      { val: 700, label: '700 ml' },
+                      { val: 1000, label: '1.000 ml' },
+                      { val: 1500, label: '1.5 L' },
+                      { val: 2000, label: '2.0 L' },
+                      { val: 5000, label: '5.0 L' }
+                    ]
+                  : [
+                      { val: 250, label: '250 g' },
+                      { val: 500, label: '500 g' },
+                      { val: 1000, label: '1.000 g' },
+                      { val: 2000, label: '2.000 g' },
+                      { val: 5000, label: '5.000 g' }
+                    ]
+                ).map(c => (
+                  <button
+                    key={c.val}
+                    type="button"
+                    onClick={() => setContainerValue(c.val)}
+                    className={`px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-colors ${
+                      containerValue === c.val
+                        ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                        : 'bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
