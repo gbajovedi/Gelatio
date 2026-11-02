@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BatchAnalysis, NutrientValidation } from '../../types/gelato';
+import { VitrineSimulator } from './VitrineSimulator';
 import {
   CheckCircle2,
   AlertCircle,
@@ -146,9 +147,9 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
     };
   } else if (servingTemperature < -13.5) {
     textureVerdict = {
-      title: 'Massa Macia / Ponto de Fusão Rápido',
-      desc: 'Excesso de anticongelante; risco de desmanchar na vitrine a -12°C',
-      badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+      title: 'Massa Macia',
+      desc: 'Maior poder anticongelante; consistência mais suave e aveludada a -12°C',
+      badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
     };
   }
 
@@ -160,7 +161,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
   } else if (corvitto?.freezerStatus === 'colher') {
     freezerVerdictBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
   } else if (corvitto?.freezerStatus === 'muito_macio') {
-    freezerVerdictBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+    freezerVerdictBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
   }
 
   const renderCardHeaderTooltip = (
@@ -674,6 +675,16 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
               </div>
             </div>
 
+          </div>
+
+          {/* Simulador Térmico de Vitrine (Curva de Dureza vs. °C) */}
+          <div className="pt-1">
+            <VitrineSimulator
+              waterPct={validations.water.val}
+              pac={validations.pac.val}
+              totalSolids={validations.totalSolids.val}
+              caldaWeightGrams={analysis.caldaWeight}
+            />
           </div>
         </div>
       </div>

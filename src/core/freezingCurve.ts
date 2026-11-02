@@ -17,10 +17,13 @@ export interface FreezingStateResult {
   frozenWaterGrams: number; // g de gelo no lote
   liquidWaterGrams: number; // g de água líquida no lote
   hardnessIndex: number; // 0 a 100
-  status: 'too_soft' | 'soft' | 'ideal' | 'firm' | 'hard';
+  status: 'very_soft' | 'soft' | 'ideal' | 'firm' | 'freezer';
   statusLabel: string;
   statusBadgeColor: string;
   statusBorderColor: string;
+  statusBoxBg: string;
+  statusBoxBorder: string;
+  statusBoxText: string;
   diagnostic: string;
   idealTempRange: { minTemp: number; maxTemp: number };
   curvePoints: FreezingPointSample[];
@@ -79,46 +82,64 @@ export function calculateFreezingState(
   const frozenWaterGrams = Math.round((totalWaterGrams * icePercent) / 100);
   const liquidWaterGrams = Math.round(totalWaterGrams - frozenWaterGrams);
 
-  // Mapeamento normalizado de dureza (0 = líquido, 50 = início ideal, 72 = centro ideal, 100 = bloco de gelo)
+  // Mapeamento normalizado de dureza (0 = líquido, 50 = início ideal, 70 = centro ideal, 100 = bloco de gelo)
   const hardnessIndex = Math.max(0, Math.min(100, Math.round((icePercent - 45) * 2.5)));
 
-  // Classificação qualitativa da consistência
-  let status: 'too_soft' | 'soft' | 'ideal' | 'firm' | 'hard';
+  // Classificação da consistência sem falsos alarmes vermelhos
+  let status: 'very_soft' | 'soft' | 'ideal' | 'firm' | 'freezer';
   let statusLabel: string;
   let statusBadgeColor: string;
   let statusBorderColor: string;
+  let statusBoxBg: string;
+  let statusBoxBorder: string;
+  let statusBoxText: string;
   let diagnostic: string;
 
-  if (icePercent < 60) {
-    status = 'too_soft';
-    statusLabel = 'Muito Mole / Desmanchando';
-    statusBadgeColor = 'bg-rose-500/15 text-rose-300';
-    statusBorderColor = 'border-rose-500/40';
-    diagnostic = `A ${tempC.toFixed(1)}°C, menos de 60% da água está congelada. O gelato perderá estrutura na cuba, escorrerá da espátula e derreterá muito rápido na casquinha. Recomenda-se reduzir a temperatura da vitrine ou reduzir o PAC da calda.`;
-  } else if (icePercent < 65) {
-    status = 'soft';
-    statusLabel = 'Mole / Degustação Imediata';
-    statusBadgeColor = 'bg-amber-500/15 text-amber-300';
+  if (icePercent < 56) {
+    status = 'very_soft';
+    statusLabel = 'Muito Macio';
+    statusBadgeColor = 'bg-amber-500/20 text-amber-300';
     statusBorderColor = 'border-amber-500/40';
-    diagnostic = `A ${tempC.toFixed(1)}°C, consistência aveludada, porém próxima ao limite inferior de sustentação para vitrines abertas com vento. Ideal para consumo imediato no copinho.`;
-  } else if (icePercent <= 74) {
+    statusBoxBg = 'bg-amber-500/10';
+    statusBoxBorder = 'border-amber-500/30';
+    statusBoxText = 'text-amber-200';
+    diagnostic = `A ${tempC.toFixed(1)}°C, a receita apresenta textura muito macia e fluida. Caso deseje maior firmeza na espátula, sirva em vitrine um pouco mais fria (-13°C a -14°C) ou regule o PAC da calda.`;
+  } else if (icePercent < 64) {
+    status = 'soft';
+    statusLabel = 'Macio & Cremoso';
+    statusBadgeColor = 'bg-amber-500/20 text-amber-300';
+    statusBorderColor = 'border-amber-500/40';
+    statusBoxBg = 'bg-amber-500/10';
+    statusBoxBorder = 'border-amber-500/30';
+    statusBoxText = 'text-amber-200';
+    diagnostic = `A ${tempC.toFixed(1)}°C, consistência aveludada e cremosa. Ponto ótimo para copinhos ou consumo imediato.`;
+  } else if (icePercent <= 75) {
     status = 'ideal';
     statusLabel = 'Spatolabile Ideal (Padrão Ouro)';
-    statusBadgeColor = 'bg-emerald-500/15 text-emerald-300';
+    statusBadgeColor = 'bg-emerald-500/20 text-emerald-300';
     statusBorderColor = 'border-emerald-500/40';
+    statusBoxBg = 'bg-emerald-500/10';
+    statusBoxBorder = 'border-emerald-500/30';
+    statusBoxText = 'text-emerald-200';
     diagnostic = `A ${tempC.toFixed(1)}°C, equilíbrio termodinâmico perfeito! ${icePercent.toFixed(1)}% de água congelada confere excelente espalhabilidade na espátula (spatolabile), microcristais aveludados e alta estabilidade na vitrine.`;
-  } else if (icePercent < 80) {
+  } else if (icePercent <= 82) {
     status = 'firm';
-    statusLabel = 'Firme / Ponto de Transporte';
-    statusBadgeColor = 'bg-sky-500/15 text-sky-300';
+    statusLabel = 'Firme / Boa Estrutura';
+    statusBadgeColor = 'bg-sky-500/20 text-sky-300';
     statusBorderColor = 'border-sky-500/40';
-    diagnostic = `A ${tempC.toFixed(1)}°C, a fração de gelo atinge ${icePercent.toFixed(1)}%. O gelato fica mais resistente ao toque da espátula. Adequado para transporte térmico em caixas de isopor ou vitrines em climas muito quentes.`;
+    statusBoxBg = 'bg-sky-500/10';
+    statusBoxBorder = 'border-sky-500/30';
+    statusBoxText = 'text-sky-200';
+    diagnostic = `A ${tempC.toFixed(1)}°C, a textura fica mais firme e resistente (${icePercent.toFixed(1)}% de gelo). Excelente sustentação para casquinhas altas, vitrines externas ou transporte térmico.`;
   } else {
-    status = 'hard';
-    statusLabel = 'Rígido / Ponto de Freezer (-18°C)';
-    statusBadgeColor = 'bg-purple-500/15 text-purple-300';
+    status = 'freezer';
+    statusLabel = 'Ponto de Pote / Freezer (-18°C)';
+    statusBadgeColor = 'bg-purple-500/20 text-purple-300';
     statusBorderColor = 'border-purple-500/40';
-    diagnostic = `A ${tempC.toFixed(1)}°C, mais de 80% da água está congelada. Consistência de pote para viagem (Take Away). Para servir na espátula, necessita descansar de 10 a 15 minutos em temperatura ambiente.`;
+    statusBoxBg = 'bg-purple-500/10';
+    statusBoxBorder = 'border-purple-500/30';
+    statusBoxText = 'text-purple-200';
+    diagnostic = `A ${tempC.toFixed(1)}°C, consistência perfeita para armazenamento em freezer doméstico e potes de delivery (Take Away). Para servir na espátula, recomenda-se descansar de 5 a 10 minutos.`;
   }
 
   // Gerar pontos da curva de -8°C a -20°C
@@ -138,13 +159,12 @@ export function calculateFreezingState(
       hardnessIndex: h
     });
 
-    // Detectar faixa ideal (65% a 74% de gelo)
-    if (!maxIdealFound && pt.icePercent >= 65) {
-      maxIdealTemp = t; // Ponto mais quente onde atinge 65%
+    if (!maxIdealFound && pt.icePercent >= 64) {
+      maxIdealTemp = t;
       maxIdealFound = true;
     }
-    if (pt.icePercent <= 74) {
-      minIdealTemp = t; // Ponto mais frio antes de ultrapassar 74%
+    if (pt.icePercent <= 75) {
+      minIdealTemp = t;
       minIdealFound = true;
     }
   }
@@ -160,6 +180,9 @@ export function calculateFreezingState(
     statusLabel,
     statusBadgeColor,
     statusBorderColor,
+    statusBoxBg,
+    statusBoxBorder,
+    statusBoxText,
     diagnostic,
     idealTempRange: {
       minTemp: Math.min(minIdealTemp, maxIdealTemp),

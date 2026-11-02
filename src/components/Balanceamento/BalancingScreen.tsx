@@ -14,7 +14,6 @@ import {
 import { stylesDataMap, db } from '../../db/database';
 import { NutrientBars } from './NutrientBars';
 import { CalibrationAlerts } from './CalibrationAlerts';
-import { VitrineSimulator } from './VitrineSimulator';
 import { AllergensBadge } from './AllergensBadge';
 import { PostProduction } from './PostProduction';
 import { SaveRecipeModal } from './SaveRecipeModal';
@@ -811,15 +810,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           {/* 1. Calibração Necessária & Alerta de Arenosidade */}
           <CalibrationAlerts analysis={analysis} />
 
-          {/* 2. Simulador Térmico de Vitrine (Curva de Congelamento & Dureza vs. °C) */}
-          <VitrineSimulator
-            waterPct={analysis.percentages.water}
-            pac={analysis.percentages.pac}
-            totalSolids={analysis.percentages.totalSolids}
-            caldaWeightGrams={analysis.caldaWeight}
-          />
-
-          {/* 3. Engenharia de Custos */}
+          {/* 2. Engenharia de Custos */}
           <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-700/80 pb-3">
               <div className="flex items-center gap-2">
