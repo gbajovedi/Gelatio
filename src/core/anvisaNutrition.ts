@@ -1,4 +1,5 @@
 import { Recipe, Ingredient } from '../types/gelato';
+import { extractItemAllergens } from './calculator';
 
 export interface NutritionalItemValue {
   name: string;
@@ -17,9 +18,20 @@ export interface AnvisaNutritionalData {
   items: NutritionalItemValue[];
   frontOfPack: {
     hasAny: boolean;
+    count: number;
     highAddedSugars: boolean;
     highSaturatedFat: boolean;
     highSodium: boolean;
+    values: {
+      addedSugars100g: number;
+      saturatedFat100g: number;
+      sodium100g: number;
+    };
+    thresholds: {
+      addedSugars100g: number;
+      saturatedFat100g: number;
+      sodium100g: number;
+    };
   };
   allergens: {
     list: string[];
@@ -47,12 +59,40 @@ const ANVISA_DAILY_VALUES: Record<string, number> = {
 
 /**
  * Limites da Rotulagem Frontal (FOP - Lupa ANVISA) para alimentos sólidos/semissólidos por 100g
+ * Conforme RDC nº 429/2020 e Instrução Normativa IN nº 75/2020.
  */
 export const ANVISA_FOP_LIMITS = {
   addedSugarsGramsPer100g: 15,
   saturatedFatGramsPer100g: 6,
   sodiumMgPer100g: 600
 };
+
+/**
+ * Localiza um insumo no mapa ou por busca normalizada
+ */
+function findIngredient(
+  name: string,
+  ingMap: Map<string, Ingredient>,
+  ingredients: Ingredient[]
+): Ingredient | undefined {
+  const clean = name.toLowerCase().trim();
+  if (ingMap.has(clean)) return ingMap.get(clean);
+
+  // Normalização sem pontuação
+  const normalized = clean.replace(/[-_()]/g, ' ').replace(/\s+/g, ' ').trim();
+  for (const ing of ingredients) {
+    const ingNorm = ing.name.toLowerCase().replace(/[-_()]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (ingNorm === normalized) return ing;
+  }
+
+  // Fallback: busca por inclusão
+  for (const ing of ingredients) {
+    const ingLower = ing.name.toLowerCase().trim();
+    if (ingLower.includes(clean) || clean.includes(ingLower)) return ing;
+  }
+
+  return undefined;
+}
 
 /**
  * Calcula a tabela nutricional completa no padrão ANVISA (RDC 429/2020 e IN 75/2020)
@@ -67,7 +107,7 @@ export function calculateAnvisaNutrition(
   ingredients.forEach(i => ingMap.set(i.name.toLowerCase().trim(), i));
 
   let totalRecipeWeight = 0;
-  let totalSugars = 0;
+  let totalIngredientSugars = 0;
   let totalFat = 0;
   let totalProtein = 0;
   let totalMsnf = 0;
@@ -77,15 +117,29 @@ export function calculateAnvisaNutrition(
   let totalSaturatedFat = 0;
   let intrinsicFruitSugars = 0;
 
-  // Alérgenos
+  // Alérgenos acumulados
   const detectedAllergens = new Set<string>();
   let hasLactose = false;
   let hasGluten = false;
 
-  (recipe.ingredients || []).forEach(item => {
-    const ing = ingMap.get(item.name.toLowerCase().trim());
+  // Unifica calda base e variegatos/mesclas para a tabela nutricional completa
+  const allItems = [
+    ...(recipe.ingredients || []),
+    ...(recipe.variegatos || [])
+  ];
+
+  allItems.forEach(item => {
     const g = item.grams || 0;
+    if (g <= 0) return;
     totalRecipeWeight += g;
+
+    const ing = findIngredient(item.name, ingMap, ingredients);
+
+    // Extração padronizada de alérgenos via helper bromatológico
+    const itemAllergens = extractItemAllergens(item.name, ing);
+    itemAllergens.allergens.forEach(a => detectedAllergens.add(a));
+    if (itemAllergens.hasLactose) hasLactose = true;
+    if (itemAllergens.hasGluten) hasGluten = true;
 
     if (!ing) return;
 
@@ -95,7 +149,7 @@ export function calculateAnvisaNutrition(
     const ingMsnf = (ing.msnf || 0) * g;
     const ingOtherSolids = (ing.otherSolids || 0) * g;
 
-    totalSugars += ingSugars;
+    totalIngredientSugars += ingSugars;
     totalFat += ingFat;
     totalProtein += ingProtein;
     totalMsnf += ingMsnf;
@@ -110,24 +164,38 @@ export function calculateAnvisaNutrition(
       satRatio = 0.90;
     } else if (name.includes('cacau') || name.includes('chocolate') || cat.includes('cacau')) {
       satRatio = 0.60;
-    } else if (cat.includes('castanha') || cat.includes('oleaginosa') || name.includes('pistache') || name.includes('avelã') || name.includes('avela') || name.includes('amendoim') || name.includes('noz')) {
+    } else if (
+      cat.includes('castanha') ||
+      cat.includes('oleaginosa') ||
+      name.includes('pistache') ||
+      name.includes('avelã') ||
+      name.includes('avela') ||
+      name.includes('amendoim') ||
+      name.includes('noz')
+    ) {
       satRatio = 0.12;
-    } else if (cat.includes('leite') || name.includes('leite') || name.includes('creme') || name.includes('nata') || name.includes('manteiga')) {
+    } else if (
+      cat.includes('leite') ||
+      name.includes('leite') ||
+      name.includes('creme') ||
+      name.includes('nata') ||
+      name.includes('manteiga')
+    ) {
       satRatio = 0.65;
     }
     totalSaturatedFat += ingFat * satRatio;
 
-    // 2. Fibras alimentares
+    // 2. Fibras alimentares e açúcares intrínsecos de frutas intactas
     if (cat.includes('fruta') || cat.includes('polpa')) {
       totalFiber += g * 0.02; // Média 2% fibras em polpas de frutas
-      intrinsicFruitSugars += ingSugars; // Frutas intactas não contam como açúcar adicionado
+      intrinsicFruitSugars += ingSugars; // Frutas intactas não contam como açúcar adicionado pela ANVISA
     } else if (name.includes('cacau')) {
       totalFiber += g * 0.30; // Cacau em pó 100% tem ~30% fibras solúveis/insolúveis
     } else if (name.includes('inulina') || name.includes('polidextrose') || name.includes('fibra')) {
       totalFiber += g * 0.90;
     }
 
-    // 3. Sódio
+    // 3. Sódio regulamentar
     if (name.includes('sal') || name.includes('cloreto')) {
       totalSodiumMg += g * 390; // 1g de sal refinado = ~390mg de sódio
     } else if (name.includes('leite em pó') || name.includes('leite em po')) {
@@ -137,45 +205,23 @@ export function calculateAnvisaNutrition(
     } else {
       totalSodiumMg += (g / 100) * 5; // Traços naturais em outros alimentos
     }
-
-    // 4. Detecção de Alérgenos
-    if (ing.hasAllergen && ing.allergenDetails && ing.allergenDetails.length > 0) {
-      ing.allergenDetails.forEach(d => detectedAllergens.add(d.toUpperCase().trim()));
-    }
-
-    if (cat.includes('leite') || name.includes('leite') || name.includes('creme') || name.includes('nata') || name.includes('soro') || name.includes('whey')) {
-      detectedAllergens.add('LEITE');
-      hasLactose = true;
-    }
-    if (name.includes('trigo') || name.includes('glúten') || name.includes('gluten') || name.includes('biscoito') || name.includes('malte')) {
-      detectedAllergens.add('TRIGO');
-      hasGluten = true;
-    }
-    if (name.includes('ovo') || name.includes('gema') || name.includes('clara')) {
-      detectedAllergens.add('OVOS');
-    }
-    if (name.includes('soja') || name.includes('lecitina de soja')) {
-      detectedAllergens.add('SOJA');
-    }
-    if (name.includes('pistache')) detectedAllergens.add('PISTACHES');
-    if (name.includes('avelã') || name.includes('avela')) detectedAllergens.add('AVELÃS');
-    if (name.includes('amendoim')) detectedAllergens.add('AMENDOIM');
-    if (name.includes('castanha-de-caju') || name.includes('castanha de caju')) detectedAllergens.add('CASTANHA-DE-CAJU');
-    if (name.includes('castanha-do-pará') || name.includes('castanha-do-brasil') || name.includes('castanha')) detectedAllergens.add('CASTANHAS');
-    if (name.includes('noz') || name.includes('nozes')) detectedAllergens.add('NOZES');
-    if (name.includes('amêndoa') || name.includes('amendoa')) detectedAllergens.add('AMÊNDOAS');
   });
 
   if (totalRecipeWeight <= 0) {
     totalRecipeWeight = 1000;
   }
 
-  // Carboidratos totais (Açúcares + outros carboidratos sólidos como amidos e maltodextrinas)
-  const totalCarbs = totalSugars + (totalOtherSolids * 0.7);
+  // Lactose do leite (O SNGL contém ~52% de lactose)
+  const lactoseGrams = totalMsnf * 0.52;
 
-  // Açúcares adicionados: Açúcares totais menos lactose do leite e açúcares intrínsecos de frutas intactas
-  const lactoseGrams = totalMsnf * 0.52; // O SNGL do leite contém ~52% de lactose
-  const totalAddedSugars = Math.max(0, totalSugars - lactoseGrams - intrinsicFruitSugars);
+  // Açúcares adicionados: açúcares derivados de adoçantes e insumos adicionados (exclui açúcares intrínsecos de frutas intactas e lactose)
+  const totalAddedSugars = Math.max(0, totalIngredientSugars - intrinsicFruitSugars);
+
+  // Açúcares totais: soma de açúcares adicionados + lactose + açúcares naturais de frutas
+  const totalSugars = totalAddedSugars + lactoseGrams + intrinsicFruitSugars;
+
+  // Carboidratos totais (Açúcares + outros carboidratos sólidos como amidos, fibras solúveis e maltodextrinas)
+  const totalCarbs = Math.max(totalSugars, totalSugars + (totalOtherSolids * 0.7));
 
   // Escala para 100g
   const scale100 = 100 / totalRecipeWeight;
@@ -192,7 +238,7 @@ export function calculateAnvisaNutrition(
   const transFat100 = 0; // Gelato artesanal autêntico
   const fiber100 = totalFiber * scale100;
   const sodium100 = totalSodiumMg * scale100;
-  const energyKcal100 = (carbs100 * 4) + (protein100 * 4) + (fat100 * 9);
+  const energyKcal100 = (carbs100 * 4) + (protein100 * 4) + (fat100 * 9) + (fiber100 * 2);
   const energyKj100 = energyKcal100 * 4.184;
 
   // Valores por Porção
@@ -205,7 +251,7 @@ export function calculateAnvisaNutrition(
   const transFatPortion = 0;
   const fiberPortion = totalFiber * scalePortion;
   const sodiumPortion = totalSodiumMg * scalePortion;
-  const energyKcalPortion = (carbsPortion * 4) + (proteinPortion * 4) + (fatPortion * 9);
+  const energyKcalPortion = (carbsPortion * 4) + (proteinPortion * 4) + (fatPortion * 9) + (fiberPortion * 2);
   const energyKjPortion = energyKcalPortion * 4.184;
 
   // Porções por embalagem
@@ -215,6 +261,11 @@ export function calculateAnvisaNutrition(
   const highAddedSugars = addedSugars100 >= ANVISA_FOP_LIMITS.addedSugarsGramsPer100g;
   const highSaturatedFat = satFat100 >= ANVISA_FOP_LIMITS.saturatedFatGramsPer100g;
   const highSodium = sodium100 >= ANVISA_FOP_LIMITS.sodiumMgPer100g;
+
+  let fopCount = 0;
+  if (highAddedSugars) fopCount++;
+  if (highSaturatedFat) fopCount++;
+  if (highSodium) fopCount++;
 
   // Construção dos itens da tabela
   const items: NutritionalItemValue[] = [
@@ -313,10 +364,21 @@ export function calculateAnvisaNutrition(
     containerWeightGrams,
     items,
     frontOfPack: {
-      hasAny: highAddedSugars || highSaturatedFat || highSodium,
+      hasAny: fopCount > 0,
+      count: fopCount,
       highAddedSugars,
       highSaturatedFat,
-      highSodium
+      highSodium,
+      values: {
+        addedSugars100g: +addedSugars100.toFixed(1),
+        saturatedFat100g: +satFat100.toFixed(1),
+        sodium100g: Math.round(sodium100)
+      },
+      thresholds: {
+        addedSugars100g: ANVISA_FOP_LIMITS.addedSugarsGramsPer100g,
+        saturatedFat100g: ANVISA_FOP_LIMITS.saturatedFatGramsPer100g,
+        sodium100g: ANVISA_FOP_LIMITS.sodiumMgPer100g
+      }
     },
     allergens: {
       list: allergenList,
