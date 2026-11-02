@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Save, BookmarkPlus, CheckCircle2 } from 'lucide-react';
+import { getStoredStyles } from '../../core/stylesStorage';
 
 interface SaveRecipeModalProps {
   isOpen: boolean;
@@ -25,6 +26,24 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
   const [category, setCategory] = useState(currentCategory || 'Gelatos de Leite');
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setName(currentName);
+      setCategory(currentCategory || 'Gelatos de Leite');
+      setMode(isExisting ? 'update' : 'new');
+      setNotes('');
+    }
+  }, [isOpen, currentName, currentCategory, isExisting]);
+
+  const availableStyles = useMemo(() => {
+    const stylesMap = getStoredStyles();
+    const names = Object.keys(stylesMap);
+    if (category && !names.includes(category)) {
+      names.push(category);
+    }
+    return names.sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+  }, [isOpen, category]);
 
   if (!isOpen) return null;
 
@@ -123,20 +142,11 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
               onChange={e => setCategory(e.target.value)}
               className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-semibold focus:outline-none focus:border-amber-500"
             >
-              <option value="Alcoólicos">Alcoólicos</option>
-              <option value="Gelatos Proteicos">Gelatos Proteicos</option>
-              <option value="Gelatos Zero Açúcar">Gelatos Zero Açúcar</option>
-              <option value="Gelatos de Leite">Gelatos de Leite</option>
-              <option value="Gelatos de Leite com Chocolate">Gelatos de Leite com Chocolate</option>
-              <option value="Gelatos de Leite com Fruta">Gelatos de Leite com Fruta</option>
-              <option value="Gelatos de Oleaginosas">Gelatos de Oleaginosas</option>
-              <option value="Sorbets">Sorbets (Geral)</option>
-              <option value="Sorbets Alcoólicos">Sorbets Alcoólicos</option>
-              <option value="Sorbets Cítricos / Frutas Ácidas">Sorbets Cítricos / Frutas Ácidas</option>
-              <option value="Sorbets Polposos / Frutas Densas">Sorbets Polposos / Frutas Densas</option>
-              <option value="Sorbets Zero Açúcar">Sorbets Zero Açúcar</option>
-              <option value="Sorbets de Chocolate">Sorbets de Chocolate</option>
-              <option value="Vegano">Vegano</option>
+              {availableStyles.map(s => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -10,11 +10,16 @@ import {
   ShieldCheck,
   GraduationCap,
   Save,
-  Sparkles
+  Sparkles,
+  PlusCircle,
+  Trash2
 } from 'lucide-react';
 import {
   getStoredStyles,
   saveSingleStyle,
+  createCustomStyle,
+  deleteCustomStyle,
+  isOfficialStyle,
   applyGoldStandardPreset,
   applyCarpigianiPreset,
   resetSingleStyleToGold,
@@ -30,6 +35,7 @@ interface StyleSettingsModalProps {
   onClose: () => void;
   initialStyleName?: string;
   onStyleUpdated?: (styleName: string) => void;
+  initialCreateMode?: boolean;
 }
 
 interface EditableFormState {
@@ -84,12 +90,18 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
   isOpen,
   onClose,
   initialStyleName = 'Gelatos de Leite',
-  onStyleUpdated
+  onStyleUpdated,
+  initialCreateMode = false
 }) => {
   const [stylesMap, setStylesMap] = useState<Record<string, StyleStandard>>(() => getStoredStyles());
   const [selectedStyleName, setSelectedStyleName] = useState<string>(initialStyleName);
   const [presetId, setPresetId] = useState<StylePresetId>(() => getActivePresetId());
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  // Modo de criação de novo estilo
+  const [isCreating, setIsCreating] = useState(initialCreateMode);
+  const [newStyleName, setNewStyleName] = useState('');
+  const [newBaseCategory, setNewBaseCategory] = useState('Gelatos de Leite');
 
   // Form inputs state for currently selected style
   const [form, setForm] = useState<EditableFormState>(() => {
@@ -97,19 +109,30 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
     return styleToFormState(s);
   });
 
-  // Sync when initialStyleName or isOpen changes
+  // Sync when initialStyleName, isOpen or initialCreateMode changes
   useEffect(() => {
     if (isOpen) {
       const freshMap = getStoredStyles();
       setStylesMap(freshMap);
-      const targetName = initialStyleName && freshMap[initialStyleName] ? initialStyleName : 'Gelatos de Leite';
-      setSelectedStyleName(targetName);
       setPresetId(getActivePresetId());
-      if (freshMap[targetName]) {
-        setForm(styleToFormState(freshMap[targetName]));
+
+      if (initialCreateMode) {
+        setIsCreating(true);
+        setNewStyleName(initialStyleName && !freshMap[initialStyleName] ? initialStyleName : '');
+        setNewBaseCategory('Gelatos de Leite');
+        if (freshMap['Gelatos de Leite']) {
+          setForm(styleToFormState(freshMap['Gelatos de Leite']));
+        }
+      } else {
+        setIsCreating(false);
+        const targetName = initialStyleName && freshMap[initialStyleName] ? initialStyleName : 'Gelatos de Leite';
+        setSelectedStyleName(targetName);
+        if (freshMap[targetName]) {
+          setForm(styleToFormState(freshMap[targetName]));
+        }
       }
     }
-  }, [isOpen, initialStyleName]);
+  }, [isOpen, initialStyleName, initialCreateMode]);
 
   // When changing selected style dropdown
   const handleSelectStyle = (name: string) => {
@@ -120,12 +143,57 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
     }
   };
 
+  // Basear novo estilo em uma categoria existente
+  const handleSelectBaseCategory = (baseCat: string) => {
+    setNewBaseCategory(baseCat);
+    const base = stylesMap[baseCat] || stylesMap['Gelatos de Leite'];
+    if (base) {
+      setForm(styleToFormState(base));
+    }
+  };
+
+  // Iniciar modo de criação
+  const handleStartCreate = () => {
+    setIsCreating(true);
+    setNewStyleName('');
+    setNewBaseCategory('Gelatos de Leite');
+    if (stylesMap['Gelatos de Leite']) {
+      setForm(styleToFormState(stylesMap['Gelatos de Leite']));
+    }
+  };
+
+  // Excluir estilo customizado selecionado
+  const handleDeleteCurrentStyle = () => {
+    if (isOfficialStyle(selectedStyleName)) {
+      alert('Estilos oficiais protegidos não podem ser excluídos.');
+      return;
+    }
+    const confirm = window.confirm(`Deseja realmente excluir o estilo personalizado "${selectedStyleName}"?`);
+    if (!confirm) return;
+
+    deleteCustomStyle(selectedStyleName);
+    const updated = getStoredStyles();
+    setStylesMap(updated);
+    setSelectedStyleName('Gelatos de Leite');
+    if (updated['Gelatos de Leite']) {
+      setForm(styleToFormState(updated['Gelatos de Leite']));
+    }
+    if (onStyleUpdated) onStyleUpdated('Gelatos de Leite');
+  };
+
   if (!isOpen) return null;
 
-  const currentTheme = getCategoryTheme(selectedStyleName);
+  const currentTheme = getCategoryTheme(isCreating ? newBaseCategory : (stylesMap[selectedStyleName]?.baseCategory || selectedStyleName));
+  const isCurrentCustom = !isOfficialStyle(selectedStyleName) || !!stylesMap[selectedStyleName]?.isCustom;
 
   // Validation errors
   const errors: string[] = [];
+  if (isCreating && !newStyleName.trim()) {
+    errors.push('Nome do Estilo: Digite o nome do novo estilo.');
+  }
+  if (isCreating && stylesMap[newStyleName.trim()]) {
+    errors.push(`Nome do Estilo: Já existe um estilo com o nome "${newStyleName.trim()}".`);
+  }
   if (form.sugarsMin > form.sugarsMax) errors.push('Açúcares: Mínimo não pode ser maior que o Máximo.');
   if (form.fatMin > form.fatMax) errors.push('Gordura: Mínimo não pode ser maior que o Máximo.');
   if (form.msnfMin > form.msnfMax) errors.push('SLNG: Mínimo não pode ser maior que o Máximo.');
@@ -140,10 +208,11 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
   if (form.msnfMax > 10.5) {
     warnings.push(`SLNG Máximo de ${form.msnfMax}% está acima de 10.5%: risco de cristalização de lactose (arenosidade) após 48h a -12°C.`);
   }
-  if (form.sugarsMax > 22 && !selectedStyleName.toLowerCase().includes('sorbet')) {
+  const checkStyleName = isCreating ? newStyleName : selectedStyleName;
+  if (form.sugarsMax > 22 && !checkStyleName.toLowerCase().includes('sorbet')) {
     warnings.push(`Açúcares Máximos de ${form.sugarsMax}% podem conferir doçura excessiva e mascarar notas sutis do leite ou fruta.`);
   }
-  if (form.fatMax > 13.5 && !selectedStyleName.toLowerCase().includes('oleaginosa')) {
+  if (form.fatMax > 13.5 && !checkStyleName.toLowerCase().includes('oleaginosa')) {
     warnings.push(`Gordura Máxima de ${form.fatMax}% pode reduzir o overrun e aumentar o risco de coalescência lipídica.`);
   }
 
@@ -156,9 +225,56 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
     }));
   };
 
-  // Save changes
+  // Save changes (ou criar novo estilo)
   const handleSave = () => {
     if (errors.length > 0) return;
+
+    if (isCreating) {
+      const cleanName = newStyleName.trim();
+      const newStyle: StyleStandard = {
+        name: cleanName,
+        baseCategory: newBaseCategory,
+        isCustom: true,
+        customProfileName: form.profileName.trim() || undefined,
+        pacDivisor: form.pacDivisor || 24,
+        min: {
+          sugars: +(form.sugarsMin / 100).toFixed(4),
+          fat: +(form.fatMin / 100).toFixed(4),
+          msnf: +(form.msnfMin / 100).toFixed(4),
+          otherSolids: +(form.otherSolidsMin / 100).toFixed(4),
+          totalSolids: +(form.totalSolidsMin / 100).toFixed(4),
+          water: +(form.waterMin / 100).toFixed(4),
+          pod: Math.round(form.podMin),
+          pac: Math.round(form.pacMin),
+          protein: +(form.proteinMin / 100).toFixed(4)
+        },
+        max: {
+          sugars: +(form.sugarsMax / 100).toFixed(4),
+          fat: +(form.fatMax / 100).toFixed(4),
+          msnf: +(form.msnfMax / 100).toFixed(4),
+          otherSolids: +(form.otherSolidsMax / 100).toFixed(4),
+          totalSolids: +(form.totalSolidsMax / 100).toFixed(4),
+          water: +(form.waterMax / 100).toFixed(4),
+          pod: Math.round(form.podMax),
+          pac: Math.round(form.pacMax),
+          protein: +(form.proteinMax / 100).toFixed(4)
+        }
+      };
+
+      createCustomStyle(newStyle);
+      const newMap = getStoredStyles();
+      setStylesMap(newMap);
+      setSelectedStyleName(cleanName);
+      setIsCreating(false);
+      setPresetId(getActivePresetId());
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 2000);
+
+      if (onStyleUpdated) {
+        onStyleUpdated(cleanName);
+      }
+      return;
+    }
 
     const updatedStyle: StyleStandard = {
       name: selectedStyleName,
@@ -232,6 +348,15 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
     if (onStyleUpdated) onStyleUpdated(selectedStyleName);
   };
 
+  // Separar chaves de estilos para o select
+  const customStyleKeys = Object.keys(stylesMap)
+    .filter(s => stylesMap[s]?.isCustom || !isOfficialStyle(s))
+    .sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+
+  const officialStyleKeys = Object.keys(stylesMap)
+    .filter(s => isOfficialStyle(s) && !stylesMap[s]?.isCustom)
+    .sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
@@ -240,29 +365,42 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
         <div className="px-5 py-4 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-              <SlidersHorizontal className="w-5 h-5" />
+              {isCreating ? <Sparkles className="w-5 h-5 text-purple-400" /> : <SlidersHorizontal className="w-5 h-5" />}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-white">Metas e Parâmetros Físico-Químicos</h2>
-                {presetId === 'gold' && (
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold">
-                    🛡️ Padrão Ouro Ativo
+                <h2 className="text-lg font-bold text-white">
+                  {isCreating ? 'Criar Novo Estilo Personalizado' : 'Metas e Parâmetros Físico-Químicos'}
+                </h2>
+                {isCreating ? (
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 font-semibold flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-purple-400" />
+                    Novo Estilo
                   </span>
-                )}
-                {presetId === 'carpigiani' && hasCarpigianiData(selectedStyleName) && (
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold">
-                    🎓 Carpigiani Estrito
-                  </span>
-                )}
-                {presetId === 'custom' && (
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 font-semibold">
-                    ✨ Personalizado
-                  </span>
+                ) : (
+                  <>
+                    {presetId === 'gold' && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold">
+                        🛡️ Padrão Ouro Ativo
+                      </span>
+                    )}
+                    {presetId === 'carpigiani' && hasCarpigianiData(selectedStyleName) && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold">
+                        🎓 Carpigiani Estrito
+                      </span>
+                    )}
+                    {presetId === 'custom' && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 font-semibold">
+                        ✨ Personalizado
+                      </span>
+                    )}
+                  </>
                 )}
               </div>
               <p className="text-xs text-slate-400">
-                Ajuste os intervalos ideais de cada variável técnica para balizar receitas e diagnósticos.
+                {isCreating
+                  ? 'Defina o nome, categoria base e os intervalos ideais de cada variável para o seu novo estilo.'
+                  : 'Ajuste os intervalos ideais de cada variável técnica para balizar receitas e diagnósticos.'}
               </p>
             </div>
           </div>
@@ -278,75 +416,142 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
 
         {/* Style Selector & Quick Presets Toolbar */}
         <div className="p-4 border-b border-slate-800 bg-slate-900/90 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 flex-1 min-w-[280px]">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Estilo Alvo:</span>
-            <div className="relative flex-1">
-              <select
-                value={selectedStyleName}
-                onChange={e => handleSelectStyle(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 text-slate-100 text-sm font-semibold rounded-xl px-3 py-2 pr-8 focus:outline-none focus:border-amber-500 transition-colors shadow-inner"
-              >
-                {Object.keys(stylesMap)
-                  .sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }))
-                  .map(s => (
+          {isCreating ? (
+            <div className="w-full flex flex-wrap items-center justify-between gap-3 bg-purple-500/10 border border-purple-500/30 rounded-xl p-3">
+              <div className="flex-1 min-w-[240px] space-y-1">
+                <label className="text-xs font-bold text-purple-300 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                  Nome do Novo Estilo:
+                </label>
+                <input
+                  type="text"
+                  value={newStyleName}
+                  onChange={e => setNewStyleName(e.target.value)}
+                  placeholder="Ex: Base Leite Econômica, Gelato Keto..."
+                  className="w-full bg-slate-900 border border-purple-500/50 rounded-xl px-3 py-1.5 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-purple-500/30"
+                  autoFocus
+                />
+              </div>
+
+              <div className="flex-1 min-w-[200px] space-y-1">
+                <label className="text-xs font-bold text-slate-300">
+                  Basear Parâmetros em:
+                </label>
+                <select
+                  value={newBaseCategory}
+                  onChange={e => handleSelectBaseCategory(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs sm:text-sm font-semibold rounded-xl px-3 py-1.5 focus:outline-none focus:border-purple-500"
+                >
+                  {Object.keys(GOLD_STANDARD_STYLES).map(s => (
                     <option key={s} value={s}>
                       {s}
                     </option>
                   ))}
-              </select>
+                </select>
+              </div>
+
+              <div className="flex items-end">
+                <button
+                  type="button"
+                  onClick={() => setIsCreating(false)}
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                >
+                  Cancelar Criação
+                </button>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-wrap items-center justify-between gap-3 w-full">
+              <div className="flex items-center gap-2.5 flex-1 min-w-[280px]">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider shrink-0">Estilo Alvo:</span>
+                <div className="relative flex-1">
+                  <select
+                    value={selectedStyleName}
+                    onChange={e => handleSelectStyle(e.target.value)}
+                    className="w-full bg-slate-800 border border-slate-700 text-slate-100 text-sm font-semibold rounded-xl px-3 py-2 pr-8 focus:outline-none focus:border-amber-500 transition-colors shadow-inner"
+                  >
+                    {customStyleKeys.length > 0 && (
+                      <optgroup label="⭐ Meus Estilos Personalizados">
+                        {customStyleKeys.map(s => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )}
+                    <optgroup label="🏛️ Estilos Oficiais Protegidos">
+                      {officialStyleKeys.map(s => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </select>
+                </div>
 
-          {/* Quick Preset Buttons */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <button
-              type="button"
-              onClick={handleApplyGoldPreset}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border ${
-                presetId === 'gold'
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm'
-                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
-              }`}
-              title="Aplica o Padrão Ouro Híbrido Protegido (Recomendado com proteção de Caviezel e PAC Carpigiani)"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Restaurar Padrão Ouro</span>
-            </button>
+                <button
+                  type="button"
+                  onClick={handleStartCreate}
+                  className="px-3 py-2 rounded-xl text-xs font-bold bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/40 flex items-center gap-1.5 transition-all shrink-0"
+                  title="Criar um novo estilo personalizado do zero"
+                >
+                  <PlusCircle className="w-3.5 h-3.5 text-purple-400" />
+                  <span className="hidden sm:inline">+ Novo Estilo</span>
+                </button>
+              </div>
 
-            {hasCarpigianiData(selectedStyleName) ? (
-              <button
-                type="button"
-                onClick={handleApplyCarpigianiPreset}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border ${
-                  presetId === 'carpigiani'
-                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm'
-                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
-                }`}
-                title="Carrega as réguas estritas da Carpigiani Gelato University (Apostila 2025/2026)"
-              >
-                <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
-                <span>Carpigiani Estrito</span>
-              </button>
-            ) : (
-              <span
-                className="text-[11px] text-slate-400 bg-slate-800/80 border border-slate-700/70 px-2.5 py-1 rounded-xl italic flex items-center gap-1"
-                title="Este estilo não possui parâmetros na apostila do Curso Intermediário da Carpigiani (reservado ao Curso Avançado ou nutrição esportiva)"
-              >
-                <Info className="w-3 h-3 text-slate-400" />
-                <span>Sem dados na CGU</span>
-              </span>
-            )}
+              {/* Quick Preset Buttons */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={handleApplyGoldPreset}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border ${
+                    presetId === 'gold'
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm'
+                      : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+                  }`}
+                  title="Aplica o Padrão Ouro Híbrido Protegido (Recomendado com proteção de Caviezel e PAC Carpigiani)"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Restaurar Padrão Ouro</span>
+                </button>
 
-            <button
-              type="button"
-              onClick={handleResetThisStyle}
-              className="px-2.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1 transition-colors"
-              title="Restaura apenas este estilo selecionado para o Padrão Ouro"
-            >
-              <RotateCcw className="w-3 h-3 text-slate-400" />
-              <span>Resetar este estilo</span>
-            </button>
-          </div>
+                {hasCarpigianiData(selectedStyleName) ? (
+                  <button
+                    type="button"
+                    onClick={handleApplyCarpigianiPreset}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border ${
+                      presetId === 'carpigiani'
+                        ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm'
+                        : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+                    }`}
+                    title="Carrega as réguas estritas da Carpigiani Gelato University (Apostila 2025/2026)"
+                  >
+                    <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
+                    <span>Carpigiani Estrito</span>
+                  </button>
+                ) : (
+                  <span
+                    className="text-[11px] text-slate-400 bg-slate-800/80 border border-slate-700/70 px-2.5 py-1 rounded-xl italic flex items-center gap-1"
+                    title="Este estilo não possui parâmetros na apostila do Curso Intermediário da Carpigiani (reservado ao Curso Avançado ou nutrição esportiva)"
+                  >
+                    <Info className="w-3 h-3 text-slate-400" />
+                    <span>Sem dados na CGU</span>
+                  </span>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleResetThisStyle}
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1 transition-colors"
+                  title="Restaura apenas este estilo selecionado para o Padrão Ouro"
+                >
+                  <RotateCcw className="w-3 h-3 text-slate-400" />
+                  <span>Resetar este estilo</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Modal Body: Editable Variables Grid */}
@@ -679,19 +884,31 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
 
         {/* Modal Footer */}
         <div className="px-5 py-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {savedSuccess && (
               <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold animate-in fade-in">
                 <Check className="w-4 h-4 text-emerald-400" />
-                Metas salvas com sucesso!
+                {isCreating ? 'Estilo criado com sucesso!' : 'Metas salvas com sucesso!'}
               </span>
+            )}
+
+            {isCurrentCustom && !isCreating && (
+              <button
+                type="button"
+                onClick={handleDeleteCurrentStyle}
+                className="px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/15 border border-rose-500/30 flex items-center gap-1.5 transition-colors"
+                title="Excluir este estilo personalizado"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Excluir Estilo</span>
+              </button>
             )}
           </div>
 
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={onClose}
+              onClick={isCreating ? () => setIsCreating(false) : onClose}
               className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
             >
               Cancelar
@@ -708,7 +925,7 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
               }`}
             >
               <Save className="w-4 h-4 text-slate-950" />
-              <span>Salvar Metas Técnicas</span>
+              <span>{isCreating ? 'Criar e Salvar Estilo' : 'Salvar Metas Técnicas'}</span>
             </button>
           </div>
         </div>

@@ -20,6 +20,7 @@ import { SaveRecipeModal } from './SaveRecipeModal';
 import { RecipeSearchCombobox } from './RecipeSearchCombobox';
 import { ProfitSimulator } from './ProfitSimulator';
 import { StyleSettingsModal } from './StyleSettingsModal';
+import { StyleSearchCombobox } from './StyleSearchCombobox';
 import { CategoryBadge, getCategoryTheme } from '../../core/categoryThemes';
 import {
   Save,
@@ -97,10 +98,18 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isStyleModalOpen, setIsStyleModalOpen] = useState<boolean>(false);
+  const [styleModalInitialName, setStyleModalInitialName] = useState<string | undefined>(undefined);
+  const [styleModalCreateMode, setStyleModalCreateMode] = useState<boolean>(false);
   const [stylesRevision, setStylesRevision] = useState<number>(0);
   const [activePresetId, setActivePresetId] = useState<StylePresetId>(() => getActivePresetId());
   const [batchScaleInput, setBatchScaleInput] = useState<string>('1000');
   const [lastActiveRecipeId, setLastActiveRecipeId] = useState<string>(initialRecipeId || (recipes[0]?.id ?? ''));
+
+  const handleOpenStyleSettings = (styleName?: string, createMode?: boolean) => {
+    setStyleModalInitialName(styleName || targetStyleName);
+    setStyleModalCreateMode(!!createMode);
+    setIsStyleModalOpen(true);
+  };
 
   // Map of ingredients by lowercase name for fast lookup
   const ingredientsMap = useMemo(() => {
@@ -461,32 +470,19 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           </div>
         </div>
 
-        {/* LINHA 2: Caixa de Estilo alinhada com Padrão Ouro, Carpigiani Estrito e Ajustar Metas */}
+        {/* LINHA 2: Caixa de Estilo com busca instantânea alinhada com Padrão Ouro, Carpigiani Estrito e Ajustar Metas */}
         <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-slate-700/60">
-          {/* Single Unified Target Style Selector */}
-          <div
-            className="flex items-center gap-2 bg-slate-900 border border-slate-700 hover:border-slate-600 focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20 rounded-xl px-3.5 py-2 transition-all shadow-inner shrink-0"
-            title="Estilo Alvo de Balanceamento (define os limites nutricionais recomendados)"
-          >
-            <span className="shrink-0">{getCategoryTheme(targetStyleName).icon}</span>
-            <div className="relative flex items-center">
-              <select
-                value={targetStyleName}
-                onChange={e => {
-                  setTargetStyleName(e.target.value);
-                  setIsDirty(true);
-                }}
-                className="appearance-none bg-transparent pr-6 text-xs sm:text-sm font-bold text-slate-200 focus:outline-none cursor-pointer"
-              >
-                {Object.keys(stylesDataMap).map(s => (
-                  <option key={s} value={s} className="bg-slate-900 text-slate-200">
-                    Estilo: {s}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-0 pointer-events-none" />
-            </div>
-          </div>
+          {/* Seletor Combobox Inteligente com busca instantânea e gestão de estilos */}
+          <StyleSearchCombobox
+            selectedStyleName={targetStyleName}
+            onSelectStyle={newStyle => {
+              setTargetStyleName(newStyle);
+              setIsDirty(true);
+            }}
+            onOpenSettings={(styleName, createMode) => {
+              handleOpenStyleSettings(styleName, createMode);
+            }}
+          />
 
           {/* Presets Rápidos e Ajuste de Metas (3 Botões alinhados com o estilo) */}
           <div className="flex items-center gap-2 flex-wrap">
@@ -544,7 +540,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             {/* 4. Ajustar Metas (Abre Modal de Edição) */}
             <button
               type="button"
-              onClick={() => setIsStyleModalOpen(true)}
+              onClick={() => handleOpenStyleSettings(targetStyleName, false)}
               className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all shadow-inner shrink-0 group border bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 border-slate-700 hover:border-amber-500/50"
               title="Ajustar manualmente metas, limites físico-químicos e nome deste perfil"
             >
@@ -990,10 +986,18 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
       {/* Modal de Ajuste de Metas Físico-Químicas */}
       <StyleSettingsModal
         isOpen={isStyleModalOpen}
-        onClose={() => setIsStyleModalOpen(false)}
-        initialStyleName={targetStyleName}
-        onStyleUpdated={() => {
+        onClose={() => {
+          setIsStyleModalOpen(false);
+          setStyleModalCreateMode(false);
+        }}
+        initialStyleName={styleModalInitialName || targetStyleName}
+        initialCreateMode={styleModalCreateMode}
+        onStyleUpdated={(updatedStyleName) => {
           setStylesRevision(prev => prev + 1);
+          if (updatedStyleName) {
+            setTargetStyleName(updatedStyleName);
+            setIsDirty(true);
+          }
         }}
       />
     </div>

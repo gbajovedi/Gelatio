@@ -204,6 +204,13 @@ export const CARPIGIANI_STRICT_STYLES: Record<string, StyleStandard> = {
 };
 
 /**
+ * Verifica se um estilo pertence aos 14 estilos oficiais de fábrica
+ */
+export function isOfficialStyle(styleName: string): boolean {
+  return Object.prototype.hasOwnProperty.call(GOLD_STANDARD_STYLES, styleName);
+}
+
+/**
  * Retorna os estilos e perfis personalizados do usuário armazenados de forma isolada.
  * Não é sobrescrito ao alternar entre Padrão Ouro ou Carpigiani.
  */
@@ -263,23 +270,41 @@ export function getActivePresetId(): StylePresetId {
 }
 
 /**
- * Carrega estilos efetivos de acordo com o preset ativo
+ * Carrega estilos efetivos de acordo com o preset ativo,
+ * garantindo que novos estilos criados pelo usuário (isCustom === true) estejam sempre disponíveis.
  */
 export function getStoredStyles(): Record<string, StyleStandard> {
-  if (typeof window === 'undefined') return GOLD_STANDARD_STYLES;
+  if (typeof window === 'undefined') return { ...GOLD_STANDARD_STYLES };
   try {
     const activePreset = getActivePresetId();
+    let baseStyles: Record<string, StyleStandard>;
     if (activePreset === 'carpigiani') {
-      return CARPIGIANI_STRICT_STYLES;
+      baseStyles = { ...CARPIGIANI_STRICT_STYLES };
+    } else if (activePreset === 'custom') {
+      baseStyles = getUserCustomStyles();
+    } else {
+      baseStyles = { ...GOLD_STANDARD_STYLES };
     }
-    if (activePreset === 'custom') {
-      return getUserCustomStyles();
+
+    // Mescla estilos customizados adicionais criados pelo usuário
+    const userCustomMap = getUserCustomStyles();
+    for (const [key, style] of Object.entries(userCustomMap)) {
+      if (style.isCustom || !isOfficialStyle(key)) {
+        baseStyles[key] = style;
+      }
     }
-    return GOLD_STANDARD_STYLES;
+    return baseStyles;
   } catch (e) {
     console.warn('Erro ao carregar estilos vigentes:', e);
-    return GOLD_STANDARD_STYLES;
+    return { ...GOLD_STANDARD_STYLES };
   }
+}
+
+/**
+ * Retorna todos os estilos vigentes (alias para getStoredStyles)
+ */
+export function getAllEffectiveStyles(): Record<string, StyleStandard> {
+  return getStoredStyles();
 }
 
 /**
@@ -306,6 +331,73 @@ export function saveStoredStyles(
 }
 
 /**
+ * Cria e persiste um novo estilo personalizado
+ */
+export function createCustomStyle(newStyle: StyleStandard): Record<string, StyleStandard> {
+  const customStyles = getUserCustomStyles();
+  const trimmedName = newStyle.name.trim();
+  if (!trimmedName) throw new Error('O nome do estilo não pode estar vazio.');
+
+  const fullStyle: StyleStandard = {
+    ...newStyle,
+    id: newStyle.id || `custom_style_${Date.now()}`,
+    name: trimmedName,
+    isCustom: true,
+    createdAt: newStyle.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+
+  const updated = { ...customStyles, [trimmedName]: fullStyle };
+  saveUserCustomStyles(updated);
+  saveStoredStyles(updated, 'custom');
+  return updated;
+}
+
+/**
+ * Clona um estilo existente com um novo nome
+ */
+export function duplicateStyle(sourceName: string, newName: string): StyleStandard {
+  const all = getStoredStyles();
+  const source = all[sourceName] || all['Gelatos de Leite'];
+  const cleanName = newName.trim();
+  if (!cleanName) throw new Error('O nome do novo estilo não pode estar vazio.');
+
+  const cloned: StyleStandard = {
+    ...JSON.parse(JSON.stringify(source)),
+    id: `custom_style_${Date.now()}`,
+    name: cleanName,
+    customProfileName: undefined,
+    baseCategory: source.baseCategory || source.name,
+    isCustom: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+
+  createCustomStyle(cloned);
+  return cloned;
+}
+
+/**
+ * Remove um estilo criado pelo usuário (protegendo os 14 estilos oficiais)
+ */
+export function deleteCustomStyle(styleName: string): boolean {
+  if (isOfficialStyle(styleName)) {
+    console.warn(`Não é permitido excluir o estilo oficial: ${styleName}`);
+    return false;
+  }
+
+  const customStyles = getUserCustomStyles();
+  if (!customStyles[styleName]) return false;
+
+  const updated = { ...customStyles };
+  delete updated[styleName];
+  saveUserCustomStyles(updated);
+  const currentPreset = getActivePresetId();
+  saveStoredStyles(updated, currentPreset);
+  return true;
+}
+
+/**
  * Ativa o preset Personalizado do Mestre Gelatiere com 1 clique rápido
  */
 export function applyCustomPreset(): Record<string, StyleStandard> {
@@ -320,10 +412,11 @@ export function applyCustomPreset(): Record<string, StyleStandard> {
 export function applyGoldStandardPreset(): Record<string, StyleStandard> {
   if (typeof window !== 'undefined') {
     localStorage.setItem(STYLES_PRESET_KEY, 'gold');
-    localStorage.setItem(STYLES_STORAGE_KEY, JSON.stringify(GOLD_STANDARD_STYLES));
-    currentStylesMap = { ...GOLD_STANDARD_STYLES };
+    const goldWithCustom = getStoredStyles();
+    localStorage.setItem(STYLES_STORAGE_KEY, JSON.stringify(goldWithCustom));
+    currentStylesMap = { ...goldWithCustom };
     window.dispatchEvent(
-      new CustomEvent(STYLES_UPDATED_EVENT, { detail: { styles: GOLD_STANDARD_STYLES, presetId: 'gold' } })
+      new CustomEvent(STYLES_UPDATED_EVENT, { detail: { styles: goldWithCustom, presetId: 'gold' } })
     );
   }
   return GOLD_STANDARD_STYLES;
@@ -335,10 +428,11 @@ export function applyGoldStandardPreset(): Record<string, StyleStandard> {
 export function applyCarpigianiPreset(): Record<string, StyleStandard> {
   if (typeof window !== 'undefined') {
     localStorage.setItem(STYLES_PRESET_KEY, 'carpigiani');
-    localStorage.setItem(STYLES_STORAGE_KEY, JSON.stringify(CARPIGIANI_STRICT_STYLES));
-    currentStylesMap = { ...CARPIGIANI_STRICT_STYLES };
+    const carpigianiWithCustom = getStoredStyles();
+    localStorage.setItem(STYLES_STORAGE_KEY, JSON.stringify(carpigianiWithCustom));
+    currentStylesMap = { ...carpigianiWithCustom };
     window.dispatchEvent(
-      new CustomEvent(STYLES_UPDATED_EVENT, { detail: { styles: CARPIGIANI_STRICT_STYLES, presetId: 'carpigiani' } })
+      new CustomEvent(STYLES_UPDATED_EVENT, { detail: { styles: carpigianiWithCustom, presetId: 'carpigiani' } })
     );
   }
   return CARPIGIANI_STRICT_STYLES;
@@ -365,7 +459,17 @@ export function saveSingleStyle(
   updatedStyle: StyleStandard
 ): Record<string, StyleStandard> {
   const customStyles = getUserCustomStyles();
-  const updated = { ...customStyles, [styleName]: updatedStyle };
+  const existing = customStyles[styleName];
+  const isCustomFlag = existing?.isCustom ?? updatedStyle.isCustom ?? !isOfficialStyle(styleName);
+
+  const updatedEntry: StyleStandard = {
+    ...existing,
+    ...updatedStyle,
+    isCustom: isCustomFlag,
+    updatedAt: new Date().toISOString()
+  };
+
+  const updated = { ...customStyles, [styleName]: updatedEntry };
   saveUserCustomStyles(updated);
   saveStoredStyles(updated, 'custom');
   return updated;
