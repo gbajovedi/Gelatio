@@ -2467,7 +2467,7 @@
   },
   {
     "id": "rec_63",
-    "name": "Gelato de Morango / Fragola (Direto ao Ponto)",
+    "name": "Gelato de Morango (Direto ao Ponto)",
     "category": "Gelatos de Leite com Fruta",
     "targetStyle": "Gelatos de Leite com Fruta",
     "ingredients": [
@@ -3356,7 +3356,7 @@
   },
   {
     "id": "rec_84",
-    "name": "Sorbet de Atemoia / Fruta do Conde (Addolcire)",
+    "name": "Sorbet de Atemoia (Addolcire)",
     "category": "Sorbets Polposos / Frutas Densas",
     "targetStyle": "Sorbets Polposos / Frutas Densas",
     "ingredients": [
@@ -4280,7 +4280,7 @@
   },
   {
     "id": "rec_109",
-    "name": "Gelato Alcoólico de Licor Amaretto (Direto ao Ponto)",
+    "name": "Gelato de Licor Amaretto (Direto ao Ponto)",
     "category": "Gelatos Alcoólicos",
     "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
@@ -4763,7 +4763,7 @@
   },
   {
     "id": "rec_142",
-    "name": "Sorbet de Morango e Manjericão Diet (Addolcire)",
+    "name": "Sorbet de Morango e Manjericão (Addolcire)",
     "category": "Sorbets Zero Açúcar",
     "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
@@ -4804,7 +4804,7 @@
   },
   {
     "id": "rec_143",
-    "name": "Gelato de Coco com Cumaru Diet (Addolcire)",
+    "name": "Gelato de Coco com Cumaru (Addolcire)",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -4841,7 +4841,7 @@
   },
   {
     "id": "rec_144",
-    "name": "Sorbet de Framboesa - Polióis (Sem Açúcar)",
+    "name": "Sorbet de Framboesa - Polióis",
     "category": "Sorbets Zero Açúcar",
     "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
@@ -4882,7 +4882,7 @@
   },
   {
     "id": "rec_145",
-    "name": "Sorbet de Framboesa - Redução de Polióis (Sem Açúcar)",
+    "name": "Sorbet de Framboesa - Redução de Polióis",
     "category": "Sorbets Zero Açúcar",
     "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
@@ -4923,7 +4923,7 @@
   },
   {
     "id": "rec_146",
-    "name": "Gelato Fior di Latte 17% - Polióis (Sem Açúcar)",
+    "name": "Gelato Fior di Latte 17% - Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -4960,7 +4960,7 @@
   },
   {
     "id": "rec_147",
-    "name": "Gelato Fior di Latte 17% - Menos Polióis (Sem Açúcar)",
+    "name": "Gelato Fior di Latte 17% - Redução de Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5001,7 +5001,7 @@
   },
   {
     "id": "rec_148",
-    "name": "Gelato de Chocolate 17% - Polióis (Sem Açúcar)",
+    "name": "Gelato de Chocolate 17% - Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5050,7 +5050,7 @@
   },
   {
     "id": "rec_149",
-    "name": "Gelato de Chocolate 17% - Redução Polióis (Sem Açúcar)",
+    "name": "Gelato de Chocolate 17% - Redução de Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5103,7 +5103,7 @@
   },
   {
     "id": "rec_150",
-    "name": "Gelato de Fragola / Morango ao Leite - Polióis (Sem Açúcar)",
+    "name": "Gelato de Morango ao Leite - Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5144,7 +5144,7 @@
   },
   {
     "id": "rec_151",
-    "name": "Gelato de Fragola / Morango ao Leite - Redução Polióis (Sem Açúcar)",
+    "name": "Gelato de Morango ao Leite - Redução de Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5189,7 +5189,7 @@
   },
   {
     "id": "rec_152",
-    "name": "Gelato de Coco - Polióis (Sem Açúcar)",
+    "name": "Gelato de Coco - Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5226,7 +5226,7 @@
   },
   {
     "id": "rec_153",
-    "name": "Gelato de Coco - Menos Polióis (Sem Açúcar)",
+    "name": "Gelato de Coco - Redução de Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5267,7 +5267,7 @@
   },
   {
     "id": "rec_154",
-    "name": "Gelato de Coco Vegano - Polióis (Sem Açúcar)",
+    "name": "Gelato de Coco Vegano - Polióis",
     "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5308,7 +5308,7 @@
   },
   {
     "id": "rec_155",
-    "name": "Gelato de Coco Vegano - Menos Polióis (Sem Açúcar)",
+    "name": "Gelato de Coco Vegano - Redução de Polióis",
     "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5349,7 +5349,7 @@
   },
   {
     "id": "rec_156",
-    "name": "Gelato de Pistache - Polióis (Sem Açúcar)",
+    "name": "Gelato de Pistache - Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5390,7 +5390,7 @@
   },
   {
     "id": "rec_157",
-    "name": "Gelato de Pistache - Menos Polióis (Sem Açúcar)",
+    "name": "Gelato de Pistache - Redução de Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5435,7 +5435,7 @@
   },
   {
     "id": "rec_158",
-    "name": "Gelato de Pistache Vegano - Polióis (Sem Açúcar)",
+    "name": "Gelato de Pistache Vegano - Polióis",
     "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5468,7 +5468,7 @@
   },
   {
     "id": "rec_159",
-    "name": "Gelato de Pistache Vegano - Menos Polióis (Sem Açúcar)",
+    "name": "Gelato de Pistache Vegano - Redução de Polióis",
     "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5505,7 +5505,7 @@
   },
   {
     "id": "rec_160",
-    "name": "Gelato de Iogurte - Polióis (Sem Açúcar)",
+    "name": "Gelato de Iogurte - Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5546,7 +5546,7 @@
   },
   {
     "id": "rec_161",
-    "name": "Gelato de Iogurte - Redução de Polióis (Sem Açúcar)",
+    "name": "Gelato de Iogurte - Redução de Polióis",
     "category": "Gelatos Zero Açúcar",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5587,7 +5587,7 @@
   },
   {
     "id": "rec_162",
-    "name": "Gelato Intenso de Cacau com Laranja Vegano - Polióis (Sem Açúcar)",
+    "name": "Gelato Intenso de Cacau com Laranja Vegano - Polióis",
     "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5624,7 +5624,7 @@
   },
   {
     "id": "rec_163",
-    "name": "Gelato Intenso de Cacau com Laranja Vegano - Redução Polióis (Sem Açúcar)",
+    "name": "Gelato Intenso de Cacau com Laranja Vegano - Redução de Polióis",
     "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
@@ -5661,7 +5661,7 @@
   },
   {
     "id": "rec_164",
-    "name": "Sorbet de Manga - Polióis (Sem Açúcar)",
+    "name": "Sorbet de Manga - Polióis",
     "category": "Sorbets Zero Açúcar",
     "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
@@ -5698,7 +5698,7 @@
   },
   {
     "id": "rec_165",
-    "name": "Sorbet de Manga - Redução de Polióis (Sem Açúcar)",
+    "name": "Sorbet de Manga - Redução de Polióis",
     "category": "Sorbets Zero Açúcar",
     "targetStyle": "Sorbets Zero Açúcar",
     "ingredients": [
@@ -5739,7 +5739,7 @@
   },
   {
     "id": "rec_166",
-    "name": "Gelato de Baunilha Proteico (Gelatos Proteicos)",
+    "name": "Gelato de Baunilha Proteico",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -5784,7 +5784,7 @@
   },
   {
     "id": "rec_167",
-    "name": "Gelato de Baunilha Proteico s/ Açúcar (Gelatos Proteicos)",
+    "name": "Gelato de Baunilha Proteico Zero Açúcar",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -5829,7 +5829,7 @@
   },
   {
     "id": "rec_168",
-    "name": "Gelato de Baunilha Proteico Redução Polióis (Gelatos Proteicos)",
+    "name": "Gelato de Baunilha Proteico Redução de Polióis",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -5878,7 +5878,7 @@
   },
   {
     "id": "rec_169",
-    "name": "Gelato de Chocolate Proteico (Gelatos Proteicos)",
+    "name": "Gelato de Chocolate Proteico",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -5923,7 +5923,7 @@
   },
   {
     "id": "rec_170",
-    "name": "Gelato de Chocolate Proteico s/ Açúcar (Gelatos Proteicos)",
+    "name": "Gelato de Chocolate Proteico Zero Açúcar",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -5968,7 +5968,7 @@
   },
   {
     "id": "rec_171",
-    "name": "Gelato de Chocolate Proteico Redução Polióis (Gelatos Proteicos)",
+    "name": "Gelato de Chocolate Proteico Redução de Polióis",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -6017,7 +6017,7 @@
   },
   {
     "id": "rec_172",
-    "name": "Gelato de Oleaginosas / Pistache Proteico (Gelatos Proteicos)",
+    "name": "Gelato de Pistache Proteico",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -6058,7 +6058,7 @@
   },
   {
     "id": "rec_173",
-    "name": "Gelato de Oleaginosas / Pistache Proteico s/ Açúcar (Gelatos Proteicos)",
+    "name": "Gelato de Pistache Proteico Zero Açúcar",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -6099,7 +6099,7 @@
   },
   {
     "id": "rec_174",
-    "name": "Gelato de Oleaginosas / Pistache Proteico Redução Polióis (Gelatos Proteicos)",
+    "name": "Gelato de Pistache Proteico Redução de Polióis",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -6144,7 +6144,7 @@
   },
   {
     "id": "rec_175",
-    "name": "Gelato de Frutas ao Leite Proteico - Banana (Gelatos Proteicos)",
+    "name": "Gelato de Banana Proteico",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -6185,7 +6185,7 @@
   },
   {
     "id": "rec_176",
-    "name": "Gelato de Frutas ao Leite Proteico s/ Açúcar - Banana (Gelatos Proteicos)",
+    "name": "Gelato de Banana Proteico Zero Açúcar",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [
@@ -6226,7 +6226,7 @@
   },
   {
     "id": "rec_177",
-    "name": "Gelato de Frutas ao Leite Proteico Redução Polióis - Banana (Gelatos Proteicos)",
+    "name": "Gelato de Banana Proteico Redução de Polióis",
     "category": "Gelatos Proteicos",
     "targetStyle": "Gelatos Proteicos",
     "ingredients": [

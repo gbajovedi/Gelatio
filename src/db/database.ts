@@ -835,6 +835,66 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v22 soft gelatos removal:', e);
       }
     });
+    // Versão 23: Simplificação e padronização dos nomes das receitas (39 receitas)
+    this.version(23).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const recipeNameUpdates: Record<string, string> = {
+          'rec_63': 'Gelato de Morango (Direto ao Ponto)',
+          'rec_84': 'Sorbet de Atemoia (Addolcire)',
+          'rec_109': 'Gelato de Licor Amaretto (Direto ao Ponto)',
+          'rec_142': 'Sorbet de Morango e Manjericão (Addolcire)',
+          'rec_143': 'Gelato de Coco com Cumaru (Addolcire)',
+          'rec_144': 'Sorbet de Framboesa - Polióis',
+          'rec_145': 'Sorbet de Framboesa - Redução de Polióis',
+          'rec_146': 'Gelato Fior di Latte 17% - Polióis',
+          'rec_147': 'Gelato Fior di Latte 17% - Redução de Polióis',
+          'rec_148': 'Gelato de Chocolate 17% - Polióis',
+          'rec_149': 'Gelato de Chocolate 17% - Redução de Polióis',
+          'rec_150': 'Gelato de Morango ao Leite - Polióis',
+          'rec_151': 'Gelato de Morango ao Leite - Redução de Polióis',
+          'rec_152': 'Gelato de Coco - Polióis',
+          'rec_153': 'Gelato de Coco - Redução de Polióis',
+          'rec_154': 'Gelato de Coco Vegano - Polióis',
+          'rec_155': 'Gelato de Coco Vegano - Redução de Polióis',
+          'rec_156': 'Gelato de Pistache - Polióis',
+          'rec_157': 'Gelato de Pistache - Redução de Polióis',
+          'rec_158': 'Gelato de Pistache Vegano - Polióis',
+          'rec_159': 'Gelato de Pistache Vegano - Redução de Polióis',
+          'rec_160': 'Gelato de Iogurte - Polióis',
+          'rec_161': 'Gelato de Iogurte - Redução de Polióis',
+          'rec_162': 'Gelato Intenso de Cacau com Laranja Vegano - Polióis',
+          'rec_163': 'Gelato Intenso de Cacau com Laranja Vegano - Redução de Polióis',
+          'rec_164': 'Sorbet de Manga - Polióis',
+          'rec_165': 'Sorbet de Manga - Redução de Polióis',
+          'rec_166': 'Gelato de Baunilha Proteico',
+          'rec_167': 'Gelato de Baunilha Proteico Zero Açúcar',
+          'rec_168': 'Gelato de Baunilha Proteico Redução de Polióis',
+          'rec_169': 'Gelato de Chocolate Proteico',
+          'rec_170': 'Gelato de Chocolate Proteico Zero Açúcar',
+          'rec_171': 'Gelato de Chocolate Proteico Redução de Polióis',
+          'rec_172': 'Gelato de Pistache Proteico',
+          'rec_173': 'Gelato de Pistache Proteico Zero Açúcar',
+          'rec_174': 'Gelato de Pistache Proteico Redução de Polióis',
+          'rec_175': 'Gelato de Banana Proteico',
+          'rec_176': 'Gelato de Banana Proteico Zero Açúcar',
+          'rec_177': 'Gelato de Banana Proteico Redução de Polióis'
+        };
+
+        for (const [id, newName] of Object.entries(recipeNameUpdates)) {
+          const rec = await tx.table('recipes').get(id);
+          if (rec && !rec.isCustom) {
+            await tx.table('recipes').update(id, { name: newName });
+          }
+        }
+      } catch (e) {
+        console.warn('Migration to v23 recipe name simplification:', e);
+      }
+    });
 
   }
 
