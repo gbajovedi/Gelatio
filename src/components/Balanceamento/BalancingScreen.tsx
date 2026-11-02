@@ -97,6 +97,18 @@ const getFirstAlphabeticalRecipe = (recs: Recipe[]): Recipe | undefined => {
   return [...recs].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }))[0];
 };
 
+/**
+ * Localiza a receita alvo para a bancada (pelo ID salvo ou fallback alfabético).
+ */
+const getTargetInitialRecipe = (recs: Recipe[], targetId?: string): Recipe | undefined => {
+  if (!recs || recs.length === 0) return undefined;
+  if (targetId && targetId !== 'new') {
+    const found = recs.find(r => r.id === targetId);
+    if (found) return found;
+  }
+  return getFirstAlphabeticalRecipe(recs);
+};
+
 export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   recipes,
   ingredients,
@@ -105,22 +117,65 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   onRecipeSaved,
   onActiveRecipeChange
 }) => {
-  const [selectedRecipeId, setSelectedRecipeId] = useState<string>(initialRecipeId || (getFirstAlphabeticalRecipe(recipes)?.id ?? ''));
-  const lastLoadedRecipeIdRef = useRef<string | null>(initialRecipeId || null);
+  // Obter receita inicial com fallback seguro para a primeira do catálogo alfabético
+  const initialRecipe = useMemo(() => {
+    if (initialRecipeId === 'new') return undefined;
+    return getTargetInitialRecipe(recipes, initialRecipeId);
+  }, []);
+
+  const [selectedRecipeId, setSelectedRecipeId] = useState<string>(() => {
+    if (initialRecipeId === 'new') return 'new';
+    return initialRecipe?.id || (initialRecipeId && initialRecipeId !== 'new' ? initialRecipeId : (getFirstAlphabeticalRecipe(recipes)?.id ?? ''));
+  });
+
+  const lastLoadedRecipeIdRef = useRef<string | null>(initialRecipe?.id || (initialRecipeId === 'new' ? 'new' : null));
   const lastActionTokenRef = useRef<number>(recipeSelectionToken || 0);
-  const [recipeName, setRecipeName] = useState<string>('Receita sem título');
-  const [targetStyleName, setTargetStyleName] = useState<string>('Gelatos de Leite');
-  const [items, setItems] = useState<RecipeItem[]>([]);
-  const [variegatos, setVariegatos] = useState<VariegatoItem[]>([]);
-  const [isDirty, setIsDirty] = useState<boolean>(false);
+
+  const [recipeName, setRecipeName] = useState<string>(() => {
+    if (initialRecipeId === 'new') return 'Novo Gelato Artesanal';
+    return initialRecipe?.name || 'Receita sem título';
+  });
+
+  const [targetStyleName, setTargetStyleName] = useState<string>(() => {
+    if (initialRecipeId === 'new') return 'Gelatos de Leite';
+    return initialRecipe?.targetStyle || initialRecipe?.category || 'Gelatos de Leite';
+  });
+
+  const [items, setItems] = useState<RecipeItem[]>(() => {
+    if (initialRecipeId === 'new') {
+      return [
+        { name: 'Leite Integral', grams: 620 },
+        { name: 'Creme De Leite Fresco 35%', grams: 150 },
+        { name: 'Leite Em Pó Desnatado', grams: 45 },
+        { name: 'Açúcar', grams: 120 },
+        { name: 'Dextrose', grams: 35 },
+        { name: 'Neutro', grams: 5 }
+      ];
+    }
+    return initialRecipe?.ingredients ? JSON.parse(JSON.stringify(initialRecipe.ingredients)) : [];
+  });
+
+  const [variegatos, setVariegatos] = useState<VariegatoItem[]>(() => {
+    return initialRecipe?.variegatos ? JSON.parse(JSON.stringify(initialRecipe.variegatos)) : [];
+  });
+
+  const [isDirty, setIsDirty] = useState<boolean>(() => initialRecipeId === 'new');
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isStyleModalOpen, setIsStyleModalOpen] = useState<boolean>(false);
   const [styleModalInitialName, setStyleModalInitialName] = useState<string | undefined>(undefined);
   const [styleModalCreateMode, setStyleModalCreateMode] = useState<boolean>(false);
   const [stylesRevision, setStylesRevision] = useState<number>(0);
   const [activePresetId, setActivePresetId] = useState<StylePresetId>(() => getActivePresetId());
-  const [batchScaleInput, setBatchScaleInput] = useState<string>('1000');
-  const [lastActiveRecipeId, setLastActiveRecipeId] = useState<string>(initialRecipeId || (getFirstAlphabeticalRecipe(recipes)?.id ?? ''));
+
+  const [batchScaleInput, setBatchScaleInput] = useState<string>(() => {
+    if (initialRecipeId === 'new') return '975';
+    const totalG = initialRecipe?.ingredients ? initialRecipe.ingredients.reduce((acc, i) => acc + i.grams, 0) : 1000;
+    return String(Math.round(totalG));
+  });
+
+  const [lastActiveRecipeId, setLastActiveRecipeId] = useState<string>(() => {
+    return initialRecipe?.id || (initialRecipeId && initialRecipeId !== 'new' ? initialRecipeId : (getFirstAlphabeticalRecipe(recipes)?.id ?? ''));
+  });
 
   const handleOpenStyleSettings = (styleName?: string, createMode?: boolean) => {
     setStyleModalInitialName(styleName || targetStyleName);
@@ -179,15 +234,18 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
       if (lastLoadedRecipeIdRef.current !== 'new' || items.length === 0) {
         handleStartNewRecipe();
       }
-    } else if (initialRecipeId && initialRecipeId !== lastLoadedRecipeIdRef.current) {
-      const found = recipes.find(r => r.id === initialRecipeId);
-      if (found) {
-        loadRecipe(found);
-      }
-    } else if (!lastLoadedRecipeIdRef.current && recipes.length > 0 && items.length === 0) {
-      const firstAlpha = getFirstAlphabeticalRecipe(recipes);
-      const target = initialRecipeId ? recipes.find(r => r.id === initialRecipeId) || firstAlpha : firstAlpha;
-      if (target) {
+      return;
+    }
+
+    // Determinar a receita que deve estar carregada (pelo ID ativo ou fallback para primeira em ordem alfabética)
+    const target = getTargetInitialRecipe(recipes, initialRecipeId);
+    if (target) {
+      const shouldLoad =
+        lastLoadedRecipeIdRef.current !== target.id ||
+        items.length === 0 ||
+        recipeName === 'Receita sem título';
+
+      if (shouldLoad) {
         loadRecipe(target);
       }
     }
@@ -438,6 +496,10 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
 
   // Restore active recipe to original
   const handleReset = () => {
+    if (selectedRecipeId === 'new') {
+      handleSelectRecipe('new');
+      return;
+    }
     const rec = recipes.find(r => r.id === selectedRecipeId);
     if (rec) loadRecipe(rec);
   };

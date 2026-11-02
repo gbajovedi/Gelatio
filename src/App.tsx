@@ -98,11 +98,18 @@ export function App() {
       setIngredients(fallbackIngs);
       setPreparations(fallbackPreps);
 
+      const savedRecId = getInitialRecipeId();
+      const hasSavedRec = savedRecId && savedRecId !== 'new' && fallbackRecs.some(r => r.id === savedRecId);
       const firstFallback = [...fallbackRecs].sort((a, b) =>
         a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })
       )[0];
-      if (!activeRecipeId && firstFallback) {
+      if (hasSavedRec) {
+        setActiveRecipeId(savedRecId);
+      } else if (firstFallback) {
         setActiveRecipeId(firstFallback.id);
+        try {
+          localStorage.setItem(STORAGE_RECIPE_KEY, firstFallback.id);
+        } catch {}
       }
     } finally {
       setIsLoading(false);
