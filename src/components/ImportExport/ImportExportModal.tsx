@@ -179,11 +179,8 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
           <div className="bg-slate-850 p-4 sm:p-5 rounded-2xl border border-slate-700/80 space-y-3.5 shadow-md">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h4 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
-                  <span>Exportar Backup Completo</span>
-                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    Tudo Incluso
-                  </span>
+                <h4 className="text-base sm:text-lg font-black text-white">
+                  Exportar Backup Completo
                 </h4>
                 <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                   Gera um arquivo <code className="font-mono text-amber-300 font-bold">.JSON</code> com 100% dos seus dados: receitas, insumos & custos, pré-preparos e <strong>todos os parâmetros de Precificação (custos fixos e taxas de maquininha)</strong>.
