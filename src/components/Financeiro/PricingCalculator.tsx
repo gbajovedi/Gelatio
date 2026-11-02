@@ -313,18 +313,91 @@ export const PricingCalculator: React.FC = () => {
   const totalDeductionsAndMarginPercent = targetMargin + totalSalesDeductionsPercent;
   const marginDivisor = (100 - totalDeductionsAndMarginPercent) / 100;
 
+  // Preço de Venda Sugerido:
+  // Se marginDivisor > 0 e totalDeductionsAndMarginPercent < 100: fórmula Sebrae por divisor
+  // Se targetMargin >= 100 ou total >= 100: markup multiplicador sobre o custo total (evita zerar preço)
   const suggestedTubPrice =
-    marginDivisor > 0 && totalDeductionsAndMarginPercent < 100
+    totalCostWithOverhead <= 0
+      ? 0
+      : marginDivisor > 0 && totalDeductionsAndMarginPercent < 100
       ? totalCostWithOverhead / marginDivisor
-      : 0;
+      : (totalCostWithOverhead * (1 + targetMargin / 100)) / Math.max(0.01, (100 - totalSalesDeductionsPercent) / 100);
 
   const cardFeeValue = suggestedTubPrice * (activeFeePercent / 100);
   const taxValue = suggestedTubPrice * (salesTaxPercent / 100);
   const netProfit = suggestedTubPrice - cardFeeValue - taxValue - totalCostWithOverhead;
 
   // Ponto de Equilíbrio (Break-Even em Potes por Mês)
-  const unitContributionMargin = suggestedTubPrice - directCostPerTub - cardFeeValue - taxValue;
-  const breakEvenUnits = unitContributionMargin > 0 ? Math.ceil(totalFixedCosts / unitContributionMargin) : 0;
+  // Receita Líquida por Unidade (após taxas de cartão e impostos variáveis sobre a venda)
+  const netRevenuePerUnit = suggestedTubPrice - cardFeeValue - taxValue;
+  // Margem de Contribuição Unitária (MCU) = Receita Líquida - Custos Diretos Variáveis (Gelato + Pote)
+  const unitContributionMargin = netRevenuePerUnit - directCostPerTub;
+  // Ponto de Equilíbrio em Unidades = Custos Fixos Totais / Margem de Contribuição Unitária
+  const breakEvenUnits =
+    unitContributionMargin > 0 && totalFixedCosts > 0
+      ? Math.ceil(totalFixedCosts / unitContributionMargin)
+      : 0;
+  const breakEvenRevenue = breakEvenUnits * suggestedTubPrice;
+  const safetyMarginUnits = monthlyUnits - breakEvenUnits;
+
+  // Grupos de Custo com cores coordenadas para a barra e legenda
+  const costGroups = [
+    {
+      key: 'occupancy',
+      name: 'Ocupação',
+      fullName: '1. Ocupação & Utilidades',
+      amount: subtotalOccupancy,
+      pct: pctOccupancy,
+      colorBg: 'bg-amber-400',
+      colorText: 'text-amber-300',
+      colorBorder: 'border-amber-400/50',
+      colorDot: 'bg-amber-400 shadow-amber-400/50'
+    },
+    {
+      key: 'personnel',
+      name: 'Pessoal',
+      fullName: '2. Pessoal & Gestão',
+      amount: subtotalPersonnel,
+      pct: pctPersonnel,
+      colorBg: 'bg-cyan-400',
+      colorText: 'text-cyan-300',
+      colorBorder: 'border-cyan-400/50',
+      colorDot: 'bg-cyan-400 shadow-cyan-400/50'
+    },
+    {
+      key: 'equipment',
+      name: 'Máquinas',
+      fullName: '3. Refrigeração & Máquinas',
+      amount: subtotalEquipment,
+      pct: pctEquipment,
+      colorBg: 'bg-emerald-400',
+      colorText: 'text-emerald-300',
+      colorBorder: 'border-emerald-400/50',
+      colorDot: 'bg-emerald-400 shadow-emerald-400/50'
+    },
+    {
+      key: 'legal',
+      name: 'Tributos',
+      fullName: '4. Tributos & Licenças',
+      amount: subtotalLegal,
+      pct: pctLegal,
+      colorBg: 'bg-rose-400',
+      colorText: 'text-rose-300',
+      colorBorder: 'border-rose-400/50',
+      colorDot: 'bg-rose-400 shadow-rose-400/50'
+    },
+    {
+      key: 'custom',
+      name: 'Extras',
+      fullName: '5. Custos Extras / Personalizados',
+      amount: subtotalCustom,
+      pct: pctCustom,
+      colorBg: 'bg-purple-400',
+      colorText: 'text-purple-300',
+      colorBorder: 'border-purple-400/50',
+      colorDot: 'bg-purple-400 shadow-purple-400/50'
+    }
+  ];
 
   // Comparativo por Modalidade para o mesmo pote
   const paymentScenarios = [
@@ -866,35 +939,131 @@ export const PricingCalculator: React.FC = () => {
               </div>
             </div>
 
-            {/* Barra de Distribuição de Custos (% por grupo) */}
+            {/* Barra de Distribuição de Custos com Legenda de Cores */}
             {totalFixedCosts > 0 && (
-              <div className="pt-2 border-t border-slate-800 space-y-1.5">
-                <div className="flex items-center justify-between text-[10px] text-slate-400 font-semibold">
-                  <span>Distribuição dos Custos Fixos:</span>
-                  <span className="font-mono text-slate-300">
-                    Ocupação {pctOccupancy.toFixed(0)}% | Pessoal {pctPersonnel.toFixed(0)}% | Máq {pctEquipment.toFixed(0)}% | Trib {pctLegal.toFixed(0)}%{subtotalCustom > 0 ? ` | Extras ${pctCustom.toFixed(0)}%` : ''}
+              <div className="pt-2.5 border-t border-slate-800 space-y-2">
+                <div className="flex items-center justify-between text-[11px] text-slate-300 font-semibold">
+                  <span className="flex items-center gap-1.5">
+                    <PieChart className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Distribuição dos Custos Fixos (% do Total):</span>
+                  </span>
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    Total: R$ {totalFixedCosts.toFixed(2)}
                   </span>
                 </div>
-                <div className="w-full h-2 rounded-full overflow-hidden flex bg-slate-950">
-                  {pctOccupancy > 0 && <div style={{ width: `${pctOccupancy}%` }} className="bg-amber-400" title={`Ocupação: R$ ${subtotalOccupancy.toFixed(2)} (${pctOccupancy.toFixed(1)}%)`} />}
-                  {pctPersonnel > 0 && <div style={{ width: `${pctPersonnel}%` }} className="bg-cyan-400" title={`Pessoal: R$ ${subtotalPersonnel.toFixed(2)} (${pctPersonnel.toFixed(1)}%)`} />}
-                  {pctEquipment > 0 && <div style={{ width: `${pctEquipment}%` }} className="bg-emerald-400" title={`Refrigeração: R$ ${subtotalEquipment.toFixed(2)} (${pctEquipment.toFixed(1)}%)`} />}
-                  {pctLegal > 0 && <div style={{ width: `${pctLegal}%` }} className="bg-rose-400" title={`Tributos & Licenças: R$ ${subtotalLegal.toFixed(2)} (${pctLegal.toFixed(1)}%)`} />}
-                  {pctCustom > 0 && <div style={{ width: `${pctCustom}%` }} className="bg-purple-400" title={`Extras: R$ ${subtotalCustom.toFixed(2)} (${pctCustom.toFixed(1)}%)`} />}
+
+                {/* Barra Segmentada de Cores */}
+                <div className="w-full h-3 rounded-full overflow-hidden flex bg-slate-950 p-0.5 border border-slate-800 shadow-inner">
+                  {costGroups.map(g =>
+                    g.pct > 0 ? (
+                      <div
+                        key={g.key}
+                        style={{ width: `${g.pct}%` }}
+                        className={`${g.colorBg} h-full first:rounded-l-full last:rounded-r-full transition-all`}
+                        title={`${g.fullName}: R$ ${g.amount.toFixed(2)} (${g.pct.toFixed(1)}%)`}
+                      />
+                    ) : null
+                  )}
+                </div>
+
+                {/* Legenda de Cores com Indicadores Visuais Redondos */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                  {costGroups.map(g => (
+                    <div
+                      key={g.key}
+                      className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-semibold border transition-all ${
+                        g.amount > 0
+                          ? `bg-slate-950/80 ${g.colorBorder} ${g.colorText}`
+                          : 'bg-slate-950/30 border-slate-800/80 text-slate-500 opacity-40'
+                      }`}
+                      title={`${g.fullName}: R$ ${g.amount.toFixed(2)} (${g.pct.toFixed(1)}%)`}
+                    >
+                      <span className={`w-2 h-2 rounded-full ${g.colorDot} shrink-0`} />
+                      <span>{g.name}:</span>
+                      <span className="font-mono font-black">{g.pct.toFixed(0)}%</span>
+                      {g.amount > 0 && (
+                        <span className="font-mono text-slate-400 text-[9px] font-normal">
+                          (R$ {g.amount.toFixed(0)})
+                        </span>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
 
-            {/* Indicador de Ponto de Equilíbrio (Break-Even) */}
+            {/* Indicador Detalhado de Ponto de Equilíbrio (Break-Even) */}
             {breakEvenUnits > 0 && (
-              <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400 bg-slate-950/60 px-3 py-1.5 rounded-lg border border-slate-800/80">
-                <span className="flex items-center gap-1.5">
-                  <span>⚖️</span>
-                  <span>Ponto de Equilíbrio (Break-Even):</span>
-                </span>
-                <span className="font-mono font-bold text-emerald-300">
-                  {breakEvenUnits.toLocaleString('pt-BR')} potes/mês para zerar custos fixos
-                </span>
+              <div className="mt-2 p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-2 text-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-800/80 pb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base">⚖️</span>
+                    <span className="font-bold text-white text-xs">
+                      Ponto de Equilíbrio Operacional (Break-Even):
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-black text-emerald-400 text-sm">
+                      {breakEvenUnits.toLocaleString('pt-BR')} potes/mês
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      (R$ {breakEvenRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
+                    </span>
+                  </div>
+                </div>
+
+                {/* Explicação da Margem de Contribuição e Comparativo */}
+                <div className="text-[11px] text-slate-300 space-y-1">
+                  <div className="flex flex-wrap items-center justify-between gap-1 text-slate-400">
+                    <span>
+                      Margem de Contribuição (MCU):{' '}
+                      <strong className="text-amber-300 font-mono">
+                        R$ {unitContributionMargin.toFixed(2)}/pote
+                      </strong>{' '}
+                      <span className="text-[10px]">
+                        (Preço R$ {suggestedTubPrice.toFixed(2)} - Custos Diretos R$ {directCostPerTub.toFixed(2)} - Taxas R$ {(cardFeeValue + taxValue).toFixed(2)})
+                      </span>
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-500">
+                      R$ {totalFixedCosts.toFixed(0)} fixos ÷ R$ {unitContributionMargin.toFixed(2)} margem
+                    </span>
+                  </div>
+
+                  {targetMargin === 0 ? (
+                    <div className="p-1.5 bg-amber-500/10 border border-amber-500/30 rounded-lg text-amber-300 text-[10px] flex items-center gap-1.5">
+                      <span>ℹ️</span>
+                      <span>
+                        Com <strong>margem de 0%</strong>, o preço cobre estritamente o custo com rateio. O equilíbrio é exatamente a sua meta de <strong>{monthlyUnits} potes</strong>.
+                      </span>
+                    </div>
+                  ) : safetyMarginUnits > 0 ? (
+                    <div className="p-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 text-[10px] flex items-center justify-between gap-1.5">
+                      <span className="flex items-center gap-1">
+                        <span>✓</span>
+                        <span>
+                          <strong>Margem de Segurança:</strong> +{safetyMarginUnits} potes ({Math.round((safetyMarginUnits / monthlyUnits) * 100)}% acima do equilíbrio).
+                        </span>
+                      </span>
+                      <span className="font-semibold text-emerald-400">
+                        Lucro a partir do pote {breakEvenUnits + 1}!
+                      </span>
+                    </div>
+                  ) : safetyMarginUnits === 0 ? (
+                    <div className="p-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-cyan-300 text-[10px] flex items-center gap-1.5">
+                      <span>⚖️</span>
+                      <span>
+                        Sua produção planejada de <strong>{monthlyUnits} potes</strong> coincide exatamente com o ponto de equilíbrio operacional.
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="p-1.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-rose-300 text-[10px] flex items-center gap-1.5">
+                      <span>⚠️</span>
+                      <span>
+                        <strong>Déficit de Produção:</strong> A meta de {monthlyUnits} potes está abaixo do necessário. Faltam {Math.abs(safetyMarginUnits)} potes para não ter prejuízo.
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -1446,6 +1615,25 @@ export const PricingCalculator: React.FC = () => {
                   <strong className="font-mono text-emerald-300 font-black">R$ {netProfit.toFixed(2)}</strong>
                 </div>
               </div>
+
+              {/* Bloco de Ponto de Equilíbrio Integrado ao Preço */}
+              {breakEvenUnits > 0 && (
+                <div className="pt-2.5 border-t border-emerald-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
+                  <div className="flex items-center gap-1.5 text-slate-300 text-[11px]">
+                    <span>⚖️</span>
+                    <span>Ponto de Equilíbrio Operacional:</span>
+                    <strong className="text-emerald-300 font-mono font-black text-xs">
+                      {breakEvenUnits} potes/mês
+                    </strong>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      (R$ {breakEvenRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
+                    </span>
+                  </div>
+                  <div className="text-[10px] font-mono text-slate-400">
+                    Margem Contribuição: <span className="text-amber-300 font-bold">R$ {unitContributionMargin.toFixed(2)}/pote</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
