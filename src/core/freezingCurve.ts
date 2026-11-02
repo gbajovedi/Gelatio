@@ -33,27 +33,34 @@ export interface FreezingStateResult {
  * Calcula a fração de água congelada a uma determinada temperatura negativa
  */
 export function calculateIcePercentAtTemp(
-  waterPct: number, // 0 a 1 (ex: 0.64 para 64%)
-  pac: number, // em % do lote (ex: 21.5 para 21.5%)
-  totalSolids: number, // 0 a 1 (ex: 0.36 para 36%)
+  waterPct: number, // 0 a 1 ou 0 a 100
+  pac: number, // pode vir em % (ex: 25.5) ou relativo por 1000g (ex: 255)
+  totalSolids: number, // 0 a 1 ou 0 a 100
   tempC: number // ex: -12
 ): { icePercent: number; liquidPercent: number } {
   const absTemp = Math.abs(tempC);
-  if (absTemp <= 0.1 || waterPct <= 0) {
+
+  // Normalização de escalas para robustez absoluta
+  const normalizedWater = waterPct > 1 ? waterPct / 100 : waterPct;
+  const normalizedSolids = totalSolids > 1 ? totalSolids / 100 : totalSolids;
+  // Se o PAC estiver na escala de 1.000g (ex: 255), converte para porcentagem do lote (25.5%)
+  const normalizedPac = pac > 100 ? pac / 10 : pac;
+
+  if (absTemp <= 0.1 || normalizedWater <= 0) {
     return { icePercent: 0, liquidPercent: 100 };
   }
 
-  const totalWaterGrams100 = waterPct * 100;
+  const totalWaterGrams100 = normalizedWater * 100;
 
   // Água ligada (hidratação não-congelável de sólidos/proteínas/gomas ~0.2g H2O / g sólidos)
   const boundWater = Math.min(
-    0.2 * (totalSolids * 100),
+    0.2 * (normalizedSolids * 100),
     totalWaterGrams100 * 0.4
   );
 
   // Água líquida livre requerida para dissolver os solutos (PAC) à temperatura T (relação crioscópica de Raoult)
   // |T| = 1.86 * (PAC / 342.3) / (W_free / 1000) => W_free = PAC * 5.434 / |T|
-  const freeLiquidWater = (pac * 5.434) / absTemp;
+  const freeLiquidWater = (normalizedPac * 5.434) / absTemp;
   const totalLiquidWater = Math.min(totalWaterGrams100, freeLiquidWater + boundWater);
 
   const frozenWater = Math.max(0, totalWaterGrams100 - totalLiquidWater);
@@ -76,9 +83,19 @@ export function calculateFreezingState(
   tempC: number,
   caldaWeightGrams: number = 1000
 ): FreezingStateResult {
-  const { icePercent, liquidPercent } = calculateIcePercentAtTemp(waterPct, pac, totalSolids, tempC);
+  // Normalização prévia de escalas
+  const normalizedWater = waterPct > 1 ? waterPct / 100 : waterPct;
+  const normalizedSolids = totalSolids > 1 ? totalSolids / 100 : totalSolids;
+  const normalizedPac = pac > 100 ? pac / 10 : pac;
 
-  const totalWaterGrams = caldaWeightGrams * waterPct;
+  const { icePercent, liquidPercent } = calculateIcePercentAtTemp(
+    normalizedWater,
+    normalizedPac,
+    normalizedSolids,
+    tempC
+  );
+
+  const totalWaterGrams = caldaWeightGrams * normalizedWater;
   const frozenWaterGrams = Math.round((totalWaterGrams * icePercent) / 100);
   const liquidWaterGrams = Math.round(totalWaterGrams - frozenWaterGrams);
 
@@ -150,7 +167,7 @@ export function calculateFreezingState(
   let maxIdealFound = false;
 
   for (let t = -8; t >= -20; t -= 0.5) {
-    const pt = calculateIcePercentAtTemp(waterPct, pac, totalSolids, t);
+    const pt = calculateIcePercentAtTemp(normalizedWater, normalizedPac, normalizedSolids, t);
     const h = Math.max(0, Math.min(100, Math.round((pt.icePercent - 45) * 2.5)));
     curvePoints.push({
       tempC: t,
@@ -163,7 +180,7 @@ export function calculateFreezingState(
       maxIdealTemp = t;
       maxIdealFound = true;
     }
-    if (pt.icePercent <= 75) {
+    if (pt.icePercent <= 73) {
       minIdealTemp = t;
       minIdealFound = true;
     }
