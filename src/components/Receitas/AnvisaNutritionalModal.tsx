@@ -39,6 +39,7 @@ export const AnvisaFopSeal: React.FC<{
 
   return (
     <div
+      style={{ WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}
       className={`inline-flex flex-col gap-1 bg-white border-[2.5px] border-black rounded-[14px] p-1 w-[150px] shadow-sm select-none shrink-0 ${className}`}
     >
       {/* Caixa do Topo: Lupa Oficial + ALTO EM */}
@@ -84,22 +85,31 @@ export const AnvisaFopSeal: React.FC<{
 
       {/* Caixas Pretas dos Nutrientes */}
       {highAddedSugars && (
-        <div className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]">
-          <span className="text-[12px] leading-tight">AÇÚCAR</span>
-          <span className="text-[12px] leading-tight">ADICIONADO</span>
+        <div
+          style={{ backgroundColor: '#000000', color: '#ffffff', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}
+          className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]"
+        >
+          <span style={{ color: '#ffffff' }} className="text-[12px] leading-tight">AÇÚCAR</span>
+          <span style={{ color: '#ffffff' }} className="text-[12px] leading-tight">ADICIONADO</span>
         </div>
       )}
 
       {highSaturatedFat && (
-        <div className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]">
-          <span className="text-[12px] leading-tight">GORDURA</span>
-          <span className="text-[12px] leading-tight">SATURADA</span>
+        <div
+          style={{ backgroundColor: '#000000', color: '#ffffff', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}
+          className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]"
+        >
+          <span style={{ color: '#ffffff' }} className="text-[12px] leading-tight">GORDURA</span>
+          <span style={{ color: '#ffffff' }} className="text-[12px] leading-tight">SATURADA</span>
         </div>
       )}
 
       {highSodium && (
-        <div className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]">
-          <span className="text-[13px] leading-tight py-0.5">SÓDIO</span>
+        <div
+          style={{ backgroundColor: '#000000', color: '#ffffff', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}
+          className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]"
+        >
+          <span style={{ color: '#ffffff' }} className="text-[13px] leading-tight py-0.5">SÓDIO</span>
         </div>
       )}
     </div>
@@ -663,7 +673,7 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
           {/* Card Branco da ANVISA */}
           <div
             id="anvisa-label"
-            className="bg-white text-black p-5 sm:p-6 rounded-2xl border-2 border-black max-w-lg mx-auto shadow-xl font-sans print:shadow-none print:border-2 print:border-black print:max-w-none print:rounded-none"
+            className="anvisa-label-card bg-white text-black p-5 sm:p-6 rounded-2xl border-2 border-black max-w-[460px] mx-auto shadow-xl font-sans print:shadow-none print:border-2 print:border-black print:max-w-[440px] print:rounded-2xl print:my-6 print:mx-auto"
           >
             
             {/* 1. SELOS DE ROTULAGEM NUTRICIONAL FRONTAL (FOP) - PADRÃO OFICIAL ANVISA */}

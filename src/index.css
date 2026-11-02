@@ -718,12 +718,18 @@ html.light ::-webkit-scrollbar-thumb:hover {
 }
 
 /* ==========================================================================
-   Estilos de Impressão (Ficha de Produção da Cozinha - A4 Única Página)
+   Estilos de Impressão (Ficha de Produção da Cozinha & Rótulo Oficial ANVISA)
    ========================================================================== */
 @media print {
   @page {
     margin: 10mm 12mm;
     size: A4 portrait;
+  }
+
+  /* Forçar preservação de cores e fundos (necessário para selos pretos ANVISA) */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   /* 1. Ocultar todos os elementos que não fazem parte da impressão */
@@ -746,6 +752,12 @@ html.light ::-webkit-scrollbar-thumb:hover {
     height: auto !important;
     min-height: auto !important;
     overflow: visible !important;
+  }
+
+  /* Ocultar fundo da aplicação quando o modal de rotulagem ANVISA estiver ativo */
+  body:has(#anvisa-label) > #root > *:not(:has(#anvisa-label)),
+  body:has(#anvisa-label) main:not(:has(#anvisa-label)) {
+    display: none !important;
   }
 
   /* 3. Desfazer posição fixa (fixed inset-0) do modal para não repetir em múltiplas páginas */
@@ -787,7 +799,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
     padding: 12px 16px !important;
   }
 
-  /* 5. Forçar texto preto e bordas nítidas para tinta */
+  /* 5. Forçar texto preto e bordas nítidas para tinta na ficha de produção */
   .print-recipe-card * {
     color: #000000 !important;
     border-color: #cbd5e1 !important;
@@ -810,6 +822,82 @@ html.light ::-webkit-scrollbar-thumb:hover {
     width: 18px !important;
     height: 18px !important;
     border-radius: 3px !important;
+  }
+
+  /* ==========================================================================
+     6. RÓTULO OFICIAL ANVISA NA IMPRESSÃO (Design Idêntico ao Programa)
+     ========================================================================== */
+  #anvisa-label,
+  .anvisa-label-card {
+    display: block !important;
+    width: 100% !important;
+    max-width: 440px !important; /* Preserva proporção realista e vertical idêntica ao app */
+    margin: 10mm auto !important; /* Centralizado perfeitamente na folha A4 */
+    padding: 20px 24px !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+    border-radius: 18px !important; /* Cantos arredondados preservados */
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Selo da Lupa Frontal ANVISA (FOP): caixas pretas com fundo sólido e texto branco puro */
+  #anvisa-label .bg-black,
+  .anvisa-label-card .bg-black {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-radius: 9px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #anvisa-label .bg-black *,
+  .anvisa-label-card .bg-black * {
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Tabela de Nutrientes Oficial */
+  #anvisa-label table,
+  .anvisa-label-card table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    color: #000000 !important;
+  }
+
+  #anvisa-label th,
+  .anvisa-label-card th {
+    background-color: transparent !important;
+    color: #000000 !important;
+    border-bottom: 2px solid #000000 !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  #anvisa-label td,
+  .anvisa-label-card td {
+    color: #000000 !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+  }
+
+  #anvisa-label tr:hover,
+  .anvisa-label-card tr:hover {
+    background-color: transparent !important;
+  }
+
+  /* Linhas divisórias regulamentares pretas */
+  #anvisa-label [class*="border-black"],
+  .anvisa-label-card [class*="border-black"],
+  #anvisa-label .border-black,
+  .anvisa-label-card .border-black {
+    border-color: #000000 !important;
   }
 
   .bg-slate-800,
