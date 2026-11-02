@@ -722,6 +722,25 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v18 nesquik/ovomaltine split:', e);
       }
     });
+
+    // Versão 19: Renomeação dos estilos 'Vegano' -> 'Gelatos Veganos' e 'Alcoólicos' -> 'Gelatos Alcoólicos'
+    this.version(19).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        await tx.table('recipes').toCollection().modify((recipe: any) => {
+          if (recipe.category === 'Vegano') recipe.category = 'Gelatos Veganos';
+          if (recipe.targetStyle === 'Vegano') recipe.targetStyle = 'Gelatos Veganos';
+          if (recipe.category === 'Alcoólicos') recipe.category = 'Gelatos Alcoólicos';
+          if (recipe.targetStyle === 'Alcoólicos') recipe.targetStyle = 'Gelatos Alcoólicos';
+        });
+      } catch (e) {
+        console.warn('Migration to v19 style rename:', e);
+      }
+    });
   }
 
   async initializeSeedData(): Promise<void> {
@@ -1068,7 +1087,7 @@ export class GelatoDatabase extends Dexie {
             const existing = await this.recipes.get(id);
             if (existing && !existing.isCustom) {
               await this.recipes.update(id, {
-                category: 'Vegano',
+                category: 'Gelatos Veganos',
                 targetStyle: 'Zero'
               });
             }
@@ -1179,6 +1198,38 @@ export class GelatoDatabase extends Dexie {
             await this.recipes.update('rec_51', { ingredients: updated });
           }
           await this.settings.put({ key: 'nesquik_ovomaltine_split_v18', value: 1 });
+        }
+
+        // Garantir renomeação dos estilos e categorias Vegano -> Gelatos Veganos e Alcoólicos -> Gelatos Alcoólicos
+        const veganAlcoRenameFlag = await this.settings.get('vegan_alco_renamed_v19');
+        if (!veganAlcoRenameFlag) {
+          const recs = await this.recipes.toArray();
+          for (const rec of recs) {
+            let dirty = false;
+            let newCategory = rec.category;
+            let newTargetStyle = rec.targetStyle;
+            if (rec.category === 'Vegano') {
+              newCategory = 'Gelatos Veganos';
+              dirty = true;
+            } else if (rec.category === 'Alcoólicos') {
+              newCategory = 'Gelatos Alcoólicos';
+              dirty = true;
+            }
+            if (rec.targetStyle === 'Vegano') {
+              newTargetStyle = 'Gelatos Veganos';
+              dirty = true;
+            } else if (rec.targetStyle === 'Alcoólicos') {
+              newTargetStyle = 'Gelatos Alcoólicos';
+              dirty = true;
+            }
+            if (dirty) {
+              await this.recipes.update(rec.id, {
+                category: newCategory,
+                targetStyle: newTargetStyle
+              });
+            }
+          }
+          await this.settings.put({ key: 'vegan_alco_renamed_v19', value: 1 });
         }
       }
 

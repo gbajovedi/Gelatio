@@ -4093,8 +4093,8 @@
   {
     "id": "rec_100",
     "name": "Gelato de Pistache Vegano (Direto ao Ponto)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Água",
@@ -4134,8 +4134,8 @@
   {
     "id": "rec_101",
     "name": "Gelato de Avelã Vegano (Direto ao Ponto)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Água",
@@ -4175,8 +4175,8 @@
   {
     "id": "rec_102",
     "name": "Gelato de Avelã com Chocolate Vegano (Direto ao Ponto)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Água",
@@ -4220,8 +4220,8 @@
   {
     "id": "rec_103",
     "name": "Gelato de Amendoim Vegano (Direto ao Ponto)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Água",
@@ -4261,8 +4261,8 @@
   {
     "id": "rec_104",
     "name": "Gelato de Coco Vegano (Direto ao Ponto)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Água",
@@ -4306,8 +4306,8 @@
   {
     "id": "rec_105",
     "name": "Gelato de Coco com Cacau Vegano (Direto ao Ponto)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Água",
@@ -4355,8 +4355,8 @@
   {
     "id": "rec_106",
     "name": "Calda Base Vegana de Aveia (Addolcire)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Leite de Aveia",
@@ -4392,8 +4392,8 @@
   {
     "id": "rec_107",
     "name": "Gelato de Avelã Vegano (Addolcire)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Leite de Aveia",
@@ -4433,8 +4433,8 @@
   {
     "id": "rec_108",
     "name": "Gelato de Pistache Vegano (Addolcire)",
-    "category": "Vegano",
-    "targetStyle": "Vegano",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Leite de Aveia",
@@ -4474,8 +4474,8 @@
   {
     "id": "rec_109",
     "name": "Gelato Alcoólico de Licor Amaretto (Direto ao Ponto)",
-    "category": "Alcoólicos",
-    "targetStyle": "Alcoólicos",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -4552,8 +4552,8 @@
   {
     "id": "rec_111",
     "name": "Gelato de Chocolate com Bailey's (Addolcire)",
-    "category": "Alcoólicos",
-    "targetStyle": "Alcoólicos",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
       {
         "name": "Chocolate Amargo 70%",
@@ -4605,8 +4605,8 @@
   {
     "id": "rec_112",
     "name": "Gelato de Chocolate e Whisky (Addolcire)",
-    "category": "Alcoólicos",
-    "targetStyle": "Alcoólicos",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -4658,8 +4658,8 @@
   {
     "id": "rec_113",
     "name": "Gelato de Bailey's (Addolcire)",
-    "category": "Alcoólicos",
-    "targetStyle": "Alcoólicos",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -4703,8 +4703,8 @@
   {
     "id": "rec_114",
     "name": "Gelato de Cajá e Cachaça (Addolcire)",
-    "category": "Alcoólicos",
-    "targetStyle": "Alcoólicos",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -4744,8 +4744,8 @@
   {
     "id": "rec_115",
     "name": "Gelato de Conhaque (Addolcire)",
-    "category": "Alcoólicos",
-    "targetStyle": "Alcoólicos",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -4785,8 +4785,8 @@
   {
     "id": "rec_116",
     "name": "Gelato de Rum (Addolcire)",
-    "category": "Alcoólicos",
-    "targetStyle": "Alcoólicos",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
       {
         "name": "Leite Integral",
@@ -5461,7 +5461,7 @@
   {
     "id": "rec_154",
     "name": "Gelato de Coco Vegano - Polióis (Sem Açúcar)",
-    "category": "Vegano",
+    "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
@@ -5502,7 +5502,7 @@
   {
     "id": "rec_155",
     "name": "Gelato de Coco Vegano - Menos Polióis (Sem Açúcar)",
-    "category": "Vegano",
+    "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
@@ -5629,7 +5629,7 @@
   {
     "id": "rec_158",
     "name": "Gelato de Pistache Vegano - Polióis (Sem Açúcar)",
-    "category": "Vegano",
+    "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
@@ -5662,7 +5662,7 @@
   {
     "id": "rec_159",
     "name": "Gelato de Pistache Vegano - Menos Polióis (Sem Açúcar)",
-    "category": "Vegano",
+    "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
@@ -5781,7 +5781,7 @@
   {
     "id": "rec_162",
     "name": "Gelato Intenso de Cacau com Laranja Vegano - Polióis (Sem Açúcar)",
-    "category": "Vegano",
+    "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {
@@ -5818,7 +5818,7 @@
   {
     "id": "rec_163",
     "name": "Gelato Intenso de Cacau com Laranja Vegano - Redução Polióis (Sem Açúcar)",
-    "category": "Vegano",
+    "category": "Gelatos Veganos",
     "targetStyle": "Gelatos Zero Açúcar",
     "ingredients": [
       {

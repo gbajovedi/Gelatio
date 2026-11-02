@@ -236,6 +236,14 @@ export function getUserCustomStyles(): Record<string, StyleStandard> {
       parsed['Sorbets Zero Açúcar'] = { ...parsed['Sorbets Zero'], name: 'Sorbets Zero Açúcar' };
       delete parsed['Sorbets Zero'];
     }
+    if (parsed['Vegano']) {
+      parsed['Gelatos Veganos'] = { ...parsed['Vegano'], name: 'Gelatos Veganos' };
+      delete parsed['Vegano'];
+    }
+    if (parsed['Alcoólicos']) {
+      parsed['Gelatos Alcoólicos'] = { ...parsed['Alcoólicos'], name: 'Gelatos Alcoólicos' };
+      delete parsed['Alcoólicos'];
+    }
     return { ...GOLD_STANDARD_STYLES, ...parsed };
   } catch (e) {
     console.warn('Erro ao carregar estilos customizados do usuário:', e);

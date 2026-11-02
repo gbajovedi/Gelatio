@@ -49,8 +49,8 @@ O sistema conta com um catálogo nativo de **155 receitas balanceadas**, uma bas
   * *Sorbets de Chocolate base água*
   * *Sorbets Alcoólicos*
   * *Sorbets Zero Açúcar*
-  * *Veganos / Plant-Based*
-  * *Alcoólicos base leite*
+  * *Gelatos Veganos*
+  * *Gelatos Alcoólicos*
   * *Sorbets Especiais*
 - **Gauges Bromatológicos com Metas:** Acompanhamento visual de limites mínimos, máximos e alvos ideais para:
   * Açúcares Totais (%)

@@ -129,8 +129,8 @@
       "protein": 0
     }
   },
-  "Vegano": {
-    "name": "Vegano",
+  "Gelatos Veganos": {
+    "name": "Gelatos Veganos",
     "pacDivisor": 22,
     "min": {
       "sugars": 0.18,
@@ -155,8 +155,8 @@
       "protein": 0
     }
   },
-  "Alcoólicos": {
-    "name": "Alcoólicos",
+  "Gelatos Alcoólicos": {
+    "name": "Gelatos Alcoólicos",
     "pacDivisor": 25,
     "min": {
       "sugars": 0.12,
