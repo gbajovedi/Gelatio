@@ -162,29 +162,31 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           })}
         </div>
 
-        {/* Stepper Térmico Preciso (4 cols) */}
-        <div className="md:col-span-4 flex items-center justify-end gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
-          <button
-            type="button"
-            onClick={() => setSelectedTemp(prev => Math.min(-8, +(prev + 0.5).toFixed(1)))}
-            className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors"
-            title="Aumentar temperatura (+0.5°C)"
-          >
-            +
-          </button>
-          <div className="px-2 text-center">
-            <span className="font-mono text-base font-black text-amber-300 tracking-tight block">
-              {selectedTemp.toFixed(1)}°C
-            </span>
+        {/* Stepper Térmico Preciso (ajustado com precisão ao tamanho dos dados) */}
+        <div className="md:col-span-4 flex items-center justify-start md:justify-end">
+          <div className="inline-flex items-center gap-1.5 bg-slate-950 px-2 py-1 rounded-xl border border-slate-800 shadow-inner">
+            <button
+              type="button"
+              onClick={() => setSelectedTemp(prev => Math.min(-8, +(prev + 0.5).toFixed(1)))}
+              className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors"
+              title="Aumentar temperatura (+0.5°C)"
+            >
+              +
+            </button>
+            <div className="px-2 text-center min-w-[70px]">
+              <span className="font-mono text-base font-black text-amber-300 tracking-tight block">
+                {selectedTemp.toFixed(1)}°C
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSelectedTemp(prev => Math.max(-20, +(prev - 0.5).toFixed(1)))}
+              className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors"
+              title="Diminuir temperatura (-0.5°C)"
+            >
+              -
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => setSelectedTemp(prev => Math.max(-20, +(prev - 0.5).toFixed(1)))}
-            className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors"
-            title="Diminuir temperatura (-0.5°C)"
-          >
-            -
-          </button>
         </div>
       </div>
 
