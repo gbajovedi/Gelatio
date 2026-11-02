@@ -16,7 +16,8 @@ import {
   SlidersHorizontal,
   ShieldCheck,
   GraduationCap,
-  FileText
+  FileText,
+  Package
 } from 'lucide-react';
 import { db, stylesDataMap } from '../../db/database';
 import { calculateBatchAnalysis } from '../../core/calculator';
@@ -39,6 +40,7 @@ interface RecipeListProps {
   recipes: Recipe[];
   ingredients?: Ingredient[];
   onSelectRecipe: (id: string) => void;
+  onProduceRecipe?: (id: string) => void;
   onRefresh: () => void;
 }
 
@@ -46,6 +48,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
   recipes,
   ingredients = [],
   onSelectRecipe,
+  onProduceRecipe,
   onRefresh
 }) => {
   const [search, setSearch] = useState('');
@@ -776,6 +779,18 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                     <Scale className="w-4 h-4" />
                     <span>Balancear</span>
                   </button>
+
+                  {onProduceRecipe && (
+                    <button
+                      type="button"
+                      onClick={() => onProduceRecipe(recipe.id)}
+                      className="py-2.5 px-3 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 font-bold border border-emerald-500/40 text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95"
+                      title={`Produzir lote de "${recipe.name}" no estoque`}
+                    >
+                      <Package className="w-4 h-4" />
+                      <span className="hidden sm:inline">Produzir</span>
+                    </button>
+                  )}
 
                   {/* Botão Tabela Nutricional ANVISA (ao lado esquerdo do botão de duplicar) */}
                   <button

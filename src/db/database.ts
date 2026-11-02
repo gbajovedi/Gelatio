@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
 import { Ingredient, Recipe, Preparation, StyleStandard } from '../types/gelato';
+import { ProductionBatch, StockItem, SaleTransaction, StockAdjustment } from '../types/stock';
 
 import initialIngredients from '../data/ingredients.json';
 import initialRecipes from '../data/recipes.json';
@@ -87,6 +88,7 @@ export interface BackupResult {
   pricingImported: boolean;
   themeImported: boolean;
   customStylesImported: boolean;
+  stockImported?: boolean;
 }
 
 export class GelatoDatabase extends Dexie {
@@ -94,6 +96,10 @@ export class GelatoDatabase extends Dexie {
   recipes!: EntityTable<Recipe, 'id'>;
   preparations!: EntityTable<Preparation, 'id'>;
   settings!: EntityTable<AppSetting, 'key'>;
+  productionBatches!: EntityTable<ProductionBatch, 'id'>;
+  stockItems!: EntityTable<StockItem, 'id'>;
+  salesTransactions!: EntityTable<SaleTransaction, 'id'>;
+  stockAdjustments!: EntityTable<StockAdjustment, 'id'>;
 
   constructor() {
     super('GelatoBalancerDB');
@@ -1676,7 +1682,7 @@ export class GelatoDatabase extends Dexie {
       throw new Error('Formato de backup inválido: campos de receitas e ingredientes ausentes.');
     }
 
-    await this.transaction('rw', this.ingredients, this.recipes, this.preparations, this.settings, async () => {
+    await this.transaction('rw', [this.ingredients, this.recipes, this.preparations, this.settings, this.productionBatches, this.stockItems, this.salesTransactions, this.stockAdjustments], async () => {
       if (mode === 'replace') {
         await this.ingredients.clear();
         await this.recipes.clear();

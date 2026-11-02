@@ -122,6 +122,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
       const extras: string[] = [];
       if (result.pricingImported) extras.push('parâmetros de precificação');
       if (result.customStylesImported) extras.push('balanceamentos e metas personalizadas');
+      if (result.stockImported) extras.push('estoque e histórico de vendas');
       if (result.themeImported) extras.push('preferência de tema');
       const extraMsg = extras.length > 0 ? ` (incluindo ${extras.join(', ')})` : '';
 

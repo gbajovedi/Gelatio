@@ -343,27 +343,18 @@ export const PricingCalculator: React.FC = () => {
   const marginDivisor = (100 - totalDeductionsAndMarginPercent) / 100;
 
   // Preço de Venda Sugerido:
-  // 1. Margem sobre Venda (Margem Líquida Divisor):
-  //    Preço = CustoTotal / (1 - (Taxas% + Impostos% + Margem%) / 100)
-  // 2. Markup sobre Custo (Markup Multiplicador):
-  //    Preço = [ CustoTotal * (1 + Markup% / 100) ] / [ (100 - (Taxas% + Impostos%)) / 100 ]
-  const isMarkup = pricingMethod === 'markup';
-  const netRevenueFactor = Math.max(0.01, (100 - totalSalesDeductionsPercent) / 100);
-
+  // Se marginDivisor > 0 e totalDeductionsAndMarginPercent < 100: fórmula Sebrae por divisor
+  // Se targetMargin >= 100 ou total >= 100: markup multiplicador sobre o custo total (evita zerar preço)
   const suggestedTubPrice =
     totalCostWithOverhead <= 0
       ? 0
-      : isMarkup
-      ? (totalCostWithOverhead * (1 + targetMargin / 100)) / netRevenueFactor
       : marginDivisor > 0 && totalDeductionsAndMarginPercent < 100
       ? totalCostWithOverhead / marginDivisor
-      : (totalCostWithOverhead * (1 + targetMargin / 100)) / netRevenueFactor;
+      : (totalCostWithOverhead * (1 + targetMargin / 100)) / Math.max(0.01, (100 - totalSalesDeductionsPercent) / 100);
 
   const cardFeeValue = suggestedTubPrice * (activeFeePercent / 100);
   const taxValue = suggestedTubPrice * (salesTaxPercent / 100);
   const netProfit = suggestedTubPrice - cardFeeValue - taxValue - totalCostWithOverhead;
-  const effectiveProfitMarginPct = suggestedTubPrice > 0 ? (netProfit / suggestedTubPrice) * 100 : 0;
-  const effectiveMarkupPct = totalCostWithOverhead > 0 ? (netProfit / totalCostWithOverhead) * 100 : 0;
 
   // Ponto de Equilíbrio (Break-Even em Potes por Mês)
   // Receita Líquida por Unidade (após taxas de cartão e impostos variáveis sobre a venda)
@@ -470,16 +461,11 @@ export const PricingCalculator: React.FC = () => {
       suggestedTubPrice > 0
         ? (profit / suggestedTubPrice) * 100
         : 0;
-    const markupPct =
-      totalCostWithOverhead > 0
-        ? (profit / totalCostWithOverhead) * 100
-        : 0;
     return {
       ...s,
       feeVal,
       profit,
-      marginPct,
-      markupPct
+      marginPct
     };
   });
 
@@ -1104,45 +1090,11 @@ export const PricingCalculator: React.FC = () => {
         {/* Right Column: Markup, Terminals & Pricing */}
         <div className="lg:col-span-6 space-y-4">
           <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-700 pb-3">
-              <div>
-                <h3 className="text-base font-bold text-white leading-tight">Simulador de Formação de Preço</h3>
-                <span className="text-[11px] text-slate-400">
-                  {pricingMethod === 'margin'
-                    ? 'Cálculo por Margem Desejada sobre a Venda (Divisor)'
-                    : 'Cálculo por Markup sobre o Custo (Multiplicador)'}
-                </span>
-              </div>
-
-              {/* Toggle Switch: Margem Desejada vs Markup */}
-              <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-bold shrink-0 shadow-inner">
-                <button
-                  type="button"
-                  onClick={() => setPricingMethod('margin')}
-                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                    pricingMethod === 'margin'
-                      ? 'bg-amber-500 text-slate-950 font-black shadow-md'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                  title="Margem Desejada: calcula o preço a partir da porcentagem de lucro líquido sobre o preço final de venda"
-                >
-                  <Percent className="w-3.5 h-3.5" />
-                  <span>Margem Desejada</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPricingMethod('markup')}
-                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                    pricingMethod === 'markup'
-                      ? 'bg-emerald-500 text-slate-950 font-black shadow-md'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                  title="Markup: calcula o preço aplicando um acréscimo multiplicador sobre o custo total de produção"
-                >
-                  <SlidersHorizontal className="w-3.5 h-3.5" />
-                  <span>Markup</span>
-                </button>
-              </div>
+            <div className="flex items-center justify-between border-b border-slate-700 pb-3">
+              <h3 className="text-base font-bold text-white">Simulador de Formação de Preço</h3>
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                Fórmula de Markup
+              </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
@@ -1181,76 +1133,16 @@ export const PricingCalculator: React.FC = () => {
                   placeholder="0.00"
                 />
               </div>
-              <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-750 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-300 font-bold block text-xs flex items-center gap-1">
-                      {pricingMethod === 'margin' ? (
-                        <>
-                          <Percent className="w-3.5 h-3.5 text-amber-400" />
-                          <span>Margem Desejada (%):</span>
-                        </>
-                      ) : (
-                        <>
-                          <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Markup Desejado (%):</span>
-                        </>
-                      )}
-                    </label>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${
-                      pricingMethod === 'margin'
-                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                        : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                    }`}>
-                      {pricingMethod === 'margin' ? 's/ Venda' : 's/ Custo'}
-                    </span>
-                  </div>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      min="0"
-                      step="1"
-                      value={targetMargin !== undefined && targetMargin !== null ? targetMargin : ''}
-                      onChange={e => setTargetMargin(Math.max(0, parseFloat(e.target.value) || 0))}
-                      className={`w-full bg-slate-900 border rounded-lg p-2 text-sm font-mono font-black pr-7 transition-colors ${
-                        pricingMethod === 'margin'
-                          ? 'border-amber-500/60 text-amber-300 focus:border-amber-400'
-                          : 'border-emerald-500/60 text-emerald-300 focus:border-emerald-400'
-                      }`}
-                      placeholder="0.00"
-                    />
-                    <span className="absolute right-2 top-2 text-slate-500 font-bold text-xs pointer-events-none">%</span>
-                  </div>
-                </div>
-
-                <div className="mt-1.5 space-y-1">
-                  <span className="text-[10px] text-slate-400 block leading-tight">
-                    {pricingMethod === 'margin' ? (
-                      <>Equivale a um markup de <strong className="text-slate-200">+{totalCostWithOverhead > 0 && netProfit > 0 ? ((netProfit / totalCostWithOverhead) * 100).toFixed(1) : '0'}%</strong> s/ custo.</>
-                    ) : (
-                      <>Gera uma margem líquida de <strong className="text-slate-200">{suggestedTubPrice > 0 && netProfit > 0 ? ((netProfit / suggestedTubPrice) * 100).toFixed(1) : '0'}%</strong> s/ venda.</>
-                    )}
-                  </span>
-                  <div className="flex flex-wrap items-center gap-1 pt-0.5">
-                    <span className="text-[10px] text-slate-500 mr-0.5">Sugestões:</span>
-                    {(pricingMethod === 'margin' ? [30, 40, 50, 60] : [50, 80, 100, 120, 150]).map(val => (
-                      <button
-                        key={val}
-                        type="button"
-                        onClick={() => setTargetMargin(val)}
-                        className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
-                          targetMargin === val
-                            ? pricingMethod === 'margin'
-                              ? 'bg-amber-500 text-slate-950 font-black'
-                              : 'bg-emerald-500 text-slate-950 font-black'
-                            : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80'
-                        }`}
-                      >
-                        {val}%
-                      </button>
-                    ))}
-                  </div>
-                </div>
+              <div>
+                <label className="text-slate-300 font-semibold block mb-1">Margem Desejada (%):</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={targetMargin || ''}
+                  onChange={e => setTargetMargin(Math.max(0, parseFloat(e.target.value) || 0))}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white font-mono font-black text-amber-300"
+                  placeholder="0.00"
+                />
               </div>
             </div>
 
@@ -1704,13 +1596,6 @@ export const PricingCalculator: React.FC = () => {
                   Preço de Venda Sugerido (Pote {tubWeightGrams}g):
                 </span>
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className={`text-xs px-2.5 py-0.5 rounded-full font-bold border ${
-                    pricingMethod === 'margin'
-                      ? 'bg-amber-500/25 text-amber-300 border-amber-500/40'
-                      : 'bg-emerald-500/25 text-emerald-300 border-emerald-500/40'
-                  }`}>
-                    {pricingMethod === 'margin' ? `Margem Alvo: ${targetMargin}%` : `Markup Alvo: +${targetMargin}%`}
-                  </span>
                   <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 font-bold border border-emerald-500/40">
                     Taxa Efetiva: {activeFeePercent.toFixed(2)}%
                   </span>
@@ -1733,12 +1618,7 @@ export const PricingCalculator: React.FC = () => {
                 </div>
                 <div>
                   <span className="text-slate-400 block text-[11px]">Lucro Líquido Real:</span>
-                  <strong className="font-mono text-emerald-300 font-black">
-                    R$ {netProfit.toFixed(2)}{' '}
-                    <span className="text-[10px] text-emerald-400/90 font-normal">
-                      ({pricingMethod === 'margin' ? `${effectiveProfitMarginPct.toFixed(1)}% margem` : `+${effectiveMarkupPct.toFixed(1)}% markup`})
-                    </span>
-                  </strong>
+                  <strong className="font-mono text-emerald-300 font-black">R$ {netProfit.toFixed(2)}</strong>
                 </div>
               </div>
 
@@ -1801,9 +1681,7 @@ export const PricingCalculator: React.FC = () => {
                       R$ {s.profit.toFixed(2)}
                     </span>
                     <span className="text-[10px] text-emerald-400 font-semibold block">
-                      {pricingMethod === 'margin'
-                        ? `Margem: ${s.marginPct.toFixed(1)}%`
-                        : `Markup: +${s.markupPct.toFixed(1)}%`}
+                      Margem: {s.marginPct.toFixed(1)}%
                     </span>
                   </div>
                 </div>

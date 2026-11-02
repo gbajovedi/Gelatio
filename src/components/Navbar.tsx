@@ -1,9 +1,9 @@
 import React from 'react';
-import { Scale, BookOpen, Utensils, ChefHat, DollarSign, Database } from 'lucide-react';
+import { Scale, BookOpen, Utensils, ChefHat, DollarSign, Database, Package } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import gelatioLogo from '../assets/gelatio-logo.png';
 
-export type NavTab = 'balanceamento' | 'receitas' | 'ingredientes' | 'preparos' | 'financeiro';
+export type NavTab = 'balanceamento' | 'receitas' | 'ingredientes' | 'preparos' | 'financeiro' | 'estoque';
 
 interface NavbarProps {
   activeTab: NavTab;
@@ -18,6 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
     { id: 'ingredientes', label: 'Insumos & Custos', shortLabel: 'Insumos', icon: Utensils },
     { id: 'preparos', label: 'Pré-preparos', shortLabel: 'Pré-preparos', icon: ChefHat },
     { id: 'financeiro', label: 'Precificação', shortLabel: 'Precificação', icon: DollarSign },
+    { id: 'estoque', label: 'Estoque & PDV', shortLabel: 'Estoque', icon: Package },
   ] as const;
 
   return (

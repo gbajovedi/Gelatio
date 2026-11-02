@@ -8,6 +8,7 @@ import { RecipeList } from './components/Receitas/RecipeList';
 import { IngredientManager } from './components/Ingredientes/IngredientManager';
 import { PrePreparosList } from './components/PrePreparos/PrePreparosList';
 import { PricingCalculator } from './components/Financeiro/PricingCalculator';
+import { StockScreen } from './components/Estoque/StockScreen';
 import { ImportExportModal } from './components/ImportExport/ImportExportModal';
 
 import initialIngredients from './data/ingredients.json';
@@ -16,7 +17,7 @@ import initialPreparations from './data/preparations.json';
 
 const STORAGE_TAB_KEY = 'gelato_active_tab';
 const STORAGE_RECIPE_KEY = 'gelato_active_recipe_id';
-const VALID_TABS: NavTab[] = ['balanceamento', 'receitas', 'ingredientes', 'preparos', 'financeiro'];
+const VALID_TABS: NavTab[] = ['balanceamento', 'receitas', 'ingredientes', 'preparos', 'financeiro', 'estoque'];
 
 const getInitialTab = (): NavTab => {
   if (typeof window !== 'undefined') {
@@ -54,6 +55,7 @@ export function App() {
   const [preparations, setPreparations] = useState<Preparation[]>([]);
   const [activeRecipeId, setActiveRecipeId] = useState<string>(getInitialRecipeId);
   const [recipeSelectionToken, setRecipeSelectionToken] = useState<number>(0);
+  const [produceRecipeId, setProduceRecipeId] = useState<string | undefined>(undefined);
   const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -153,6 +155,11 @@ export function App() {
     handleTabChange('balanceamento');
   };
 
+  const handleProduceRecipeFromCatalog = (id: string) => {
+    setProduceRecipeId(id);
+    handleTabChange('estoque');
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
@@ -193,6 +200,7 @@ export function App() {
             recipes={recipes}
             ingredients={ingredients}
             onSelectRecipe={handleSelectRecipeFromCatalog}
+            onProduceRecipe={handleProduceRecipeFromCatalog}
             onRefresh={refreshData}
           />
         </div>
@@ -214,6 +222,15 @@ export function App() {
 
         <div style={{ display: activeTab === 'financeiro' ? 'block' : 'none' }}>
           <PricingCalculator />
+        </div>
+
+        <div style={{ display: activeTab === 'estoque' ? 'block' : 'none' }}>
+          <StockScreen
+            recipes={recipes}
+            ingredients={ingredients}
+            initialProduceRecipeId={produceRecipeId}
+            onClearInitialProduceRecipeId={() => setProduceRecipeId(undefined)}
+          />
         </div>
       </main>
 
