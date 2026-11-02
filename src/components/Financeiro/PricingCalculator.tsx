@@ -679,7 +679,7 @@ export const PricingCalculator: React.FC = () => {
             </div>
             <div className="grid grid-cols-2 gap-2.5 text-xs">
               <div>
-                <label className="text-amber-300 font-bold block mb-0.5">Impostos Fixos (DAS MEI):</label>
+                <label className="text-amber-300 font-bold block mb-0.5">Impostos Fixos:</label>
                 <input
                   type="number"
                   min="0"
