@@ -84,6 +84,7 @@ interface BalancingScreenProps {
   recipes: Recipe[];
   ingredients: Ingredient[];
   initialRecipeId?: string;
+  recipeSelectionToken?: number;
   onRecipeSaved: () => void;
   onActiveRecipeChange?: (id: string) => void;
 }
@@ -92,11 +93,13 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   recipes,
   ingredients,
   initialRecipeId,
+  recipeSelectionToken,
   onRecipeSaved,
   onActiveRecipeChange
 }) => {
   const [selectedRecipeId, setSelectedRecipeId] = useState<string>(initialRecipeId || (recipes[0]?.id ?? ''));
   const lastLoadedRecipeIdRef = useRef<string | null>(initialRecipeId || null);
+  const lastActionTokenRef = useRef<number>(recipeSelectionToken || 0);
   const [recipeName, setRecipeName] = useState<string>('Receita sem título');
   const [targetStyleName, setTargetStyleName] = useState<string>('Gelatos de Leite');
   const [items, setItems] = useState<RecipeItem[]>([]);
@@ -147,20 +150,39 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   };
 
   useEffect(() => {
-    if (initialRecipeId && initialRecipeId !== lastLoadedRecipeIdRef.current) {
+    // 1. Ação explícita disparada a partir do catálogo (ex: 'Criar Nova Receita' ou 'Balancear')
+    if (recipeSelectionToken && recipeSelectionToken !== lastActionTokenRef.current) {
+      lastActionTokenRef.current = recipeSelectionToken;
+      if (initialRecipeId === 'new') {
+        handleStartNewRecipe();
+        return;
+      }
+      if (initialRecipeId) {
+        const found = recipes.find(r => r.id === initialRecipeId);
+        if (found) {
+          loadRecipe(found);
+          return;
+        }
+      }
+    }
+
+    // 2. Sincronização padrão ou montagem inicial
+    if (initialRecipeId === 'new') {
+      if (lastLoadedRecipeIdRef.current !== 'new' || items.length === 0) {
+        handleStartNewRecipe();
+      }
+    } else if (initialRecipeId && initialRecipeId !== lastLoadedRecipeIdRef.current) {
       const found = recipes.find(r => r.id === initialRecipeId);
       if (found) {
-        lastLoadedRecipeIdRef.current = initialRecipeId;
         loadRecipe(found);
       }
     } else if (!lastLoadedRecipeIdRef.current && recipes.length > 0 && items.length === 0) {
       const target = initialRecipeId ? recipes.find(r => r.id === initialRecipeId) || recipes[0] : recipes[0];
       if (target) {
-        lastLoadedRecipeIdRef.current = target.id;
         loadRecipe(target);
       }
     }
-  }, [initialRecipeId, recipes]);
+  }, [initialRecipeId, recipeSelectionToken, recipes]);
 
   // Sincronização em tempo real com metas físico-químicas
   useEffect(() => {
@@ -273,6 +295,10 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     if (id === 'new') {
       setSelectedRecipeId('new');
       lastLoadedRecipeIdRef.current = 'new';
+      if (onActiveRecipeChange) onActiveRecipeChange('new');
+      try {
+        localStorage.setItem('gelato_active_recipe_id', 'new');
+      } catch {}
       setRecipeName('Novo Gelato Artesanal');
       setTargetStyleName('Gelatos de Leite');
       setItems([

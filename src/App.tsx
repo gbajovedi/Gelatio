@@ -53,6 +53,7 @@ export function App() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [preparations, setPreparations] = useState<Preparation[]>([]);
   const [activeRecipeId, setActiveRecipeId] = useState<string>(getInitialRecipeId);
+  const [recipeSelectionToken, setRecipeSelectionToken] = useState<number>(0);
   const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -126,6 +127,7 @@ export function App() {
 
   const handleSelectRecipeFromCatalog = (id: string) => {
     setActiveRecipeId(id);
+    setRecipeSelectionToken(Date.now());
     try {
       localStorage.setItem(STORAGE_RECIPE_KEY, id);
     } catch {}
@@ -156,6 +158,7 @@ export function App() {
             recipes={recipes}
             ingredients={ingredients}
             initialRecipeId={activeRecipeId}
+            recipeSelectionToken={recipeSelectionToken}
             onRecipeSaved={refreshData}
             onActiveRecipeChange={(id) => {
               setActiveRecipeId(id);
