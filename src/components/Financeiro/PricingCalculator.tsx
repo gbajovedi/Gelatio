@@ -734,52 +734,51 @@ export const PricingCalculator: React.FC = () => {
                 </div>
               </div>
 
-              {/* Botões de Presets de Maquininha */}
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-[11px] text-slate-400 font-semibold mr-1 flex items-center gap-1">
-                  <Zap className="w-3 h-3 text-amber-400" />
-                  Planos / Presets:
-                </span>
-                <button
-                  type="button"
-                  onClick={() => applyCieloPreset('padrao')}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
-                    cieloPlan === 'padrao'
-                      ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                      : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
-                  }`}
-                  title={CIELO_PRESETS.padrao.description}
-                >
-                  ⭐ D+1 Padrão
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applyCieloPreset('negociado')}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
-                    cieloPlan === 'negociado'
-                      ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                      : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
-                  }`}
-                  title={CIELO_PRESETS.negociado.description}
-                >
-                  💼 Negociado (&gt;15k)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applyCieloPreset('fluxo')}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
-                    cieloPlan === 'fluxo'
-                      ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                      : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
-                  }`}
-                  title={CIELO_PRESETS.fluxo.description}
-                >
-                  ⏱️ D+30 (No Fluxo)
-                </button>
-              </div>
-
               {useSalesMix ? (
                 <div className="space-y-3 pt-1">
+                  {/* Botões de Presets de Maquininha (visíveis apenas no modo Mix Ponderado) */}
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-[11px] text-slate-400 font-semibold mr-1 flex items-center gap-1">
+                      <Zap className="w-3 h-3 text-amber-400" />
+                      Planos / Presets:
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => applyCieloPreset('padrao')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                        cieloPlan === 'padrao'
+                          ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                          : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
+                      }`}
+                      title={CIELO_PRESETS.padrao.description}
+                    >
+                      ⭐ D+1 Padrão
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => applyCieloPreset('negociado')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                        cieloPlan === 'negociado'
+                          ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                          : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
+                      }`}
+                      title={CIELO_PRESETS.negociado.description}
+                    >
+                      💼 Negociado (&gt;15k)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => applyCieloPreset('fluxo')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                        cieloPlan === 'fluxo'
+                          ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                          : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
+                      }`}
+                      title={CIELO_PRESETS.fluxo.description}
+                    >
+                      ⏱️ D+30 (No Fluxo)
+                    </button>
+                  </div>
                   {/* Grid das 4 modalidades de pagamento */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                     {/* 1. Pix */}
