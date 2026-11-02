@@ -795,6 +795,27 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v20 recipe names standardization:', e);
       }
     });
+    // Versão 21: Remoção de 4 bases genéricas e renomeação de Gelato de Cacau Base Água para Sorbet de Chocolate
+    this.version(21).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const idsToDelete = ['rec_20', 'rec_106', 'rec_19', 'rec_57'];
+        for (const id of idsToDelete) {
+          await tx.table('recipes').delete(id);
+        }
+        const r99 = await tx.table('recipes').get('rec_99');
+        if (r99 && !r99.isCustom) {
+          await tx.table('recipes').update('rec_99', { name: 'Sorbet de Chocolate (Direto ao Ponto)' });
+        }
+      } catch (e) {
+        console.warn('Migration to v21 bases removal and chocolate sorbet rename:', e);
+      }
+    });
+
   }
 
   async initializeSeedData(): Promise<void> {
@@ -1331,6 +1352,20 @@ export class GelatoDatabase extends Dexie {
             }
           }
           await this.settings.put({ key: 'recipe_names_standardized_v20', value: 1 });
+        // Garantir remoção das 4 bases genéricas e renomeação de rec_99 para Sorbet de Chocolate
+        const basesRemovedFlag = await this.settings.get('bases_removed_v21');
+        if (!basesRemovedFlag) {
+          const idsToDelete = ['rec_20', 'rec_106', 'rec_19', 'rec_57'];
+          for (const id of idsToDelete) {
+            await this.recipes.delete(id);
+          }
+          const r99 = await this.recipes.get('rec_99');
+          if (r99 && !r99.isCustom) {
+            await this.recipes.update('rec_99', { name: 'Sorbet de Chocolate (Direto ao Ponto)' });
+          }
+          await this.settings.put({ key: 'bases_removed_v21', value: 1 });
+        }
+
         }
       }
 

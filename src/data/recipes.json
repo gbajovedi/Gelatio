@@ -766,84 +766,6 @@
     "totalGrams": 1004
   },
   {
-    "id": "rec_19",
-    "name": "Gelato de Pistache - Base Oleaginosas (Direto ao Ponto)",
-    "category": "Gelatos de Oleaginosas",
-    "targetStyle": "Gelatos de Oleaginosas",
-    "ingredients": [
-      {
-        "name": "Leite Integral",
-        "grams": 610
-      },
-      {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 90
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 40
-      },
-      {
-        "name": "Açúcar Sacarose",
-        "grams": 125
-      },
-      {
-        "name": "Açúcar - Dextrose",
-        "grams": 40
-      },
-      {
-        "name": "Pasta De Pistache 100%",
-        "grams": 90
-      },
-      {
-        "name": "Sal",
-        "grams": 1
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      }
-    ],
-    "totalGrams": 1001
-  },
-  {
-    "id": "rec_20",
-    "name": "Gelato Base Branca (Addolcire)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
-    "ingredients": [
-      {
-        "name": "Leite Integral",
-        "grams": 552
-      },
-      {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 216
-      },
-      {
-        "name": "Açúcar Sacarose",
-        "grams": 146
-      },
-      {
-        "name": "Açúcar - Dextrose",
-        "grams": 19
-      },
-      {
-        "name": "Açúcar - Glucose em pó",
-        "grams": 19
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 48
-      },
-      {
-        "name": "Neutro",
-        "grams": 4
-      }
-    ],
-    "totalGrams": 1004
-  },
-  {
     "id": "rec_21",
     "name": "Gelato de Caffè Bianco (Addolcire)",
     "category": "Gelatos de Leite",
@@ -2370,39 +2292,6 @@
       }
     ],
     "totalGrams": 1101
-  },
-  {
-    "id": "rec_57",
-    "name": "Gelato Soft - Calda Base de Leite (Addolcire)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
-    "ingredients": [
-      {
-        "name": "Leite Integral",
-        "grams": 711
-      },
-      {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 45
-      },
-      {
-        "name": "Açúcar Sacarose",
-        "grams": 145
-      },
-      {
-        "name": "Açúcar - Glucose em pó",
-        "grams": 35
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 59
-      },
-      {
-        "name": "Neutro",
-        "grams": 5.52
-      }
-    ],
-    "totalGrams": 1000.52
   },
   {
     "id": "rec_58",
@@ -4047,7 +3936,7 @@
   },
   {
     "id": "rec_99",
-    "name": "Gelato de Cacau Base Água (Direto ao Ponto)",
+    "name": "Sorbet de Chocolate (Direto ao Ponto)",
     "category": "Sorbets de Chocolate",
     "targetStyle": "Sorbets de Chocolate",
     "ingredients": [
@@ -4351,43 +4240,6 @@
       }
     ],
     "totalGrams": 996
-  },
-  {
-    "id": "rec_106",
-    "name": "Gelato Calda Base Vegana de Aveia (Addolcire)",
-    "category": "Gelatos Veganos",
-    "targetStyle": "Gelatos Veganos",
-    "ingredients": [
-      {
-        "name": "Leite de Aveia",
-        "grams": 750
-      },
-      {
-        "name": "Óleo de girassol",
-        "grams": 45
-      },
-      {
-        "name": "Açúcar Sacarose",
-        "grams": 130
-      },
-      {
-        "name": "Açúcar - Glucose em pó",
-        "grams": 30
-      },
-      {
-        "name": "Açúcar - Dextrose",
-        "grams": 16
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 22
-      },
-      {
-        "name": "Neutro",
-        "grams": 6
-      }
-    ],
-    "totalGrams": 999
   },
   {
     "id": "rec_107",

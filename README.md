@@ -29,7 +29,7 @@ O **Gelatio** pode ser instalado diretamente no seu smartphone, tablet ou comput
 
 Desenvolvido para superar em definitivo as limitações e a fragilidade das planilhas eletrônicas convencionais, o **Gelatio** é uma aplicação web moderna, ultra-rápida, reativa e **100% offline-first**.
 
-O sistema conta com um catálogo nativo de **155 receitas balanceadas**, uma base bromatológica com **208 matérias-primas**, **16 bases e pré-preparos** e **14 estilos técnicos calibrados**, cobrindo desde o gelato clássico italiano de vitrine até sorbets alcoólicos, formulações veganas, proteicas e zero açúcar.
+O sistema conta com um catálogo nativo de **151 receitas balanceadas**, uma base bromatológica com **208 matérias-primas**, **16 bases e pré-preparos** e **14 estilos técnicos calibrados**, cobrindo desde o gelato clássico italiano de vitrine até sorbets alcoólicos, formulações veganas, proteicas e zero açúcar.
 
 ---
 
@@ -104,8 +104,8 @@ O sistema conta com um catálogo nativo de **155 receitas balanceadas**, uma bas
 
 ---
 
-### 📖 5. Catálogo com 155 Receitas Balanceadas
-- Repositório completo de 155 receitas testadas da gelateria clássica, contemporânea e funcional.
+### 📖 5. Catálogo com 151 Receitas Balanceadas
+- Repositório completo de 151 receitas testadas da gelateria clássica, contemporânea e funcional.
 - **Combobox com Busca Inteligente:** Pesquisa instantânea por título, estilo ou ingredientes específicos (ex.: pistache, maracujá, cacau black, mascarpone).
 - Carregamento imediato na Bancada de Balanceamento com um clique.
 
