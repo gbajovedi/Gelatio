@@ -184,6 +184,7 @@ export interface PricingSettings {
   tubPackagingCost: number;
   indirectOverheadPerTub: number;
   targetProfitMarginPercent: number;
+  pricingMethod?: 'margin' | 'markup';
   cardFeePercent: number;
   salesTaxPercent?: number;
 }

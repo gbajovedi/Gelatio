@@ -255,6 +255,7 @@ export function getStoredPricingParams(): PricingParams {
       return {
         ...DEFAULT_PRICING_PARAMS,
         ...parsed,
+        pricingMethod: parsed.pricingMethod || 'margin',
         selectedPaymentPlan: activePlan,
         paymentPlans: mergedPlans,
         cardFeePix: mergedPlans[activePlan].cardFeePix,
@@ -290,6 +291,7 @@ export function getPricingSettings(params: PricingParams = getStoredPricingParam
     tubPackagingCost: params.tubPackCost,
     indirectOverheadPerTub: overheadPerUnit,
     targetProfitMarginPercent: params.targetMargin,
+    pricingMethod: params.pricingMethod || 'margin',
     cardFeePercent: effectiveCardFee,
     salesTaxPercent: params.salesTaxPercent
   };

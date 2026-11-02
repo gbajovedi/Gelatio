@@ -419,19 +419,27 @@ export function calculateBatchAnalysis(
     effectiveOverrunPct: Math.round(effectiveOverrunPct * 10) / 10
   };
 
-  // Tub 500g Suggested Price
-  // ((CustoFinal/Kg * 0.5 + Embalagem) + RateioIndireto) / ((1 - Margem/100) * (1 - TaxaCartao/100))
+  // Tub Suggested Price
+  // Margem sobre venda: TotalCost / (1 - (Deduções + Margem))
+  // Markup sobre custo: [ TotalCost * (1 + Markup) ] / (1 - Deduções)
   const tubProductCost = finalCostKg * (pricing.tubWeightGrams / 1000);
   const directCostWithPack = tubProductCost + pricing.tubPackagingCost;
   const totalCostWithOverhead = directCostWithPack + pricing.indirectOverheadPerTub;
   const totalSalesDeductions = (pricing.cardFeePercent + (pricing.salesTaxPercent || 0)) / 100;
   const targetMarginDecimal = (pricing.targetProfitMarginPercent || 0) / 100;
+  const isMarkup = pricing.pricingMethod === 'markup';
   const totalDeductionsAndMargin = targetMarginDecimal + totalSalesDeductions;
   const marginDivisor = 1 - totalDeductionsAndMargin;
+  const netRevenueFactor = Math.max(0.01, 1 - totalSalesDeductions);
+
   const suggestedPrice500g =
-    marginDivisor > 0 && totalDeductionsAndMargin < 1
+    totalCostWithOverhead <= 0
+      ? 0
+      : isMarkup
+      ? (totalCostWithOverhead * (1 + targetMarginDecimal)) / netRevenueFactor
+      : marginDivisor > 0 && totalDeductionsAndMargin < 1
       ? totalCostWithOverhead / marginDivisor
-      : (totalCostWithOverhead * (1 + targetMarginDecimal)) / Math.max(0.01, 1 - totalSalesDeductions);
+      : (totalCostWithOverhead * (1 + targetMarginDecimal)) / netRevenueFactor;
   const variegatoRatioPercent = finalWeightGrams > 0 ? (totalVariegatoGrams / finalWeightGrams) * 100 : 0;
 
   return {
