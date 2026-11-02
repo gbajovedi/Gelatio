@@ -12,7 +12,11 @@ import {
   Users,
   Snowflake,
   ShieldCheck,
-  AlertTriangle
+  AlertTriangle,
+  SlidersHorizontal,
+  Scale,
+  Trash2,
+  Plus
 } from 'lucide-react';
 import {
   getStoredPricingParams,
@@ -20,7 +24,8 @@ import {
   DEFAULT_PRICING_PARAMS,
   CIELO_PRESETS,
   calculateEffectiveCardFee,
-  PricingParams
+  PricingParams,
+  CustomCostItem
 } from '../../core/pricingStorage';
 
 export const PricingCalculator: React.FC = () => {
@@ -90,6 +95,38 @@ export const PricingCalculator: React.FC = () => {
 
   // Taxa manual (modo simples)
   const [cardFeeManual, setCardFeeManual] = useState<number>(initial.cardFee ?? 2.03);
+
+  // 5. Custos Extras / Personalizados
+  const [customCosts, setCustomCosts] = useState<CustomCostItem[]>(() => {
+    if (Array.isArray(initial.customCosts)) {
+      return initial.customCosts;
+    }
+    return [];
+  });
+
+  const handleAddCustomCost = (suggestedName?: string) => {
+    const newItem: CustomCostItem = {
+      id: `cost_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      name: suggestedName || '',
+      amount: 0
+    };
+    setCustomCosts(prev => [...prev, newItem]);
+  };
+
+  const handleUpdateCustomCost = (id: string, field: 'name' | 'amount', value: string | number) => {
+    setCustomCosts(prev =>
+      prev.map(item => {
+        if (item.id === id) {
+          return { ...item, [field]: value };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handleRemoveCustomCost = (id: string) => {
+    setCustomCosts(prev => prev.filter(item => item.id !== id));
+  };
 
   // Objeto unificado para persistência e cálculos
   const currentParams: PricingParams = {
@@ -249,14 +286,22 @@ export const PricingCalculator: React.FC = () => {
     }
   };
 
-  // Subtotais por Grupo Lógico
+  // Subtotais por Grupo Lógico (1 a 5)
   const subtotalOccupancy = rent + electricity + water + telecom;
   const subtotalPersonnel = payroll + ownerSalary + accounting + software;
   const subtotalEquipment = equipmentMaintenance + equipmentDepreciation + cleaningHygiene + secPackaging;
   const subtotalLegal = fixedTaxes + licensesAndPermits + commercialInsurance + posRentalMonthly + marketing;
+  const subtotalCustom = customCosts.reduce((acc, item) => acc + (Number(item.amount) || 0), 0);
 
-  const totalFixedCosts = subtotalOccupancy + subtotalPersonnel + subtotalEquipment + subtotalLegal;
+  const totalFixedCosts = subtotalOccupancy + subtotalPersonnel + subtotalEquipment + subtotalLegal + subtotalCustom;
   const overheadPerUnit = monthlyUnits > 0 ? totalFixedCosts / monthlyUnits : 0;
+
+  // Percentuais por grupo para barra de distribuição
+  const pctOccupancy = totalFixedCosts > 0 ? (subtotalOccupancy / totalFixedCosts) * 100 : 0;
+  const pctPersonnel = totalFixedCosts > 0 ? (subtotalPersonnel / totalFixedCosts) * 100 : 0;
+  const pctEquipment = totalFixedCosts > 0 ? (subtotalEquipment / totalFixedCosts) * 100 : 0;
+  const pctLegal = totalFixedCosts > 0 ? (subtotalLegal / totalFixedCosts) * 100 : 0;
+  const pctCustom = totalFixedCosts > 0 ? (subtotalCustom / totalFixedCosts) * 100 : 0;
 
   // Cálculos do Pote e Markup
   const activeFeePercent = useSalesMix ? effectiveCardFee : cardFeeManual;
@@ -276,6 +321,10 @@ export const PricingCalculator: React.FC = () => {
   const cardFeeValue = suggestedTubPrice * (activeFeePercent / 100);
   const taxValue = suggestedTubPrice * (salesTaxPercent / 100);
   const netProfit = suggestedTubPrice - cardFeeValue - taxValue - totalCostWithOverhead;
+
+  // Ponto de Equilíbrio (Break-Even em Potes por Mês)
+  const unitContributionMargin = suggestedTubPrice - directCostPerTub - cardFeeValue - taxValue;
+  const breakEvenUnits = unitContributionMargin > 0 ? Math.ceil(totalFixedCosts / unitContributionMargin) : 0;
 
   // Comparativo por Modalidade para o mesmo pote
   const paymentScenarios = [
@@ -348,10 +397,10 @@ export const PricingCalculator: React.FC = () => {
           <div className="flex items-center justify-between border-b border-slate-700 pb-3">
             <div className="flex items-center gap-2">
               <Landmark className="w-4 h-4 text-amber-400" />
-              <h3 className="text-base font-bold text-white">Custos Fixos Mensais (Rateio)</h3>
+              <h3 className="text-base font-bold text-white">Custos Fixos Mensais</h3>
             </div>
-            <span className="text-sm font-mono font-black text-amber-300">
-              Total: R$ {totalFixedCosts.toFixed(2)}/mês
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300">
+              5 Grupos de Custo
             </span>
           </div>
 
@@ -629,25 +678,225 @@ export const PricingCalculator: React.FC = () => {
             </div>
           </div>
 
-          {/* Volume de Produção & Rateio Unitário */}
-          <div className="pt-3.5 border-t border-slate-700 flex items-center justify-between">
-            <div>
-              <label className="text-xs font-semibold text-slate-300 block">Produção / Venda Mensal (Unidades ou Potes):</label>
-              <input
-                type="number"
-                  min="0"
-                value={monthlyUnits || ''}
-                onChange={e => setMonthlyUnits(parseFloat(e.target.value) || 1)}
-                className="w-40 bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white font-mono font-bold mt-1"
-                placeholder="0"
-              />
+          {/* 5. GRUPO: CUSTOS EXTRAS & PERSONALIZADOS */}
+          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-700/80 space-y-2.5">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+              <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
+                5. Custos Extras & Personalizados
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-purple-300">
+                  R$ {subtotalCustom.toFixed(2)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleAddCustomCost()}
+                  className="px-2 py-0.5 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 rounded text-[11px] font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
+                  title="Cadastrar um novo custo fixo personalizado"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>Adicionar</span>
+                </button>
+              </div>
             </div>
-            <div className="text-right">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">Rateio Fixo / Unidade:</span>
-              <span className="text-xl font-black text-amber-300 font-mono">
-                R$ {overheadPerUnit.toFixed(2)}
+
+            {customCosts.length === 0 ? (
+              <div className="text-center py-2.5 px-3 bg-slate-950/40 rounded-lg border border-dashed border-slate-800 space-y-2">
+                <p className="text-[11px] text-slate-400">
+                  Nenhum custo extra cadastrado. Adicione despesas específicas da sua operação (consultorias, financiamentos, segurança, etc.).
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-1.5 pt-0.5">
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mr-1">Sugestões:</span>
+                  {[
+                    'Taxa de Resíduos Sólidos',
+                    'Consultoria Sanitária / RT',
+                    'Financiamento / Maquinário',
+                    'Segurança & Alarme 24h',
+                    'Lavanderia & Uniformes'
+                  ].map(sug => (
+                    <button
+                      key={sug}
+                      type="button"
+                      onClick={() => handleAddCustomCost(sug)}
+                      className="text-[10px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 font-medium transition-all cursor-pointer"
+                    >
+                      + {sug}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="space-y-1.5">
+                  {customCosts.map(item => (
+                    <div key={item.id} className="flex items-center gap-2 bg-slate-950/70 p-1.5 rounded-lg border border-slate-800">
+                      <input
+                        type="text"
+                        value={item.name}
+                        onChange={e => handleUpdateCustomCost(item.id, 'name', e.target.value)}
+                        placeholder="Nome do custo (ex: Segurança Noturna)"
+                        className="flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder-slate-500 font-medium focus:border-purple-400 focus:outline-none"
+                      />
+                      <div className="relative w-28 shrink-0">
+                        <input
+                          type="number"
+                          min="0"
+                          step="10"
+                          value={item.amount || ''}
+                          onChange={e => handleUpdateCustomCost(item.id, 'amount', Math.max(0, parseFloat(e.target.value) || 0))}
+                          placeholder="0.00"
+                          className="w-full bg-slate-900 border border-slate-700 rounded pl-6 pr-2 py-1 text-xs text-white font-mono font-bold text-right focus:border-purple-400 focus:outline-none"
+                        />
+                        <span className="absolute left-2 top-1 text-[10px] text-slate-500 pointer-events-none font-bold">R$</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveCustomCost(item.id)}
+                        className="p-1 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors cursor-pointer"
+                        title="Remover custo"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px]">
+                  <button
+                    type="button"
+                    onClick={() => handleAddCustomCost()}
+                    className="text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>Adicionar mais um custo</span>
+                  </button>
+                  <span className="text-slate-500 text-[10px]">
+                    {customCosts.length} {customCosts.length === 1 ? 'item extra' : 'itens extras'}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* NOVO CARD DASHBOARD: TOTAL CUSTOS FIXOS, PRODUÇÃO & RATEIO */}
+          <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 p-4 sm:p-5 rounded-2xl border border-amber-500/40 shadow-2xl space-y-3.5">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <div className="flex items-center gap-2">
+                <Scale className="w-4 h-4 text-amber-400" />
+                <h4 className="text-sm font-black text-white tracking-tight">
+                  Resumo de Custos Fixos & Rateio Unitário
+                </h4>
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                Estrutura de Rateio
               </span>
             </div>
+
+            {/* Grid de 3 Indicadores Principais */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* 1. Total Custos Fixos */}
+              <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-800 flex flex-col justify-between">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                  Total Custos Fixos:
+                </span>
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-white font-mono">
+                    R$ {totalFixedCosts.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </div>
+                  <span className="text-[10px] text-slate-500 block mt-0.5">
+                    Soma dos 5 grupos / mês
+                  </span>
+                </div>
+              </div>
+
+              {/* 2. Volume de Produção / Venda Mensal */}
+              <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-800 flex flex-col justify-between">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                  Produção / Venda:
+                </label>
+                <div>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="1"
+                      value={monthlyUnits || ''}
+                      onChange={e => setMonthlyUnits(Math.max(1, parseFloat(e.target.value) || 1))}
+                      className="w-full bg-slate-900 border border-slate-700 focus:border-amber-400 focus:outline-none rounded-lg p-1.5 text-base text-white font-mono font-bold pr-14"
+                      placeholder="0"
+                    />
+                    <span className="absolute right-2 top-2 text-[10px] font-bold text-slate-400 pointer-events-none">
+                      potes/mês
+                    </span>
+                  </div>
+
+                  {/* Atalhos rápidos de volume */}
+                  <div className="flex items-center gap-1 mt-1.5">
+                    {[250, 500, 1000, 2500, 5000].map(vol => (
+                      <button
+                        key={vol}
+                        type="button"
+                        onClick={() => setMonthlyUnits(vol)}
+                        className={`text-[9px] px-1.5 py-0.5 rounded font-mono font-bold transition-all cursor-pointer ${
+                          monthlyUnits === vol
+                            ? 'bg-amber-500 text-slate-950 font-black'
+                            : 'bg-slate-800 hover:bg-slate-750 text-slate-300'
+                        }`}
+                      >
+                        {vol >= 1000 ? `${vol / 1000}k` : vol}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Rateio Fixo / Unidade */}
+              <div className="bg-gradient-to-br from-amber-500/15 to-amber-600/5 p-3 rounded-xl border border-amber-500/40 flex flex-col justify-between">
+                <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider block mb-1">
+                  Rateio Fixo / Unidade:
+                </span>
+                <div>
+                  <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
+                    R$ {overheadPerUnit.toFixed(2)}
+                  </div>
+                  <span className="text-[10px] text-amber-400/80 block mt-0.5">
+                    Absorvido por cada pote
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Barra de Distribuição de Custos (% por grupo) */}
+            {totalFixedCosts > 0 && (
+              <div className="pt-2 border-t border-slate-800 space-y-1.5">
+                <div className="flex items-center justify-between text-[10px] text-slate-400 font-semibold">
+                  <span>Distribuição dos Custos Fixos:</span>
+                  <span className="font-mono text-slate-300">
+                    Ocupação {pctOccupancy.toFixed(0)}% | Pessoal {pctPersonnel.toFixed(0)}% | Máq {pctEquipment.toFixed(0)}% | Trib {pctLegal.toFixed(0)}%{subtotalCustom > 0 ? ` | Extras ${pctCustom.toFixed(0)}%` : ''}
+                  </span>
+                </div>
+                <div className="w-full h-2 rounded-full overflow-hidden flex bg-slate-950">
+                  {pctOccupancy > 0 && <div style={{ width: `${pctOccupancy}%` }} className="bg-amber-400" title={`Ocupação: R$ ${subtotalOccupancy.toFixed(2)} (${pctOccupancy.toFixed(1)}%)`} />}
+                  {pctPersonnel > 0 && <div style={{ width: `${pctPersonnel}%` }} className="bg-cyan-400" title={`Pessoal: R$ ${subtotalPersonnel.toFixed(2)} (${pctPersonnel.toFixed(1)}%)`} />}
+                  {pctEquipment > 0 && <div style={{ width: `${pctEquipment}%` }} className="bg-emerald-400" title={`Refrigeração: R$ ${subtotalEquipment.toFixed(2)} (${pctEquipment.toFixed(1)}%)`} />}
+                  {pctLegal > 0 && <div style={{ width: `${pctLegal}%` }} className="bg-rose-400" title={`Tributos & Licenças: R$ ${subtotalLegal.toFixed(2)} (${pctLegal.toFixed(1)}%)`} />}
+                  {pctCustom > 0 && <div style={{ width: `${pctCustom}%` }} className="bg-purple-400" title={`Extras: R$ ${subtotalCustom.toFixed(2)} (${pctCustom.toFixed(1)}%)`} />}
+                </div>
+              </div>
+            )}
+
+            {/* Indicador de Ponto de Equilíbrio (Break-Even) */}
+            {breakEvenUnits > 0 && (
+              <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400 bg-slate-950/60 px-3 py-1.5 rounded-lg border border-slate-800/80">
+                <span className="flex items-center gap-1.5">
+                  <span>⚖️</span>
+                  <span>Ponto de Equilíbrio (Break-Even):</span>
+                </span>
+                <span className="font-mono font-bold text-emerald-300">
+                  {breakEvenUnits.toLocaleString('pt-BR')} potes/mês para zerar custos fixos
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

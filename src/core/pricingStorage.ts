@@ -3,6 +3,12 @@ import { PricingSettings } from '../types/gelato';
 export const STORAGE_KEY = 'gelato_pricing_params_v1';
 export const PRICING_UPDATED_EVENT = 'gelato-pricing-updated';
 
+export interface CustomCostItem {
+  id: string;
+  name: string;
+  amount: number;
+}
+
 export interface PricingParams {
   // 1. Ocupação & Utilidades
   rent: number;
@@ -28,6 +34,9 @@ export interface PricingParams {
   commercialInsurance: number; // Seguros patrimoniais e perda de estoque refrigerado
   posRentalMonthly: number; // Aluguel da maquininha (R$/mês)
   marketing: number; // Marketing e redes sociais
+
+  // 5. Custos Extras / Personalizados
+  customCosts?: CustomCostItem[];
 
   // Produção e Pote
   monthlyUnits: number;
@@ -112,6 +121,7 @@ export const DEFAULT_PRICING_PARAMS: PricingParams = {
   commercialInsurance: 0,
   posRentalMonthly: 0,
   marketing: 500,
+  customCosts: [],
 
   monthlyUnits: 4000,
   tubWeightGrams: 500,
@@ -136,6 +146,11 @@ export const DEFAULT_PRICING_PARAMS: PricingParams = {
 };
 
 export function calculateTotalFixedCosts(params: PricingParams): number {
+  const customTotal = (params.customCosts || []).reduce(
+    (acc, item) => acc + (Number(item.amount) || 0),
+    0
+  );
+
   return (
     (params.rent || 0) +
     (params.electricity || 0) +
@@ -153,7 +168,8 @@ export function calculateTotalFixedCosts(params: PricingParams): number {
     (params.licensesAndPermits || 0) +
     (params.commercialInsurance || 0) +
     (params.posRentalMonthly || 0) +
-    (params.marketing || 0)
+    (params.marketing || 0) +
+    customTotal
   );
 }
 
