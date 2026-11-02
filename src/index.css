@@ -170,60 +170,74 @@ html.light .text-slate-500 {
    Colored Typography Overrides for High Contrast (WCAG AAA)
    ========================================================================== */
 /* Amber / Gold */
+html.light .text-amber-100,
 html.light .text-amber-200,
+html.light [class*="text-amber-200"],
 html.light .text-amber-300,
-html.light .text-amber-300\/80 {
-  color: #92400e !important; /* amber-800: excelente legibilidade em fundos claros */
+html.light [class*="text-amber-300"] {
+  color: #78350f !important; /* amber-900: máxima legibilidade e contraste em fundos claros */
 }
 
 html.light .text-amber-400,
-html.light .text-amber-400\/80,
-html.light .text-amber-400\/90,
-html.light .text-amber-500 {
-  color: #b45309 !important; /* amber-700 */
+html.light [class*="text-amber-400"],
+html.light .text-amber-500,
+html.light [class*="text-amber-500"] {
+  color: #92400e !important; /* amber-800 */
 }
 
 /* Emerald / Green */
+html.light .text-emerald-100,
 html.light .text-emerald-200,
+html.light [class*="text-emerald-200"],
 html.light .text-emerald-300,
-html.light .text-emerald-300\/80 {
-  color: #065f46 !important; /* emerald-800 */
+html.light [class*="text-emerald-300"] {
+  color: #064e3b !important; /* emerald-900 */
 }
 
 html.light .text-emerald-400,
-html.light .text-emerald-500 {
+html.light [class*="text-emerald-400"],
+html.light .text-emerald-500,
+html.light [class*="text-emerald-500"] {
   color: #047857 !important; /* emerald-700 */
 }
 
 /* Cyan / Sky */
 html.light .text-cyan-100,
 html.light .text-cyan-200,
-html.light .text-cyan-300 {
-  color: #0e7490 !important; /* cyan-700 */
+html.light [class*="text-cyan-200"],
+html.light .text-cyan-300,
+html.light [class*="text-cyan-300"] {
+  color: #155e75 !important; /* cyan-800 */
 }
 
 html.light .text-cyan-400,
-html.light .text-cyan-500 {
-  color: #0369a1 !important; /* sky-700 */
+html.light [class*="text-cyan-400"],
+html.light .text-cyan-500,
+html.light [class*="text-cyan-500"] {
+  color: #0e7490 !important; /* cyan-700 */
 }
 
 html.light .text-sky-200,
+html.light [class*="text-sky-200"],
 html.light .text-sky-300,
-html.light .text-sky-400 {
-  color: #0284c7 !important; /* sky-600 */
+html.light [class*="text-sky-300"],
+html.light .text-sky-400,
+html.light [class*="text-sky-400"] {
+  color: #0369a1 !important; /* sky-700 */
 }
 
 html.light .text-sky-500 {
-  color: #0369a1 !important; /* sky-700 */
+  color: #075985 !important; /* sky-800 */
 }
 
 /* Purple / Violet */
 html.light .text-purple-200,
+html.light [class*="text-purple-200"],
 html.light .text-purple-300,
+html.light [class*="text-purple-300"],
 html.light .text-purple-400,
-html.light .text-purple-400\/80,
-html.light .text-purple-400\/90 {
-  color: #7e22ce !important; /* purple-700 */
+html.light [class*="text-purple-400"] {
+  color: #581c87 !important; /* purple-900 */
 }
 
 html.light .text-purple-500 {
@@ -231,46 +245,75 @@ html.light .text-purple-500 {
 }
 
 /* Rose / Red */
+html.light .text-rose-100,
 html.light .text-rose-200,
-html.light .text-rose-300 {
-  color: #9f1239 !important; /* rose-800 */
+html.light [class*="text-rose-200"],
+html.light .text-rose-300,
+html.light [class*="text-rose-300"],
+html.light .text-red-100,
+html.light .text-red-200,
+html.light [class*="text-red-200"],
+html.light .text-red-300,
+html.light [class*="text-red-300"] {
+  color: #881337 !important; /* rose-900 */
 }
 
 html.light .text-rose-400,
-html.light .text-rose-500 {
-  color: #be123c !important; /* rose-700 */
+html.light [class*="text-rose-400"],
+html.light .text-rose-500,
+html.light [class*="text-rose-500"],
+html.light .text-red-400,
+html.light [class*="text-red-400"],
+html.light .text-red-500,
+html.light [class*="text-red-500"] {
+  color: #9f1239 !important; /* rose-800 */
 }
 
 /* Blue */
+html.light .text-blue-100,
 html.light .text-blue-200,
-html.light .text-blue-300 {
-  color: #1d4ed8 !important; /* blue-700 */
+html.light [class*="text-blue-200"],
+html.light .text-blue-300,
+html.light [class*="text-blue-300"] {
+  color: #1e3a8a !important; /* blue-900 */
 }
 
 html.light .text-blue-400,
+html.light [class*="text-blue-400"],
 html.light .text-blue-500 {
-  color: #1e40af !important; /* blue-800 */
+  color: #1d4ed8 !important; /* blue-700 */
 }
 
 /* Teal */
 html.light .text-teal-200,
+html.light [class*="text-teal-200"],
 html.light .text-teal-300,
-html.light .text-teal-400 {
-  color: #0f766e !important; /* teal-700 */
+html.light [class*="text-teal-300"],
+html.light .text-teal-400,
+html.light [class*="text-teal-400"] {
+  color: #115e59 !important; /* teal-800 */
 }
 
 /* Yellow */
+html.light .text-yellow-100,
 html.light .text-yellow-200,
+html.light [class*="text-yellow-200"],
 html.light .text-yellow-300,
-html.light .text-yellow-400 {
-  color: #854d0e !important; /* yellow-800 */
+html.light [class*="text-yellow-300"],
+html.light .text-yellow-400,
+html.light [class*="text-yellow-400"] {
+  color: #713f12 !important; /* yellow-900 */
 }
 
 /* Orange */
+html.light .text-orange-100,
 html.light .text-orange-200,
+html.light [class*="text-orange-200"],
 html.light .text-orange-300,
-html.light .text-orange-400 {
-  color: #c2410c !important; /* orange-700 */
+html.light [class*="text-orange-300"],
+html.light .text-orange-400,
+html.light [class*="text-orange-400"] {
+  color: #9a3412 !important; /* orange-800 */
 }
 
 /* Pink */
