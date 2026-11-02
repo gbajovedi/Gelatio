@@ -1,11 +1,11 @@
 /**
  * Utilitário de Compartilhamento e Download de Backups do Gelatio.
- * Suporta a Web Share API Level 2 (Android, iOS e Windows 10/11) com fallback inteligente.
+ * Suporta a Web Share API Level 2 (Android, iOS) com fallback amigável para Desktop.
  */
 
 export interface ShareBackupResult {
   success: boolean;
-  method: 'native' | 'download_with_whatsapp_prompt' | 'cancelled';
+  method: 'native' | 'menu_desktop' | 'cancelled';
   message: string;
 }
 
@@ -39,8 +39,8 @@ export function canShareFiles(): boolean {
 }
 
 /**
- * Compartilha o arquivo de backup nativamente (WhatsApp, Drive, Email, etc.)
- * ou executa o fallback de download com sugestão para o WhatsApp Web.
+ * Compartilha o arquivo de backup nativamente (WhatsApp, Drive, Email no Mobile)
+ * ou orienta a abertura do menu de opções no Desktop sem forçar download redundante.
  */
 export async function shareOrDownloadBackup(
   jsonContent: string,
@@ -49,7 +49,7 @@ export async function shareOrDownloadBackup(
   const blob = new Blob([jsonContent], { type: 'application/json' });
   const file = new File([blob], filename, { type: 'application/json' });
 
-  // 1. Tenta compartilhamento nativo (Android, iOS, Windows 10/11 via Chromium)
+  // 1. Tenta compartilhamento nativo de arquivos (Android/iOS onde suportado)
   if (canShareFiles()) {
     try {
       await navigator.share({
@@ -64,7 +64,6 @@ export async function shareOrDownloadBackup(
       };
     } catch (err: unknown) {
       const error = err as Error;
-      // Se o usuário simplesmente cancelou o diálogo de compartilhamento, não é erro
       if (error && error.name === 'AbortError') {
         return {
           success: false,
@@ -72,17 +71,16 @@ export async function shareOrDownloadBackup(
           message: 'Compartilhamento cancelado.'
         };
       }
-      console.warn('Erro ao compartilhar nativamente, usando fallback de download:', err);
+      console.warn('Erro ao compartilhar nativamente, usando menu desktop:', err);
     }
   }
 
-  // 2. Fallback para Desktop (Windows sem WhatsApp App / Firefox): Baixa e sugere WhatsApp Web
-  downloadBlob(blob, filename);
-
+  // 2. No Desktop (Windows/Mac/Linux): não faz download forçado, abre o menu de compartilhamento
   return {
     success: true,
-    method: 'download_with_whatsapp_prompt',
-    message: 'Arquivo de backup baixado em Downloads! Você pode anexá-lo diretamente no WhatsApp Web ou enviá-lo por e-mail.'
+    method: 'menu_desktop',
+    message: 'Escolha uma opção de compartilhamento abaixo.'
   };
 }
 
+export const shareOrPrepareBackup = shareOrDownloadBackup;
