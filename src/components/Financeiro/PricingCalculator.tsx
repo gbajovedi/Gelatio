@@ -23,6 +23,10 @@ import {
   saveStoredPricingParams,
   DEFAULT_PRICING_PARAMS,
   CIELO_PRESETS,
+  PaymentPlanId,
+  PaymentPlanRates,
+  PaymentPlansConfig,
+  DEFAULT_PAYMENT_PLANS,
   calculateEffectiveCardFee,
   PricingParams,
   CustomCostItem
@@ -77,15 +81,52 @@ export const PricingCalculator: React.FC = () => {
 
   // Configurações Maquininha / Adquirentes
   const [useSalesMix, setUseSalesMix] = useState<boolean>(initial.useSalesMix ?? true);
-  const [cieloPlan, setCieloPlan] = useState<'padrao' | 'negociado' | 'fluxo' | 'custom'>(
-    initial.cieloPlan ?? 'padrao'
+  const [selectedPlan, setSelectedPlan] = useState<PaymentPlanId>(
+    initial.selectedPaymentPlan ||
+      (initial.cieloPlan === 'fluxo' ? 'd30' : initial.cieloPlan === 'negociado' ? 'outro' : 'd1')
   );
-  const [cardFeePix, setCardFeePix] = useState<number>(initial.cardFeePix ?? 0.0);
-  const [cardFeeDebit, setCardFeeDebit] = useState<number>(initial.cardFeeDebit ?? 1.49);
-  const [cardFeeCreditSight, setCardFeeCreditSight] = useState<number>(initial.cardFeeCreditSight ?? 4.3);
-  const [cardFeeCreditInstallment, setCardFeeCreditInstallment] = useState<number>(
-    initial.cardFeeCreditInstallment ?? 9.9
-  );
+
+  const [paymentPlans, setPaymentPlans] = useState<PaymentPlansConfig>(() => {
+    if (initial.paymentPlans) {
+      return {
+        d1: { ...DEFAULT_PAYMENT_PLANS.d1, ...initial.paymentPlans.d1 },
+        d30: { ...DEFAULT_PAYMENT_PLANS.d30, ...initial.paymentPlans.d30 },
+        outro: { ...DEFAULT_PAYMENT_PLANS.outro, ...initial.paymentPlans.outro }
+      };
+    }
+    const plans: PaymentPlansConfig = {
+      d1: { ...DEFAULT_PAYMENT_PLANS.d1 },
+      d30: { ...DEFAULT_PAYMENT_PLANS.d30 },
+      outro: { ...DEFAULT_PAYMENT_PLANS.outro }
+    };
+    const activeKey: PaymentPlanId = initial.selectedPaymentPlan ||
+      (initial.cieloPlan === 'fluxo' ? 'd30' : initial.cieloPlan === 'negociado' ? 'outro' : 'd1');
+    if (initial.cardFeeDebit !== undefined) {
+      plans[activeKey] = {
+        cardFeePix: initial.cardFeePix ?? plans[activeKey].cardFeePix,
+        cardFeeDebit: initial.cardFeeDebit ?? plans[activeKey].cardFeeDebit,
+        cardFeeCreditSight: initial.cardFeeCreditSight ?? plans[activeKey].cardFeeCreditSight,
+        cardFeeCreditInstallment: initial.cardFeeCreditInstallment ?? plans[activeKey].cardFeeCreditInstallment
+      };
+    }
+    return plans;
+  });
+
+  const activeRates = paymentPlans[selectedPlan] || DEFAULT_PAYMENT_PLANS[selectedPlan];
+  const cardFeePix = activeRates.cardFeePix;
+  const cardFeeDebit = activeRates.cardFeeDebit;
+  const cardFeeCreditSight = activeRates.cardFeeCreditSight;
+  const cardFeeCreditInstallment = activeRates.cardFeeCreditInstallment;
+
+  const handleUpdateRate = (field: keyof PaymentPlanRates, value: number) => {
+    setPaymentPlans(prev => ({
+      ...prev,
+      [selectedPlan]: {
+        ...prev[selectedPlan],
+        [field]: value
+      }
+    }));
+  };
 
   // Mix de Vendas (% do faturamento no balcão)
   const [mixPix, setMixPix] = useState<number>(initial.mixPix ?? 30);
@@ -153,7 +194,9 @@ export const PricingCalculator: React.FC = () => {
     targetMargin,
     cardFee: cardFeeManual,
     useSalesMix,
-    cieloPlan,
+    selectedPaymentPlan: selectedPlan,
+    paymentPlans,
+    cieloPlan: selectedPlan === 'd30' ? 'fluxo' : selectedPlan === 'outro' ? 'negociado' : 'padrao',
     cardFeePix,
     cardFeeDebit,
     cardFeeCreditSight,
@@ -220,11 +263,8 @@ export const PricingCalculator: React.FC = () => {
     targetMargin,
     cardFeeManual,
     useSalesMix,
-    cieloPlan,
-    cardFeePix,
-    cardFeeDebit,
-    cardFeeCreditSight,
-    cardFeeCreditInstallment,
+    selectedPlan,
+    paymentPlans,
     mixPix,
     mixDebit,
     mixCreditSight,
@@ -232,17 +272,6 @@ export const PricingCalculator: React.FC = () => {
     salesTaxPercent,
     sampleCaldaCostKg
   ]);
-
-  // Aplicar Preset de Maquininha
-  const applyCieloPreset = (plan: 'padrao' | 'negociado' | 'fluxo') => {
-    const p = CIELO_PRESETS[plan];
-    setCieloPlan(plan);
-    setCardFeePix(p.cardFeePix);
-    setCardFeeDebit(p.cardFeeDebit);
-    setCardFeeCreditSight(p.cardFeeCreditSight);
-    setCardFeeCreditInstallment(p.cardFeeCreditInstallment);
-    setPosRentalMonthly(p.posRentalMonthly);
-  };
 
   const handleResetToDefaults = () => {
     if (window.confirm('Deseja restaurar todos os custos fixos para os padrões recomendados da gelateria?')) {
@@ -271,11 +300,8 @@ export const PricingCalculator: React.FC = () => {
       setPricingMethod(def.pricingMethod || 'margin');
       setCardFeeManual(def.cardFee);
       setUseSalesMix(def.useSalesMix);
-      setCieloPlan(def.cieloPlan);
-      setCardFeePix(def.cardFeePix);
-      setCardFeeDebit(def.cardFeeDebit);
-      setCardFeeCreditSight(def.cardFeeCreditSight);
-      setCardFeeCreditInstallment(def.cardFeeCreditInstallment);
+      setSelectedPlan(def.selectedPaymentPlan || 'd1');
+      setPaymentPlans(def.paymentPlans || DEFAULT_PAYMENT_PLANS);
       setMixPix(def.mixPix);
       setMixDebit(def.mixDebit);
       setMixCreditSight(def.mixCreditSight);
@@ -1161,47 +1187,47 @@ export const PricingCalculator: React.FC = () => {
 
               {useSalesMix ? (
                 <div className="space-y-3 pt-1">
-                  {/* Botões de Presets de Maquininha (visíveis apenas no modo Mix Ponderado) */}
+                  {/* Botões dos 3 Planos Customizados */}
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span className="text-[11px] text-slate-400 font-semibold mr-1 flex items-center gap-1">
                       <Zap className="w-3 h-3 text-amber-400" />
-                      Planos / Presets:
+                      Planos:
                     </span>
                     <button
                       type="button"
-                      onClick={() => applyCieloPreset('padrao')}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
-                        cieloPlan === 'padrao'
+                      onClick={() => setSelectedPlan('d1')}
+                      className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                        selectedPlan === 'd1'
                           ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
                           : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
                       }`}
-                      title={CIELO_PRESETS.padrao.description}
+                      title="Plano D+1"
                     >
-                      ⭐ D+1 Padrão
+                      D+1
                     </button>
                     <button
                       type="button"
-                      onClick={() => applyCieloPreset('negociado')}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
-                        cieloPlan === 'negociado'
+                      onClick={() => setSelectedPlan('d30')}
+                      className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                        selectedPlan === 'd30'
                           ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
                           : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
                       }`}
-                      title={CIELO_PRESETS.negociado.description}
+                      title="Plano D+30"
                     >
-                      💼 Negociado (&gt;15k)
+                      D+30
                     </button>
                     <button
                       type="button"
-                      onClick={() => applyCieloPreset('fluxo')}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
-                        cieloPlan === 'fluxo'
+                      onClick={() => setSelectedPlan('outro')}
+                      className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                        selectedPlan === 'outro'
                           ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
                           : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
                       }`}
-                      title={CIELO_PRESETS.fluxo.description}
+                      title="Plano Outro"
                     >
-                      ⏱️ D+30 (No Fluxo)
+                      Outro
                     </button>
                   </div>
                   {/* Grid das 4 modalidades de pagamento */}
@@ -1220,10 +1246,7 @@ export const PricingCalculator: React.FC = () => {
                           step="0.05"
                           value={cardFeePix !== undefined && cardFeePix !== null ? cardFeePix : ''}
                           placeholder="0.00"
-                          onChange={e => {
-                            setCardFeePix(Math.max(0, parseFloat(e.target.value) || 0));
-                            setCieloPlan('custom');
-                          }}
+                          onChange={e => handleUpdateRate('cardFeePix', Math.max(0, parseFloat(e.target.value) || 0))}
                           className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
                         />
                       </div>
@@ -1257,10 +1280,7 @@ export const PricingCalculator: React.FC = () => {
                           step="0.05"
                           value={cardFeeDebit !== undefined && cardFeeDebit !== null ? cardFeeDebit : ''}
                           placeholder="0.00"
-                          onChange={e => {
-                            setCardFeeDebit(Math.max(0, parseFloat(e.target.value) || 0));
-                            setCieloPlan('custom');
-                          }}
+                          onChange={e => handleUpdateRate('cardFeeDebit', Math.max(0, parseFloat(e.target.value) || 0))}
                           className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
                         />
                       </div>
@@ -1294,10 +1314,7 @@ export const PricingCalculator: React.FC = () => {
                           step="0.05"
                           value={cardFeeCreditSight !== undefined && cardFeeCreditSight !== null ? cardFeeCreditSight : ''}
                           placeholder="0.00"
-                          onChange={e => {
-                            setCardFeeCreditSight(Math.max(0, parseFloat(e.target.value) || 0));
-                            setCieloPlan('custom');
-                          }}
+                          onChange={e => handleUpdateRate('cardFeeCreditSight', Math.max(0, parseFloat(e.target.value) || 0))}
                           className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
                         />
                       </div>
@@ -1331,10 +1348,7 @@ export const PricingCalculator: React.FC = () => {
                           step="0.1"
                           value={cardFeeCreditInstallment !== undefined && cardFeeCreditInstallment !== null ? cardFeeCreditInstallment : ''}
                           placeholder="0.00"
-                          onChange={e => {
-                            setCardFeeCreditInstallment(Math.max(0, parseFloat(e.target.value) || 0));
-                            setCieloPlan('custom');
-                          }}
+                          onChange={e => handleUpdateRate('cardFeeCreditInstallment', Math.max(0, parseFloat(e.target.value) || 0))}
                           className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
                         />
                       </div>

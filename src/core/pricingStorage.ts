@@ -50,7 +50,9 @@ export interface PricingParams {
 
   // Maquininha / Adquirentes detalhadas
   useSalesMix: boolean;
-  cieloPlan: 'padrao' | 'negociado' | 'fluxo' | 'custom';
+  selectedPaymentPlan?: 'd1' | 'd30' | 'outro';
+  paymentPlans?: PaymentPlansConfig;
+  cieloPlan?: 'padrao' | 'negociado' | 'fluxo' | 'custom';
   cardFeePix: number;
   cardFeeDebit: number;
   cardFeeCreditSight: number;
@@ -65,6 +67,42 @@ export interface PricingParams {
   salesTaxPercent: number;
   sampleCaldaCostKg: number;
 }
+
+export type PaymentPlanId = 'd1' | 'd30' | 'outro';
+
+export interface PaymentPlanRates {
+  cardFeePix: number;
+  cardFeeDebit: number;
+  cardFeeCreditSight: number;
+  cardFeeCreditInstallment: number;
+}
+
+export interface PaymentPlansConfig {
+  d1: PaymentPlanRates;
+  d30: PaymentPlanRates;
+  outro: PaymentPlanRates;
+}
+
+export const DEFAULT_PAYMENT_PLANS: PaymentPlansConfig = {
+  d1: {
+    cardFeePix: 0.00,
+    cardFeeDebit: 1.49,
+    cardFeeCreditSight: 4.30,
+    cardFeeCreditInstallment: 9.90
+  },
+  d30: {
+    cardFeePix: 0.00,
+    cardFeeDebit: 1.49,
+    cardFeeCreditSight: 2.79,
+    cardFeeCreditInstallment: 5.49
+  },
+  outro: {
+    cardFeePix: 0.00,
+    cardFeeDebit: 1.19,
+    cardFeeCreditSight: 3.19,
+    cardFeeCreditInstallment: 6.90
+  }
+};
 
 export const CIELO_PRESETS = {
   padrao: {
@@ -130,6 +168,8 @@ export const DEFAULT_PRICING_PARAMS: PricingParams = {
   pricingMethod: 'margin',
   cardFee: 2.03,
   useSalesMix: true,
+  selectedPaymentPlan: 'd1',
+  paymentPlans: DEFAULT_PAYMENT_PLANS,
   cieloPlan: 'padrao',
   // Auto-preenchimento oficial de taxas:
   cardFeePix: 0.00,
@@ -194,7 +234,34 @@ export function getStoredPricingParams(): PricingParams {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      return { ...DEFAULT_PRICING_PARAMS, ...parsed };
+      const mergedPlans: PaymentPlansConfig = {
+        d1: { ...DEFAULT_PAYMENT_PLANS.d1, ...(parsed.paymentPlans?.d1 || {}) },
+        d30: { ...DEFAULT_PAYMENT_PLANS.d30, ...(parsed.paymentPlans?.d30 || {}) },
+        outro: { ...DEFAULT_PAYMENT_PLANS.outro, ...(parsed.paymentPlans?.outro || {}) }
+      };
+
+      const activePlan: PaymentPlanId = parsed.selectedPaymentPlan ||
+        (parsed.cieloPlan === 'fluxo' ? 'd30' : parsed.cieloPlan === 'negociado' ? 'outro' : 'd1');
+
+      if (!parsed.paymentPlans && parsed.cardFeeDebit !== undefined) {
+        mergedPlans[activePlan] = {
+          cardFeePix: parsed.cardFeePix ?? mergedPlans[activePlan].cardFeePix,
+          cardFeeDebit: parsed.cardFeeDebit ?? mergedPlans[activePlan].cardFeeDebit,
+          cardFeeCreditSight: parsed.cardFeeCreditSight ?? mergedPlans[activePlan].cardFeeCreditSight,
+          cardFeeCreditInstallment: parsed.cardFeeCreditInstallment ?? mergedPlans[activePlan].cardFeeCreditInstallment
+        };
+      }
+
+      return {
+        ...DEFAULT_PRICING_PARAMS,
+        ...parsed,
+        selectedPaymentPlan: activePlan,
+        paymentPlans: mergedPlans,
+        cardFeePix: mergedPlans[activePlan].cardFeePix,
+        cardFeeDebit: mergedPlans[activePlan].cardFeeDebit,
+        cardFeeCreditSight: mergedPlans[activePlan].cardFeeCreditSight,
+        cardFeeCreditInstallment: mergedPlans[activePlan].cardFeeCreditInstallment
+      };
     }
   } catch (err) {
     console.warn('Erro ao carregar parâmetros de precificação do localStorage:', err);
