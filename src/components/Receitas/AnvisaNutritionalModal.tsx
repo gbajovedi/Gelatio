@@ -164,7 +164,7 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
     let text = `INFORMAÇÃO NUTRICIONAL - ${recipe.name.toUpperCase()}\n`;
     text += `Porções por embalagem: cerca de ${nutrition.servingsPerContainer} porções\n`;
     text += `Porção: ${nutrition.portionHousehold}\n`;
-    text += `Embalagem: ${containerValue} ${containerUnit}${containerUnit === 'ml' ? ` (aprox. ${effectiveContainerWeightGrams} g)` : ''}\n\n`;
+    text += `Conteúdo Líquido: ${containerUnit === 'ml' ? `${containerValue} ml (${effectiveContainerWeightGrams} g)` : `${containerValue} g`}\n\n`;
     text += `Nutriente | 100g | ${portionGrams}g | %VD*\n`;
     text += `------------------------------------------------\n`;
 
@@ -707,12 +707,21 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
               <h1 className="text-base sm:text-lg font-black uppercase tracking-tight text-black m-0 leading-tight">
                 INFORMAÇÃO NUTRICIONAL
               </h1>
-              <p className="text-xs text-black font-medium leading-snug mt-1">
-                Porções por embalagem: cerca de <strong>{nutrition.servingsPerContainer}</strong> porções
-              </p>
-              <p className="text-xs text-black font-medium leading-snug">
-                Porção: <strong>{nutrition.portionHousehold}</strong>
-              </p>
+              <div className="mt-1 space-y-0.5 text-xs text-black font-medium leading-snug">
+                <p>
+                  Porções por embalagem: cerca de <strong>{nutrition.servingsPerContainer}</strong> porções
+                </p>
+                <p>
+                  Porção: <strong>{nutrition.portionHousehold}</strong>
+                </p>
+                <p>
+                  {containerUnit === 'ml' ? (
+                    <>Conteúdo líquido da embalagem: <strong>{containerValue} ml ({effectiveContainerWeightGrams} g)</strong></>
+                  ) : (
+                    <>Peso líquido da embalagem: <strong>{containerValue} g</strong></>
+                  )}
+                </p>
+              </div>
             </div>
 
             {/* 3. TABELA COM 3 COLUNAS OFICIAIS */}
@@ -766,6 +775,16 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
             {/* 6. DECLARAÇÃO DE ALÉRGENOS, LACTOSE E GLÚTEN (RDC 727/2022) */}
             <div className="mt-2 text-xs font-black text-black leading-tight space-y-1">
               <p>{nutrition.allergens.fullDeclaration}</p>
+            </div>
+
+            {/* 7. DECLARAÇÃO DE CONTEÚDO LÍQUIDO REGULAMENTAR (INMETRO / RDC 727) */}
+            <div className="mt-3 pt-2 border-t-2 border-black flex items-center justify-between text-xs text-black font-black uppercase tracking-tight">
+              <span>Conteúdo Líquido:</span>
+              <span className="font-mono text-xs sm:text-sm font-black">
+                {containerUnit === 'ml'
+                  ? `${containerValue} ml (${effectiveContainerWeightGrams} g)`
+                  : `${containerValue} g`}
+              </span>
             </div>
 
           </div>
