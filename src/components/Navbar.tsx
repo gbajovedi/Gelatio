@@ -1,6 +1,7 @@
 import React from 'react';
 import { Scale, BookOpen, Utensils, ChefHat, DollarSign, Database } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
+import gelatioLogo from '../assets/gelatio-logo.png';
 
 export type NavTab = 'balanceamento' | 'receitas' | 'ingredientes' | 'preparos' | 'financeiro';
 
@@ -22,22 +23,17 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
   return (
     <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-md w-full">
       <div className="max-w-screen-2xl mx-auto px-3 sm:px-4 lg:px-5 xl:px-6 flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-3 xl:gap-4 w-full">
-        {/* Brand */}
+        {/* Brand - Gelatio Logo */}
         <div
           onClick={() => onTabChange('balanceamento')}
-          className="flex items-center gap-2 sm:gap-2.5 xl:gap-3 cursor-pointer group shrink-0"
+          className="flex items-center cursor-pointer group shrink-0 select-none py-1"
+          title="Gelatio — Calculadora & Balanceamento de Gelatos"
         >
-          <div className="w-9 h-9 sm:w-10 sm:h-10 xl:w-11 xl:h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-lg sm:text-xl xl:text-2xl shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform shrink-0">
-            🍨
-          </div>
-          <div className="shrink-0">
-            <span className="font-black text-sm sm:text-base xl:text-lg tracking-tight text-white block leading-none">
-              Gelato<span className="text-amber-400">Balancer</span>
-            </span>
-            <span className="text-[11px] xl:text-xs text-slate-400 font-mono tracking-wider hidden 2xl:block">
-              PWA Artesanal • 100% Offline
-            </span>
-          </div>
+          <img
+            src={gelatioLogo}
+            alt="Gelatio"
+            className="h-8 sm:h-9 xl:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-sm"
+          />
         </div>
 
         {/* Desktop Unified Navigation Bar with Integrated Backup Button */}

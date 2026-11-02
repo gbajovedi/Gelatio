@@ -136,7 +136,7 @@ export function App() {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
         <div className="text-4xl mb-4 animate-bounce">🍨</div>
-        <h2 className="text-lg font-bold text-white mb-1">Carregando Gelato Balancer...</h2>
+        <h2 className="text-lg font-bold text-white mb-1">Carregando Gelatio...</h2>
         <p className="text-xs text-slate-400">Preparando banco de dados bromatológico offline...</p>
       </div>
     );

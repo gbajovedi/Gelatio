@@ -1,18 +1,18 @@
-# 🍨 Gelato Balancer — Calculadora & Balanceadora de Gelatos
+# 🍨 Gelatio — Calculadora & Balanceamento de Gelatos Artesanais
 
-[![Deploy to GitHub Pages](https://github.com/gbajovedi/Receitas-e-Balanceamento-de-Gelatos/actions/workflows/deploy.yml/badge.svg)](https://github.com/gbajovedi/Receitas-e-Balanceamento-de-Gelatos/actions/workflows/deploy.yml)
-[![PWA Ready](https://img.shields.io/badge/PWA-100%25%20Offline-success)](https://gbajovedi.github.io/Receitas-e-Balanceamento-de-Gelatos/)
+[![Deploy to GitHub Pages](https://github.com/gbajovedi/Gelatio/actions/workflows/deploy.yml/badge.svg)](https://github.com/gbajovedi/Gelatio/actions/workflows/deploy.yml)
+[![PWA Ready](https://img.shields.io/badge/PWA-100%25%20Offline-success)](https://gbajovedi.github.io/Gelatio/)
 [![React](https://img.shields.io/badge/React-18-blue)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8)](https://tailwindcss.com/)
 
 > **Progressive Web App (PWA)** profissional para cálculo, formulação bromatológica, balanceamento e gestão de custos de gelatos artesanais e sorvetes.
 
-👉 **Acesse o aplicativo online:** [**https://gbajovedi.github.io/Receitas-e-Balanceamento-de-Gelatos/**](https://gbajovedi.github.io/Receitas-e-Balanceamento-de-Gelatos/)
+👉 **Acesse o aplicativo online:** [**https://gbajovedi.github.io/Gelatio/**](https://gbajovedi.github.io/Gelatio/)
 
 ## 📲 Como Instalar como Aplicativo (PWA)
 
-O **Gelato Balancer** pode ser instalado diretamente no seu smartphone, tablet ou computador, funcionando com visual de aplicativo nativo em tela cheia e **100% offline**:
+O **Gelatio** pode ser instalado diretamente no seu smartphone, tablet ou computador, funcionando com visual de aplicativo nativo em tela cheia e **100% offline**:
 
 - **📱 Android (Google Chrome):** Acesse o link acima, toque no menu de **três pontinhos** no canto superior e selecione **"Instalar aplicativo"** ou **"Adicionar à tela inicial"**.
 - **🍏 iPhone / iPad (Safari):** Abra o link no Safari, toque no botão de **Compartilhar** (ícone de quadrado com seta para cima) e selecione **"Adicionar à Tela de Início"**.
@@ -25,7 +25,7 @@ O **Gelato Balancer** pode ser instalado diretamente no seu smartphone, tablet o
 
 ## 📱 Visão Geral
 
-Desenvolvido para superar as limitações das planilhas convencionais (onde editar ingredientes quebrava fórmulas matriciais de busca), o **Gelato Balancer** é uma aplicação web moderna, reativa e **100% offline-first**. 
+Desenvolvido para superar as limitações das planilhas convencionais (onde editar ingredientes quebrava fórmulas matriciais de busca), o **Gelatio** é uma aplicação web moderna, reativa e **100% offline-first**. 
 
 Ele permite formular e ajustar receitas diretamente na bancada da produção, visualizar diagnósticos térmicos e nutricionais em tempo real, gerenciar um catálogo de **177 receitas pré-balanceadas**, manipular **190 matérias-primas** e calcular a formação precisa do preço de venda com rateio de custos fixos.
 
@@ -125,7 +125,7 @@ Ele permite formular e ajustar receitas diretamente na bancada da produção, vi
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/gbajovedi/Receitas-e-Balanceamento-de-Gelatos.git
+git clone https://github.com/gbajovedi/Gelatio.git
 cd Receitas-e-Balanceamento-de-Gelatos
 ```
 

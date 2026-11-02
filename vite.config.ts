@@ -6,7 +6,7 @@ export default defineConfig(({ command }) => {
   // Em produção (build) usa o subcaminho do GitHub Pages.
   // No localhost (dev), usa a raiz '/' para abrir direto em http://localhost:5173/
   const isBuild = command === 'build';
-  const base = isBuild ? '/Receitas-e-Balanceamento-de-Gelatos/' : '/';
+  const base = isBuild ? '/Gelatio/' : '/';
 
   return {
     base,
@@ -40,10 +40,10 @@ export default defineConfig(({ command }) => {
       react(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
+        includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512.png', 'gelatio-logo.png'],
         manifest: {
-          name: 'Calculadora & Balanceadora de Gelatos',
-          short_name: 'Gelato Balancer',
+          name: 'Gelatio — Calculadora & Balanceamento',
+          short_name: 'Gelatio',
           description: 'Balanceamento e formulação profissional de receitas de gelato artesanal',
           theme_color: '#0f172a',
           background_color: '#0f172a',
@@ -60,7 +60,13 @@ export default defineConfig(({ command }) => {
               src: 'pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
-              purpose: 'any maskable'
+              purpose: 'any'
+            },
+            {
+              src: 'pwa-maskable-512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'maskable'
             }
           ]
         },
