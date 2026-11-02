@@ -819,6 +819,22 @@ export class GelatoDatabase extends Dexie {
         console.warn('Migration to v21 bases removal and recipe renames:', e);
       }
     });
+    // Versão 22: Remoção dos Gelatos Soft da Addolcire restantes (rec_58, rec_59)
+    this.version(22).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key'
+    }).upgrade(async tx => {
+      try {
+        const idsToDelete = ['rec_58', 'rec_59'];
+        for (const id of idsToDelete) {
+          await tx.table('recipes').delete(id);
+        }
+      } catch (e) {
+        console.warn('Migration to v22 soft gelatos removal:', e);
+      }
+    });
 
   }
 
