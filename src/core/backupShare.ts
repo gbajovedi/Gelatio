@@ -85,3 +85,4 @@ export async function shareOrDownloadBackup(
     message: 'Arquivo de backup baixado em Downloads! Você pode anexá-lo diretamente no WhatsApp Web ou enviá-lo por e-mail.'
   };
 }
+

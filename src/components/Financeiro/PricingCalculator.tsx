@@ -11,7 +11,8 @@ import {
   Building2,
   Users,
   Snowflake,
-  ShieldCheck
+  ShieldCheck,
+  AlertTriangle
 } from 'lucide-react';
 import {
   getStoredPricingParams,
@@ -127,6 +128,30 @@ export const PricingCalculator: React.FC = () => {
 
   const effectiveCardFee = calculateEffectiveCardFee(currentParams);
   const totalMixSum = mixPix + mixDebit + mixCreditSight + mixCreditInstallment;
+  // Normalizar composição de vendas para somar exatamente 100%
+  const handleNormalizeMix = () => {
+    if (totalMixSum <= 0) {
+      setMixPix(40);
+      setMixDebit(35);
+      setMixCreditSight(20);
+      setMixCreditInstallment(5);
+      return;
+    }
+    const rawPix = (mixPix / totalMixSum) * 100;
+    const rawDebit = (mixDebit / totalMixSum) * 100;
+    const rawCredit = (mixCreditSight / totalMixSum) * 100;
+
+    const roundPix = Math.round(rawPix);
+    const roundDebit = Math.round(rawDebit);
+    const roundCredit = Math.round(rawCredit);
+    const roundInstallment = Math.max(0, 100 - (roundPix + roundDebit + roundCredit));
+
+    setMixPix(roundPix);
+    setMixDebit(roundDebit);
+    setMixCreditSight(roundCredit);
+    setMixCreditInstallment(roundInstallment);
+  };
+
 
   // Persistência automática no localStorage
   useEffect(() => {
@@ -761,13 +786,13 @@ export const PricingCalculator: React.FC = () => {
                     <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-emerald-400">Pix</span>
-                        <span className="text-[10px] text-slate-400">Na conta</span>
+                        <span className="text-[10px] text-slate-400">Imediato</span>
                       </div>
                       <div>
                         <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
                         <input
                           type="number"
-                  min="0"
+                          min="0"
                           step="0.05"
                           value={cardFeePix}
                           onChange={e => {
@@ -781,10 +806,13 @@ export const PricingCalculator: React.FC = () => {
                         <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
                         <input
                           type="number"
-                  min="0"
+                          min="0"
+                          max="100"
                           value={mixPix}
-                          onChange={e => setMixPix(Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-emerald-300"
+                          onChange={e => setMixPix(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                          className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-emerald-300 transition-colors ${
+                            totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+                          }`}
                         />
                       </div>
                     </div>
@@ -799,7 +827,7 @@ export const PricingCalculator: React.FC = () => {
                         <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
                         <input
                           type="number"
-                  min="0"
+                          min="0"
                           step="0.05"
                           value={cardFeeDebit}
                           onChange={e => {
@@ -813,10 +841,13 @@ export const PricingCalculator: React.FC = () => {
                         <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
                         <input
                           type="number"
-                  min="0"
+                          min="0"
+                          max="100"
                           value={mixDebit}
-                          onChange={e => setMixDebit(Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-cyan-300"
+                          onChange={e => setMixDebit(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                          className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-cyan-300 transition-colors ${
+                            totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+                          }`}
                         />
                       </div>
                     </div>
@@ -831,7 +862,7 @@ export const PricingCalculator: React.FC = () => {
                         <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
                         <input
                           type="number"
-                  min="0"
+                          min="0"
                           step="0.05"
                           value={cardFeeCreditSight}
                           onChange={e => {
@@ -845,10 +876,13 @@ export const PricingCalculator: React.FC = () => {
                         <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
                         <input
                           type="number"
-                  min="0"
+                          min="0"
+                          max="100"
                           value={mixCreditSight}
-                          onChange={e => setMixCreditSight(Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-amber-300"
+                          onChange={e => setMixCreditSight(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                          className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-amber-300 transition-colors ${
+                            totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+                          }`}
                         />
                       </div>
                     </div>
@@ -863,7 +897,7 @@ export const PricingCalculator: React.FC = () => {
                         <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
                         <input
                           type="number"
-                  min="0"
+                          min="0"
                           step="0.1"
                           value={cardFeeCreditInstallment}
                           onChange={e => {
@@ -877,45 +911,134 @@ export const PricingCalculator: React.FC = () => {
                         <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
                         <input
                           type="number"
-                  min="0"
+                          min="0"
+                          max="100"
                           value={mixCreditInstallment}
-                          onChange={e => setMixCreditInstallment(Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-rose-300"
+                          onChange={e => setMixCreditInstallment(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                          className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-rose-300 transition-colors ${
+                            totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+                          }`}
                         />
                       </div>
                     </div>
                   </div>
 
+                  {/* Aviso de Segurança de Excesso de 100% */}
+                  {totalMixSum > 100 && (
+                    <div className="p-3 bg-rose-500/15 border border-rose-500/40 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-rose-300">
+                      <div className="flex items-center gap-2.5">
+                        <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <div>
+                          <span className="font-bold text-rose-200">Aviso de Segurança: Composição das vendas em {totalMixSum}%</span>
+                          <span className="block text-[11px] text-rose-300/85 mt-0.5">
+                            A soma dos canais de venda não pode ultrapassar 100% (excesso de +{totalMixSum - 100}%).
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleNormalizeMix}
+                        className="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-400 text-slate-950 font-black rounded-lg text-xs whitespace-nowrap transition-all shadow-md active:scale-95 self-start sm:self-auto shrink-0"
+                      >
+                        Ajustar para 100%
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Aviso de Composição Incompleta */}
+                  {totalMixSum < 100 && totalMixSum > 0 && (
+                    <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-amber-300">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm shrink-0">ℹ️</span>
+                        <span>
+                          Composição atual soma <strong>{totalMixSum}%</strong> (faltam <strong>{100 - totalMixSum}%</strong> para completar 100%).
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleNormalizeMix}
+                        className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs whitespace-nowrap transition-all active:scale-95 self-start sm:self-auto shrink-0"
+                      >
+                        Completar para 100%
+                      </button>
+                    </div>
+                  )}
+
                   {/* Barra Visual do Mix de Vendas */}
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[11px] text-slate-400 font-medium">
-                      <span className="flex items-center gap-1">
-                        <PieChart className="w-3 h-3 text-slate-400" />
-                        Composição das Vendas (Total: {totalMixSum}%):
+                  <div className="space-y-1.5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] font-medium gap-1">
+                      <span className="flex items-center gap-1.5">
+                        <PieChart className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="text-slate-400">Composição das Vendas:</span>
+                        <span
+                          className={`font-mono font-bold px-2 py-0.5 rounded text-[10px] ${
+                            totalMixSum === 100
+                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                              : totalMixSum > 100
+                              ? 'bg-rose-500/25 text-rose-300 border border-rose-500/40'
+                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                          }`}
+                        >
+                          {totalMixSum === 100
+                            ? '100% ✓ Equilibrado'
+                            : totalMixSum > 100
+                            ? `${totalMixSum}% ⚠️ Excesso de +${totalMixSum - 100}%`
+                            : `${totalMixSum}% (Faltam ${100 - totalMixSum}%)`}
+                        </span>
                       </span>
-                      <span className="text-white font-mono font-bold">
+                      <span className="text-white font-mono font-bold text-[11px]">
                         Pix {mixPix}% | Déb {mixDebit}% | Créd {mixCreditSight}% | Parc {mixCreditInstallment}%
                       </span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-slate-950 flex overflow-hidden border border-slate-800">
-                      <div style={{ width: `${mixPix}%` }} className="bg-emerald-500 h-full" title={`Pix: ${mixPix}%`} />
-                      <div style={{ width: `${mixDebit}%` }} className="bg-cyan-500 h-full" title={`Débito: ${mixDebit}%`} />
-                      <div style={{ width: `${mixCreditSight}%` }} className="bg-amber-500 h-full" title={`Crédito: ${mixCreditSight}%`} />
-                      <div style={{ width: `${mixCreditInstallment}%` }} className="bg-rose-500 h-full" title={`Parcelado: ${mixCreditInstallment}%`} />
+                    <div className={`w-full h-2.5 rounded-full bg-slate-950 flex overflow-hidden border transition-colors ${
+                      totalMixSum > 100 ? 'border-rose-500 ring-1 ring-rose-500/40' : 'border-slate-800'
+                    }`}>
+                      <div
+                        style={{ width: `${totalMixSum > 0 ? (mixPix / Math.max(100, totalMixSum)) * 100 : 0}%` }}
+                        className="bg-emerald-500 h-full transition-all"
+                        title={`Pix: ${mixPix}%`}
+                      />
+                      <div
+                        style={{ width: `${totalMixSum > 0 ? (mixDebit / Math.max(100, totalMixSum)) * 100 : 0}%` }}
+                        className="bg-cyan-500 h-full transition-all"
+                        title={`Débito: ${mixDebit}%`}
+                      />
+                      <div
+                        style={{ width: `${totalMixSum > 0 ? (mixCreditSight / Math.max(100, totalMixSum)) * 100 : 0}%` }}
+                        className="bg-amber-500 h-full transition-all"
+                        title={`Crédito: ${mixCreditSight}%`}
+                      />
+                      <div
+                        style={{ width: `${totalMixSum > 0 ? (mixCreditInstallment / Math.max(100, totalMixSum)) * 100 : 0}%` }}
+                        className="bg-rose-500 h-full transition-all"
+                        title={`Parcelado: ${mixCreditInstallment}%`}
+                      />
                     </div>
                   </div>
 
                   {/* Destaque da Taxa Média Efetiva */}
-                  <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-between">
+                  <div className={`p-3 rounded-xl border flex items-center justify-between transition-all ${
+                    totalMixSum > 100
+                      ? 'bg-rose-950/30 border-rose-500/40'
+                      : totalMixSum === 100
+                      ? 'bg-emerald-950/40 border-emerald-500/30'
+                      : 'bg-slate-900/60 border-slate-750'
+                  }`}>
                     <div>
-                      <span className="text-xs font-bold text-emerald-300 block">
+                      <span className={`text-xs font-bold block ${
+                        totalMixSum > 100 ? 'text-rose-300' : 'text-emerald-300'
+                      }`}>
                         Taxa Média Efetiva da Maquininha:
                       </span>
                       <span className="text-[10px] text-slate-400">
-                        Ponderada pelo seu volume real de Pix, Débito e Crédito
+                        {totalMixSum > 100
+                          ? `⚠️ Ponderada com base normalizada (Aviso: soma atual em ${totalMixSum}% precisa de ajuste)`
+                          : 'Ponderada pelo seu volume real de Pix, Débito e Crédito'}
                       </span>
                     </div>
-                    <span className="text-lg font-black font-mono text-emerald-400">
+                    <span className={`text-lg font-black font-mono ${
+                      totalMixSum > 100 ? 'text-rose-400' : 'text-emerald-400'
+                    }`}>
                       {effectiveCardFee.toFixed(2)}%
                     </span>
                   </div>
