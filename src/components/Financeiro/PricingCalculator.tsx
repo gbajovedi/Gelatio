@@ -375,6 +375,7 @@ export const PricingCalculator: React.FC = () => {
                   value={rent || ''}
                   onChange={e => setRent(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -385,6 +386,7 @@ export const PricingCalculator: React.FC = () => {
                   value={electricity || ''}
                   onChange={e => setElectricity(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -395,6 +397,7 @@ export const PricingCalculator: React.FC = () => {
                   value={water || ''}
                   onChange={e => setWater(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -405,6 +408,7 @@ export const PricingCalculator: React.FC = () => {
                   value={telecom || ''}
                   onChange={e => setTelecom(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
             </div>
@@ -430,6 +434,7 @@ export const PricingCalculator: React.FC = () => {
                   value={payroll || ''}
                   onChange={e => setPayroll(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -443,7 +448,7 @@ export const PricingCalculator: React.FC = () => {
                   value={ownerSalary || ''}
                   onChange={e => setOwnerSalary(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-cyan-500/50 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="Ex: 2500.00"
+                  placeholder="0.00"
                   title="Salário mensal retirado pelo dono/mestre gelatiere"
                 />
               </div>
@@ -455,6 +460,7 @@ export const PricingCalculator: React.FC = () => {
                   value={accounting || ''}
                   onChange={e => setAccounting(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -465,6 +471,7 @@ export const PricingCalculator: React.FC = () => {
                   value={software || ''}
                   onChange={e => setSoftware(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
             </div>
@@ -492,7 +499,7 @@ export const PricingCalculator: React.FC = () => {
                   value={equipmentMaintenance || ''}
                   onChange={e => setEquipmentMaintenance(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="Ex: 250.00"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -505,7 +512,7 @@ export const PricingCalculator: React.FC = () => {
                   value={equipmentDepreciation || ''}
                   onChange={e => setEquipmentDepreciation(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="Ex: 350.00"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -518,7 +525,7 @@ export const PricingCalculator: React.FC = () => {
                   value={cleaningHygiene || ''}
                   onChange={e => setCleaningHygiene(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="Ex: 150.00"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -531,6 +538,7 @@ export const PricingCalculator: React.FC = () => {
                   value={secPackaging || ''}
                   onChange={e => setSecPackaging(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
             </div>
@@ -557,7 +565,7 @@ export const PricingCalculator: React.FC = () => {
                   value={fixedTaxes || ''}
                   onChange={e => setFixedTaxes(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-amber-500/50 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="Ex: 75.00"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -570,7 +578,7 @@ export const PricingCalculator: React.FC = () => {
                   value={licensesAndPermits || ''}
                   onChange={e => setLicensesAndPermits(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="Ex: 100.00"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -594,6 +602,7 @@ export const PricingCalculator: React.FC = () => {
                   value={marketing || ''}
                   onChange={e => setMarketing(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
               <div className="col-span-2 flex items-center justify-between pt-1 border-t border-slate-800">
@@ -630,6 +639,7 @@ export const PricingCalculator: React.FC = () => {
                 value={monthlyUnits || ''}
                 onChange={e => setMonthlyUnits(parseFloat(e.target.value) || 1)}
                 className="w-40 bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white font-mono font-bold mt-1"
+                placeholder="0"
               />
             </div>
             <div className="text-right">
@@ -661,6 +671,7 @@ export const PricingCalculator: React.FC = () => {
                   value={sampleCaldaCostKg || ''}
                   onChange={e => setSampleCaldaCostKg(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white font-mono font-black"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -671,6 +682,7 @@ export const PricingCalculator: React.FC = () => {
                   value={tubWeightGrams || ''}
                   onChange={e => setTubWeightGrams(parseFloat(e.target.value) || 500)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white font-mono font-bold"
+                  placeholder="0"
                 />
               </div>
               <div>
@@ -682,6 +694,7 @@ export const PricingCalculator: React.FC = () => {
                   value={tubPackCost || ''}
                   onChange={e => setTubPackCost(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white font-mono font-bold"
+                  placeholder="0.00"
                 />
               </div>
               <div>
@@ -692,6 +705,7 @@ export const PricingCalculator: React.FC = () => {
                   value={targetMargin || ''}
                   onChange={e => setTargetMargin(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white font-mono font-black text-amber-300"
+                  placeholder="0.00"
                 />
               </div>
             </div>
@@ -797,7 +811,8 @@ export const PricingCalculator: React.FC = () => {
                           type="number"
                           min="0"
                           step="0.05"
-                          value={cardFeePix}
+                          value={cardFeePix !== undefined && cardFeePix !== null ? cardFeePix : ''}
+                          placeholder="0.00"
                           onChange={e => {
                             setCardFeePix(Math.max(0, parseFloat(e.target.value) || 0));
                             setCieloPlan('custom');
@@ -811,7 +826,8 @@ export const PricingCalculator: React.FC = () => {
                           type="number"
                           min="0"
                           max="100"
-                          value={mixPix}
+                          value={mixPix !== undefined && mixPix !== null ? mixPix : ''}
+                          placeholder="0"
                           onChange={e => setMixPix(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
                           className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-emerald-300 transition-colors ${
                             totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
@@ -832,7 +848,8 @@ export const PricingCalculator: React.FC = () => {
                           type="number"
                           min="0"
                           step="0.05"
-                          value={cardFeeDebit}
+                          value={cardFeeDebit !== undefined && cardFeeDebit !== null ? cardFeeDebit : ''}
+                          placeholder="0.00"
                           onChange={e => {
                             setCardFeeDebit(Math.max(0, parseFloat(e.target.value) || 0));
                             setCieloPlan('custom');
@@ -846,7 +863,8 @@ export const PricingCalculator: React.FC = () => {
                           type="number"
                           min="0"
                           max="100"
-                          value={mixDebit}
+                          value={mixDebit !== undefined && mixDebit !== null ? mixDebit : ''}
+                          placeholder="0"
                           onChange={e => setMixDebit(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
                           className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-cyan-300 transition-colors ${
                             totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
@@ -867,7 +885,8 @@ export const PricingCalculator: React.FC = () => {
                           type="number"
                           min="0"
                           step="0.05"
-                          value={cardFeeCreditSight}
+                          value={cardFeeCreditSight !== undefined && cardFeeCreditSight !== null ? cardFeeCreditSight : ''}
+                          placeholder="0.00"
                           onChange={e => {
                             setCardFeeCreditSight(Math.max(0, parseFloat(e.target.value) || 0));
                             setCieloPlan('custom');
@@ -881,7 +900,8 @@ export const PricingCalculator: React.FC = () => {
                           type="number"
                           min="0"
                           max="100"
-                          value={mixCreditSight}
+                          value={mixCreditSight !== undefined && mixCreditSight !== null ? mixCreditSight : ''}
+                          placeholder="0"
                           onChange={e => setMixCreditSight(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
                           className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-amber-300 transition-colors ${
                             totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
@@ -902,7 +922,8 @@ export const PricingCalculator: React.FC = () => {
                           type="number"
                           min="0"
                           step="0.1"
-                          value={cardFeeCreditInstallment}
+                          value={cardFeeCreditInstallment !== undefined && cardFeeCreditInstallment !== null ? cardFeeCreditInstallment : ''}
+                          placeholder="0.00"
                           onChange={e => {
                             setCardFeeCreditInstallment(Math.max(0, parseFloat(e.target.value) || 0));
                             setCieloPlan('custom');
@@ -916,7 +937,8 @@ export const PricingCalculator: React.FC = () => {
                           type="number"
                           min="0"
                           max="100"
-                          value={mixCreditInstallment}
+                          value={mixCreditInstallment !== undefined && mixCreditInstallment !== null ? mixCreditInstallment : ''}
+                          placeholder="0"
                           onChange={e => setMixCreditInstallment(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
                           className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-rose-300 transition-colors ${
                             totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
@@ -1058,9 +1080,10 @@ export const PricingCalculator: React.FC = () => {
                       type="number"
                   min="0"
                       step="0.1"
-                      value={cardFeeManual}
+                      value={cardFeeManual || ''}
                       onChange={e => setCardFeeManual(Math.max(0, parseFloat(e.target.value) || 0))}
                       className="w-28 bg-slate-950 border border-amber-500/60 rounded-lg p-1.5 text-sm font-mono font-bold text-amber-300 text-right pr-6"
+                      placeholder="0.00"
                     />
                     <span className="absolute right-2 top-2 text-slate-500 font-bold text-xs">%</span>
                   </div>
@@ -1090,7 +1113,7 @@ export const PricingCalculator: React.FC = () => {
                       value={salesTaxPercent || ''}
                       onChange={e => setSalesTaxPercent(Math.max(0, parseFloat(e.target.value) || 0))}
                       className="w-28 bg-slate-950 border-2 border-cyan-500/60 focus:border-cyan-400 focus:outline-none rounded-lg pl-3 pr-6 py-1.5 text-sm text-cyan-300 font-mono font-black text-right"
-                      placeholder="0.0"
+                      placeholder="0.00"
                     />
                     <span className="absolute right-2.5 top-2 text-slate-500 font-bold text-xs pointer-events-none">%</span>
                   </div>
