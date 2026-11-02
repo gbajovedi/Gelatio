@@ -5,113 +5,175 @@
 [![React](https://img.shields.io/badge/React-18-blue)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](https://opensource.org/licenses/MIT)
 
-> **Progressive Web App (PWA)** profissional para cálculo, formulação bromatológica, balanceamento e gestão de custos de gelatos artesanais e sorvetes.
+> **Progressive Web App (PWA)** profissional para cálculo bromatológico, balanceamento termodinâmico, rotulagem regulamentar ANVISA e engenharia de custos para gelaterias artesanais e indústrias de sorvete.
 
 👉 **Acesse o aplicativo online:** [**https://gbajovedi.github.io/Gelatio/**](https://gbajovedi.github.io/Gelatio/)
 
+---
+
 ## 📲 Como Instalar como Aplicativo (PWA)
 
-O **Gelatio** pode ser instalado diretamente no seu smartphone, tablet ou computador, funcionando com visual de aplicativo nativo em tela cheia e **100% offline**:
+O **Gelatio** pode ser instalado diretamente no seu smartphone, tablet ou computador, funcionando com interface nativa em tela cheia e operação **100% offline**:
 
 - **📱 Android (Google Chrome):** Acesse o link acima, toque no menu de **três pontinhos** no canto superior e selecione **"Instalar aplicativo"** ou **"Adicionar à tela inicial"**.
 - **🍏 iPhone / iPad (Safari):** Abra o link no Safari, toque no botão de **Compartilhar** (ícone de quadrado com seta para cima) e selecione **"Adicionar à Tela de Início"**.
-- **💻 Computador (Chrome / Edge):** Abra o link e clique no ícone de **computador com seta para baixo** no canto direito da barra de endereço para **"Instalar Aplicativo"** (ou crie um atalho na Área de Trabalho).
+- **💻 Computador (Chrome / Edge):** Abra o link e clique no ícone de **computador com seta para baixo** no canto direito da barra de endereço para **"Instalar Gelatio"** (ou crie um atalho na Área de Trabalho).
 
-> **💡 Dica para a Cozinha:** Uma vez instalado, o aplicativo abre instantaneamente e não necessita de Wi-Fi ou conexão com a internet para você consultar ou balancear suas receitas.
-
+> **💡 Dica para a Cozinha & Produção:** Uma vez instalado, o aplicativo abre instantaneamente e não consome internet nem precisa de Wi-Fi para você consultar, formular, imprimir ou balancear suas receitas.
 
 ---
 
 ## 📱 Visão Geral
 
-Desenvolvido para superar as limitações das planilhas convencionais (onde editar ingredientes quebrava fórmulas matriciais de busca), o **Gelatio** é uma aplicação web moderna, reativa e **100% offline-first**. 
+Desenvolvido para superar em definitivo as limitações e a fragilidade das planilhas eletrônicas convencionais, o **Gelatio** é uma aplicação web moderna, ultra-rápida, reativa e **100% offline-first**.
 
-Ele permite formular e ajustar receitas diretamente na bancada da produção, visualizar diagnósticos térmicos e nutricionais em tempo real, gerenciar um catálogo de **177 receitas pré-balanceadas**, manipular **190 matérias-primas** e calcular a formação precisa do preço de venda com rateio de custos fixos.
+O sistema conta com um catálogo nativo de **155 receitas balanceadas**, uma base bromatológica com **208 matérias-primas**, **16 bases e pré-preparos** e **14 estilos técnicos calibrados**, cobrindo desde o gelato clássico italiano de vitrine até sorbets alcoólicos, formulações veganas, proteicas e zero açúcar.
 
 ---
 
-## ✨ Principais Recursos
+## ✨ Recursos & Funcionalidades
 
-### ⚖️ 1. Bancada de Balanceamento Reativo
-- **Edição em Tempo Real:** Altere insumos e gramagens livremente sem quebrar referências ou fórmulas.
-- **Metas Bromatológicas por Estilo:** Validação instantânea (`Ok`, `Baixo`, `Alto`) contra os parâmetros ideais de 8 categorias oficiais:
+### ⚖️ 1. Bancada de Balanceamento Reativo & Padrão Ouro
+- **Edição Dinâmica em Tempo Real:** Ajuste gramagens e insumos livremente com recálculo instantâneo de toda a matriz bromatológica.
+- **14 Estilos e Perfis Bromatológicos Calibrados:**
   * *Gelatos de Leite*
-  * *Sorbets*
+  * *Gelatos de Leite com Chocolate*
   * *Gelatos de Leite com Fruta*
-  * *Chocolate base água*
-  * *Vegano*
-  * *Alcoólicos*
-  * *Zero Açúcar*
-  * *Gelatos Proteicos*
-- **Termômetro de Vitrine:** Cálculo da temperatura estimada de serviço (-10°C a -14°C) a partir do PAC relativo e da matriz de calda.
-- **Rótulo Automático de Alérgenos:** Detecção regulamentar de leite, lactose, glúten (trigo, aveia, cevada, biscoitos) e oleaginosas.
-- **Escala de Lote em 1 Clique:** Multiplicação proporcional automática de calda base para qualquer volume de produção (ex.: de 1.000 g para 3.500 g, 5.000 g ou cubas inteiras) e botão de normalização para 1 kg.
-- **Persistência Local Flexível:** Salve alterações diretamente na receita original ou crie novas variações personalizadas armazenadas no seu dispositivo.
-
-### 🍯 2. Módulo de Pós-Produção (Variegatos & Inclusões)
-- Adição de mesclas e recheios incorporados após o congelamento/batimento.
-- Cálculo da proporção de mescla no produto final (%) e reflexo direto no custo total por quilo.
-
-### 📖 3. Livro com 177 Receitas Catalogadas
-- Repositório com 177 receitas testadas da gelateria tradicional italiana e contemporânea.
-- Busca instantânea por título ou por insumo (ex: receitas com pistache, cacau, maracujá).
-- Botão **"Carregar na Calculadora"** para puxar a receita para edição e teste imediato.
-
-### 🥄 4. Tabela de Insumos & Custos (190 Matérias-Primas)
-- Banco de dados bromatológico completo:
-  * Açúcares, Gorduras, SLNG (Sólidos Não Gordurosos do Leite), Outros Sólidos, Sólidos Totais, Água, POD, PAC e Proteínas.
-- Edição rápida e simplificada do **Custo/Kg** para manter as fichas técnicas sempre alinhadas aos preços dos seus fornecedores.
-- Cadastro de novos insumos personalizados.
-
-### 👨‍🍳 5. Pré-preparos & Variegatos Caseiros (95 Formulações)
-- Fórmulas de caldas base, mixes (ex: *Mix Zero*), pastas e variegatos artesanais (Brigadeiro, Caramelo Flor de Sal, Cocada, etc.).
-- Fichas completas com gramagens de ingredientes e procedimentos detalhados de cocção/forno.
-
-### 💰 6. Engenharia de Custos & Precificação
-- Simulador de custos indiretos mensais (aluguel, luz, folha, marketing, sistemas, embalagens).
-- Rateio fixo por unidade produzida.
-- Formação de preço por markup de margem líquida desejada e taxas de cartão.
-- Cálculo de:
-  * **Custo da Calda Base (R$/Kg)**
-  * **Custo Final com Mesclas (R$/Kg)**
-  * **Custo por Bola (60 g)**
-  * **Preço Sugerido do Pote (500 g)**
-
-### 💾 7. Sistema de Backup & Importação/Exportação (.JSON)
-- Armazenamento 100% offline usando **IndexedDB (Dexie.js)**.
-- **Exportar Backup (.JSON):** Baixe todas as suas receitas, alterações de custos e insumos novos em um único arquivo.
-- **Importar Backup (.JSON):** Restaure seus dados ou sincronize entre celular, tablet e computador com modos de mesclagem ou substituição.
-- **Restaurar Padrões de Fábrica:** Recupere a base inicial da planilha com um único clique.
-
-### 🖨️ 8. Modo Ficha Técnica / Cozinha
-- Interface limpa com formatação especial para impressão física ou PDF, ideal para apoiar o operador na pesagem dos ingredientes na balança.
+  * *Gelatos de Oleaginosas (Pistache, Avelã, Amendoim)*
+  * *Gelatos Proteicos (Whey / Isolados)*
+  * *Gelatos Zero Açúcar*
+  * *Sorbets Cítricos / Frutas Ácidas*
+  * *Sorbets Polposos / Frutas Densas*
+  * *Sorbets de Chocolate base água*
+  * *Sorbets Alcoólicos*
+  * *Sorbets Zero Açúcar*
+  * *Veganos / Plant-Based*
+  * *Alcoólicos base leite*
+  * *Sorbets Especiais*
+- **Gauges Bromatológicos com Metas:** Acompanhamento visual de limites mínimos, máximos e alvos ideais para:
+  * Açúcares Totais (%)
+  * Gorduras Lipídicas (%)
+  * Sólidos Não Gordurosos do Leite — SLNG (%)
+  * Outros Sólidos (%)
+  * Sólidos Totais (%)
+  * POD (*Potere Dolcificante* / Dulçor)
+  * PAC (*Potere Anticongelante* / Poder Anticongelante)
+- **Escala de Lote em 1 Clique:** Multiplicação ou divisão proporcional instantânea da receita para qualquer tamanho de batelada (ex.: 1 kg, 3,5 kg, 5 kg ou cubas de 10 kg) e botão de normalização para 1.000 g.
+- **Rótulo Automático de Alérgenos:** Detecção regulamentar em tempo real de leite/lactose, glúten (trigo, aveia, cevada) e oleaginosas (castanhas, nozes, avelã, pistache).
 
 ---
 
-## 🎯 Parâmetros Bromatológicos Fundamentais
+### 🏷️ 2. Rotulagem Nutricional Oficial ANVISA (RDC 429/2020 & IN 75/2020)
+- **Tabela Nutricional Padronizada:** Geração automática da tabela nos moldes oficiais exigidos pela ANVISA, com colunas para **100 g**, **Porção Personalizada** e **%VD\***:
+  * Valor Energético (kcal e kJ)
+  * Carboidratos Totais, Açúcares Totais e **Açúcares Adicionados**
+  * Proteínas
+  * Gorduras Totais, Gorduras Saturadas e Gorduras Trans
+  * Fibras Alimentares e Sódio (mg)
+- **Selos Frontais de Lupa (FOP — Front-of-Package):**
+  * Algoritmo regulamentar que avalia os teores por 100 g e exibe os selos oficiais da **Lupa ANVISA** para nutrientes em excesso: **Alto em Açúcar Adicionado**, **Alto em Gordura Saturada** e **Alto em Sódio**.
+  * Chave rápida para ativar/desativar a visualização dos selos no rótulo.
+- **Personalização de Porções e Embalagens:**
+  * Escolha flexível do tamanho da porção (ex: 60 g / 1 bola, 100 g, etc.).
+  * Seleção do tamanho da embalagem tanto em massa (**g**) quanto em volume (**ML**), calculando o número exato de porções por embalagem.
+  * Declaração de Conteúdo Líquido com dupla especificação regulamentar (ex.: `500 ML (375 G)`).
+- **Lista Oficial de Ingredientes:** Ordenação decrescente automática por peso e agrupamento de insumos compostos.
+- **Impressão Profissional do Rótulo:** Layout otimizado para impressão de etiquetas em tamanho real ou exportação de PDF para gráficas e rotuladoras.
+- **Copiar Texto:** Exportação rápida dos dados nutricionais tabulados para transferência direta para softwares de design ou fichas técnicas.
 
-| Parâmetro | Significado Técnico | Efeito no Gelato |
+---
+
+### 🌡️ 3. Simulador Térmico de Vitrine & Ponto de Espátula
+- **Slider Térmico Interativo (-8°C a -20°C):** Ajuste a temperatura exata da sua vitrine ou freezer e visualize o comportamento físico do gelato.
+- **Atalhos Rápidos de Cenário:**
+  * 🏺 **Pozzetti (-11°C):** Armazenamento vedado italiano tradicional.
+  * 🍨 **Vitrine Clássica (-12°C):** Exposição padrão com temperatura equilibrada.
+  * ❄️ **Vitrine Aberta (-14°C):** Vitrines ventiladas com maior perda térmica.
+  * 🧊 **Pote / Freezer (-18°C):** Consumo domiciliar direto do congelador.
+- **Diagnóstico de Consistência:** Régua visual informando a colherabilidade (*Muito Macio*, *Macio*, *Spatolabile Ideal*, *Firme*, *Freezer*).
+- **Fração Congelada em Tempo Real:** Cálculo bromatológico da porcentagem e gramatura de **gelo sólido formado** versus **xarope concentrado fluido não congelado** em qualquer temperatura.
+
+---
+
+### 🌀 4. Emulsão & Estimativa de Overrun (Carpigiani)
+- **Equilíbrio Lipídio vs. SLNG:** Análise da matriz coloidal de proteínas do leite e gorduras emulsionadas.
+- **Estimativa de Overrun (%):** Previsão matemática da aeração incorporada no batimento na produtora vertical ou horizontal (ex.: ~32% a 38% no padrão artesanal italiano).
+- **Diagnóstico da Calda:** Alertas para caldas magras com aeração excessivamente rápida ou caldas sobrecarregadas de gordura com risco de amanteigamento.
+
+---
+
+### 📖 5. Catálogo com 155 Receitas Balanceadas
+- Repositório completo de 155 receitas testadas da gelateria clássica, contemporânea e funcional.
+- **Combobox com Busca Inteligente:** Pesquisa instantânea por título, estilo ou ingredientes específicos (ex.: pistache, maracujá, cacau black, mascarpone).
+- Carregamento imediato na Bancada de Balanceamento com um clique.
+
+---
+
+### 🥄 6. Tabela de Insumos & Custos (208 Matérias-Primas)
+- **Banco de Dados Bromatológico Completo:** Composição detalhada por insumo (Água, Açúcares, Gorduras, SLNG, Outros Sólidos, Proteínas, Fibras, Sódio, POD, PAC e PAC Alcoólico).
+- **Gestão de Custos por Quilo (R$/Kg):** Atualize o preço das matérias-primas e veja o reflexo imediato em todas as receitas e cálculos financeiros.
+- **Cadastro Personalizado:** Adicione novos insumos e pastas especiais da sua gelateria.
+
+---
+
+### 👨‍🍳 7. Pré-preparos & Variegatos Artesanais (16 Fórmulas)
+- Fórmulas de caldas base (Base Branca, Base Amarela, Base Chocolate, Mix Zero), pastas e variegatos caseiros.
+- Procedimentos detalhados de cocção, pasteurização, maturação e choque térmico.
+
+---
+
+### 💰 8. Engenharia de Custos, Markup & Precificação
+- **Simulador de Custos Indiretos:** Rateio preciso de aluguel, energia elétrica, equipe, embalagens e marketing por kg produzido.
+- **Formação de Preço de Venda:** Cálculo de preço sugerido com base na margem de lucro líquida desejada e taxas de operadoras de cartão.
+- **Métricas Chave:**
+  * Custo da Calda Base (R$/Kg)
+  * Custo Final com Variegatos e Mesclas (R$/Kg)
+  * Custo por Porção / Bola (ex: 60 g)
+  * Preço de Venda Sugerido para Potes (ex: 500 ml / 500 g)
+
+---
+
+### 🎨 9. Interface Visual Multitema com 3 Modos
+- **Alternador de Tema em 3 Fases:**
+  * 🌓 **Auto:** Acompanha automaticamente a preferência do sistema operacional.
+  * ☀️ **Claro (Panna Linho Gastronômico):** Fundo acolhedor e profissional em tom creme panna (`#f6f5f0`), reduzindo a fadiga ocular sob iluminação forte de laboratórios e cozinhas.
+  * 🌙 **Escuro (Deep Slate):** Interface elegante em tons ardósia e âmbar (`#0f172a`), com alto contraste e economia de bateria em telas OLED.
+
+---
+
+### 💾 10. Sistema de Backup & Sincronização Local (.JSON)
+- Armazenamento 100% offline via **IndexedDB (Dexie.js)** no próprio navegador.
+- **Exportar Backup (.JSON):** Salve todas as suas receitas, alterações de insumos e configurações em um arquivo seguro.
+- **Importar Backup (.JSON):** Transfira facilmente dados entre celular, tablet e notebook com opções de mesclagem ou substituição completa.
+- **Restaurar Padrões de Fábrica:** Retorne à base de dados original calibrada a qualquer momento.
+
+---
+
+## 🎯 Parâmetros Bromatológicos Técnicos
+
+| Parâmetro | Significado Técnico | Efeito Prático no Gelato |
 | :--- | :--- | :--- |
-| **POD** | *Potere Dolcificante* (Poder Adoçante) | Dulçor relativo à sacarose (referência = 1.0). Evita gelatos enjoativos. |
-| **PAC** | *Potere Anticongelante* | Determina o ponto de congelamento e a firmeza na espátula em vitrine (-11°C a -14°C). |
-| **Gorduras** | Lipídios (creme de leite, manteiga, pastas puras) | Fornecem corpo, cremosidade, palatabilidade e desaceleram o derretimento. |
-| **SLNG** | Sólidos Não Gordurosos do Leite (*MSNF*) | Proteínas e lactose que retêm água livre e auxiliam na incorporação estável de ar (*overrun*). |
-| **Açúcares** | Sacarose, Dextrose, Glucose, Frutose, etc. | Responsáveis diretos pela combinação de sabor doce e maciez térmica. |
-| **Outros Sólidos** | Fibras, estabilizantes, cacau, polpas | Estruturam caldas à base de água (sorbets) e equilibram o extrato seco. |
-| **Sólidos Totais** | Matéria seca total versus água livre | Previne a formação de cristais de gelo perceptíveis na língua. |
+| **POD** | *Potere Dolcificante* (Poder Adoçante) | Dulçor relativo à sacarose (sacarose = 1.0). Evita produtos excessivamente doces ou sem sabor. |
+| **PAC** | *Potere Anticongelante* | Determina o abaixamento crioscópico e a firmeza na espátula em vitrine (-11°C a -14°C). |
+| **Gorduras** | Lipídios (leite, creme de leite, pastas puras) | Conferem cremosidade, palatabilidade, calor na boca e desaceleram o derretimento. |
+| **SLNG** | Sólidos Não Gordurosos do Leite (*MSNF*) | Proteínas e lactose que retêm água livre e formam a estrutura que estabiliza o *overrun*. |
+| **Açúcares** | Sacarose, Dextrose, Glucose, Frutose, Maltitol | Equilíbrio fundamental entre maciez térmica e dulçor. |
+| **Outros Sólidos** | Fibras, cacau, neutros, sólidos de frutas | Estruturam caldas de sorbet base água e evitam a cristalização de gelo perceptível. |
+| **Sólidos Totais** | Matéria seca total em relação à água livre | Garante textura aveludada e evita a sensação áspera de gelo na língua. |
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Core:** [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- **Build Tool:** [Vite 6](https://vitejs.dev/)
-- **Estilização:** [Tailwind CSS](https://tailwindcss.com/)
+- **Interface:** [React 18](https://react.dev/) + [TypeScript 5](https://www.typescriptlang.org/)
+- **Estilização & Temas:** [Tailwind CSS 3](https://tailwindcss.com/)
+- **Build & Bundler:** [Vite 6](https://vitejs.dev/)
 - **Ícones:** [Lucide React](https://lucide.dev/)
-- **Banco de Dados Local:** [IndexedDB](https://developer.mozilla.org/pt-BR/docs/Web/API/IndexedDB_API) via [Dexie.js](https://dexie.org/)
-- **Motor PWA / Cache:** [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) & [Workbox](https://developer.chrome.com/docs/workbox/)
-- **CI/CD:** [GitHub Actions](https://github.com/features/actions) integrado ao [GitHub Pages](https://pages.github.com/)
+- **Banco de Dados Offline:** [IndexedDB](https://developer.mozilla.org/pt-BR/docs/Web/API/IndexedDB_API) gerenciado via [Dexie.js 4](https://dexie.org/)
+- **Motor PWA:** [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) com Service Workers e Workbox
+- **CI/CD:** [GitHub Actions](https://github.com/features/actions) automatizado para o [GitHub Pages](https://pages.github.com/)
 
 ---
 
@@ -121,12 +183,12 @@ Ele permite formular e ajustar receitas diretamente na bancada da produção, vi
 - [Node.js](https://nodejs.org/) (versão 18 ou superior)
 - Git
 
-### Instalação
+### Passo a Passo
 
 1. Clone o repositório:
 ```bash
 git clone https://github.com/gbajovedi/Gelatio.git
-cd Receitas-e-Balanceamento-de-Gelatos
+cd Gelatio
 ```
 
 2. Instale as dependências:
@@ -139,49 +201,14 @@ npm install
 npm run dev
 ```
 
-4. Abra no navegador:
+4. Acesse no navegador:
 ```text
 http://localhost:5173
 ```
 
-### Gerar Build de Produção
+### Compilar para Produção (Build)
 ```bash
 npm run build
-```
-
----
-
-## 📁 Estrutura de Arquivos
-
-```text
-Receitas-e-Balanceamento-de-Gelatos/
-├── .github/workflows/          # Automação de deploy contínuo no GitHub Pages
-├── extracted_data/             # Bases brutas extraídas da planilha em JSON
-├── public/                     # Favicons, ícones de alta resolução PWA e manifest
-├── src/
-│   ├── components/
-│   │   ├── Balanceamento/      # Telas e widgets da calculadora, gauges e pós-produção
-│   │   ├── Financeiro/         # Simulador de precificação e rateio de custos fixos
-│   │   ├── ImportExport/       # Modal de backup e restauração JSON
-│   │   ├── Ingredientes/       # Tabela de gestão e edição de insumos
-│   │   ├── PrePreparos/        # Lista de bases e variegatos artesanais
-│   │   ├── Receitas/           # Catálogo das 177 receitas de gelato
-│   │   └── Navbar.tsx          # Barra de navegação responsiva
-│   ├── core/
-│   │   └── calculator.ts       # Motor matemático puro de balanceamento e termodinâmica
-│   ├── data/                   # Datasets integrados (ingredientes, receitas, estilos)
-│   ├── db/
-│   │   └── database.ts         # Camada de banco IndexedDB (Dexie) com seed de fábrica
-│   ├── types/
-│   │   └── gelato.ts           # Interfaces e tipos TypeScript de alta precisão
-│   ├── App.tsx                 # Controlador principal da aplicação
-│   ├── index.css               # Estilos Tailwind e regras de impressão para cozinha
-│   └── main.tsx                # Ponto de montagem da aplicação React
-├── Planilha de Gelatos...xlsx  # Planilha original em Excel (mantida localmente)
-├── index.html                  # Template HTML do PWA
-├── package.json                # Dependências e scripts
-├── tailwind.config.js          # Configurações do Tailwind
-└── vite.config.ts              # Configuração Vite com base path e plugins PWA
 ```
 
 ---
@@ -189,3 +216,5 @@ Receitas-e-Balanceamento-de-Gelatos/
 ## 👨‍🍳 Autor
 
 - **Gabriel Ajovedi** — [@gbajovedi](https://github.com/gbajovedi)
+- Repositório Oficial: [https://github.com/gbajovedi/Gelatio](https://github.com/gbajovedi/Gelatio)
+- Acesso Web Online: [https://gbajovedi.github.io/Gelatio/](https://gbajovedi.github.io/Gelatio/)
