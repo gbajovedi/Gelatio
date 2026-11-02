@@ -1670,18 +1670,6 @@ export const PricingCalculator: React.FC = () => {
                 </div>
               ))}
             </div>
-
-            <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-700/80 text-xs text-slate-300 leading-relaxed flex items-start gap-2">
-              <span className="text-base">💡</span>
-              <div>
-                <strong className="text-amber-300 block mb-0.5">Estratégia de Desconto no Pix:</strong>
-                Ao vender no Pix você economiza{' '}
-                <strong className="text-emerald-300 font-mono">
-                  R$ {(paymentScenarios[2].feeVal - paymentScenarios[0].feeVal).toFixed(2)}
-                </strong>{' '}
-                por pote em comparação com o cartão de crédito 1x. Você pode conceder esse valor como desconto à vista sem reduzir seu lucro planejado!
-              </div>
-            </div>
           </div>
         </div>
       </div>
