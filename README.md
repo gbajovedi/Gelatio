@@ -97,7 +97,7 @@ O sistema conta com um catálogo nativo de **155 receitas balanceadas**, uma bas
 
 ---
 
-### 🌀 4. Emulsão & Estimativa de Overrun (Carpigiani)
+### 🌀 4. Emulsão & Estimativa de Overrun (Método Italiano)
 - **Equilíbrio Lipídio vs. SLNG:** Análise da matriz coloidal de proteínas do leite e gorduras emulsionadas.
 - **Estimativa de Overrun (%):** Previsão matemática da aeração incorporada no batimento na produtora vertical ou horizontal (ex.: ~32% a 38% no padrão artesanal italiano).
 - **Diagnóstico da Calda:** Alertas para caldas magras com aeração excessivamente rápida ou caldas sobrecarregadas de gordura com risco de amanteigamento.

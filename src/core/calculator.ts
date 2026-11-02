@@ -307,7 +307,7 @@ export function calculateBatchAnalysis(
       emulsionMetrics = {
         fatMsnfRatio,
         status: 'ideal',
-        statusLabel: 'Emulsão Equilibrada (Carpigiani)',
+        statusLabel: 'Emulsão Equilibrada (Método Italiano)',
         overrunEstimatePct: baseOverrun,
         overrunRange: `${baseOverrun - 3}% a ${baseOverrun + 3}%`,
         advice: 'Excelente equilíbrio entre lipídios e proteínas lácteas (0.75:1 a 1.25:1). Formação estável de glóbulos com textura aveludada e aeração sedosa.'

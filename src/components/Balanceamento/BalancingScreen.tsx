@@ -499,7 +499,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           <div className="flex items-center gap-2 flex-wrap">
             {isTargetOfficial ? (
               <>
-                {/* Segmented Switch: Referência Bibliográfica (Padrão Ouro | Carpigiani) */}
+                {/* Segmented Switch: Referência Bibliográfica (Padrão Ouro | Padrão Clássico Italiano) */}
                 <div className="inline-flex items-center bg-slate-900 p-0.5 rounded-xl border border-slate-700/80 shadow-inner">
                   <button
                     type="button"
@@ -509,7 +509,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                         ? 'bg-emerald-500/25 text-emerald-300 shadow-sm border border-emerald-500/40'
                         : 'text-slate-400 hover:text-slate-200'
                     }`}
-                    title="Padrão Ouro Híbrido Protegido (Recomendado: Caviezel + PAC Carpigiani)"
+                    title="Padrão Ouro Híbrido Protegido (Recomendado: Caviezel + PAC Clássico Italiano)"
                   >
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Padrão Ouro</span>
@@ -524,10 +524,10 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                           ? 'bg-sky-500/25 text-sky-300 shadow-sm border border-sky-500/40'
                           : 'text-slate-400 hover:text-slate-200'
                       }`}
-                      title="Carpigiani Gelato University Estrito (Apostila 2025/2026)"
+                      title="Padrão Clássico Italiano (Diretrizes Acadêmicas Tradicionais)"
                     >
                       <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
-                      <span>Carpigiani</span>
+                      <span>Padrão Clássico Italiano</span>
                     </button>
                   )}
                 </div>

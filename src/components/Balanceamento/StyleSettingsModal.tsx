@@ -440,7 +440,7 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
                     )}
                     {presetId === 'carpigiani' && hasCarpigianiData(selectedStyleName) && (
                       <span className="text-[11px] px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30 font-semibold">
-                        🎓 Carpigiani Estrito
+                        🎓 Padrão Clássico Italiano
                       </span>
                     )}
                     {presetId === 'custom' && (
@@ -564,7 +564,7 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
                       ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm'
                       : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
                   }`}
-                  title="Aplica o Padrão Ouro Híbrido Protegido (Recomendado com proteção de Caviezel e PAC Carpigiani)"
+                  title="Aplica o Padrão Ouro Híbrido Protegido (Recomendado com proteção de Caviezel e PAC do Padrão Clássico Italiano)"
                 >
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Restaurar Padrão Ouro</span>
@@ -579,18 +579,18 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
                         ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm'
                         : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
                     }`}
-                    title="Carrega as réguas estritas da Carpigiani Gelato University (Apostila 2025/2026)"
+                    title="Carrega as réguas tradicionais do Padrão Clássico Italiano"
                   >
                     <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
-                    <span>Carpigiani Estrito</span>
+                    <span>Padrão Clássico Italiano</span>
                   </button>
                 ) : (
                   <span
                     className="text-[11px] text-slate-400 bg-slate-800/80 border border-slate-700/70 px-2.5 py-1 rounded-xl italic flex items-center gap-1"
-                    title="Este estilo não possui parâmetros na apostila do Curso Intermediário da Carpigiani (reservado ao Curso Avançado ou nutrição esportiva)"
+                    title="Este estilo não possui parâmetros na bibliografia clássica italiana (reservado a formulações avançadas ou nutrição esportiva)"
                   >
                     <Info className="w-3 h-3 text-slate-400" />
-                    <span>Sem dados na CGU</span>
+                    <span>Sem dados no Clássico Italiano</span>
                   </span>
                 )}
 

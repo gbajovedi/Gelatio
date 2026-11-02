@@ -390,7 +390,7 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
               }`}
               title={
                 densityAndVolume?.baseOverrunPct && userOverrun !== densityAndVolume.baseOverrunPct
-                  ? `Restaurar aeração padrão Carpigiani (${densityAndVolume.baseOverrunPct}%)`
+                  ? `Restaurar aeração padrão (Método Italiano: ${densityAndVolume.baseOverrunPct}%)`
                   : undefined
               }
             >

@@ -413,13 +413,13 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                         ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-black'
                         : 'text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10'
                     }`}
-                    title="Padrão Ouro Híbrido Protegido (PAC Carpigiani + Caviezel Anti-Arenosidade)"
+                    title="Padrão Ouro Híbrido Protegido (PAC Clássico Italiano + Caviezel Anti-Arenosidade)"
                   >
                     <ShieldCheck className="w-3.5 h-3.5 stroke-[2.4]" />
                     <span>Padrão Ouro</span>
                   </button>
 
-                  {/* Carpigiani Estrito */}
+                  {/* Padrão Clássico Italiano */}
                   <button
                     type="button"
                     onClick={() => handleSelectPreset('carpigiani')}
@@ -428,10 +428,10 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                         ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/20 font-black'
                         : 'text-slate-400 hover:text-sky-300 hover:bg-sky-500/10'
                     }`}
-                    title="Carpigiani Gelato University - Diretrizes Acadêmicas Estritas"
+                    title="Padrão Clássico Italiano - Diretrizes Acadêmicas Tradicionais"
                   >
                     <GraduationCap className="w-3.5 h-3.5 stroke-[2.4]" />
-                    <span>Carpigiani Estrito</span>
+                    <span>Padrão Clássico Italiano</span>
                   </button>
 
                   {/* Personalizado */}

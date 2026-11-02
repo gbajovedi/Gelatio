@@ -202,7 +202,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
       }
     } else if (key === 'fat' && emulsion && emulsion.status !== 'sorbet') {
       icon = (
-        <span className="text-purple-400/90 hover:text-purple-300 transition-colors flex items-center" title="Razão Lipídica Carpigiani">
+        <span className="text-purple-400/90 hover:text-purple-300 transition-colors flex items-center" title="Razão Lipídica (Método Italiano)">
           <Wind className="w-3.5 h-3.5" />
         </span>
       );
@@ -601,7 +601,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
                 <div className="flex items-center gap-2 text-purple-300">
                   <Wind className="w-4 h-4 text-purple-400" />
                   <span className="text-xs sm:text-sm uppercase font-bold tracking-wider text-purple-200">
-                    Emulsão & Overrun (Carpigiani)
+                    Emulsão & Overrun (Método Italiano)
                   </span>
                 </div>
 
