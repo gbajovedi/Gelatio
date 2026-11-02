@@ -25,6 +25,87 @@ interface AnvisaNutritionalModalProps {
   ingredients: Ingredient[];
 }
 
+/**
+ * Selo Oficial da Rotulagem Nutricional Frontal da ANVISA (RDC 429/2020 e IN 75/2020)
+ * Reproduz com fidelidade milimétrica o modelo gráfico oficial do Anexo XVII (lupa + caixas pretas)
+ */
+export const AnvisaFopSeal: React.FC<{
+  highAddedSugars: boolean;
+  highSaturatedFat: boolean;
+  highSodium: boolean;
+  className?: string;
+}> = ({ highAddedSugars, highSaturatedFat, highSodium, className = '' }) => {
+  if (!highAddedSugars && !highSaturatedFat && !highSodium) return null;
+
+  return (
+    <div
+      className={`inline-flex flex-col gap-1 bg-white border-[2.5px] border-black rounded-[14px] p-1 w-[150px] shadow-sm select-none shrink-0 ${className}`}
+    >
+      {/* Caixa do Topo: Lupa Oficial + ALTO EM */}
+      <div className="flex items-center justify-center gap-1.5 border-2 border-black rounded-[9px] bg-white py-1 px-2 h-[38px]">
+        {/* SVG da Lupa Oficial ANVISA */}
+        <svg
+          viewBox="0 0 100 100"
+          className="w-7 h-7 shrink-0"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Arco externo superior direito */}
+          <path
+            d="M 54 13 C 71 14 84 27 84 44 C 84 53 80 61 73 67"
+            stroke="black"
+            strokeWidth="5.5"
+            strokeLinecap="round"
+          />
+          {/* Aro circular da lente */}
+          <circle
+            cx="49"
+            cy="43"
+            r="23"
+            stroke="black"
+            strokeWidth="7"
+            fill="white"
+          />
+          {/* Cabo da Lupa (Preto) */}
+          <path
+            d="M 33 58 L 15 76 C 12.5 78.5 12.5 82.5 15 85 C 17.5 87.5 21.5 87.5 24 85 L 42 67 Z"
+            fill="black"
+          />
+          {/* Fenda Interna Branca do Cabo */}
+          <path
+            d="M 32 61 L 18 75 C 17 76 17 77.5 18 78.5 C 19 79.5 20.5 79.5 21.5 78.5 L 35.5 64.5 Z"
+            fill="white"
+          />
+        </svg>
+        <span className="font-black text-black text-[14.5px] tracking-tight leading-none">
+          ALTO EM
+        </span>
+      </div>
+
+      {/* Caixas Pretas dos Nutrientes */}
+      {highAddedSugars && (
+        <div className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]">
+          <span className="text-[12px] leading-tight">AÇÚCAR</span>
+          <span className="text-[12px] leading-tight">ADICIONADO</span>
+        </div>
+      )}
+
+      {highSaturatedFat && (
+        <div className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]">
+          <span className="text-[12px] leading-tight">GORDURA</span>
+          <span className="text-[12px] leading-tight">SATURADA</span>
+        </div>
+      )}
+
+      {highSodium && (
+        <div className="bg-black text-white rounded-[9px] py-1.5 px-2 flex flex-col items-center justify-center text-center font-black tracking-tight leading-[1.15]">
+          <span className="text-[13px] leading-tight py-0.5">SÓDIO</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
   isOpen,
   onClose,
@@ -174,8 +255,24 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
               title="Clique para alternar a exibição da Rotulagem Frontal (Lupa ANVISA)"
             >
               <div className="flex items-center gap-1.5 font-bold">
-                <Search className={`w-3.5 h-3.5 ${showFOP ? (nutrition.frontOfPack.hasAny ? 'text-amber-400' : 'text-emerald-400') : 'text-slate-500'}`} />
-                <span>Lupa Frontal:</span>
+                <svg
+                  viewBox="0 0 100 100"
+                  className={`w-4 h-4 shrink-0 ${
+                    showFOP
+                      ? nutrition.frontOfPack.hasAny
+                        ? 'text-amber-400'
+                        : 'text-emerald-400'
+                      : 'text-slate-500'
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M 54 13 C 71 14 84 27 84 44 C 84 53 80 61 73 67" strokeWidth="7" strokeLinecap="round" />
+                  <circle cx="49" cy="43" r="23" strokeWidth="8" />
+                  <path d="M 33 58 L 15 76 C 12.5 78.5 12.5 82.5 15 85 C 17.5 87.5 21.5 87.5 24 85 L 42 67 Z" fill="currentColor" stroke="none" />
+                </svg>
+                <span>Lupa Frontal ANVISA:</span>
               </div>
 
               {/* Botão Switch visual */}
@@ -569,33 +666,29 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
             className="bg-white text-black p-5 sm:p-6 rounded-2xl border-2 border-black max-w-lg mx-auto shadow-xl font-sans print:shadow-none print:border-2 print:border-black print:max-w-none print:rounded-none"
           >
             
-            {/* 1. SELOS DE ROTULAGEM NUTRICIONAL FRONTAL (FOP) */}
+            {/* 1. SELOS DE ROTULAGEM NUTRICIONAL FRONTAL (FOP) - PADRÃO OFICIAL ANVISA */}
             {showFOP && (
               <>
                 {nutrition.frontOfPack.hasAny ? (
-                  <div className="mb-4 pb-3 border-b-2 border-black animate-in fade-in duration-200">
-                    <div className="inline-flex items-stretch border-2 border-black bg-white overflow-hidden shadow-sm">
-                      {/* Ícone da Lupa Oficial */}
-                      <div className="bg-black text-white px-2.5 py-2 flex items-center justify-center">
-                        <Search className="w-5 h-5 stroke-[2.5]" />
-                      </div>
-                      {/* Textos dos Selos */}
-                      <div className="px-3 py-1.5 flex flex-col justify-center">
-                        <span className="text-[11px] font-black uppercase tracking-tight text-black leading-tight">
-                          ALTO EM
-                        </span>
-                        <div className="flex flex-col text-[12px] font-black uppercase leading-tight text-black">
-                          {nutrition.frontOfPack.highAddedSugars && (
-                            <span>AÇÚCAR ADICIONADO</span>
-                          )}
-                          {nutrition.frontOfPack.highSaturatedFat && (
-                            <span>GORDURA SATURADA</span>
-                          )}
-                          {nutrition.frontOfPack.highSodium && (
-                            <span>SÓDIO</span>
-                          )}
-                        </div>
-                      </div>
+                  <div className="mb-4 pb-4 border-b-2 border-black flex flex-col sm:flex-row items-center sm:items-start justify-between gap-3 animate-in fade-in duration-200">
+                    <div className="flex flex-col items-center sm:items-start gap-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-black/60 print:hidden">
+                        Rotulagem Nutricional Frontal
+                      </span>
+                      <AnvisaFopSeal
+                        highAddedSugars={nutrition.frontOfPack.highAddedSugars}
+                        highSaturatedFat={nutrition.frontOfPack.highSaturatedFat}
+                        highSodium={nutrition.frontOfPack.highSodium}
+                      />
+                    </div>
+
+                    <div className="hidden sm:flex flex-col justify-center text-[10.5px] text-black/75 bg-slate-100 p-2.5 rounded-xl border border-black/10 max-w-[260px] leading-snug print:hidden">
+                      <span className="font-bold text-black uppercase mb-0.5">
+                        Selo Obrigatório (IN 75/2020)
+                      </span>
+                      <span>
+                        Padrão oficial da ANVISA com a lupa regulamentar e os destaques dos nutrientes com limites excedidos.
+                      </span>
                     </div>
                   </div>
                 ) : (
