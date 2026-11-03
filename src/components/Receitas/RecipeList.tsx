@@ -681,38 +681,12 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                 {/* Top Category Accent Line */}
                 <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${theme.gradient}`} />
 
-                <div className="space-y-3.5">
-                  {/* Meta Badges (Category & Custom & Variegato & Warning) + Ações Rápidas no Canto Superior Direito */}
-                  <div className="flex items-center justify-between gap-2 min-h-[32px]">
-                    <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                {/* Bloco Superior: Cabeçalho, Título e Slot Padronizado de Variegato */}
+                <div className="flex-1 flex flex-col min-w-0">
+                  {/* Meta Badges + Ações Rápidas no Canto Superior Direito */}
+                  <div className="flex items-center justify-between gap-2 h-8 min-h-[32px] mb-3">
+                    <div className="flex items-center gap-1.5 min-w-0 truncate">
                       <CategoryBadge category={recipe.category} />
-
-                      {recipe.variegatos && recipe.variegatos.some(v => v.name && v.grams > 0) ? (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditingVariegatoRecipe(recipe);
-                          }}
-                          className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 hover:border-amber-400 font-bold whitespace-nowrap flex items-center gap-1 transition-all cursor-pointer shadow-sm active:scale-95"
-                          title={`Clique para gerenciar mesclas desta receita (${recipe.variegatos.length} cadastrada${recipe.variegatos.length > 1 ? 's' : ''})`}
-                        >
-                          <span>🍯 Variegato</span>
-                          <span className="text-[10px] text-amber-400/80">✏️</span>
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditingVariegatoRecipe(recipe);
-                          }}
-                          className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800/80 hover:bg-amber-500/15 text-slate-400 hover:text-amber-300 border border-slate-700/60 hover:border-amber-500/30 font-semibold whitespace-nowrap flex items-center gap-1 transition-colors cursor-pointer"
-                          title="Adicionar mescla ou variegato permanente a esta receita"
-                        >
-                          <span>+ 🍯 Mescla</span>
-                        </button>
-                      )}
                       {recipe.isCustom && (
                         <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold whitespace-nowrap">
                           ✨ Personalizada
@@ -738,28 +712,11 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                       )}
                     </div>
 
-                    {/* Botões de Ações Rápidas: Mesclas, Tabela Nutricional, Copiar e Excluir no Canto Superior Direito */}
+                    {/* Botões de Ações Rápidas: Tabela Nutricional, Copiar e Excluir */}
                     <div
                       className="flex items-center gap-1 shrink-0"
                       onClick={e => e.stopPropagation()}
                     >
-                      <button
-                        type="button"
-                        onClick={() => setEditingVariegatoRecipe(recipe)}
-                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-colors active:scale-95 border ${
-                          recipe.variegatos && recipe.variegatos.some(v => v.name && v.grams > 0)
-                            ? 'text-amber-300 bg-amber-500/20 border-amber-500/50 hover:bg-amber-500/30 shadow-sm'
-                            : 'text-slate-400 hover:text-amber-300 hover:bg-amber-500/15 border-slate-700/80 hover:border-amber-500/30'
-                        }`}
-                        title={
-                          recipe.variegatos && recipe.variegatos.some(v => v.name && v.grams > 0)
-                            ? `Gerenciar mesclas de "${recipe.name}" (${recipe.variegatos.length} vinculada${recipe.variegatos.length > 1 ? 's' : ''})`
-                            : `Adicionar mescla / variegato a "${recipe.name}"`
-                        }
-                      >
-                        <span className="text-xs">🍯</span>
-                      </button>
-
                       <button
                         type="button"
                         onClick={() => setNutritionalRecipe(recipe)}
@@ -778,18 +735,20 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                         <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </button>
 
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 flex items-center justify-center transition-colors active:scale-95"
-                        title="Excluir esta receita do catálogo"
-                      >
-                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      </button>
+                      {recipe.isCustom && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 flex items-center justify-center transition-colors active:scale-95"
+                          title="Excluir esta receita do catálogo"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
 
-                  {/* Recipe Title: Altura mínima para 2 linhas garantindo alinhamento uniforme do cockpit de dados */}
+                  {/* Recipe Title: Altura mínima para 2 linhas garantindo alinhamento uniforme */}
                   <h3
                     className="font-bold text-base sm:text-lg text-white group-hover:text-amber-200 transition-colors leading-snug break-words min-h-[2.85rem] sm:min-h-[3.35rem] flex items-start"
                     title={recipe.name}
@@ -797,34 +756,49 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                     <span>{recipe.name}</span>
                   </h3>
 
-                  {/* Pílulas em Destaque de Mesclas e Variegatos */}
-                  {recipe.variegatos && recipe.variegatos.some(v => v.name && v.grams > 0) && (
-                    <div className="flex items-center gap-1.5 flex-wrap pt-0.5 pb-1" onClick={e => e.stopPropagation()}>
-                      {recipe.variegatos.filter(v => v.name && v.grams > 0).map((v, i) => {
-                        const ing = ingredientsMap.get(v.name.toLowerCase().trim());
-                        const unitCost = v.costKg !== undefined && v.costKg > 0 ? v.costKg : (ing ? ing.costKg : 0);
-                        const itemCost = (v.grams * unitCost) / 1000;
-                        return (
-                          <button
-                            key={i}
-                            type="button"
-                            onClick={() => setEditingVariegatoRecipe(recipe)}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 hover:border-amber-400 text-amber-300 text-xs font-bold transition-all shadow-sm cursor-pointer"
-                            title={`Mescla pós-calda: ${v.name} (${v.grams}g) — Custo: R$ ${itemCost.toFixed(2).replace('.', ',')}\nClique para gerenciar mesclas`}
-                          >
-                            <span className="text-amber-400">🍯</span>
-                            <span className="truncate max-w-[140px] sm:max-w-[170px]">{v.name}</span>
-                            <span className="text-amber-400 font-mono text-[11px] font-extrabold bg-amber-500/20 px-1 py-0.5 rounded">
-                              {v.grams}g
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
+                  {/* Slot de Variegatos / Mesclas: Altura padronizada para manter alinhamento estrito */}
+                  <div className="min-h-[32px] flex items-center pt-1.5 pb-1" onClick={e => e.stopPropagation()}>
+                    {recipe.variegatos && recipe.variegatos.some(v => v.name && v.grams > 0) ? (
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {recipe.variegatos.filter(v => v.name && v.grams > 0).map((v, i) => {
+                          const ing = ingredientsMap.get(v.name.toLowerCase().trim());
+                          const unitCost = v.costKg !== undefined && v.costKg > 0 ? v.costKg : (ing ? ing.costKg : 0);
+                          const itemCost = (v.grams * unitCost) / 1000;
+                          return (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => setEditingVariegatoRecipe(recipe)}
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 hover:border-amber-400 text-amber-300 text-xs font-bold transition-all shadow-sm cursor-pointer"
+                              title={`Mescla pós-calda: ${v.name} (${v.grams}g) — Custo: R$ ${itemCost.toFixed(2).replace('.', ',')}\nClique para editar mesclas`}
+                            >
+                              <span className="text-amber-400">🍯</span>
+                              <span className="truncate max-w-[140px] sm:max-w-[170px]">{v.name}</span>
+                              <span className="text-amber-400 font-mono text-[11px] font-extrabold bg-amber-500/20 px-1 py-0.5 rounded">
+                                {v.grams}g
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setEditingVariegatoRecipe(recipe)}
+                        className="opacity-0 group-hover:opacity-100 text-[11px] text-slate-500 hover:text-amber-300 border border-dashed border-slate-700/80 hover:border-amber-500/40 px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all cursor-pointer"
+                        title="Adicionar mescla ou variegato permanente a esta receita"
+                      >
+                        <span className="text-amber-400/80">🍯</span>
+                        <span>+ Mescla</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
 
+                {/* Bloco Inferior: Cockpit de Insumos/Peso/Custo + Botões de Ação com mt-auto para alinhamento 100% perfeito */}
+                <div className="mt-auto pt-2 space-y-3" onClick={e => e.stopPropagation()}>
                   {/* Linha unificada: Insumos, Peso base e Custo/kg */}
-                  <div className="flex items-center justify-between gap-2 text-xs sm:text-sm text-slate-400 font-mono font-medium pt-1">
+                  <div className="flex items-center justify-between gap-2 text-xs sm:text-sm text-slate-400 font-mono font-medium">
                     <span
                       className="flex items-center gap-1.5"
                       title={m?.variegatoCount ? `${recipe.ingredients?.length ?? 0} insumos na calda base + ${m.variegatoCount} mescla(s) pós-congelamento` : 'Quantidade de insumos na fórmula'}
@@ -859,44 +833,41 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                       </span>
                     </span>
                   </div>
-                </div>
 
-                {/* Card Footer Actions: 3 botões perfeitamente equilibrados */}
-                <div
-                  className="flex items-center gap-2 pt-3 mt-3 border-t border-slate-700/60"
-                  onClick={e => e.stopPropagation()}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setViewingRecipe(recipe)}
-                    className="flex-1 h-9 sm:h-10 px-2 bg-slate-900/90 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm min-w-0"
-                    title="Abrir ficha técnica de produção e modo cozinha"
-                  >
-                    <Eye className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    <span className="whitespace-nowrap">Ver Ficha</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => onSelectRecipe(recipe.id)}
-                    className="flex-1 h-9 sm:h-10 px-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/15 active:scale-95 min-w-0"
-                    title="Balancear receita na bancada"
-                  >
-                    <Scale className="w-3.5 h-3.5 shrink-0" />
-                    <span className="whitespace-nowrap">Balancear</span>
-                  </button>
-
-                  {onProduceRecipe && (
+                  {/* Card Footer Actions: 3 botões perfeitamente equilibrados */}
+                  <div className="flex items-center gap-2 pt-3 border-t border-slate-700/60">
                     <button
                       type="button"
-                      onClick={() => onProduceRecipe(recipe.id)}
-                      className="flex-1 h-9 sm:h-10 px-2 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 font-bold border border-emerald-500/40 text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95 min-w-0"
-                      title={`Produzir lote de "${recipe.name}" no estoque`}
+                      onClick={() => setViewingRecipe(recipe)}
+                      className="flex-1 h-9 sm:h-10 px-2 bg-slate-900/90 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm min-w-0"
+                      title="Abrir ficha técnica de produção e modo cozinha"
                     >
-                      <Package className="w-3.5 h-3.5 shrink-0" />
-                      <span className="whitespace-nowrap">Produzir</span>
+                      <Eye className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span className="whitespace-nowrap">Ver Ficha</span>
                     </button>
-                  )}
+
+                    <button
+                      type="button"
+                      onClick={() => onSelectRecipe(recipe.id)}
+                      className="flex-1 h-9 sm:h-10 px-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/15 active:scale-95 min-w-0"
+                      title="Balancear receita na bancada"
+                    >
+                      <Scale className="w-3.5 h-3.5 shrink-0" />
+                      <span className="whitespace-nowrap">Balancear</span>
+                    </button>
+
+                    {onProduceRecipe && (
+                      <button
+                        type="button"
+                        onClick={() => onProduceRecipe(recipe.id)}
+                        className="flex-1 h-9 sm:h-10 px-2 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 font-bold border border-emerald-500/40 text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95 min-w-0"
+                        title={`Produzir lote de "${recipe.name}" no estoque`}
+                      >
+                        <Package className="w-3.5 h-3.5 shrink-0" />
+                        <span className="whitespace-nowrap">Produzir</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             );
