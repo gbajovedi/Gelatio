@@ -5835,7 +5835,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 655
+        "grams": 648
       },
       {
         "name": "Creme De Leite Fresco 35%",
@@ -5855,11 +5855,11 @@
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 55
+        "grams": 30
       },
       {
         "name": "Whey protein 80%",
-        "grams": 55
+        "grams": 65
       },
       {
         "name": "Sal",
@@ -5870,7 +5870,7 @@
         "grams": 3
       }
     ],
-    "totalGrams": 1022
+    "totalGrams": 1000
   },
   {
     "id": "rec_167",
@@ -5880,7 +5880,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 655
+        "grams": 668
       },
       {
         "name": "Creme De Leite Fresco 35%",
@@ -5900,11 +5900,11 @@
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 55
+        "grams": 30
       },
       {
         "name": "Whey protein 80%",
-        "grams": 55
+        "grams": 65
       },
       {
         "name": "Sal",
@@ -5915,7 +5915,7 @@
         "grams": 3
       }
     ],
-    "totalGrams": 1002
+    "totalGrams": 1000
   },
   {
     "id": "rec_168",
@@ -5925,7 +5925,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 655
+        "grams": 666
       },
       {
         "name": "Creme De Leite Fresco 35%",
@@ -5933,11 +5933,11 @@
       },
       {
         "name": "Polidextrose - Fibra",
-        "grams": 100
+        "grams": 105
       },
       {
         "name": "Eritritol",
-        "grams": 50
+        "grams": 55
       },
       {
         "name": "Stevia em pó",
@@ -5949,11 +5949,11 @@
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 55
+        "grams": 30
       },
       {
         "name": "Whey protein 80%",
-        "grams": 55
+        "grams": 65
       },
       {
         "name": "Sal",
@@ -5964,7 +5964,7 @@
         "grams": 3
       }
     ],
-    "totalGrams": 994
+    "totalGrams": 1000
   },
   {
     "id": "rec_169",
@@ -6019,7 +6019,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 655
+        "grams": 646
       },
       {
         "name": "Creme De Leite Fresco 35%",
@@ -6039,11 +6039,11 @@
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 55
+        "grams": 30
       },
       {
         "name": "Whey protein 80%",
-        "grams": 55
+        "grams": 65
       },
       {
         "name": "Sal",
@@ -6054,7 +6054,7 @@
         "grams": 25
       }
     ],
-    "totalGrams": 1024
+    "totalGrams": 1000
   },
   {
     "id": "rec_171",
@@ -6064,7 +6064,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 655
+        "grams": 649
       },
       {
         "name": "Creme De Leite Fresco 35%",
@@ -6088,11 +6088,11 @@
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 55
+        "grams": 30
       },
       {
         "name": "Whey protein 80%",
-        "grams": 55
+        "grams": 65
       },
       {
         "name": "Sal",
@@ -6103,7 +6103,7 @@
         "grams": 25
       }
     ],
-    "totalGrams": 1021
+    "totalGrams": 1000
   },
   {
     "id": "rec_172",
@@ -6154,7 +6154,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 655
+        "grams": 666
       },
       {
         "name": "Pasta De Pistache 100%",
@@ -6174,18 +6174,18 @@
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 55
+        "grams": 30
       },
       {
         "name": "Whey protein 80%",
-        "grams": 55
+        "grams": 60
       },
       {
         "name": "Sal",
         "grams": 1
       }
     ],
-    "totalGrams": 1009
+    "totalGrams": 1000
   },
   {
     "id": "rec_174",
@@ -6195,7 +6195,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 655
+        "grams": 664
       },
       {
         "name": "Pasta De Pistache 100%",
@@ -6219,18 +6219,18 @@
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 55
+        "grams": 30
       },
       {
         "name": "Whey protein 80%",
-        "grams": 55
+        "grams": 65
       },
       {
         "name": "Sal",
         "grams": 1
       }
     ],
-    "totalGrams": 1006
+    "totalGrams": 1000
   },
   {
     "id": "rec_175",

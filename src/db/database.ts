@@ -1703,6 +1703,25 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_phase4_final_100pct_v2', value: 1 });
       }
 
+      // Sincronizar calibração anti-arenosidade (Caviezel) nos Gelatos Proteicos (7 receitas)
+      const proteicAntiSandinessSetting = await this.settings.get('recipes_proteic_anti_arenosidade_v1');
+      if (!proteicAntiSandinessSetting) {
+        console.log('Sincronizando 7 receitas proteicas calibradas contra arenosidade no banco...');
+        const proteicIds = ['rec_166', 'rec_167', 'rec_168', 'rec_170', 'rec_171', 'rec_173', 'rec_174'];
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const allRecs = await this.recipes.toArray();
+        for (const rec of allRecs) {
+          const catRec = initialMap.get(rec.id);
+          if (catRec && !rec.isCustom && proteicIds.includes(rec.id)) {
+            await this.recipes.update(rec.id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_proteic_anti_arenosidade_v1', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {
