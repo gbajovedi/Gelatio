@@ -1145,9 +1145,9 @@ export const PricingCalculator: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-stretch text-xs">
-              {/* Coluna Esquerda: As 3 caixas de texto equilibradas */}
-              <div className="sm:col-span-7 flex flex-col justify-between gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 items-stretch text-xs">
+              {/* Coluna Esquerda: As 3 caixas de texto com resumo do Custo Base */}
+              <div className="flex flex-col justify-between gap-2.5">
                 <div>
                   <label className="text-slate-300 font-semibold block mb-1">Custo da Calda (R$/Kg):</label>
                   <div className="relative">
@@ -1196,31 +1196,45 @@ export const PricingCalculator: React.FC = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Chip de Resumo do Custo Base Direto */}
+                <div className="bg-slate-900/80 rounded-lg px-2.5 py-1.5 border border-slate-700/60 flex items-center justify-between text-[11px]">
+                  <span className="text-slate-400 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+                    <span>Custo Base do Pote:</span>
+                  </span>
+                  <span className="font-mono text-white font-bold">
+                    R$ {directCostPerTub.toFixed(2)}{' '}
+                    <span className="text-slate-400 font-normal text-[10px]">
+                      (R$ {productCostInTub.toFixed(2)} calda + R$ {tubPackCost.toFixed(2)} emb.)
+                    </span>
+                  </span>
+                </div>
               </div>
 
-              {/* Coluna Direita: Apenas a caixa de Margem / Markup logo abaixo do toggle switch */}
-              <div className="sm:col-span-5 flex flex-col">
+              {/* Coluna Direita: Caixa de Margem / Markup perfeitamente equilibrada */}
+              <div className="flex flex-col">
                 <div className={`p-3 rounded-xl border flex flex-col justify-between h-full transition-all ${
                   pricingMethod === 'margin'
                     ? 'bg-slate-950/80 border-amber-500/50 shadow-inner'
                     : 'bg-slate-950/80 border-emerald-500/50 shadow-inner'
                 }`}>
                   <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="text-slate-200 font-bold block text-xs flex items-center gap-1">
+                    <div className="flex items-center justify-between mb-1.5 gap-2">
+                      <label className="text-slate-200 font-bold block text-xs flex items-center gap-1.5 whitespace-nowrap">
                         {pricingMethod === 'margin' ? (
                           <>
-                            <Percent className="w-3.5 h-3.5 text-amber-400" />
-                            <span>Margem Desejada (%):</span>
+                            <Percent className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                            <span>Margem Desejada:</span>
                           </>
                         ) : (
                           <>
-                            <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Markup Desejado (%):</span>
+                            <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                            <span>Markup Desejado:</span>
                           </>
                         )}
                       </label>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${
+                      <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold border whitespace-nowrap shrink-0 ${
                         pricingMethod === 'margin'
                           ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                           : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
@@ -1255,14 +1269,14 @@ export const PricingCalculator: React.FC = () => {
                         <>Gera uma margem líquida de <strong className="text-slate-200">{suggestedTubPrice > 0 && netProfit > 0 ? ((netProfit / suggestedTubPrice) * 100).toFixed(1) : '0'}%</strong> s/ venda.</>
                       )}
                     </span>
-                    <div className="flex flex-wrap items-center gap-1 pt-0.5">
+                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                       <span className="text-[10px] text-slate-500 mr-0.5">Sugestões:</span>
                       {(pricingMethod === 'margin' ? [30, 40, 50, 60] : [50, 80, 100, 120, 150]).map(val => (
                         <button
                           key={val}
                           type="button"
                           onClick={() => setTargetMargin(val)}
-                          className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
                             targetMargin === val
                               ? pricingMethod === 'margin'
                                 ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
