@@ -248,7 +248,7 @@ export const StockOverview: React.FC<StockOverviewProps> = ({
               onClick={() => onNavigateToProduction()}
               className="mt-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md cursor-pointer"
             >
-              + Produzir Primeira Batelada
+              + Produzir Primeiro Lote
             </button>
           )}
         </div>

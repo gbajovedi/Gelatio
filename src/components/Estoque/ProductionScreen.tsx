@@ -160,7 +160,7 @@ export const ProductionScreen: React.FC<ProductionScreenProps> = ({
                 <ChefHat className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-white">Lançar Batelada de Produção</h3>
+                <h3 className="text-base sm:text-lg font-bold text-white">Lançar Lote de Produção</h3>
                 <span className="text-xs text-slate-400">
                   Dê entrada nos potes envasados e calcule o custo real por unidade
                 </span>
@@ -303,7 +303,7 @@ export const ProductionScreen: React.FC<ProductionScreenProps> = ({
             <div className="flex items-center justify-between border-b border-slate-700 pb-3">
               <h4 className="text-sm font-bold text-white flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-amber-400" />
-                <span>Resumo Financeiro da Batelada</span>
+                <span>Resumo Financeiro do Lote</span>
               </h4>
               <span className="text-[11px] font-mono text-slate-400">
                 Pote {tubWeightGrams}g
@@ -386,7 +386,7 @@ export const ProductionScreen: React.FC<ProductionScreenProps> = ({
 
         {recentBatches.length === 0 ? (
           <div className="text-center py-6 text-slate-500 text-xs">
-            Nenhum lote de produção lançado ainda. Registre a primeira batelada acima!
+            Nenhum lote de produção lançado ainda. Registre o primeiro lote acima!
           </div>
         ) : (
           <div className="overflow-x-auto">

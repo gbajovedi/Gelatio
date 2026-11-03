@@ -40,7 +40,7 @@ export function getPaymentMethodFeeRate(method: PaymentMethodType, params: Prici
 }
 
 /**
- * Calcula o custo unitário e total de uma batelada de produção
+ * Calcula o custo unitário e total de um lote de produção
  */
 export function calculateBatchCosts(
   recipeCostKg: number,
