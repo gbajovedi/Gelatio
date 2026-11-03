@@ -1672,20 +1672,22 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_phase3_alcohol_v1', value: 1 });
       }
 
-      // Sincronizar calibração Fase 4: Sobremesas Complexas, Chocolates Lácteos e Remoção de Sucrilhos (19 receitas + purge rec_16)
-      const phase4V1Setting = await this.settings.get('recipes_phase4_final_100pct_v1');
-      if (!phase4V1Setting) {
-        console.log('Sincronizando 19 receitas calibradas (Fase 4) e removendo Sucrilhos (rec_16)...');
-        // Remover sabor de Sucrilhos do catálogo
-        const sucrilhos = await this.recipes.get('rec_16');
-        if (sucrilhos && !sucrilhos.isCustom) {
-          await this.recipes.delete('rec_16');
+      // Sincronizar calibração Fase 4: Sobremesas Complexas, Chocolates Lácteos e Remoção de Sucrilhos e Whey Brownie (18 receitas + purge rec_16 e rec_29)
+      const phase4V2Setting = await this.settings.get('recipes_phase4_final_100pct_v2');
+      if (!phase4V2Setting) {
+        console.log('Sincronizando 18 receitas calibradas (Fase 4) e removendo Sucrilhos (rec_16) e Whey Brownie (rec_29)...');
+        // Remover sabores descontinuados do catálogo
+        for (const removedId of ['rec_16', 'rec_29']) {
+          const r = await this.recipes.get(removedId);
+          if (r && !r.isCustom) {
+            await this.recipes.delete(removedId);
+          }
         }
 
         const phase4Ids = [
           'rec_8', 'rec_22', 'rec_23', 'rec_33', 'rec_35', 'rec_36', 'rec_46', 'rec_48',
           'rec_12', 'rec_17', 'rec_28', 'rec_40', 'rec_41', 'rec_51', 'rec_55', 'rec_56',
-          'rec_44', 'rec_47', 'rec_29'
+          'rec_44', 'rec_47'
         ];
         const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
         const allRecs = await this.recipes.toArray();
@@ -1698,7 +1700,7 @@ export class GelatoDatabase extends Dexie {
             });
           }
         }
-        await this.settings.put({ key: 'recipes_phase4_final_100pct_v1', value: 1 });
+        await this.settings.put({ key: 'recipes_phase4_final_100pct_v2', value: 1 });
       }
 
       // 4. Parâmetros de Precificação

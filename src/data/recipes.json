@@ -1122,51 +1122,6 @@
     "totalGrams": 1000
   },
   {
-    "id": "rec_29",
-    "name": "Gelato de Whey Protein com Brownie (Addolcire)",
-    "category": "Gelatos Proteicos",
-    "targetStyle": "Gelatos Proteicos",
-    "ingredients": [
-      {
-        "name": "Leite Integral",
-        "grams": 640
-      },
-      {
-        "name": "Chocolate Amargo 60%",
-        "grams": 90
-      },
-      {
-        "name": "Whey protein 80%",
-        "grams": 55
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 35
-      },
-      {
-        "name": "Açúcar",
-        "grams": 85
-      },
-      {
-        "name": "Dextrose",
-        "grams": 35
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 40
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 15
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      }
-    ],
-    "totalGrams": 1000
-  },
-  {
     "id": "rec_30",
     "name": "Gelato de Abóbora (Addolcire)",
     "category": "Gelatos de Leite",
