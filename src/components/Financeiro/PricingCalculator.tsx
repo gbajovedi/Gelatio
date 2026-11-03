@@ -1247,7 +1247,7 @@ export const PricingCalculator: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mt-2 space-y-1.5">
+                  <div className="mt-2 space-y-1.5 min-h-[46px]">
                     <span className="text-[10px] text-slate-400 block leading-tight">
                       {pricingMethod === 'margin' ? (
                         <>Equivale a um markup de <strong className="text-slate-200">+{totalCostWithOverhead > 0 && netProfit > 0 ? ((netProfit / totalCostWithOverhead) * 100).toFixed(1) : '0'}%</strong> s/ custo.</>
@@ -1255,8 +1255,8 @@ export const PricingCalculator: React.FC = () => {
                         <>Gera uma margem líquida de <strong className="text-slate-200">{suggestedTubPrice > 0 && netProfit > 0 ? ((netProfit / suggestedTubPrice) * 100).toFixed(1) : '0'}%</strong> s/ venda.</>
                       )}
                     </span>
-                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                      <span className="text-[10px] text-slate-500 mr-0.5">Sugestões:</span>
+                    <div className="flex items-center gap-1 sm:gap-1.5 pt-0.5 whitespace-nowrap overflow-x-auto">
+                      <span className="text-[10px] text-slate-500 mr-0.5 shrink-0">Sugestões:</span>
                       {(pricingMethod === 'margin' ? [30, 40, 50, 60] : [50, 80, 100, 150]).map(val => (
                         <button
                           key={val}
