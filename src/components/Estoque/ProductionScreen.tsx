@@ -31,7 +31,7 @@ export const ProductionScreen: React.FC<ProductionScreenProps> = ({
     return map;
   }, [ingredients]);
 
-  // Helper para calcular custo por kg da calda
+  // Helper para calcular custo por kg da calda e mesclas pós-calda
   const calculateRecipeCostKg = (rec: Recipe): number => {
     if (!rec || !rec.ingredients || rec.ingredients.length === 0) return 15.0; // fallback padrão
     let totalCost = 0;
@@ -41,6 +41,13 @@ export const ProductionScreen: React.FC<ProductionScreenProps> = ({
       const costKg = ing ? ing.costKg : 0;
       totalCost += (item.grams * costKg) / 1000;
       totalGrams += item.grams;
+    }
+    for (const v of rec.variegatos || []) {
+      if (!v.name || v.grams <= 0) continue;
+      const ing = ingredientsMap.get(v.name.toLowerCase().trim());
+      const costKg = v.costKg !== undefined && v.costKg > 0 ? v.costKg : (ing ? ing.costKg : 0);
+      totalCost += (v.grams * costKg) / 1000;
+      totalGrams += v.grams;
     }
     return totalGrams > 0 ? (totalCost / totalGrams) * 1000 : 15.0;
   };
