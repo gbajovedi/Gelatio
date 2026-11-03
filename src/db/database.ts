@@ -1653,6 +1653,25 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_phase2_sorbets_v1', value: 1 });
       }
 
+      // Sincronizar calibração Fase 3: Blindagem Alcoólica (9 receitas alcoólicas)
+      const phase3V1Setting = await this.settings.get('recipes_phase3_alcohol_v1');
+      if (!phase3V1Setting) {
+        console.log('Sincronizando 9 receitas calibradas (Fase 3 Blindagem Alcoólica) no banco...');
+        const phase3Ids = ['rec_109', 'rec_111', 'rec_112', 'rec_113', 'rec_114', 'rec_115', 'rec_116', 'rec_118', 'rec_119'];
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const allRecs = await this.recipes.toArray();
+        for (const rec of allRecs) {
+          const catRec = initialMap.get(rec.id);
+          if (catRec && !rec.isCustom && phase3Ids.includes(rec.id)) {
+            await this.recipes.update(rec.id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_phase3_alcohol_v1', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {

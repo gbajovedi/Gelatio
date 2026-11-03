@@ -4414,31 +4414,31 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 500
+        "grams": 545
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 190
+        "grams": 175
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 50
-      },
-      {
-        "name": "Whey protein 80%",
-        "grams": 5
+        "grams": 35
       },
       {
         "name": "Açúcar",
-        "grams": 110
+        "grams": 100
       },
       {
         "name": "Maltodextrina",
-        "grams": 50
+        "grams": 55
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 20
       },
       {
         "name": "Licor Amaretto",
-        "grams": 90
+        "grams": 65
       },
       {
         "name": "Neutro",
@@ -4491,44 +4491,44 @@
     "targetStyle": "Gelatos Alcoólicos",
     "ingredients": [
       {
-        "name": "Chocolate Amargo 70%",
-        "grams": 100
+        "name": "Leite Integral",
+        "grams": 505
       },
       {
-        "name": "Cacau Em Pó 22% gordura",
+        "name": "Chocolate Amargo 60%",
         "grams": 50
       },
       {
+        "name": "Cacau Em Pó 11% gordura",
+        "grams": 25
+      },
+      {
         "name": "Licor Bailey's",
-        "grams": 176
+        "grams": 90
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 34
-      },
-      {
-        "name": "Manteiga",
-        "grams": 14
-      },
-      {
-        "name": "Água",
-        "grams": 367
-      },
-      {
-        "name": "Açúcar",
-        "grams": 108
-      },
-      {
-        "name": "Maltodextrina",
-        "grams": 31
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 33
+        "grams": 110
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 82
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 75
+      },
+      {
+        "name": "Maltodextrina",
+        "grams": 65
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 20
+      },
+      {
+        "name": "Whisky / Conhaque 40%",
+        "grams": 20
       },
       {
         "name": "Neutro",
@@ -4545,50 +4545,50 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 200
+        "grams": 515
+      },
+      {
+        "name": "Chocolate ao leite 40%",
+        "grams": 65
+      },
+      {
+        "name": "Chocolate Amargo 60%",
+        "grams": 30
+      },
+      {
+        "name": "Cacau Em Pó 11% gordura",
+        "grams": 20
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 120
-      },
-      {
-        "name": "Água",
-        "grams": 315
-      },
-      {
-        "name": "Açúcar",
-        "grams": 50
-      },
-      {
-        "name": "Maltodextrina",
-        "grams": 35
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 50
+        "grams": 105
       },
       {
         "name": "Leite Em Pó Desnatado",
+        "grams": 30
+      },
+      {
+        "name": "Açúcar",
+        "grams": 85
+      },
+      {
+        "name": "Maltodextrina",
+        "grams": 65
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
         "grams": 20
+      },
+      {
+        "name": "Whisky / Conhaque 40%",
+        "grams": 60
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Chocolate ao leite 40%",
-        "grams": 200
-      },
-      {
-        "name": "Chocolate Amargo 60%",
-        "grams": 50
-      },
-      {
-        "name": "Whisky / Conhaque 40%",
-        "grams": 35
       }
     ],
-    "totalGrams": 1080
+    "totalGrams": 1000
   },
   {
     "id": "rec_113",
@@ -4598,39 +4598,35 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 585
+        "grams": 535
+      },
+      {
+        "name": "Licor Bailey's",
+        "grams": 95
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 118
-      },
-      {
-        "name": "Açúcar",
-        "grams": 134
-      },
-      {
-        "name": "Dextrose",
-        "grams": 20
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 20
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 18
+        "grams": 130
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 40
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 100
+      },
+      {
+        "name": "Maltodextrina",
+        "grams": 50
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 50
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Licor Bailey's",
-        "grams": 60
       }
     ],
     "totalGrams": 1000
@@ -4643,38 +4639,42 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 296
+        "grams": 375
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 40
+        "grams": 150
+      },
+      {
+        "name": "Cajá",
+        "grams": 200
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 35
       },
       {
         "name": "Açúcar",
-        "grams": 90
+        "grams": 95
       },
       {
         "name": "Maltodextrina",
-        "grams": 29
+        "grams": 65
       },
       {
         "name": "Inulina - Fibra Vegetal",
-        "grams": 61
+        "grams": 20
+      },
+      {
+        "name": "Cachaça",
+        "grams": 55
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Cajá",
-        "grams": 400
-      },
-      {
-        "name": "Cachaça",
-        "grams": 65
       }
     ],
-    "totalGrams": 986
+    "totalGrams": 1000
   },
   {
     "id": "rec_115",
@@ -4684,38 +4684,38 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 600
+        "grams": 545
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 120
-      },
-      {
-        "name": "Açúcar",
-        "grams": 110
-      },
-      {
-        "name": "Maltodextrina",
-        "grams": 60
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 30
+        "grams": 160
       },
       {
         "name": "Leite Em Pó Desnatado",
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 105
+      },
+      {
+        "name": "Maltodextrina",
+        "grams": 55
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 35
+      },
+      {
+        "name": "Whisky / Conhaque 40%",
         "grams": 60
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Whisky / Conhaque 40%",
-        "grams": 55
       }
     ],
-    "totalGrams": 1040
+    "totalGrams": 1000
   },
   {
     "id": "rec_116",
@@ -4725,38 +4725,38 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 600
+        "grams": 505
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 120
-      },
-      {
-        "name": "Açúcar",
-        "grams": 120
-      },
-      {
-        "name": "Maltodextrina",
-        "grams": 50
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 50
+        "grams": 160
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 50
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 110
+      },
+      {
+        "name": "Maltodextrina",
+        "grams": 55
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 45
+      },
+      {
+        "name": "Rum",
+        "grams": 85
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Rum",
-        "grams": 70
       }
     ],
-    "totalGrams": 1065
+    "totalGrams": 1000
   },
   {
     "id": "rec_117",
@@ -4807,27 +4807,11 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 171
-      },
-      {
-        "name": "Açúcar",
-        "grams": 120
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 61
-      },
-      {
-        "name": "Maltodextrina",
-        "grams": 54
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
+        "grams": 300
       },
       {
         "name": "Vinho Branco / Espumante",
-        "grams": 250
+        "grams": 160
       },
       {
         "name": "Morango",
@@ -4844,9 +4828,25 @@
       {
         "name": "Maçã",
         "grams": 75
+      },
+      {
+        "name": "Açúcar",
+        "grams": 110
+      },
+      {
+        "name": "Maltodextrina",
+        "grams": 75
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 45
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 961
+    "totalGrams": 995
   },
   {
     "id": "rec_119",
@@ -4856,38 +4856,38 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 175
-      },
-      {
-        "name": "Açúcar",
-        "grams": 156
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 61
-      },
-      {
-        "name": "Maltodextrina",
-        "grams": 54
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      },
-      {
-        "name": "Vinho Branco / Espumante",
         "grams": 260
       },
       {
         "name": "Morango",
-        "grams": 250
+        "grams": 300
+      },
+      {
+        "name": "Vinho Branco / Espumante",
+        "grams": 160
       },
       {
         "name": "Suco de Limão",
+        "grams": 30
+      },
+      {
+        "name": "Açúcar",
+        "grams": 120
+      },
+      {
+        "name": "Maltodextrina",
+        "grams": 75
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
         "grams": 50
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1011
+    "totalGrams": 1000
   },
   {
     "id": "rec_142",
