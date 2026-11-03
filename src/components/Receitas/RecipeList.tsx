@@ -735,16 +735,14 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                         <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </button>
 
-                      {recipe.isCustom && (
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 flex items-center justify-center transition-colors active:scale-95"
-                          title="Excluir esta receita do catálogo"
-                        >
-                          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 flex items-center justify-center transition-colors active:scale-95"
+                        title="Excluir esta receita do catálogo"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      </button>
                     </div>
                   </div>
 
