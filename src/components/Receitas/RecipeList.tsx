@@ -682,11 +682,11 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                 <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${theme.gradient}`} />
 
                 <div className="space-y-3.5">
-                  {/* Meta Badges (Category & Custom & Variegato & Warning) */}
+                  {/* Meta Badges (Category & Custom & Variegato & Warning) + Ações Rápidas no Canto Superior Direito */}
                   <div className="flex items-center justify-between gap-2 min-h-[32px]">
-                    <CategoryBadge category={recipe.category} />
+                    <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                      <CategoryBadge category={recipe.category} />
 
-                    <div className="flex items-center gap-1.5 flex-wrap">
                       {recipe.variegatos && recipe.variegatos.length > 0 && (
                         <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 font-bold whitespace-nowrap">
                           🍯 Variegato
@@ -715,6 +715,39 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                           <AlertCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-amber-400 stroke-[2.3]" />
                         </button>
                       )}
+                    </div>
+
+                    {/* Botões de Ações Rápidas: Tabela Nutricional, Copiar e Excluir no Canto Superior Direito */}
+                    <div
+                      className="flex items-center gap-1 shrink-0"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setNutritionalRecipe(recipe)}
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/15 border border-slate-700/80 hover:border-emerald-500/30 flex items-center justify-center transition-colors active:scale-95"
+                        title={`Tabela Nutricional ANVISA de "${recipe.name}"`}
+                      >
+                        <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDuplicateRecipe(recipe)}
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-amber-300 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-500/30 flex items-center justify-center transition-colors active:scale-95"
+                        title={`Duplicar receita "${recipe.name}"`}
+                      >
+                        <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 flex items-center justify-center transition-colors active:scale-95"
+                        title="Excluir esta receita do catálogo"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      </button>
                     </div>
                   </div>
 
@@ -755,70 +788,42 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                   </div>
                 </div>
 
-                {/* Card Footer Actions */}
+                {/* Card Footer Actions: 3 botões perfeitamente equilibrados */}
                 <div
-                  className="flex items-center gap-2 pt-4 mt-3 border-t border-slate-700/60"
+                  className="flex items-center gap-2 pt-3 mt-3 border-t border-slate-700/60"
                   onClick={e => e.stopPropagation()}
                 >
                   <button
                     type="button"
                     onClick={() => setViewingRecipe(recipe)}
-                    className="flex-1 py-2.5 px-3 bg-slate-900 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
+                    className="flex-1 h-9 sm:h-10 px-2 bg-slate-900/90 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm min-w-0"
                     title="Abrir ficha técnica de produção e modo cozinha"
                   >
-                    <Eye className="w-4 h-4 text-amber-400" />
-                    <span>Ver Ficha</span>
+                    <Eye className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <span className="whitespace-nowrap">Ver Ficha</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => onSelectRecipe(recipe.id)}
-                    className="flex-1 py-2.5 px-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/10 active:scale-95"
+                    className="flex-1 h-9 sm:h-10 px-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/15 active:scale-95 min-w-0"
                     title="Balancear receita na bancada"
                   >
-                    <Scale className="w-4 h-4" />
-                    <span>Balancear</span>
+                    <Scale className="w-3.5 h-3.5 shrink-0" />
+                    <span className="whitespace-nowrap">Balancear</span>
                   </button>
 
                   {onProduceRecipe && (
                     <button
                       type="button"
                       onClick={() => onProduceRecipe(recipe.id)}
-                      className="py-2.5 px-3 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 font-bold border border-emerald-500/40 text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95"
+                      className="flex-1 h-9 sm:h-10 px-2 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 font-bold border border-emerald-500/40 text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95 min-w-0"
                       title={`Produzir lote de "${recipe.name}" no estoque`}
                     >
-                      <Package className="w-4 h-4" />
-                      <span className="hidden sm:inline">Produzir</span>
+                      <Package className="w-3.5 h-3.5 shrink-0" />
+                      <span className="whitespace-nowrap">Produzir</span>
                     </button>
                   )}
-
-                  {/* Botão Tabela Nutricional ANVISA (ao lado esquerdo do botão de duplicar) */}
-                  <button
-                    type="button"
-                    onClick={() => setNutritionalRecipe(recipe)}
-                    className="p-2.5 shrink-0 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/15 rounded-xl transition-colors border border-slate-700 active:scale-95"
-                    title={`Tabela Nutricional ANVISA de "${recipe.name}"`}
-                  >
-                    <FileText className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDuplicateRecipe(recipe)}
-                    className="p-2.5 shrink-0 text-slate-400 hover:text-amber-300 hover:bg-amber-500/15 rounded-xl transition-colors border border-slate-700 active:scale-95"
-                    title={`Duplicar receita "${recipe.name}"`}
-                  >
-                    <Copy className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
-                    className="p-2.5 shrink-0 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-xl transition-colors border border-slate-700 active:scale-95"
-                    title="Excluir esta receita do catálogo"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
               </div>
             );
