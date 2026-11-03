@@ -1614,6 +1614,24 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'sugar_names_v24', value: 1 });
       }
 
+      // Sincronizar calibração Fase 1: Quick Wins Padrão Ouro (20 receitas calibradas)
+      const quickWinsV1Setting = await this.settings.get('recipes_quick_wins_v1');
+      if (!quickWinsV1Setting) {
+        console.log('Sincronizando 20 receitas calibradas (Fase 1 Quick Wins) no banco...');
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const allRecs = await this.recipes.toArray();
+        for (const rec of allRecs) {
+          const catRec = initialMap.get(rec.id);
+          if (catRec && !rec.isCustom) {
+            await this.recipes.update(rec.id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_quick_wins_v1', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {
