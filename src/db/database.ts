@@ -991,6 +991,18 @@ export class GelatoDatabase extends Dexie {
       }
     });
 
+    // Versão 25: Criação formal das tabelas de gestão de Estoque, Lotes de Produção, Vendas e Ajustes
+    this.version(25).stores({
+      ingredients: 'id, name, category, costKg',
+      recipes: 'id, name, category, targetStyle, isCustom',
+      preparations: 'id, name, category, isCustom',
+      settings: 'key',
+      productionBatches: 'id, recipeId, category, producedAt',
+      stockItems: 'id, recipeId, category, currentUnits',
+      salesTransactions: 'id, stockItemId, recipeId, timestamp, paymentMethod',
+      stockAdjustments: 'id, stockItemId, recipeId, timestamp, type'
+    });
+
   }
 
   async initializeSeedData(): Promise<void> {

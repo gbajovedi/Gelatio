@@ -30,6 +30,9 @@ export default defineConfig(({ command }) => {
               if (id.includes('dexie')) {
                 return 'vendor-dexie';
               }
+              if (id.includes('lucide-react')) {
+                return 'vendor-icons';
+              }
               return 'vendor-ui';
             }
           }

@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { db } from './db/database';
 import { applyTheme, initThemeListener } from './core/theme';
 import { Recipe, Ingredient, Preparation } from './types/gelato';
 import { Navbar, NavTab } from './components/Navbar';
 import { BalancingScreen } from './components/Balanceamento/BalancingScreen';
 import { RecipeList } from './components/Receitas/RecipeList';
-import { IngredientManager } from './components/Ingredientes/IngredientManager';
-import { PrePreparosList } from './components/PrePreparos/PrePreparosList';
-import { PricingCalculator } from './components/Financeiro/PricingCalculator';
-import { StockScreen } from './components/Estoque/StockScreen';
-import { ImportExportModal } from './components/ImportExport/ImportExportModal';
+
+// Code-splitting via lazy loading para otimização do bundle inicial
+const IngredientManager = lazy(() => import('./components/Ingredientes/IngredientManager').then(m => ({ default: m.IngredientManager })));
+const PrePreparosList = lazy(() => import('./components/PrePreparos/PrePreparosList').then(m => ({ default: m.PrePreparosList })));
+const PricingCalculator = lazy(() => import('./components/Financeiro/PricingCalculator').then(m => ({ default: m.PricingCalculator })));
+const StockScreen = lazy(() => import('./components/Estoque/StockScreen').then(m => ({ default: m.StockScreen })));
+const ImportExportModal = lazy(() => import('./components/ImportExport/ImportExportModal').then(m => ({ default: m.ImportExportModal })));
 
 import initialIngredients from './data/ingredients.json';
 import initialRecipes from './data/recipes.json';
@@ -206,40 +208,52 @@ export function App() {
         </div>
 
         <div style={{ display: activeTab === 'ingredientes' ? 'block' : 'none' }}>
-          <IngredientManager
-            ingredients={ingredients}
-            onRefresh={refreshData}
-          />
+          <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando catálogo de insumos...</div>}>
+            <IngredientManager
+              ingredients={ingredients}
+              onRefresh={refreshData}
+            />
+          </Suspense>
         </div>
 
         <div style={{ display: activeTab === 'preparos' ? 'block' : 'none' }}>
-          <PrePreparosList
-            preparations={preparations}
-            availableIngredients={ingredients}
-            onRefresh={refreshData}
-          />
+          <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando pré-preparos...</div>}>
+            <PrePreparosList
+              preparations={preparations}
+              availableIngredients={ingredients}
+              onRefresh={refreshData}
+            />
+          </Suspense>
         </div>
 
         <div style={{ display: activeTab === 'financeiro' ? 'block' : 'none' }}>
-          <PricingCalculator />
+          <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando calculadora de custos...</div>}>
+            <PricingCalculator />
+          </Suspense>
         </div>
 
         <div style={{ display: activeTab === 'estoque' ? 'block' : 'none' }}>
-          <StockScreen
-            recipes={recipes}
-            ingredients={ingredients}
-            initialProduceRecipeId={produceRecipeId}
-            onClearInitialProduceRecipeId={() => setProduceRecipeId(undefined)}
-          />
+          <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando módulo de estoque...</div>}>
+            <StockScreen
+              recipes={recipes}
+              ingredients={ingredients}
+              initialProduceRecipeId={produceRecipeId}
+              onClearInitialProduceRecipeId={() => setProduceRecipeId(undefined)}
+            />
+          </Suspense>
         </div>
       </main>
 
       {/* Backup and Import/Export Modal */}
-      <ImportExportModal
-        isOpen={isBackupModalOpen}
-        onClose={() => setIsBackupModalOpen(false)}
-        onDataChanged={refreshData}
-      />
+      {isBackupModalOpen && (
+        <Suspense fallback={null}>
+          <ImportExportModal
+            isOpen={isBackupModalOpen}
+            onClose={() => setIsBackupModalOpen(false)}
+            onDataChanged={refreshData}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

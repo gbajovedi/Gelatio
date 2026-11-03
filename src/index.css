@@ -369,7 +369,7 @@ html.light textarea:focus {
 
 html.light ::placeholder,
 html.light .placeholder-slate-500::placeholder {
-  color: #a8a29e !important;
+  color: #64748b !important;
 }
 
 /* Action Buttons: solid amber retains high contrast with dark label */

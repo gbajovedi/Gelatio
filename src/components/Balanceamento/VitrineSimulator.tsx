@@ -236,6 +236,16 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           <span className="text-purple-300">Freezer (-18°C)</span>
         </div>
       </div>
+
+      {/* Nota Metodológica e Disclaimer do Modelo Crioscópico */}
+      <div className="pt-2 text-[10px] text-slate-500 border-t border-slate-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-1 leading-relaxed">
+        <span>
+          * Estimativa termodinâmica baseada na <strong>Lei Crioscópica de Raoult</strong> (W<sub>livre</sub> = PAC × 5,434 / |T|) corrigida para água ligada em sólidos hidratados.
+        </span>
+        <span className="text-slate-500 shrink-0 font-medium">
+          Modelo preditivo de bancada (Goff &amp; Hartel)
+        </span>
+      </div>
     </div>
   );
 };
