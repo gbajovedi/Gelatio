@@ -1672,6 +1672,35 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_phase3_alcohol_v1', value: 1 });
       }
 
+      // Sincronizar calibração Fase 4: Sobremesas Complexas, Chocolates Lácteos e Remoção de Sucrilhos (19 receitas + purge rec_16)
+      const phase4V1Setting = await this.settings.get('recipes_phase4_final_100pct_v1');
+      if (!phase4V1Setting) {
+        console.log('Sincronizando 19 receitas calibradas (Fase 4) e removendo Sucrilhos (rec_16)...');
+        // Remover sabor de Sucrilhos do catálogo
+        const sucrilhos = await this.recipes.get('rec_16');
+        if (sucrilhos && !sucrilhos.isCustom) {
+          await this.recipes.delete('rec_16');
+        }
+
+        const phase4Ids = [
+          'rec_8', 'rec_22', 'rec_23', 'rec_33', 'rec_35', 'rec_36', 'rec_46', 'rec_48',
+          'rec_12', 'rec_17', 'rec_28', 'rec_40', 'rec_41', 'rec_51', 'rec_55', 'rec_56',
+          'rec_44', 'rec_47', 'rec_29'
+        ];
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const allRecs = await this.recipes.toArray();
+        for (const rec of allRecs) {
+          const catRec = initialMap.get(rec.id);
+          if (catRec && !rec.isCustom && phase4Ids.includes(rec.id)) {
+            await this.recipes.update(rec.id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_phase4_final_100pct_v1', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {

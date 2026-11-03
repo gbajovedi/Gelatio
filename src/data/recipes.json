@@ -314,7 +314,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 680
+        "grams": 630
       },
       {
         "name": "Creme De Leite Fresco 35%",
@@ -329,23 +329,23 @@
         "grams": 130
       },
       {
+        "name": "Açúcar",
+        "grams": 45
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
         "name": "Glucose em pó",
         "grams": 25
       },
       {
-        "name": "Dextrose",
-        "grams": 15
-      },
-      {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Sal",
-        "grams": 1
       }
     ],
-    "totalGrams": 1001
+    "totalGrams": 1000
   },
   {
     "id": "rec_9",
@@ -474,15 +474,27 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 675
+        "grams": 565
       },
       {
-        "name": "Chocolate Branco",
-        "grams": 160
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 130
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 30
+        "grams": 20
+      },
+      {
+        "name": "Chocolate Branco",
+        "grams": 140
+      },
+      {
+        "name": "Missô",
+        "grams": 15
+      },
+      {
+        "name": "Cacau Em Pó 22% gordura",
+        "grams": 40
       },
       {
         "name": "Açúcar",
@@ -490,15 +502,11 @@
       },
       {
         "name": "Dextrose",
-        "grams": 25
+        "grams": 10
       },
       {
         "name": "Glucose em pó",
         "grams": 25
-      },
-      {
-        "name": "Missô",
-        "grams": 30
       },
       {
         "name": "Neutro",
@@ -647,51 +655,6 @@
     "totalGrams": 1021
   },
   {
-    "id": "rec_16",
-    "name": "Gelato de Sucrilhos (Direto ao Ponto)",
-    "category": "Gelatos de Leite",
-    "targetStyle": "Gelatos de Leite",
-    "ingredients": [
-      {
-        "name": "Leite Integral",
-        "grams": 635
-      },
-      {
-        "name": "Sucrilhos",
-        "grams": 100
-      },
-      {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 120
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 45
-      },
-      {
-        "name": "Açúcar",
-        "grams": 120
-      },
-      {
-        "name": "Dextrose",
-        "grams": 40
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 35
-      },
-      {
-        "name": "Sal",
-        "grams": 1
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      }
-    ],
-    "totalGrams": 1101
-  },
-  {
     "id": "rec_17",
     "name": "Gelato Intenso de Cacau (Direto ao Ponto)",
     "category": "Gelatos de Leite com Chocolate",
@@ -699,38 +662,42 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 600
+        "grams": 560
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 75
+        "grams": 120
       },
       {
         "name": "Leite Em Pó Desnatado",
         "grams": 35
       },
       {
-        "name": "Açúcar",
-        "grams": 125
-      },
-      {
-        "name": "Dextrose",
-        "grams": 65
-      },
-      {
-        "name": "Neutro",
-        "grams": 4
-      },
-      {
-        "name": "Cacau Em Pó 11% gordura",
+        "name": "Cacau Em Pó 22% gordura",
         "grams": 70
       },
       {
-        "name": "Sal",
-        "grams": 1
+        "name": "Açúcar",
+        "grams": 110
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 40
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 975
+    "totalGrams": 1000
   },
   {
     "id": "rec_18",
@@ -858,43 +825,43 @@
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
       {
-        "name": "Leite Integral",
-        "grams": 165
+        "name": "Iogurte Integral",
+        "grams": 460
       },
       {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 10
+        "name": "Leite Integral",
+        "grams": 160
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 60
+        "grams": 140
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 30
       },
       {
         "name": "Açúcar",
-        "grams": 82
+        "grams": 115
       },
       {
         "name": "Dextrose",
-        "grams": 90
+        "grams": 40
       },
       {
         "name": "Glucose em pó",
-        "grams": 90
-      },
-      {
-        "name": "Neutro",
-        "grams": 3
-      },
-      {
-        "name": "Iogurte Integral",
-        "grams": 510
+        "grams": 30
       },
       {
         "name": "Suco de Limão",
-        "grams": 30
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1040
+    "totalGrams": 1000
   },
   {
     "id": "rec_23",
@@ -903,39 +870,39 @@
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
       {
+        "name": "Cream cheese",
+        "grams": 180
+      },
+      {
         "name": "Leite Integral",
-        "grams": 494
+        "grams": 535
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 72
-      },
-      {
-        "name": "Açúcar",
-        "grams": 174
-      },
-      {
-        "name": "Dextrose",
-        "grams": 28
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 16
+        "grams": 65
       },
       {
         "name": "Leite Em Pó Desnatado",
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 135
+      },
+      {
+        "name": "Dextrose",
         "grams": 30
       },
       {
-        "name": "Neutro",
-        "grams": 4
+        "name": "Glucose em pó",
+        "grams": 15
       },
       {
-        "name": "Cream cheese",
-        "grams": 200
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1018
+    "totalGrams": 1000
   },
   {
     "id": "rec_24",
@@ -1112,40 +1079,44 @@
     "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
       {
-        "name": "Água",
-        "grams": 322
-      },
-      {
         "name": "Leite Integral",
-        "grams": 256
+        "grams": 550
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 60
+        "grams": 120
       },
       {
-        "name": "Açúcar",
-        "grams": 77
-      },
-      {
-        "name": "Dextrose",
-        "grams": 8
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 7
+        "name": "Chocolate Branco",
+        "grams": 140
       },
       {
         "name": "Leite Em Pó Desnatado",
         "grams": 15
       },
       {
-        "name": "Neutro",
-        "grams": 5
+        "name": "Cacau Em Pó 22% gordura",
+        "grams": 40
       },
       {
-        "name": "Chocolate Branco",
-        "grams": 250
+        "name": "Açúcar",
+        "grams": 65
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
     "totalGrams": 1000
@@ -1158,22 +1129,30 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 500
+        "grams": 640
       },
       {
-        "name": "Açúcar",
-        "grams": 100
+        "name": "Chocolate Amargo 60%",
+        "grams": 90
       },
       {
-        "name": "Dextrose",
-        "grams": 10
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 20
+        "name": "Whey protein 80%",
+        "grams": 55
       },
       {
         "name": "Leite Em Pó Desnatado",
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 85
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Glucose em pó",
         "grams": 40
       },
       {
@@ -1182,18 +1161,10 @@
       },
       {
         "name": "Neutro",
-        "grams": 4
-      },
-      {
-        "name": "Chocolate Amargo 60%",
-        "grams": 200
-      },
-      {
-        "name": "Whey protein 80%",
-        "grams": 50
+        "grams": 5
       }
     ],
-    "totalGrams": 939
+    "totalGrams": 1000
   },
   {
     "id": "rec_30",
@@ -1325,47 +1296,47 @@
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
       {
-        "name": "Leite Integral",
-        "grams": 147
+        "name": "Leite Condensado",
+        "grams": 150
       },
       {
         "name": "Leite de Coco",
-        "grams": 100
+        "grams": 60
       },
       {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 175
-      },
-      {
-        "name": "Água",
-        "grams": 268
-      },
-      {
-        "name": "Dextrose",
+        "name": "Coco",
         "grams": 40
       },
       {
-        "name": "Glucose em pó",
-        "grams": 31
+        "name": "Leite Integral",
+        "grams": 495
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 110
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 10
+        "grams": 25
       },
       {
-        "name": "Leite Condensado",
-        "grams": 232
+        "name": "Açúcar",
+        "grams": 65
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 30
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Coco",
-        "grams": 100
       }
     ],
-    "totalGrams": 1108
+    "totalGrams": 1000
   },
   {
     "id": "rec_34",
@@ -1423,39 +1394,39 @@
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
       {
+        "name": "Cenoura",
+        "grams": 75
+      },
+      {
         "name": "Leite Integral",
-        "grams": 362
+        "grams": 510
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 262
-      },
-      {
-        "name": "Açúcar",
-        "grams": 110
-      },
-      {
-        "name": "Dextrose",
-        "grams": 50
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 31
+        "grams": 195
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 33
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 125
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
       },
       {
         "name": "Neutro",
-        "grams": 4
-      },
-      {
-        "name": "Cenoura",
-        "grams": 75
+        "grams": 5
       }
     ],
-    "totalGrams": 927
+    "totalGrams": 1000
   },
   {
     "id": "rec_36",
@@ -1464,39 +1435,43 @@
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
       {
+        "name": "Queijo Brie / Cabra",
+        "grams": 130
+      },
+      {
         "name": "Leite Integral",
-        "grams": 479
+        "grams": 540
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 90
-      },
-      {
-        "name": "Açúcar",
-        "grams": 146
-      },
-      {
-        "name": "Dextrose",
-        "grams": 35
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 19
+        "grams": 85
       },
       {
         "name": "Leite Em Pó Desnatado",
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 135
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
         "grams": 20
       },
       {
         "name": "Neutro",
-        "grams": 4
-      },
-      {
-        "name": "Queijo Brie / Cabra",
-        "grams": 150
+        "grams": 5
       }
     ],
-    "totalGrams": 943
+    "totalGrams": 1000
   },
   {
     "id": "rec_37",
@@ -1633,46 +1608,46 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 350
-      },
-      {
-        "name": "Água",
-        "grams": 206
+        "grams": 585
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 70
+        "grams": 75
       },
       {
-        "name": "Açúcar",
-        "grams": 61
+        "name": "Chocolate Ao Leite 33.7%",
+        "grams": 120
       },
       {
-        "name": "Dextrose",
-        "grams": 20
+        "name": "Chocolate Amargo 60%",
+        "grams": 50
       },
       {
-        "name": "Glucose em pó",
-        "grams": 20
+        "name": "Cacau Em Pó 22% gordura",
+        "grams": 30
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 10
+        "grams": 20
+      },
+      {
+        "name": "Açúcar",
+        "grams": 45
+      },
+      {
+        "name": "Dextrose",
+        "grams": 25
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 45
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Chocolate Ao Leite 33.7%",
-        "grams": 150
-      },
-      {
-        "name": "Chocolate Amargo 60%",
-        "grams": 100
       }
     ],
-    "totalGrams": 992
+    "totalGrams": 1000
   },
   {
     "id": "rec_41",
@@ -1682,38 +1657,42 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 500
+        "grams": 575
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 70
+        "grams": 85
       },
       {
-        "name": "Açúcar",
-        "grams": 100
+        "name": "Chocolate Amargo 70%",
+        "grams": 120
       },
       {
-        "name": "Dextrose",
-        "grams": 20
-      },
-      {
-        "name": "Glucose em pó",
+        "name": "Pasta De Amêndoas s/ açúcar",
         "grams": 30
       },
       {
         "name": "Leite Em Pó Desnatado",
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 85
+      },
+      {
+        "name": "Dextrose",
         "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 35
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Chocolate Amargo 70%",
-        "grams": 200
       }
     ],
-    "totalGrams": 955
+    "totalGrams": 1000
   },
   {
     "id": "rec_42",
@@ -1809,46 +1788,46 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 400
+        "grams": 470
       },
       {
         "name": "Água",
-        "grams": 200
+        "grams": 150
       },
       {
         "name": "Pasta De Avelã s/ açúcar",
-        "grams": 60
+        "grams": 55
       },
       {
-        "name": "Açúcar",
-        "grams": 30
+        "name": "Chocolate Ao Leite 33.7%",
+        "grams": 110
       },
       {
-        "name": "Dextrose",
+        "name": "Chocolate Amargo 60%",
         "grams": 50
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 15
       },
       {
         "name": "Leite Em Pó Desnatado",
         "grams": 40
       },
       {
+        "name": "Açúcar",
+        "grams": 20
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 65
+      },
+      {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Chocolate Ao Leite 33.7%",
-        "grams": 120
-      },
-      {
-        "name": "Chocolate Amargo 60%",
-        "grams": 60
       }
     ],
-    "totalGrams": 980
+    "totalGrams": 1000
   },
   {
     "id": "rec_45",
@@ -1895,30 +1874,38 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 554
+        "grams": 540
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 220
+        "grams": 200
       },
       {
         "name": "Xarope (monin)",
-        "grams": 148
+        "grams": 120
+      },
+      {
+        "name": "Açúcar",
+        "grams": 50
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
       },
       {
         "name": "Glucose em pó",
-        "grams": 31
+        "grams": 25
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 30
+        "grams": 40
       },
       {
         "name": "Neutro",
-        "grams": 4
+        "grams": 5
       }
     ],
-    "totalGrams": 987
+    "totalGrams": 1000
   },
   {
     "id": "rec_47",
@@ -1928,42 +1915,46 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 554
+        "grams": 525
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 220
+        "grams": 160
       },
       {
         "name": "Pasta De Avelã s/ açúcar",
-        "grams": 30
-      },
-      {
-        "name": "Açúcar",
-        "grams": 100
-      },
-      {
-        "name": "Dextrose",
-        "grams": 65
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 19
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 38
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
+        "grams": 55
       },
       {
         "name": "Chocolate Ao Leite 33.7%",
         "grams": 50
+      },
+      {
+        "name": "Cacau Em Pó 22% gordura",
+        "grams": 25
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 70
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 40
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1081
+    "totalGrams": 1000
   },
   {
     "id": "rec_48",
@@ -1972,32 +1963,32 @@
     "targetStyle": "Gelatos de Leite",
     "ingredients": [
       {
+        "name": "Leite Condensado",
+        "grams": 180
+      },
+      {
         "name": "Leite Integral",
-        "grams": 247
+        "grams": 540
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 175
-      },
-      {
-        "name": "Água",
-        "grams": 268
-      },
-      {
-        "name": "Leite Condensado",
-        "grams": 232
-      },
-      {
-        "name": "Dextrose",
-        "grams": 32
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 31
+        "grams": 150
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 10
+        "grams": 15
+      },
+      {
+        "name": "Açúcar",
+        "grams": 65
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
       },
       {
         "name": "Neutro",
@@ -2096,23 +2087,27 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 554
+        "grams": 535
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 220
+        "grams": 180
       },
       {
         "name": "Ovomaltine",
-        "grams": 190
+        "grams": 155
+      },
+      {
+        "name": "Açúcar",
+        "grams": 45
       },
       {
         "name": "Dextrose",
-        "grams": 19
+        "grams": 20
       },
       {
         "name": "Glucose em pó",
-        "grams": 17
+        "grams": 25
       },
       {
         "name": "Leite Em Pó Desnatado",
@@ -2120,10 +2115,10 @@
       },
       {
         "name": "Neutro",
-        "grams": 4
+        "grams": 5
       }
     ],
-    "totalGrams": 1039
+    "totalGrams": 1000
   },
   {
     "id": "rec_52",
@@ -2264,11 +2259,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 350
-      },
-      {
-        "name": "Água",
-        "grams": 206
+        "grams": 535
       },
       {
         "name": "Creme De Leite Fresco 35%",
@@ -2276,38 +2267,46 @@
       },
       {
         "name": "Pasta De Amendoim 100%",
-        "grams": 50
-      },
-      {
-        "name": "Açúcar",
-        "grams": 61
-      },
-      {
-        "name": "Dextrose",
         "grams": 30
       },
       {
-        "name": "Glucose em pó",
-        "grams": 20
+        "name": "Chocolate Ao Leite 33.7%",
+        "grams": 100
+      },
+      {
+        "name": "Chocolate Amargo 60%",
+        "grams": 50
+      },
+      {
+        "name": "Cacau Em Pó 22% gordura",
+        "grams": 25
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 10
+        "grams": 20
+      },
+      {
+        "name": "Açúcar",
+        "grams": 45
+      },
+      {
+        "name": "Dextrose",
+        "grams": 25
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 40
       },
       {
         "name": "Neutro",
         "grams": 5
       },
       {
-        "name": "Chocolate Ao Leite 33.7%",
-        "grams": 150
-      },
-      {
-        "name": "Chocolate Amargo 60%",
-        "grams": 100
+        "name": "Água",
+        "grams": 55
       }
     ],
-    "totalGrams": 1052
+    "totalGrams": 1000
   },
   {
     "id": "rec_56",
@@ -2317,42 +2316,50 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 554
+        "grams": 550
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 220
+        "grams": 120
       },
       {
         "name": "Pasta De Amendoim 100%",
-        "grams": 20
+        "grams": 25
       },
       {
-        "name": "Açúcar",
-        "grams": 100
+        "name": "Chocolate Ao Leite 33.7%",
+        "grams": 80
       },
       {
-        "name": "Dextrose",
-        "grams": 65
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 19
+        "name": "Cacau Em Pó 22% gordura",
+        "grams": 45
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 38
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 70
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 35
       },
       {
         "name": "Neutro",
         "grams": 5
       },
       {
-        "name": "Chocolate Ao Leite 33.7%",
-        "grams": 80
+        "name": "Água",
+        "grams": 5
       }
     ],
-    "totalGrams": 1101
+    "totalGrams": 1000
   },
   {
     "id": "rec_60",
