@@ -323,3 +323,4 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
     </div>
   );
 };
+

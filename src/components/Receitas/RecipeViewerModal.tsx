@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Recipe } from '../../types/gelato';
+import { Recipe, VariegatoItem, Ingredient } from '../../types/gelato';
 import { CategoryBadge } from '../../core/categoryThemes';
+import { db } from '../../db/database';
 import {
   X,
   Scale,
-  Calculator,
   Printer,
   CheckCircle2,
   Circle,
   RotateCcw,
   Layers,
   ChefHat,
-  Edit3
+  Edit3,
+  Plus,
+  Trash2,
+  Save,
+  Check
 } from 'lucide-react';
 
 interface RecipeViewerModalProps {
@@ -19,13 +23,17 @@ interface RecipeViewerModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenInCalculator: (id: string) => void;
+  onRecipeUpdated?: () => void;
+  availableIngredients?: Ingredient[];
 }
 
 export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   recipe,
   isOpen,
   onClose,
-  onOpenInCalculator
+  onOpenInCalculator,
+  onRecipeUpdated,
+  availableIngredients = []
 }) => {
   if (!isOpen || !recipe) return null;
 
@@ -37,10 +45,22 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   const [targetBatchGrams, setTargetBatchGrams] = useState<number>(Math.round(baseWeight));
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
 
-  // Reset batch and checklist whenever a new recipe is opened
+  // Estado interativo das mesclas / variegatos
+  const [variegatos, setVariegatos] = useState<VariegatoItem[]>([]);
+  const [isDirtyVariegatos, setIsDirtyVariegatos] = useState(false);
+  const [isSavingVariegatos, setIsSavingVariegatos] = useState(false);
+  const [saveVariegatoSuccess, setSaveVariegatoSuccess] = useState(false);
+
+  // Reset batch, checklist e mesclas quando a receita muda
   useEffect(() => {
     setTargetBatchGrams(Math.round(baseWeight));
     setCheckedItems({});
+    const initialVars = recipe.variegatos && recipe.variegatos.length > 0
+      ? JSON.parse(JSON.stringify(recipe.variegatos))
+      : [];
+    setVariegatos(initialVars);
+    setIsDirtyVariegatos(false);
+    setSaveVariegatoSuccess(false);
   }, [recipe, baseWeight]);
 
   // Ratio to scale ingredients
@@ -60,6 +80,88 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
 
   // Quick preset sizes
   const presets = [1000, 2000, 2500, 3000, 4000, 5000];
+
+  // Insumos candidatos para autocomplete de mesclas
+  const variegatoCandidates = useMemo(() => {
+    return availableIngredients.filter(i =>
+      /(variegato|brigadeiro|nutella|caramelo|cocada|goiabada|doce de leite|biscoff|croissant|pudim|torrone|paçoca|pasta|calda|amendoim|castanha|avelã|pistache|nozes|amêndoa|biscoito|cereja|geleia|morango|frutas)/i.test(
+        i.name
+      )
+    );
+  }, [availableIngredients]);
+
+  // Handlers para Mesclas
+  const handleAddVariegato = () => {
+    setVariegatos(prev => [...prev, { name: '', grams: 150, costKg: 0 }]);
+    setIsDirtyVariegatos(true);
+  };
+
+  const handleRemoveVariegato = (index: number) => {
+    setVariegatos(prev => prev.filter((_, i) => i !== index));
+    setIsDirtyVariegatos(true);
+  };
+
+  const handleChangeVariegatoGrams = (index: number, grams: number) => {
+    setVariegatos(prev => {
+      const next = [...prev];
+      next[index] = { ...next[index], grams: Math.max(0, grams) };
+      return next;
+    });
+    setIsDirtyVariegatos(true);
+  };
+
+  const handleChangeVariegatoName = (index: number, name: string) => {
+    setVariegatos(prev => {
+      const next = [...prev];
+      const ing = availableIngredients.find(
+        i => i.name.toLowerCase().trim() === name.toLowerCase().trim()
+      );
+      next[index] = {
+        ...next[index],
+        name,
+        costKg: ing ? ing.costKg : next[index].costKg
+      };
+      return next;
+    });
+    setIsDirtyVariegatos(true);
+  };
+
+  const handleSaveVariegatos = async () => {
+    if (!recipe) return;
+    setIsSavingVariegatos(true);
+    try {
+      const cleanVariegatos = variegatos
+        .filter(v => v.name.trim().length > 0 && v.grams > 0)
+        .map(v => {
+          const ing = availableIngredients.find(
+            i => i.name.toLowerCase().trim() === v.name.toLowerCase().trim()
+          );
+          return {
+            name: v.name.trim(),
+            grams: v.grams,
+            costKg: v.costKg !== undefined && v.costKg > 0 ? v.costKg : (ing ? ing.costKg : 0)
+          };
+        });
+
+      await db.recipes.update(recipe.id, {
+        variegatos: cleanVariegatos,
+        updatedAt: new Date().toISOString()
+      });
+
+      recipe.variegatos = cleanVariegatos;
+      setIsDirtyVariegatos(false);
+      setSaveVariegatoSuccess(true);
+      setTimeout(() => setSaveVariegatoSuccess(false), 2500);
+
+      if (onRecipeUpdated) {
+        onRecipeUpdated();
+      }
+    } catch (e) {
+      alert('Erro ao salvar mesclas da receita: ' + e);
+    } finally {
+      setIsSavingVariegatos(false);
+    }
+  };
 
   return (
     <div className="print-modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-0 sm:p-4">
@@ -83,7 +185,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
               {recipe.name}
             </h2>
             <p className="no-print text-xs text-slate-400">
-              Modo somente leitura para pesagem e produção. Ajuste o lote abaixo.
+              Ajuste o lote e quantidades de mescla abaixo para pesagem e produção.
             </p>
           </div>
 
@@ -226,30 +328,139 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
             </div>
           </div>
 
-          {/* Variegatos / Inclusions (if any) */}
-          {recipe.variegatos && recipe.variegatos.length > 0 && (
-            <div className="bg-amber-500/10 p-4 rounded-2xl border border-amber-500/30 space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-300 block">
-                🍯 Mesclas & Variegatos Pós-Calda:
-              </span>
-              <div className="space-y-1.5">
-                {recipe.variegatos.map((v, i) => {
+          {/* Variegatos / Inclusions Card Interativo */}
+          <div className="bg-amber-500/10 p-4 sm:p-5 rounded-2xl border border-amber-500/30 space-y-3 shadow-md">
+            <div className="flex items-center justify-between gap-2 flex-wrap border-b border-amber-500/20 pb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="text-base">🍯</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
+                  Mesclas & Variegatos Pós-Calda ({variegatos.length}):
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleAddVariegato}
+                  className="no-print px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
+                  title="Adicionar mescla pós-congelamento nesta receita"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Adicionar Mescla</span>
+                </button>
+
+                {isDirtyVariegatos && (
+                  <button
+                    type="button"
+                    disabled={isSavingVariegatos}
+                    onClick={handleSaveVariegatos}
+                    className="no-print px-3 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-black flex items-center gap-1 transition-all shadow-md shadow-amber-500/20 active:scale-95 cursor-pointer disabled:opacity-50"
+                    title="Salvar alterações na receita permanentemente"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isSavingVariegatos ? 'Salvando...' : 'Salvar Mesclas'}</span>
+                  </button>
+                )}
+
+                {saveVariegatoSuccess && (
+                  <span className="text-xs font-bold text-emerald-400 flex items-center gap-1 animate-fade-in">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Salvo!</span>
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {variegatos.length === 0 ? (
+              <div className="text-center py-5 text-xs text-amber-200/80 border border-dashed border-amber-500/30 rounded-xl space-y-1">
+                <p>Nenhuma mescla ou variegato cadastrado nesta receita.</p>
+                <button
+                  type="button"
+                  onClick={handleAddVariegato}
+                  className="no-print text-amber-300 hover:text-amber-200 font-bold underline inline-flex items-center gap-1 mt-1 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Adicionar agora (ex: Nutella, Brigadeiro, Caramelo...)</span>
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {variegatos.map((v, i) => {
                   const scaledVarGrams = Math.round(v.grams * scaleRatio * 10) / 10;
                   return (
                     <div
                       key={i}
-                      className="flex justify-between items-center text-sm font-semibold text-amber-200 bg-slate-900/60 p-2.5 rounded-xl border border-amber-500/20"
+                      className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-slate-900/80 p-3 rounded-xl border border-amber-500/25 hover:border-amber-500/40 transition-colors"
                     >
-                      <span>{v.name}</span>
-                      <span className="font-mono font-black text-amber-300 text-base">
-                        {scaledVarGrams} g
-                      </span>
+                      {/* Nome do Variegato */}
+                      <div className="flex-1 min-w-0">
+                        <input
+                          type="text"
+                          list="viewer-variegatos-options"
+                          value={v.name}
+                          onChange={e => handleChangeVariegatoName(i, e.target.value)}
+                          placeholder="Nome da mescla (ex: Variegato de Nutella)..."
+                          className="w-full bg-slate-800 border border-slate-700 focus:border-amber-500 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-bold text-amber-200 placeholder-slate-500 focus:outline-none"
+                        />
+                      </div>
+
+                      {/* Quantidade na Receita Base & Lote Escalonado */}
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center gap-1 bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-lg px-2 py-1" title="Quantidade base por receita padrão de calda">
+                          <span className="text-[10px] text-slate-400 uppercase font-sans font-bold">Base:</span>
+                          <input
+                            type="number"
+                            min="0"
+                            step="5"
+                            value={v.grams || ''}
+                            onChange={e => handleChangeVariegatoGrams(i, parseFloat(e.target.value) || 0)}
+                            className="w-16 bg-transparent text-right font-mono font-black text-amber-300 text-xs sm:text-sm focus:outline-none"
+                            placeholder="0"
+                          />
+                          <span className="text-xs font-mono text-slate-400 font-bold">g</span>
+                        </div>
+
+                        {/* Peso a Pesar no Lote Escalonado */}
+                        <div
+                          className="flex items-center gap-1 bg-amber-500/20 border border-amber-500/35 rounded-lg px-2.5 py-1"
+                          title={`Quantidade de mescla a pesar para o lote atual escalonado de ${targetBatchGrams}g`}
+                        >
+                          <span className="text-[10px] text-amber-300/80 uppercase font-sans font-bold">Lote:</span>
+                          <span className="font-mono font-black text-amber-300 text-xs sm:text-sm">
+                            {scaledVarGrams} g
+                          </span>
+                        </div>
+
+                        {/* Botão Remover */}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveVariegato(i)}
+                          className="no-print p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors"
+                          title="Remover esta mescla"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
               </div>
-            </div>
-          )}
+            )}
+
+            {isDirtyVariegatos && (
+              <div className="no-print pt-2 flex justify-end">
+                <button
+                  type="button"
+                  disabled={isSavingVariegatos}
+                  onClick={handleSaveVariegatos}
+                  className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs rounded-xl shadow-lg shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>{isSavingVariegatos ? 'Salvando...' : 'Salvar Alterações na Receita'}</span>
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Notes (if any) */}
           {recipe.notes && (
@@ -265,10 +476,15 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
         {/* Sticky Footer Actions */}
         <div className="p-4 sm:p-5 bg-slate-800 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="text-xs sm:text-sm text-slate-300 font-mono font-bold">
-            Total do Lote:{' '}
+            Total Calda Base:{' '}
             <strong className="text-emerald-400 text-base sm:text-lg">
               {targetBatchGrams} g
             </strong>
+            {variegatos.length > 0 && (
+              <span className="text-amber-300 text-xs font-normal ml-1.5">
+                (+{Math.round(variegatos.reduce((acc, v) => acc + (v.grams * scaleRatio), 0))}g mesclas)
+              </span>
+            )}
           </div>
 
           <div className="no-print flex items-center gap-2">
@@ -294,6 +510,14 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
             </button>
           </div>
         </div>
+
+        <datalist id="viewer-variegatos-options">
+          {variegatoCandidates.map(i => (
+            <option key={i.id} value={i.name}>
+              R$ {i.costKg.toFixed(2)}/kg
+            </option>
+          ))}
+        </datalist>
       </div>
     </div>
   );
