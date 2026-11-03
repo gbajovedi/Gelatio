@@ -1257,7 +1257,7 @@ export const PricingCalculator: React.FC = () => {
                     </span>
                     <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                       <span className="text-[10px] text-slate-500 mr-0.5">Sugestões:</span>
-                      {(pricingMethod === 'margin' ? [30, 40, 50, 60] : [50, 80, 100, 120, 150]).map(val => (
+                      {(pricingMethod === 'margin' ? [30, 40, 50, 60] : [50, 80, 100, 150]).map(val => (
                         <button
                           key={val}
                           type="button"
