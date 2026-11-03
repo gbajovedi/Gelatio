@@ -2399,7 +2399,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 490
+        "grams": 500
       },
       {
         "name": "Maracujá",
@@ -2407,15 +2407,15 @@
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 100
+        "grams": 95
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 55
+        "grams": 38
       },
       {
         "name": "Açúcar",
-        "grams": 115
+        "grams": 130
       },
       {
         "name": "Dextrose",
@@ -2438,7 +2438,7 @@
         "grams": 5
       }
     ],
-    "totalGrams": 1006
+    "totalGrams": 1009
   },
   {
     "id": "rec_62",
@@ -2448,7 +2448,7 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 465
+        "grams": 480
       },
       {
         "name": "Banana",
@@ -2456,19 +2456,19 @@
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 120
+        "grams": 110
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 50
+        "grams": 38
       },
       {
         "name": "Açúcar",
-        "grams": 115
+        "grams": 124
       },
       {
         "name": "Dextrose",
-        "grams": 30
+        "grams": 27
       },
       {
         "name": "Inulina - Fibra Vegetal",
@@ -2483,7 +2483,7 @@
         "grams": 5
       }
     ],
-    "totalGrams": 1001
+    "totalGrams": 1000
   },
   {
     "id": "rec_63",
@@ -2493,31 +2493,39 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 165
+        "grams": 269
       },
       {
         "name": "Morango",
-        "grams": 530
+        "grams": 380
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 85
       },
       {
         "name": "Manteiga",
-        "grams": 60
+        "grams": 20
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 80
+        "grams": 55
       },
       {
         "name": "Açúcar",
         "grams": 120
       },
       {
-        "name": "Dextrose",
+        "name": "Glucose em pó",
         "grams": 30
       },
       {
-        "name": "Inulina - Fibra Vegetal",
+        "name": "Dextrose",
         "grams": 15
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 20
       },
       {
         "name": "Sal",
@@ -2528,7 +2536,7 @@
         "grams": 5
       }
     ],
-    "totalGrams": 1006
+    "totalGrams": 1000
   },
   {
     "id": "rec_64",
@@ -2538,38 +2546,46 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 554
+        "grams": 643
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 220
+        "grams": 100
       },
       {
-        "name": "Mel",
-        "grams": 90
-      },
-      {
-        "name": "Aveia em Flocos",
-        "grams": 30
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 19
-      },
-      {
-        "name": "Dextrose",
-        "grams": 10
-      },
-      {
-        "name": "Neutro",
-        "grams": 4
+        "name": "Leite Em Pó Desnatado",
+        "grams": 22
       },
       {
         "name": "Ameixa Seca",
-        "grams": 200
+        "grams": 50
+      },
+      {
+        "name": "Aveia em Flocos",
+        "grams": 20
+      },
+      {
+        "name": "Mel",
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 92
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 30
+      },
+      {
+        "name": "Dextrose",
+        "grams": 15
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1127
+    "totalGrams": 1012
   },
   {
     "id": "rec_65",
@@ -2579,38 +2595,38 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 300
-      },
-      {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 110
-      },
-      {
-        "name": "Açúcar",
-        "grams": 48
-      },
-      {
-        "name": "Dextrose",
-        "grams": 50
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 10
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 9
-      },
-      {
-        "name": "Neutro",
-        "grams": 4
+        "grams": 430
       },
       {
         "name": "Banana",
-        "grams": 500
+        "grams": 280
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 105
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 38
+      },
+      {
+        "name": "Açúcar",
+        "grams": 95
+      },
+      {
+        "name": "Dextrose",
+        "grams": 22
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1031
+    "totalGrams": 1000
   },
   {
     "id": "rec_66",
@@ -2620,42 +2636,46 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 440
-      },
-      {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 72
-      },
-      {
-        "name": "Açúcar",
-        "grams": 174
-      },
-      {
-        "name": "Dextrose",
-        "grams": 32
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 19
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 35
-      },
-      {
-        "name": "Neutro",
-        "grams": 4
-      },
-      {
-        "name": "Suco de Laranja",
-        "grams": 60
+        "grams": 485
       },
       {
         "name": "Cream cheese",
-        "grams": 200
+        "grams": 100
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 65
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 25
+      },
+      {
+        "name": "Suco de Laranja",
+        "grams": 120
+      },
+      {
+        "name": "Açúcar",
+        "grams": 130
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 10
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1036
+    "totalGrams": 1000
   },
   {
     "id": "rec_67",
@@ -2665,47 +2685,43 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 220
+        "grams": 430
       },
       {
-        "name": "Água",
-        "grams": 130
+        "name": "Morango",
+        "grams": 250
+      },
+      {
+        "name": "Chocolate ao leite 40%",
+        "grams": 70
+      },
+      {
+        "name": "Chocolate Amargo 60%",
+        "grams": 40
       },
       {
         "name": "Creme De Leite Fresco 35%",
-        "grams": 45
-      },
-      {
-        "name": "Açúcar",
-        "grams": 95
-      },
-      {
-        "name": "Dextrose",
-        "grams": 13
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 13
+        "grams": 40
       },
       {
         "name": "Leite Em Pó Desnatado",
-        "grams": 6
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 80
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Dextrose",
+        "grams": 25
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Chocolate ao leite 40%",
-        "grams": 95
-      },
-      {
-        "name": "Chocolate Amargo 60%",
-        "grams": 63
-      },
-      {
-        "name": "Morango",
-        "grams": 315
       }
     ],
     "totalGrams": 1000
@@ -2718,38 +2734,38 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 554
-      },
-      {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 220
-      },
-      {
-        "name": "Açúcar",
-        "grams": 150
-      },
-      {
-        "name": "Dextrose",
-        "grams": 19
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 19
-      },
-      {
-        "name": "Leite Em Pó Desnatado",
-        "grams": 38
-      },
-      {
-        "name": "Neutro",
-        "grams": 4
+        "grams": 505
       },
       {
         "name": "Framboesa",
-        "grams": 50
+        "grams": 150
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 120
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 35
+      },
+      {
+        "name": "Açúcar",
+        "grams": 130
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1054
+    "totalGrams": 1000
   },
   {
     "id": "rec_69",
@@ -2759,42 +2775,46 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 247
-      },
-      {
-        "name": "Creme De Leite Fresco 35%",
-        "grams": 175
-      },
-      {
-        "name": "Água",
-        "grams": 168
+        "grams": 500
       },
       {
         "name": "Leite Condensado",
-        "grams": 232
+        "grams": 100
       },
       {
-        "name": "Dextrose",
-        "grams": 55
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 110
       },
       {
-        "name": "Glucose em pó",
-        "grams": 31
+        "name": "Suco de Limão",
+        "grams": 120
       },
       {
         "name": "Leite Em Pó Desnatado",
         "grams": 10
       },
       {
-        "name": "Neutro",
-        "grams": 5
+        "name": "Açúcar",
+        "grams": 85
       },
       {
-        "name": "Suco de Limão",
-        "grams": 85
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 10
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1008
+    "totalGrams": 1000
   },
   {
     "id": "rec_70",
@@ -2804,42 +2824,46 @@
     "ingredients": [
       {
         "name": "Leite Integral",
-        "grams": 247
+        "grams": 450
       },
       {
-        "name": "Creme De Leite Fresco 35%",
+        "name": "Maracujá",
         "grams": 175
       },
       {
-        "name": "Água",
+        "name": "Leite Condensado",
         "grams": 100
       },
       {
-        "name": "Leite Condensado",
-        "grams": 250
-      },
-      {
-        "name": "Dextrose",
-        "grams": 90
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 31
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 110
       },
       {
         "name": "Leite Em Pó Desnatado",
+        "grams": 15
+      },
+      {
+        "name": "Açúcar",
+        "grams": 95
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
         "grams": 10
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Maracujá",
-        "grams": 200
       }
     ],
-    "totalGrams": 1108
+    "totalGrams": 1000
   },
   {
     "id": "rec_71",
@@ -3054,7 +3078,7 @@
       },
       {
         "name": "Água",
-        "grams": 80
+        "grams": 75
       },
       {
         "name": "Açúcar",
@@ -3062,7 +3086,7 @@
       },
       {
         "name": "Dextrose",
-        "grams": 45
+        "grams": 50
       },
       {
         "name": "Glucose em pó",
@@ -3136,11 +3160,11 @@
       },
       {
         "name": "Água",
-        "grams": 150
+        "grams": 155
       },
       {
         "name": "Açúcar",
-        "grams": 120
+        "grams": 100
       },
       {
         "name": "Dextrose",
@@ -3148,7 +3172,7 @@
       },
       {
         "name": "Glucose em pó",
-        "grams": 40
+        "grams": 60
       },
       {
         "name": "Inulina - Fibra Vegetal",
@@ -3163,7 +3187,7 @@
         "grams": 5
       }
     ],
-    "totalGrams": 1000
+    "totalGrams": 1005
   },
   {
     "id": "rec_79",
@@ -3177,19 +3201,19 @@
       },
       {
         "name": "Água",
-        "grams": 200
+        "grams": 175
       },
       {
         "name": "Açúcar",
-        "grams": 135
+        "grams": 130
       },
       {
         "name": "Dextrose",
-        "grams": 45
+        "grams": 65
       },
       {
         "name": "Glucose em pó",
-        "grams": 40
+        "grams": 50
       },
       {
         "name": "Inulina - Fibra Vegetal",
@@ -3222,15 +3246,15 @@
       },
       {
         "name": "Água",
-        "grams": 155
+        "grams": 85
       },
       {
         "name": "Açúcar",
-        "grams": 120
+        "grams": 125
       },
       {
         "name": "Dextrose",
-        "grams": 45
+        "grams": 65
       },
       {
         "name": "Glucose em pó",
@@ -3242,14 +3266,14 @@
       },
       {
         "name": "Suco de Limão",
-        "grams": 15
+        "grams": 10
       },
       {
         "name": "Neutro",
         "grams": 5
       }
     ],
-    "totalGrams": 1150
+    "totalGrams": 1100
   },
   {
     "id": "rec_81",
@@ -3258,32 +3282,32 @@
     "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
     "ingredients": [
       {
-        "name": "Morango",
-        "grams": 200
-      },
-      {
-        "name": "Amora",
-        "grams": 150
-      },
-      {
-        "name": "Framboesa",
-        "grams": 150
+        "name": "Frutas Vermelhas",
+        "grams": 500
       },
       {
         "name": "Água",
-        "grams": 248
+        "grams": 245
       },
       {
         "name": "Açúcar",
-        "grams": 145
+        "grams": 125
       },
       {
         "name": "Glucose em pó",
-        "grams": 70
+        "grams": 55
       },
       {
         "name": "Dextrose",
-        "grams": 32
+        "grams": 35
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 15
+      },
+      {
+        "name": "Suco de Limão",
+        "grams": 20
       },
       {
         "name": "Neutro",
@@ -3344,35 +3368,39 @@
     "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
     "ingredients": [
       {
-        "name": "Água",
-        "grams": 295
-      },
-      {
-        "name": "Açúcar",
-        "grams": 150
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 50
-      },
-      {
-        "name": "Dextrose",
-        "grams": 20
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      },
-      {
         "name": "Abacaxi",
         "grams": 500
       },
       {
+        "name": "Água",
+        "grams": 265
+      },
+      {
+        "name": "Açúcar",
+        "grams": 95
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 65
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 28
+      },
+      {
         "name": "Hortelã",
         "grams": 7
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 1027
+    "totalGrams": 1000
   },
   {
     "id": "rec_84",
@@ -3381,35 +3409,39 @@
     "targetStyle": "Sorbets Polposos / Frutas Densas",
     "ingredients": [
       {
+        "name": "Atemoia",
+        "grams": 450
+      },
+      {
         "name": "Água",
         "grams": 295
       },
       {
         "name": "Açúcar",
-        "grams": 100
+        "grams": 85
       },
       {
         "name": "Glucose em pó",
-        "grams": 50
+        "grams": 60
       },
       {
         "name": "Dextrose",
-        "grams": 20
+        "grams": 45
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 35
+      },
+      {
+        "name": "Suco de Limão",
+        "grams": 25
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Atemoia",
-        "grams": 500
-      },
-      {
-        "name": "Suco de Limão",
-        "grams": 10
       }
     ],
-    "totalGrams": 980
+    "totalGrams": 1000
   },
   {
     "id": "rec_85",
@@ -3418,31 +3450,35 @@
     "targetStyle": "Sorbets Polposos / Frutas Densas",
     "ingredients": [
       {
+        "name": "Caqui",
+        "grams": 500
+      },
+      {
         "name": "Água",
-        "grams": 295
+        "grams": 275
       },
       {
         "name": "Açúcar",
-        "grams": 150
+        "grams": 85
       },
       {
         "name": "Glucose em pó",
-        "grams": 50
+        "grams": 65
       },
       {
         "name": "Dextrose",
-        "grams": 20
+        "grams": 40
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 30
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Caqui",
-        "grams": 500
       }
     ],
-    "totalGrams": 1020
+    "totalGrams": 1000
   },
   {
     "id": "rec_86",
@@ -3451,115 +3487,16 @@
     "targetStyle": "Sorbets Polposos / Frutas Densas",
     "ingredients": [
       {
-        "name": "Água",
-        "grams": 270
-      },
-      {
-        "name": "Açúcar",
-        "grams": 125
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 50
-      },
-      {
-        "name": "Dextrose",
-        "grams": 20
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      },
-      {
         "name": "Figo",
         "grams": 500
-      }
-    ],
-    "totalGrams": 970
-  },
-  {
-    "id": "rec_87",
-    "name": "Sorbet de Frutas Vermelhas (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
-    "ingredients": [
+      },
       {
         "name": "Água",
-        "grams": 247
+        "grams": 260
       },
       {
         "name": "Açúcar",
-        "grams": 175
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 40
-      },
-      {
-        "name": "Dextrose",
-        "grams": 20
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      },
-      {
-        "name": "Frutas Vermelhas",
-        "grams": 500
-      },
-      {
-        "name": "Suco de Limão",
-        "grams": 20
-      }
-    ],
-    "totalGrams": 1007
-  },
-  {
-    "id": "rec_88",
-    "name": "Sorbet de Jabuticaba (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
-    "ingredients": [
-      {
-        "name": "Água",
-        "grams": 270
-      },
-      {
-        "name": "Açúcar",
-        "grams": 175
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 40
-      },
-      {
-        "name": "Dextrose",
-        "grams": 10
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      },
-      {
-        "name": "Jabuticaba",
-        "grams": 500
-      }
-    ],
-    "totalGrams": 1000
-  },
-  {
-    "id": "rec_89",
-    "name": "Sorbet de Laranja e Gengibre (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
-    "ingredients": [
-      {
-        "name": "Água",
-        "grams": 100
-      },
-      {
-        "name": "Açúcar",
-        "grams": 125
+        "grams": 95
       },
       {
         "name": "Glucose em pó",
@@ -3571,18 +3508,133 @@
       },
       {
         "name": "Inulina - Fibra Vegetal",
+        "grams": 35
+      },
+      {
+        "name": "Suco de Limão",
+        "grams": 5
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000
+  },
+  {
+    "id": "rec_87",
+    "name": "Sorbet de Frutas Vermelhas (Addolcire)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Frutas Vermelhas",
+        "grams": 500
+      },
+      {
+        "name": "Água",
+        "grams": 245
+      },
+      {
+        "name": "Açúcar",
+        "grams": 125
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 55
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 15
+      },
+      {
+        "name": "Suco de Limão",
         "grams": 20
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Suco de Laranja",
-        "grams": 700
       }
     ],
-    "totalGrams": 1050
+    "totalGrams": 1000
+  },
+  {
+    "id": "rec_88",
+    "name": "Sorbet de Jabuticaba (Addolcire)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Jabuticaba",
+        "grams": 500
+      },
+      {
+        "name": "Água",
+        "grams": 260
+      },
+      {
+        "name": "Açúcar",
+        "grams": 105
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 60
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 35
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000
+  },
+  {
+    "id": "rec_89",
+    "name": "Sorbet de Laranja e Gengibre (Addolcire)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Suco de Laranja",
+        "grams": 650
+      },
+      {
+        "name": "Água",
+        "grams": 120
+      },
+      {
+        "name": "Açúcar",
+        "grams": 95
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 55
+      },
+      {
+        "name": "Dextrose",
+        "grams": 45
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 995
   },
   {
     "id": "rec_90",
@@ -3591,31 +3643,39 @@
     "targetStyle": "Sorbets Polposos / Frutas Densas",
     "ingredients": [
       {
+        "name": "Mamão",
+        "grams": 500
+      },
+      {
         "name": "Água",
-        "grams": 220
+        "grams": 180
       },
       {
         "name": "Açúcar",
-        "grams": 132
+        "grams": 105
       },
       {
         "name": "Glucose em pó",
-        "grams": 40
+        "grams": 60
       },
       {
         "name": "Dextrose",
-        "grams": 20
+        "grams": 45
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 25
       },
       {
         "name": "Neutro",
         "grams": 5
       },
       {
-        "name": "Mamão",
-        "grams": 500
+        "name": "Suco de Limão",
+        "grams": 80
       }
     ],
-    "totalGrams": 917
+    "totalGrams": 1000
   },
   {
     "id": "rec_91",
@@ -3624,35 +3684,39 @@
     "targetStyle": "Sorbets Polposos / Frutas Densas",
     "ingredients": [
       {
-        "name": "Água",
-        "grams": 150
-      },
-      {
-        "name": "Açúcar",
-        "grams": 152
-      },
-      {
-        "name": "Dextrose",
-        "grams": 30
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 20
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
+        "name": "Mamão",
+        "grams": 250
       },
       {
         "name": "Suco de Laranja",
         "grams": 400
       },
       {
-        "name": "Mamão",
-        "grams": 200
+        "name": "Água",
+        "grams": 85
+      },
+      {
+        "name": "Açúcar",
+        "grams": 95
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 65
+      },
+      {
+        "name": "Dextrose",
+        "grams": 45
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 55
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 957
+    "totalGrams": 1000
   },
   {
     "id": "rec_92",
@@ -3661,35 +3725,39 @@
     "targetStyle": "Sorbets Polposos / Frutas Densas",
     "ingredients": [
       {
-        "name": "Água",
-        "grams": 250
-      },
-      {
-        "name": "Açúcar",
-        "grams": 100
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 40
-      },
-      {
-        "name": "Dextrose",
-        "grams": 40
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      },
-      {
         "name": "Manga",
         "grams": 500
       },
       {
+        "name": "Água",
+        "grams": 220
+      },
+      {
+        "name": "Açúcar",
+        "grams": 95
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 55
+      },
+      {
+        "name": "Dextrose",
+        "grams": 45
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 60
+      },
+      {
         "name": "Suco de Limão",
         "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
       }
     ],
-    "totalGrams": 955
+    "totalGrams": 1000
   },
   {
     "id": "rec_93",
@@ -3698,31 +3766,35 @@
     "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
     "ingredients": [
       {
+        "name": "Maracujá",
+        "grams": 380
+      },
+      {
         "name": "Água",
-        "grams": 330
+        "grams": 345
       },
       {
         "name": "Açúcar",
-        "grams": 200
+        "grams": 130
       },
       {
         "name": "Glucose em pó",
-        "grams": 40
+        "grams": 65
       },
       {
         "name": "Dextrose",
-        "grams": 20
+        "grams": 40
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 35
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Maracujá",
-        "grams": 400
       }
     ],
-    "totalGrams": 995
+    "totalGrams": 1000
   },
   {
     "id": "rec_94",
@@ -3772,39 +3844,39 @@
     "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
     "ingredients": [
       {
+        "name": "Tangerina / Mexerica",
+        "grams": 650
+      },
+      {
         "name": "Água",
-        "grams": 100
+        "grams": 120
       },
       {
         "name": "Açúcar",
-        "grams": 125
+        "grams": 95
       },
       {
         "name": "Glucose em pó",
-        "grams": 60
+        "grams": 55
       },
       {
         "name": "Dextrose",
-        "grams": 40
+        "grams": 45
       },
       {
         "name": "Inulina - Fibra Vegetal",
-        "grams": 20
+        "grams": 25
+      },
+      {
+        "name": "Suco de Limão",
+        "grams": 5
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Tangerina / Mexerica",
-        "grams": 700
-      },
-      {
-        "name": "Suco de Limão",
-        "grams": 10
       }
     ],
-    "totalGrams": 1060
+    "totalGrams": 1000
   },
   {
     "id": "rec_96",
@@ -3813,86 +3885,114 @@
     "targetStyle": "Sorbets Polposos / Frutas Densas",
     "ingredients": [
       {
+        "name": "Pêssego",
+        "grams": 500
+      },
+      {
         "name": "Água",
-        "grams": 250
+        "grams": 225
       },
       {
         "name": "Açúcar",
-        "grams": 140
+        "grams": 100
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 65
+      },
+      {
+        "name": "Dextrose",
+        "grams": 40
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 45
+      },
+      {
+        "name": "Suco de Limão",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000
+  },
+  {
+    "id": "rec_97",
+    "name": "Gelato de Chocolate Amargo 70% Vegano (Addolcire)",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 575
+      },
+      {
+        "name": "Chocolate Amargo 70%",
+        "grams": 220
+      },
+      {
+        "name": "Açúcar",
+        "grams": 55
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 55
       },
       {
         "name": "Dextrose",
         "grams": 50
       },
       {
-        "name": "Glucose em pó",
-        "grams": 30
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 40
       },
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Pêssego",
-        "grams": 500
-      },
-      {
-        "name": "Suco de Limão",
-        "grams": 20
       }
     ],
-    "totalGrams": 995
-  },
-  {
-    "id": "rec_97",
-    "name": "Sorbet de Chocolate 70% (Addolcire)",
-    "category": "Sorbets de Chocolate",
-    "targetStyle": "Sorbets de Chocolate",
-    "ingredients": [
-      {
-        "name": "Água",
-        "grams": 553
-      },
-      {
-        "name": "Açúcar",
-        "grams": 180
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 27
-      },
-      {
-        "name": "Dextrose",
-        "grams": 25
-      },
-      {
-        "name": "Neutro",
-        "grams": 5
-      },
-      {
-        "name": "Chocolate Amargo 70%",
-        "grams": 200
-      }
-    ],
-    "totalGrams": 990
+    "totalGrams": 1000
   },
   {
     "id": "rec_98",
-    "name": "Sorbet de Chocolate 40% (Addolcire)",
-    "category": "Sorbets de Chocolate",
-    "targetStyle": "Sorbets de Chocolate",
+    "name": "Gelato de Chocolate ao Leite Base Água (Addolcire)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
     "ingredients": [
       {
         "name": "Água",
-        "grams": 553
+        "grams": 380
+      },
+      {
+        "name": "Leite Integral",
+        "grams": 230
+      },
+      {
+        "name": "Chocolate ao leite 40%",
+        "grams": 200
+      },
+      {
+        "name": "Cacau Em Pó 11% gordura",
+        "grams": 35
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 40
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 20
       },
       {
         "name": "Açúcar",
-        "grams": 30
+        "grams": 40
       },
       {
         "name": "Glucose em pó",
-        "grams": 27
+        "grams": 25
       },
       {
         "name": "Dextrose",
@@ -3901,23 +4001,19 @@
       {
         "name": "Neutro",
         "grams": 5
-      },
-      {
-        "name": "Chocolate ao leite 40%",
-        "grams": 350
       }
     ],
-    "totalGrams": 990
+    "totalGrams": 1000
   },
   {
     "id": "rec_99",
-    "name": "Sorbet de Chocolate (Direto ao Ponto)",
-    "category": "Sorbets de Chocolate",
-    "targetStyle": "Sorbets de Chocolate",
+    "name": "Gelato de Cacau Vegano (Direto ao Ponto)",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
         "name": "Água",
-        "grams": 620
+        "grams": 597
       },
       {
         "name": "Chocolate Amargo 70%",
@@ -3928,20 +4024,20 @@
         "grams": 90
       },
       {
+        "name": "Manteiga de cacau",
+        "grams": 45
+      },
+      {
         "name": "Açúcar",
-        "grams": 120
+        "grams": 106
       },
       {
         "name": "Dextrose",
-        "grams": 50
+        "grams": 66
       },
       {
         "name": "Inulina - Fibra Vegetal",
         "grams": 10
-      },
-      {
-        "name": "Manteiga de cacau",
-        "grams": 30
       },
       {
         "name": "Neutro",
@@ -3952,7 +4048,7 @@
         "grams": 1
       }
     ],
-    "totalGrams": 1001
+    "totalGrams": 995
   },
   {
     "id": "rec_100",
@@ -4003,11 +4099,15 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 590
+        "grams": 600
       },
       {
         "name": "Pasta De Avelã s/ açúcar",
         "grams": 130
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 30
       },
       {
         "name": "Açúcar",
@@ -4015,15 +4115,11 @@
       },
       {
         "name": "Dextrose",
-        "grams": 50
+        "grams": 55
       },
       {
         "name": "Inulina - Fibra Vegetal",
         "grams": 50
-      },
-      {
-        "name": "Óleo de coco",
-        "grams": 40
       },
       {
         "name": "Neutro",
@@ -4034,7 +4130,7 @@
         "grams": 2
       }
     ],
-    "totalGrams": 997
+    "totalGrams": 1002
   },
   {
     "id": "rec_102",
@@ -4089,11 +4185,15 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 580
+        "grams": 575
       },
       {
         "name": "Pasta De Amendoim 100%",
         "grams": 165
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 20
       },
       {
         "name": "Açúcar",
@@ -4101,15 +4201,11 @@
       },
       {
         "name": "Dextrose",
-        "grams": 50
+        "grams": 55
       },
       {
         "name": "Inulina - Fibra Vegetal",
         "grams": 50
-      },
-      {
-        "name": "Óleo de coco",
-        "grams": 20
       },
       {
         "name": "Neutro",
@@ -4138,7 +4234,11 @@
       },
       {
         "name": "Açúcar",
-        "grams": 150
+        "grams": 130
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
       },
       {
         "name": "Dextrose",
@@ -4223,39 +4323,43 @@
     "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
-        "name": "Leite de Aveia",
-        "grams": 750
-      },
-      {
-        "name": "Óleo de girassol",
-        "grams": 45
-      },
-      {
-        "name": "Açúcar",
-        "grams": 130
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 30
-      },
-      {
-        "name": "Dextrose",
-        "grams": 41
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 22
-      },
-      {
-        "name": "Neutro",
-        "grams": 6
+        "name": "Água",
+        "grams": 590
       },
       {
         "name": "Pasta De Avelã s/ açúcar",
-        "grams": 100
+        "grams": 130
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 30
+      },
+      {
+        "name": "Açúcar",
+        "grams": 115
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Dextrose",
+        "grams": 55
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 50
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      },
+      {
+        "name": "Sal",
+        "grams": 2
       }
     ],
-    "totalGrams": 1124
+    "totalGrams": 1002
   },
   {
     "id": "rec_108",
@@ -4264,39 +4368,43 @@
     "targetStyle": "Gelatos Veganos",
     "ingredients": [
       {
-        "name": "Leite de Aveia",
-        "grams": 750
-      },
-      {
-        "name": "Óleo de girassol",
-        "grams": 45
-      },
-      {
-        "name": "Açúcar",
-        "grams": 130
-      },
-      {
-        "name": "Glucose em pó",
-        "grams": 30
-      },
-      {
-        "name": "Dextrose",
-        "grams": 41
-      },
-      {
-        "name": "Inulina - Fibra Vegetal",
-        "grams": 22
-      },
-      {
-        "name": "Neutro",
-        "grams": 6
+        "name": "Água",
+        "grams": 600
       },
       {
         "name": "Pasta De Pistache 100%",
-        "grams": 100
+        "grams": 120
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 30
+      },
+      {
+        "name": "Açúcar",
+        "grams": 115
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Dextrose",
+        "grams": 55
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 50
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      },
+      {
+        "name": "Sal",
+        "grams": 2
       }
     ],
-    "totalGrams": 1124
+    "totalGrams": 1002
   },
   {
     "id": "rec_109",
@@ -4347,7 +4455,7 @@
     "ingredients": [
       {
         "name": "Água",
-        "grams": 500
+        "grams": 495
       },
       {
         "name": "Suco de Limão",
@@ -4355,11 +4463,11 @@
       },
       {
         "name": "Cachaça",
-        "grams": 100
+        "grams": 90
       },
       {
         "name": "Açúcar",
-        "grams": 120
+        "grams": 135
       },
       {
         "name": "Maltodextrina",

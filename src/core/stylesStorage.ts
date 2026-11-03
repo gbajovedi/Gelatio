@@ -244,6 +244,9 @@ export function getUserCustomStyles(): Record<string, StyleStandard> {
       parsed['Gelatos Alcoólicos'] = { ...parsed['Alcoólicos'], name: 'Gelatos Alcoólicos' };
       delete parsed['Alcoólicos'];
     }
+    if (parsed['Sorbets de Chocolate']) {
+      delete parsed['Sorbets de Chocolate'];
+    }
     return { ...GOLD_STANDARD_STYLES, ...parsed };
   } catch (e) {
     console.warn('Erro ao carregar estilos customizados do usuário:', e);

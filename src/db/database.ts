@@ -1632,6 +1632,27 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_quick_wins_v1', value: 1 });
       }
 
+      // Sincronizar calibração Fase 2: Sorbets, Veganos, Leite com Fruta e Reclassificação de Chocolates (38 receitas)
+      const phase2V1Setting = await this.settings.get('recipes_phase2_sorbets_v1');
+      if (!phase2V1Setting) {
+        console.log('Sincronizando 38 receitas calibradas (Fase 2 Sorbets & Veganos) no banco...');
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const allRecs = await this.recipes.toArray();
+        for (const rec of allRecs) {
+          const catRec = initialMap.get(rec.id);
+          if (catRec && !rec.isCustom) {
+            await this.recipes.update(rec.id, {
+              name: catRec.name,
+              category: catRec.category,
+              targetStyle: catRec.targetStyle,
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_phase2_sorbets_v1', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {
