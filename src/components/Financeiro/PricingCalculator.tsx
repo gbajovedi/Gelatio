@@ -1146,8 +1146,8 @@ export const PricingCalculator: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 items-stretch text-xs">
-              {/* Coluna Esquerda: As 3 caixas de texto com resumo do Custo Base */}
-              <div className="flex flex-col justify-between gap-2.5">
+              {/* Coluna Esquerda: As 3 caixas de texto equilibradas */}
+              <div className="flex flex-col justify-between">
                 <div>
                   <label className="text-slate-300 font-semibold block mb-1">Custo da Calda (R$/Kg):</label>
                   <div className="relative">
@@ -1164,7 +1164,7 @@ export const PricingCalculator: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-2.5 pt-2">
                   <div>
                     <label className="text-slate-300 font-semibold block mb-1">Peso do Pote (g):</label>
                     <div className="relative">
@@ -1195,20 +1195,6 @@ export const PricingCalculator: React.FC = () => {
                       <span className="absolute right-2.5 top-2 text-slate-500 font-bold text-xs pointer-events-none">R$</span>
                     </div>
                   </div>
-                </div>
-
-                {/* Chip de Resumo do Custo Base Direto */}
-                <div className="bg-slate-900/80 rounded-lg px-2.5 py-1.5 border border-slate-700/60 flex items-center justify-between text-[11px]">
-                  <span className="text-slate-400 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
-                    <span>Custo Base do Pote:</span>
-                  </span>
-                  <span className="font-mono text-white font-bold">
-                    R$ {directCostPerTub.toFixed(2)}{' '}
-                    <span className="text-slate-400 font-normal text-[10px]">
-                      (R$ {productCostInTub.toFixed(2)} calda + R$ {tubPackCost.toFixed(2)} emb.)
-                    </span>
-                  </span>
                 </div>
               </div>
 
