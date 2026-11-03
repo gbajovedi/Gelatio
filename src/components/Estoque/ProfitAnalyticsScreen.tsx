@@ -21,7 +21,7 @@ interface ProfitAnalyticsScreenProps {
   pricingParams: PricingParams;
 }
 
-type PeriodType = 'today' | '7days' | 'month' | 'all';
+type PeriodType = 'today' | '7days' | 'month' | 'year' | 'all';
 
 export const ProfitAnalyticsScreen: React.FC<ProfitAnalyticsScreenProps> = ({ pricingParams }) => {
   const [period, setPeriod] = useState<PeriodType>('month');
@@ -59,6 +59,11 @@ export const ProfitAnalyticsScreen: React.FC<ProfitAnalyticsScreenProps> = ({ pr
     } else if (period === 'month') {
       cutoff = new Date(now.getFullYear(), now.getMonth(), 1);
       days = 30;
+    } else if (period === 'year') {
+      cutoff = new Date(now.getFullYear(), 0, 1);
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      const diffMs = now.getTime() - startOfYear.getTime();
+      days = Math.max(1, Math.round(diffMs / (1000 * 60 * 60 * 24)));
     } else {
       days = 90; // All time
     }
@@ -163,6 +168,7 @@ export const ProfitAnalyticsScreen: React.FC<ProfitAnalyticsScreenProps> = ({ pr
             { id: 'today', label: 'Hoje' },
             { id: '7days', label: '7 Dias' },
             { id: 'month', label: 'Este Mês' },
+            { id: 'year', label: 'Este Ano' },
             { id: 'all', label: 'Histórico Total' },
           ].map(p => (
             <button
