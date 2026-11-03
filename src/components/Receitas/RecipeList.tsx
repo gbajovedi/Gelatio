@@ -781,17 +781,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                           );
                         })}
                       </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => setEditingVariegatoRecipe(recipe)}
-                        className="opacity-0 group-hover:opacity-100 text-[11px] text-slate-500 hover:text-amber-300 border border-dashed border-slate-700/80 hover:border-amber-500/40 px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all cursor-pointer"
-                        title="Adicionar mescla ou variegato permanente a esta receita"
-                      >
-                        <span className="text-amber-400/80">🍯</span>
-                        <span>+ Mescla</span>
-                      </button>
-                    )}
+                    ) : null}
                   </div>
                 </div>
 
