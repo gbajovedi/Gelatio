@@ -474,7 +474,7 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
         </div>
 
         {/* Style Selector & Quick Presets Toolbar */}
-        <div className="p-4 border-b border-slate-800 bg-slate-900/90 flex flex-wrap items-center justify-between gap-3">
+        <div className="p-4 border-b border-slate-800 bg-slate-900/90">
           {isCreating ? (
             <div className="w-full flex flex-wrap items-center justify-between gap-3 bg-purple-500/10 border border-purple-500/30 rounded-xl p-3">
               <div className="flex-1 min-w-[240px] space-y-1">
@@ -520,14 +520,17 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
               </div>
             </div>
           ) : (
-            <div className="flex flex-wrap items-center justify-between gap-3 w-full">
-              <div className="flex items-center gap-2.5 flex-1 min-w-[280px]">
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider shrink-0">Estilo Alvo:</span>
-                <div className="relative flex-1">
+            <div className="w-full space-y-3">
+              {/* Linha 1: Estilo Alvo em Linha Própria com Largura Ampla + Botão Novo Estilo */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 w-full">
+                <span className="text-xs font-bold text-slate-300 uppercase tracking-wider shrink-0 select-none">
+                  Estilo Alvo:
+                </span>
+                <div className="relative flex-1 min-w-0">
                   <select
                     value={selectedStyleName}
                     onChange={e => handleSelectStyle(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 text-slate-100 text-sm font-semibold rounded-xl px-3 py-2 pr-8 focus:outline-none focus:border-amber-500 transition-colors shadow-inner"
+                    className="w-full bg-slate-800 border border-slate-700 hover:border-slate-600 focus:border-amber-500 text-slate-100 text-xs sm:text-sm font-semibold rounded-xl px-3.5 py-2.5 pr-8 focus:outline-none transition-colors shadow-inner cursor-pointer"
                   >
                     {customStyleKeys.length > 0 && (
                       <optgroup label="⭐ Meus Estilos da Casa">
@@ -551,53 +554,55 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
                 <button
                   type="button"
                   onClick={handleStartCreate}
-                  className="px-3 py-2 rounded-xl text-xs font-bold bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/40 flex items-center gap-1.5 transition-all shrink-0"
+                  className="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/40 flex items-center justify-center gap-1.5 transition-all shrink-0 active:scale-95 shadow-sm"
                   title="Criar um novo estilo da casa do zero"
                 >
                   <PlusCircle className="w-3.5 h-3.5 text-purple-400" />
-                  <span className="hidden sm:inline">+ Novo Estilo da Casa</span>
+                  <span>+ Novo Estilo da Casa</span>
                 </button>
               </div>
 
-              {/* Quick Preset Buttons */}
-              <div className="flex items-center gap-2 flex-wrap">
-                <button
-                  type="button"
-                  onClick={handleApplyGoldPreset}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border ${
-                    presetId === 'gold'
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm'
-                      : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
-                  }`}
-                  title="Aplica o Padrão Ouro Híbrido Protegido (Recomendado com proteção de Caviezel e PAC do Padrão Clássico Italiano)"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Restaurar Padrão Ouro</span>
-                </button>
-
-                {hasCarpigianiData(selectedStyleName) ? (
+              {/* Linha 2: Predefinições Bibliográficas e Ações de Restauração */}
+              <div className="flex items-center justify-between gap-2.5 pt-2.5 border-t border-slate-800/80 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap">
                   <button
                     type="button"
-                    onClick={handleApplyCarpigianiPreset}
+                    onClick={handleApplyGoldPreset}
                     className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border ${
-                      presetId === 'carpigiani'
-                        ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm'
+                      presetId === 'gold'
+                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm'
                         : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
                     }`}
-                    title="Carrega as réguas tradicionais do Padrão Clássico Italiano"
+                    title="Aplica o Padrão Ouro Híbrido Protegido (Recomendado com proteção de Caviezel e PAC do Padrão Clássico Italiano)"
                   >
-                    <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
-                    <span>Padrão Clássico Italiano</span>
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Restaurar Padrão Ouro</span>
                   </button>
-                ) : (
-                  <span
-                    className="text-[11px] text-slate-400 bg-slate-800/80 border border-slate-700/70 px-2.5 py-1 rounded-xl italic flex items-center gap-1"
-                    title="Este estilo não possui parâmetros na bibliografia clássica italiana (reservado a formulações avançadas ou nutrição esportiva)"
-                  >
-                    <Info className="w-3 h-3 text-slate-400" />
-                    <span>Sem dados no Clássico Italiano</span>
-                  </span>
-                )}
+
+                  {hasCarpigianiData(selectedStyleName) ? (
+                    <button
+                      type="button"
+                      onClick={handleApplyCarpigianiPreset}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all border ${
+                        presetId === 'carpigiani'
+                          ? 'bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm'
+                          : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+                      }`}
+                      title="Carrega as réguas tradicionais do Padrão Clássico Italiano"
+                    >
+                      <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
+                      <span>Padrão Clássico Italiano</span>
+                    </button>
+                  ) : (
+                    <span
+                      className="text-[11px] text-slate-400 bg-slate-800/80 border border-slate-700/70 px-2.5 py-1 rounded-xl italic flex items-center gap-1"
+                      title="Este estilo não possui parâmetros na bibliografia clássica italiana (reservado a formulações avançadas ou nutrição esportiva)"
+                    >
+                      <Info className="w-3 h-3 text-slate-400" />
+                      <span>Sem dados no Clássico Italiano</span>
+                    </span>
+                  )}
+                </div>
 
                 <button
                   type="button"
