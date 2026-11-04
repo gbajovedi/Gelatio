@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Recipe, VariegatoItem, Ingredient } from '../../types/gelato';
 import { CategoryBadge } from '../../core/categoryThemes';
 import { db } from '../../db/database';
-import { resolveVariegatoDensity } from '../../core/calculator';
+import { resolveVariegatoDensity, isNeutroIngredient, roundIngredientGrams, STORAGE_KEY_SHOW_ROUNDED } from '../../core/calculator';
 import {
   X,
   Scale,
@@ -45,6 +45,23 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
 
   const [targetBatchGrams, setTargetBatchGrams] = useState<number>(Math.round(baseWeight));
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+
+  // Preferência de valores arredondados sincronizada com BalancingScreen
+  const [showRoundedValues, setShowRoundedValues] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY_SHOW_ROUNDED) === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      try {
+        setShowRoundedValues(localStorage.getItem(STORAGE_KEY_SHOW_ROUNDED) === 'true');
+      } catch {}
+    }
+  }, [isOpen]);
 
   // Estado interativo das mesclas / variegatos
   const [variegatos, setVariegatos] = useState<VariegatoItem[]>([]);
@@ -258,21 +275,59 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
                 <span>Ingredientes a Pesar ({recipe.ingredients?.length ?? 0}):</span>
               </h3>
 
-              <button
-                type="button"
-                onClick={handleResetChecklist}
-                className="no-print text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
-                title="Desmarcar todos"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Desmarcar todos</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = !showRoundedValues;
+                    setShowRoundedValues(next);
+                    try {
+                      localStorage.setItem(STORAGE_KEY_SHOW_ROUNDED, String(next));
+                    } catch {}
+                  }}
+                  className={`no-print px-2 py-0.5 rounded-lg border text-xs font-bold transition-all flex items-center gap-1 active:scale-95 shadow-sm select-none ${
+                    showRoundedValues
+                      ? 'border-amber-500/70 bg-amber-500/20 text-amber-300'
+                      : 'border-slate-700 bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white'
+                  }`}
+                  title={
+                    showRoundedValues
+                      ? 'Valores arredondados ATIVOS (Neutro sempre preserva decimais). Clique para ver decimais exatos.'
+                      : 'Clique para mostrar valores arredondados para inteiros (Neutro nunca é arredondado).'
+                  }
+                >
+                  <span className="font-mono text-xs font-bold">≈</span>
+                  <span>{showRoundedValues ? 'Arredondado' : 'Decimais'}</span>
+                  {showRoundedValues && (
+                    <span
+                      className="text-[9px] bg-teal-500/20 text-teal-300 border border-teal-500/40 rounded px-1 font-mono font-bold"
+                      title="Ingrediente Neutro protegido com 1 casa decimal"
+                    >
+                      Neutro .0g
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleResetChecklist}
+                  className="no-print text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
+                  title="Desmarcar todos"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Desmarcar todos</span>
+                </button>
+              </div>
             </div>
 
             <div className="bg-slate-800/70 rounded-2xl border border-slate-700/80 divide-y divide-slate-700/50 overflow-hidden shadow-lg">
               {recipe.ingredients &&
                 recipe.ingredients.map((item, idx) => {
-                  const scaledGrams = Math.round(item.grams * scaleRatio * 10) / 10;
+                  const ing = availableIngredients?.find(
+                    i => i.name.toLowerCase().trim() === (item.name || '').toLowerCase().trim()
+                  );
+                  const isNeutro = isNeutroIngredient(item.name, ing?.category);
+                  const scaledGrams = roundIngredientGrams(item.grams * scaleRatio, isNeutro, showRoundedValues);
                   const pct = baseWeight > 0 ? (item.grams / baseWeight) * 100 : 0;
                   const isChecked = !!checkedItems[item.name];
 
@@ -328,6 +383,14 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
                             g
                           </span>
                         </div>
+                        {isNeutro && (
+                          <span
+                            className="text-[10px] text-teal-300 font-mono font-bold block text-right"
+                            title="Ingrediente Neutro: dosagem protegida com precisão decimal (0.1g)"
+                          >
+                            precisão 0.1g
+                          </span>
+                        )}
                       </div>
                     </div>
                   );
@@ -393,7 +456,9 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
             ) : (
               <div className="space-y-2.5">
                 {variegatos.map((v, i) => {
-                  const scaledVarGrams = Math.round(v.grams * scaleRatio * 10) / 10;
+                  const scaledVarGrams = showRoundedValues
+                    ? Math.round(v.grams * scaleRatio)
+                    : Math.round(v.grams * scaleRatio * 10) / 10;
                   const physical = resolveVariegatoDensity(
                     v,
                     availableIngredients?.find(ing => ing.name.toLowerCase().trim() === (v.name || '').toLowerCase().trim())

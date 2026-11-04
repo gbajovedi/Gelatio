@@ -21,6 +21,41 @@ export const DEFAULT_PRICING: PricingSettings = {
   salesTaxPercent: 0
 };
 
+export const STORAGE_KEY_SHOW_ROUNDED = 'gelato_show_rounded_values';
+
+/**
+ * Identifica se um ingrediente é da classe Neutro / Estabilizante / Emulsionante.
+ * Na tradição do gelato artesanal, os neutros atuam em dosagens microcríticas
+ * (3.0g a 5.0g por kg de calda). Portanto, o ingrediente Neutro NUNCA deve
+ * ter seus decimais arredondados para número inteiro na bancada de balanceamento.
+ */
+export function isNeutroIngredient(name?: string, category?: string): boolean {
+  const n = (name || '').toLowerCase().trim();
+  const c = (category || '').toLowerCase().trim();
+  return (
+    n.includes('neutro') ||
+    n.includes('liga neutra') ||
+    c.includes('neutro') ||
+    c === 'neutros, gomas & fibras' ||
+    c === 'neutros & fibras'
+  );
+}
+
+/**
+ * Aplica arredondamento em um valor em gramas respeitando a regra sagrada:
+ * O ingrediente Neutro NUNCA é arredondado para número inteiro (mantém 1 casa decimal).
+ */
+export function roundIngredientGrams(
+  grams: number,
+  isNeutro: boolean,
+  showRounded: boolean
+): number {
+  if (isNeutro) {
+    return Math.round(grams * 10) / 10;
+  }
+  return showRounded ? Math.round(grams) : Math.round(grams * 10) / 10;
+}
+
 /**
  * Extrai os alérgenos regulamentares (RDC Anvisa) de um insumo ou mescla,
  * priorizando os detalhes específicos de alérgenos cadastrados (`allergenDetails`)

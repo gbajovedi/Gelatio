@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { calculateBatchAnalysis, resolveVariegatoDensity, DEFAULT_PRICING } from '../calculator';
+import {
+  calculateBatchAnalysis,
+  resolveVariegatoDensity,
+  isNeutroIngredient,
+  roundIngredientGrams,
+  DEFAULT_PRICING
+} from '../calculator';
 import { RecipeItem, VariegatoItem, Ingredient, StyleStandard } from '../../types/gelato';
 
 describe('Calculator Core Engine', () => {
@@ -213,5 +219,49 @@ describe('Calculator Core Engine', () => {
       expect(analysisMixer.densityAndVolume.variegatoDetails).toHaveLength(1);
       expect(analysisMixer.densityAndVolume.variegatoDetails![0].processMethod).toBe('mixer');
     }
+  });
+
+  describe('Neutro Protection & Rounded Values System', () => {
+    it('corretamente identifica ingredientes da classe Neutro/Estabilizante', () => {
+      // Por nome
+      expect(isNeutroIngredient('Neutro')).toBe(true);
+      expect(isNeutroIngredient('Neutro 5')).toBe(true);
+      expect(isNeutroIngredient('Neutro Fabbri')).toBe(true);
+      expect(isNeutroIngredient('Liga Neutra Speciale')).toBe(true);
+      expect(isNeutroIngredient('NEUTRO CREMA')).toBe(true);
+
+      // Por categoria
+      expect(isNeutroIngredient('Goma Tara', 'Neutros, Gomas & Fibras')).toBe(true);
+      expect(isNeutroIngredient('Alfarroba', 'Neutros & Fibras')).toBe(true);
+      expect(isNeutroIngredient('Insumo X', 'Neutros e Estabilizantes')).toBe(true);
+
+      // Insumos não-neutros devem retornar false
+      expect(isNeutroIngredient('Leite Integral', 'Lácteos Líquidos')).toBe(false);
+      expect(isNeutroIngredient('Açúcar', 'Açúcares')).toBe(false);
+      expect(isNeutroIngredient('Creme de Leite 35%', 'Gorduras')).toBe(false);
+      expect(isNeutroIngredient('Nutella', 'Pastas & Oleaginosas')).toBe(false);
+    });
+
+    it('NUNCA permite arredondar o ingrediente Neutro (preserva 1 casa decimal)', () => {
+      // Neutro com valores decimais: NUNCA deve virar inteiro mesmo com showRounded = true
+      expect(roundIngredientGrams(16.8, true, true)).toBe(16.8);
+      expect(roundIngredientGrams(16.8, true, false)).toBe(16.8);
+      expect(roundIngredientGrams(3.54, true, true)).toBe(3.5);
+      expect(roundIngredientGrams(5.0, true, true)).toBe(5.0);
+      expect(roundIngredientGrams(4.26, true, true)).toBe(4.3);
+    });
+
+    it('arredonda ingredientes não-neutros para inteiros quando showRounded = true', () => {
+      // Insumos normais em lote escalado (ex: 2489.1g -> 2489g, 602.4g -> 602g, 160.7g -> 161g)
+      expect(roundIngredientGrams(2489.1, false, true)).toBe(2489);
+      expect(roundIngredientGrams(602.4, false, true)).toBe(602);
+      expect(roundIngredientGrams(160.7, false, true)).toBe(161);
+      expect(roundIngredientGrams(120.5, false, true)).toBe(121);
+
+      // Quando showRounded = false, preserva 1 casa decimal
+      expect(roundIngredientGrams(2489.1, false, false)).toBe(2489.1);
+      expect(roundIngredientGrams(602.4, false, false)).toBe(602.4);
+      expect(roundIngredientGrams(160.7, false, false)).toBe(160.7);
+    });
   });
 });
