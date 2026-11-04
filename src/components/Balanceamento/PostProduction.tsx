@@ -189,48 +189,43 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                   <button
                     type="button"
                     onClick={() => handleRemove(idx)}
-                    className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors shrink-0"
+                    className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-700/80 bg-slate-800 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 hover:border-rose-500/40 transition-colors shrink-0"
                     title="Remover mescla"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Linha 2: Peso com Steppers [-5] [ 350 g ] [+5] + Custo */}
-                <div className="flex items-center justify-between gap-2 pt-0.5">
-                  <div className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() => handleChangeGrams(idx, Math.max(0, item.grams - 5))}
-                      className="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-amber-500 text-xs font-bold active:scale-95 transition-all"
-                      title="Diminuir 5g (-5g)"
-                    >
-                      -5
-                    </button>
-                    <div className="flex items-center bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-lg px-2 py-1 shadow-inner">
+                {/* Linha 2: Peso no Lote (Digitação Direta) & Informações de Dosagem e Custo */}
+                <div className="flex items-center justify-between gap-3 pt-0.5">
+                  {/* Bloco de Pesagem & Dosagem */}
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex items-center bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-xl px-2.5 py-1.5 shadow-inner transition-colors">
+                      <span className="text-[11px] font-bold text-slate-400 mr-1.5 select-none">Peso:</span>
                       <input
                         type="number"
                         min="0"
-                        step="5"
+                        step="10"
                         value={item.grams || ''}
                         onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
-                        className="w-16 bg-transparent text-xs sm:text-sm text-right font-black font-mono text-amber-300 tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        className="w-16 bg-transparent text-sm text-right font-black font-mono text-amber-300 tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         placeholder="0"
                       />
-                      <span className="text-xs font-mono font-bold text-slate-400 pl-1">g</span>
+                      <span className="text-xs font-mono font-bold text-slate-400 pl-1 select-none">g</span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleChangeGrams(idx, item.grams + 5)}
-                      className="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-amber-500 text-xs font-bold active:scale-95 transition-all"
-                      title="Aumentar 5g (+5g)"
+
+                    <div
+                      className="text-left text-[11px] font-mono leading-tight"
+                      title={`${gPerKg}g de mescla por 1kg de calda base (~${pctCalda.toFixed(1)}% do peso do lote)`}
                     >
-                      +5
-                    </button>
+                      <span className="text-cyan-300 font-bold block">{gPerKg} g/kg</span>
+                      <span className="text-[10px] text-slate-400 block">~{pctCalda.toFixed(0)}% calda</span>
+                    </div>
                   </div>
 
+                  {/* Bloco de Custo */}
                   <div className="text-right shrink-0">
-                    <span className="text-xs sm:text-sm font-mono font-bold text-emerald-400 block tracking-tight">
+                    <span className="text-sm font-mono font-black text-emerald-400 block tracking-tight">
                       R$ {totalItemCost.toFixed(2)}
                     </span>
                     <span className="text-[10px] text-slate-400 font-mono block">
@@ -239,28 +234,28 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                   </div>
                 </div>
 
-                {/* Linha 3: Controles de Física & Dosagem */}
-                <div className="flex items-center justify-between gap-1.5 pt-1 border-t border-slate-800">
-                  {/* Botão Ação Rápida de Mixer */}
+                {/* Linha 3: Controles de Física (Mixer & Densidade/Volume) */}
+                <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-800">
+                  {/* Botão Ação Rápida de Mixer com Estado Explícito */}
                   <button
                     type="button"
                     onClick={() => handleToggleMixer(idx)}
-                    className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1 shrink-0 ${
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 ${
                       physical.method === 'mixer'
                         ? 'bg-amber-500/20 border border-amber-500/60 text-amber-300 shadow-sm'
-                        : 'bg-slate-800 border border-slate-700 text-slate-400 hover:text-slate-200 hover:bg-slate-750'
+                        : 'bg-slate-800/80 border border-slate-700/80 text-slate-400 hover:text-slate-200 hover:bg-slate-750'
                     }`}
                     title={
                       physical.method === 'mixer'
-                        ? `Mixer ativado (+${physical.overrun}% de microbolhas). Clique para desligar.`
+                        ? `Mixer ativado (+${physical.overrun}% de aeração mecânica). Clique para desligar.`
                         : 'Clique para ativar preparo com Mixer (+20% de aeração mecânica)'
                     }
                   >
                     <span>🌪️</span>
-                    <span>Mixer {physical.method === 'mixer' ? `+${physical.overrun}%` : ''}</span>
+                    <span>{physical.method === 'mixer' ? `Mixer: Ativo (+${physical.overrun}%)` : 'Mixer: Desligado'}</span>
                   </button>
 
-                  {/* Pílula de Densidade & Volume Calculado (Clicável para calibrar) */}
+                  {/* Pílula de Densidade & Volume (com ícone e affordance de clique) */}
                   <button
                     type="button"
                     onClick={() => {
@@ -271,25 +266,17 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                         setDirectDensityInput(String(physical.density));
                       }
                     }}
-                    className={`px-2 py-1 rounded-lg text-[11px] font-mono font-bold transition-all flex items-center gap-1 border shrink-0 ${
+                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 border shrink-0 ${
                       calibratingIndex === idx
-                        ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200'
-                        : 'bg-slate-800 border-slate-700 text-amber-300 hover:border-amber-500/50'
+                        ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-sm'
+                        : 'bg-slate-800/80 border-slate-700/80 text-amber-300 hover:border-cyan-500/50 hover:bg-cyan-500/10'
                     }`}
-                    title="Clique para calibrar densidade, alterar aeração ou aferir com copo 100ml"
+                    title="Clique para calibrar densidade física com copo dosador ou presets"
                   >
+                    <Sliders className="w-3 h-3 text-cyan-400" />
                     <span>{physical.density.toFixed(2)} g/ml</span>
                     <span className="text-cyan-300 font-medium">· ~{itemVolMl} ml</span>
                   </button>
-
-                  {/* Dosagem g/kg de Calda */}
-                  <div
-                    className="text-right text-[10px] font-mono text-slate-400 shrink-0"
-                    title={`${gPerKg}g de mescla por 1kg de calda base (~${pctCalda.toFixed(1)}% do peso)`}
-                  >
-                    <span className="text-cyan-300 font-bold block">{gPerKg} g/kg</span>
-                    <span className="text-[9px] text-slate-400 block">~{pctCalda.toFixed(0)}% calda</span>
-                  </div>
                 </div>
 
                 {/* Painel Expansível de Calibração Física (Copo 100ml / Mixer / Presets) */}
@@ -391,11 +378,13 @@ export const PostProduction: React.FC<PostProductionProps> = ({
           })}
 
           {/* Rodapé Sumário de Pós-Produção */}
-          <div className="pt-2 border-t border-slate-700/80 flex items-center justify-between text-xs text-slate-300 font-semibold px-1">
-            <span>Total Mesclas ({variegatos.length}):</span>
-            <div className="flex items-center gap-2 font-mono">
+          <div className="pt-2.5 border-t border-slate-700/80 flex items-center justify-between text-xs text-slate-300 px-0.5">
+            <span className="font-semibold text-slate-400">Total Mesclas ({variegatos.length}):</span>
+            <div className="flex items-center gap-1.5 font-mono text-xs">
               <span className="text-amber-300 font-bold">{totalVariegatosGrams} g</span>
-              <span className="text-cyan-300 font-medium">(~{totalVariegatosVolMl} ml)</span>
+              <span className="text-slate-500">·</span>
+              <span className="text-cyan-300 font-medium">~{totalVariegatosVolMl} ml</span>
+              <span className="text-slate-500">·</span>
               <span className="text-emerald-400 font-bold">R$ {totalVariegatosCost.toFixed(2)}</span>
             </div>
           </div>
