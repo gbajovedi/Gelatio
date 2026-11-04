@@ -666,12 +666,19 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
 
               {/* Mini-Gauge de Nível de Aeração */}
               <div className="space-y-1.5 pt-1">
-                <div className="nutrient-progress-track w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                <div className="nutrient-progress-track relative w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800 flex items-center">
                   <div
                     className="h-full bg-gradient-to-r from-sky-400 via-purple-400 to-emerald-400 rounded-full transition-all duration-500 shadow-sm"
                     style={{
                       width: `${Math.min(100, Math.max(12, (((emulsion?.overrunEstimatePct || 30) - 15) / 30) * 100))}%`
                     }}
+                  />
+
+                  {/* Marcador discreto de referência aos 32% (Clássico Italiano) */}
+                  <div
+                    className="absolute top-0 bottom-0 w-[2px] bg-white/85 shadow-[0_0_4px_rgba(255,255,255,0.9)] z-10 pointer-events-none -translate-x-1/2"
+                    style={{ left: `${((32 - 15) / 30) * 100}%` }}
+                    title="Alvo Clássico Italiano: 32% de overrun"
                   />
                 </div>
                 <div className="flex items-center justify-between text-xs text-slate-300 font-medium font-sans">
