@@ -69,7 +69,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
   const markerPosition = Math.max(0, Math.min(100, ((state.icePercent - 45) / (85 - 45)) * 100));
 
   return (
-    <div className="bg-slate-900/95 rounded-2xl border border-slate-700/80 p-4 shadow-md flex flex-col justify-between space-y-3">
+    <div className="bg-slate-900/95 rounded-2xl border border-slate-700/80 p-4 shadow-md flex flex-col justify-between space-y-3 h-full">
       {/* Header com Título Compacto e Status da Textura */}
       <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
         <div className="flex items-center gap-2 text-cyan-300 min-w-0">
@@ -83,7 +83,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
 
         <div className="flex items-center gap-1.5 shrink-0">
           <span className={`text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full font-bold border shadow-sm ${state.statusBadgeColor} ${state.statusBorderColor}`}>
-            {state.statusLabel}
+            {state.statusLabel.replace(' (Padrão Ouro)', '')}
           </span>
 
           {/* Ícone de Diagnóstico & Metodologia com Popover Flutuante */}

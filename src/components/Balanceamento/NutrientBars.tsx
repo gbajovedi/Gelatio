@@ -504,10 +504,10 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
           </div>
 
           {/* Dual Intelligence Cards: 1. Comportamento Térmico  |  2. Overrun & Emulsão (Sempre Visível) */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 pt-1">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 pt-1 items-stretch">
             
             {/* CARD 1: Comportamento Térmico de Serviço */}
-            <div className="bg-slate-900/95 p-4 rounded-2xl border border-slate-700/80 shadow-md flex flex-col justify-between space-y-3">
+            <div className="bg-slate-900/95 p-4 rounded-2xl border border-slate-700/80 shadow-md flex flex-col justify-between space-y-3 h-full">
               {/* Header do Card com Toggle Switch */}
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2 text-cyan-300">
@@ -602,7 +602,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
             </div>
 
             {/* CARD 2: Emulsão & Overrun (Aeração) — SEMPRE VISÍVEL E DESTACADO */}
-            <div className="emulsao-overrun-card bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/30 p-4 rounded-2xl border border-purple-500/30 shadow-md flex flex-col justify-between space-y-3">
+            <div className="emulsao-overrun-card bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/30 p-4 rounded-2xl border border-purple-500/30 shadow-md flex flex-col justify-between space-y-3 h-full">
               {/* Header do Card de Overrun */}
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2 text-purple-300">
