@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Recipe, Ingredient, StyleStandard, VariegatoItem, RecipeItem } from '../../types/gelato';
-import { calculateBatchAnalysis, isNeutroIngredient, roundIngredientGrams, STORAGE_KEY_SHOW_ROUNDED } from '../../core/calculator';
+import { calculateBatchAnalysis, isNeutroIngredient, roundIngredientGrams, STORAGE_KEY_SHOW_ROUNDED, STORAGE_KEY_SORT_BY_WEIGHT } from '../../core/calculator';
 import { getStoredPricingParams, getPricingSettings, PRICING_UPDATED_EVENT, PricingParams } from '../../core/pricingStorage';
 import {
   STYLES_UPDATED_EVENT,
@@ -144,6 +144,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   const [showRoundedValues, setShowRoundedValues] = useState<boolean>(() => {
     try {
       return localStorage.getItem(STORAGE_KEY_SHOW_ROUNDED) === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const [sortByWeight, setSortByWeight] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY_SORT_BY_WEIGHT) === 'true';
     } catch {
       return false;
     }
@@ -373,12 +381,25 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
       .sort((a, b) => b.cost - a.cost);
   }, [items, ingredientsMap]);
 
-  // Sort ingredients by descending weight (standard culinary practice)
-  const handleSortByWeight = () => {
-    const sorted = [...items].sort((a, b) => (b.grams || 0) - (a.grams || 0));
-    setItems(sorted);
-    setIsDirty(true);
+  // Alternar preferência de visualização ordenada por peso (prática culinária profissional)
+  // Uma vez ativo, permanece ativo ao alternar entre receitas.
+  // Altera EXCLUSIVAMENTE a apresentação na tela, sem alterar a ordem real dos dados da receita nem marcar como modificada (isDirty).
+  const handleToggleSortByWeight = () => {
+    const next = !sortByWeight;
+    setSortByWeight(next);
+    try {
+      localStorage.setItem(STORAGE_KEY_SORT_BY_WEIGHT, String(next));
+    } catch (err) {
+      console.warn('Erro ao salvar preferência de ordenação por peso:', err);
+    }
   };
+
+  // Visualização mapeada dos insumos (ordena por maior peso se ativo, preservando originalIndex para edição segura)
+  const displayedItems = useMemo(() => {
+    const indexed = items.map((item, originalIndex) => ({ item, originalIndex }));
+    if (!sortByWeight) return indexed;
+    return [...indexed].sort((a, b) => (b.item.grams || 0) - (a.item.grams || 0));
+  }, [items, sortByWeight]);
 
   // Handle recipe change from selector
   const handleStartNewRecipe = () => {
@@ -773,12 +794,20 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                 <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     type="button"
-                    onClick={handleSortByWeight}
-                    className="px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm whitespace-nowrap"
-                    title="Ordenar ingredientes por maior peso (prática culinária profissional)"
+                    onClick={handleToggleSortByWeight}
+                    className={`px-2.5 py-1 rounded-lg border text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm whitespace-nowrap select-none ${
+                      sortByWeight
+                        ? 'border-amber-500/70 bg-amber-500/20 text-amber-300 shadow-amber-500/10'
+                        : 'border-slate-700 bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white'
+                    }`}
+                    title={
+                      sortByWeight
+                        ? 'Visualização ordenada por peso ATIVA (ordem real da receita preservada). Clique para ver na ordem original.'
+                        : 'Clique para visualizar ingredientes ordenados por maior peso (ordem da receita é preservada).'
+                    }
                   >
                     <ArrowDownWideNarrow className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Ordenar por Peso</span>
+                    <span>{sortByWeight ? 'Ordenar: Ativo' : 'Ordenar por Peso'}</span>
                   </button>
 
                   {/* Botão Mostrar Valores Arredondados */}
@@ -880,7 +909,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/50">
-                  {items.map((item, idx) => {
+                  {displayedItems.map(({ item, originalIndex }) => {
                     const ing = ingredientsMap.get(item.name.toLowerCase().trim());
                     const isNeutro = isNeutroIngredient(item.name, ing?.category);
                     const displayedGrams = roundIngredientGrams(item.grams, isNeutro, showRoundedValues);
@@ -890,14 +919,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                     const isUnknown = item.name.trim() !== '' && !ing;
 
                     return (
-                      <tr key={idx} className="hover:bg-slate-750/40 transition-colors group">
+                      <tr key={originalIndex} className="hover:bg-slate-750/40 transition-colors group">
                         <td className="py-2 pl-2">
                           <div className="relative flex items-center w-full">
                             <input
                               type="text"
                               list="ingredients-datalist"
                               value={item.name}
-                              onChange={e => handleNameChange(idx, e.target.value)}
+                              onChange={e => handleNameChange(originalIndex, e.target.value)}
                               placeholder="Digite ou escolha o insumo..."
                               className={`w-full bg-slate-900 border ${
                                 isUnknown ? 'border-amber-500/60 focus:border-amber-500' : 'border-slate-700 focus:border-amber-500'
@@ -934,7 +963,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                           <div className="flex items-center justify-end gap-1">
                             <button
                               type="button"
-                              onClick={() => handleGramsChange(idx, Math.max(0, item.grams - 5))}
+                              onClick={() => handleGramsChange(originalIndex, Math.max(0, item.grams - 5))}
                               className="w-7 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white hover:border-amber-500/60 hover:bg-slate-800 text-xs font-bold active:scale-95 transition-all"
                               title="Diminuir 5g (-5g)"
                             >
@@ -944,7 +973,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                               type="number"
                               step={isNeutro ? "0.1" : (showRoundedValues ? "1" : "0.1")}
                               value={item.grams === 0 ? '' : displayedGrams}
-                              onChange={e => handleGramsChange(idx, parseFloat(e.target.value) || 0)}
+                              onChange={e => handleGramsChange(originalIndex, parseFloat(e.target.value) || 0)}
                               className={`w-24 sm:w-28 bg-slate-900 border ${
                                 isNeutro ? 'border-teal-500/60 text-teal-100' : 'border-slate-700 text-white'
                               } rounded-lg px-2 py-1.5 text-right font-mono font-bold tabular-nums tracking-tight focus:outline-none focus:border-amber-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${getGramsInputFontSize(displayedGrams)}`}
@@ -953,7 +982,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                             />
                             <button
                               type="button"
-                              onClick={() => handleGramsChange(idx, item.grams + 5)}
+                              onClick={() => handleGramsChange(originalIndex, item.grams + 5)}
                               className="w-7 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white hover:border-amber-500/60 hover:bg-slate-800 text-xs font-bold active:scale-95 transition-all"
                               title="Aumentar 5g (+5g)"
                             >
@@ -975,7 +1004,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                         <td className="py-2 text-center">
                           <button
                             type="button"
-                            onClick={() => handleRemoveRow(idx)}
+                            onClick={() => handleRemoveRow(originalIndex)}
                             className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors"
                             title="Remover Ingrediente"
                           >

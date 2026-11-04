@@ -22,6 +22,7 @@ export const DEFAULT_PRICING: PricingSettings = {
 };
 
 export const STORAGE_KEY_SHOW_ROUNDED = 'gelato_show_rounded_values';
+export const STORAGE_KEY_SORT_BY_WEIGHT = 'gelato_sort_by_weight';
 
 /**
  * Identifica se um ingrediente é da classe Neutro / Estabilizante / Emulsionante.
