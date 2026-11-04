@@ -132,13 +132,13 @@ export function calculateFreezingState(
     diagnostic = `A ${tempC.toFixed(1)}°C, consistência aveludada e cremosa. Ponto ótimo para copinhos ou consumo imediato.`;
   } else if (icePercent <= 75) {
     status = 'ideal';
-    statusLabel = 'Spatolabile Ideal (Padrão Ouro)';
+    statusLabel = 'Espatulabilidade Ideal';
     statusBadgeColor = 'bg-emerald-500/20 text-emerald-300';
     statusBorderColor = 'border-emerald-500/40';
     statusBoxBg = 'bg-emerald-500/10';
     statusBoxBorder = 'border-emerald-500/30';
     statusBoxText = 'text-emerald-200';
-    diagnostic = `A ${tempC.toFixed(1)}°C, equilíbrio termodinâmico perfeito! ${icePercent.toFixed(1)}% de água congelada confere excelente espalhabilidade na espátula (spatolabile), microcristais aveludados e alta estabilidade na vitrine.`;
+    diagnostic = `A ${tempC.toFixed(1)}°C, equilíbrio termodinâmico perfeito! ${icePercent.toFixed(1)}% de água congelada confere excelente espatulabilidade (espalhabilidade na espátula), microcristais aveludados e alta estabilidade na vitrine.`;
   } else if (icePercent <= 82) {
     status = 'firm';
     statusLabel = 'Firme / Boa Estrutura';

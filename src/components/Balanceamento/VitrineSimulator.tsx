@@ -93,7 +93,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           <span
             className={`text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full font-bold border shadow-sm ${state.statusBadgeColor} ${state.statusBorderColor}`}
           >
-            {state.statusLabel.replace(' (Padrão Ouro)', '')}
+            {state.statusLabel}
           </span>
 
           {/* Ícone de Diagnóstico & Metodologia com Popover Flutuante */}
@@ -234,7 +234,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
             <div
               style={{ width: '27.5%' }}
               className="bg-emerald-500/80 border-r border-slate-950/50 ring-1 ring-emerald-400"
-              title="Spatolabile Ideal (64% a 75%)"
+              title="Espatulabilidade Ideal (64% a 75%)"
             />
             <div
               style={{ width: '17.5%' }}
@@ -262,7 +262,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         <div className="flex justify-between text-[9px] font-bold text-slate-400 select-none">
           <span className="text-amber-400/80">Muito Macio</span>
           <span className="text-amber-300">Macio</span>
-          <span className="text-emerald-400 font-extrabold">★ Spatolabile Ideal</span>
+          <span className="text-emerald-400 font-extrabold">★ Espatulabilidade Ideal</span>
           <span className="text-sky-300">Firme</span>
           <span className="text-purple-300">Freezer</span>
         </div>
