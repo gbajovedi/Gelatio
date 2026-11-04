@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Save, Sparkles, Scale, DollarSign } from 'lucide-react';
 import { Recipe, VariegatoItem, Ingredient } from '../../types/gelato';
 import { db } from '../../db/database';
+import { resolveVariegatoDensity } from '../../core/calculator';
 
 interface VariegatoQuickModalProps {
   recipe: Recipe | null;
@@ -69,6 +70,22 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
   const handleChangeCost = (index: number, costKg: number) => {
     const next = [...items];
     next[index] = { ...next[index], costKg: Math.max(0, costKg) };
+    setItems(next);
+  };
+
+  const handleToggleMixer = (index: number) => {
+    const next = [...items];
+    const ing = availableIngredients.find(
+      i => i.name.toLowerCase().trim() === (next[index].name || '').toLowerCase().trim()
+    );
+    const resolved = resolveVariegatoDensity(next[index], ing);
+    const isCurrentlyMixer = resolved.method === 'mixer';
+    next[index] = {
+      ...next[index],
+      processMethod: isCurrentlyMixer ? 'direct' : 'mixer',
+      overrun: isCurrentlyMixer ? 0 : 20,
+      density: undefined
+    };
     setItems(next);
   };
 
@@ -209,11 +226,15 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
               <div className="space-y-2.5">
                 {items.map((item, idx) => {
                   const ing = availableIngredients.find(
-                    i => i.name.toLowerCase().trim() === item.name.toLowerCase().trim()
+                    i => i.name.toLowerCase().trim() === (item.name || '').toLowerCase().trim()
                   );
+                  const physical = resolveVariegatoDensity(item, ing);
                   const costKg = item.costKg !== undefined && item.costKg > 0 ? item.costKg : (ing ? ing.costKg : 0);
                   const totalItemCost = (item.grams * costKg) / 1000;
                   const pctCalda = caldaGrams > 0 ? (item.grams / caldaGrams) * 100 : 0;
+                  const itemVolMl = item.grams > 0 && physical.density > 0
+                    ? Math.round(item.grams / physical.density)
+                    : 0;
 
                   return (
                     <div
@@ -233,7 +254,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
                       </div>
 
                       {/* Peso em gramas */}
-                      <div className="w-full sm:w-28 flex items-center bg-slate-900 border border-slate-700 focus-within:border-amber-500 rounded-xl px-2.5 py-1.5 shadow-inner">
+                      <div className="w-full sm:w-28 flex items-center bg-slate-900 border border-slate-700 focus-within:border-amber-500 rounded-xl px-2.5 py-1.5 shadow-inner shrink-0">
                         <input
                           type="number"
                           min="0"
@@ -246,8 +267,40 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
                         <span className="text-xs font-mono font-bold text-slate-400 pl-1.5 shrink-0">g</span>
                       </div>
 
+                      {/* Botão Mixer */}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleMixer(idx)}
+                        className={`w-full sm:w-auto px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 shrink-0 ${
+                          physical.method === 'mixer'
+                            ? 'bg-amber-500/20 border border-amber-500/60 text-amber-300 shadow-sm'
+                            : 'bg-slate-900 border border-slate-700 text-slate-400 hover:text-slate-200'
+                        }`}
+                        title={
+                          physical.method === 'mixer'
+                            ? `Mixer ativo (+${physical.overrun}% ar). Clique para alternar para direto.`
+                            : 'Ativar preparo com Mixer (+20% de aeração mecânica)'
+                        }
+                      >
+                        <span>🌪️</span>
+                        <span>Mixer {physical.method === 'mixer' ? `+${physical.overrun}%` : ''}</span>
+                      </button>
+
+                      {/* Pílula de Densidade e Volume */}
+                      <div
+                        className="w-full sm:w-24 flex flex-col items-center justify-center bg-slate-900 border border-slate-700/80 rounded-xl py-1 px-1.5 shrink-0"
+                        title={`Densidade aparente: ${physical.density.toFixed(2)} g/ml`}
+                      >
+                        <span className="text-xs font-mono font-bold text-amber-300">
+                          {physical.density.toFixed(2)} g/ml
+                        </span>
+                        <span className="text-[10px] text-cyan-300 font-mono">
+                          ~{itemVolMl} ml
+                        </span>
+                      </div>
+
                       {/* Preço Unitário R$/kg */}
-                      <div className="w-full sm:w-28 flex items-center bg-slate-900 border border-slate-700 focus-within:border-amber-500 rounded-xl px-2.5 py-1.5 shadow-inner">
+                      <div className="w-full sm:w-24 flex items-center bg-slate-900 border border-slate-700 focus-within:border-amber-500 rounded-xl px-2 py-1.5 shadow-inner shrink-0">
                         <span className="text-xs font-mono text-slate-400 pr-1">R$</span>
                         <input
                           type="number"
@@ -263,7 +316,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
                       </div>
 
                       {/* Custo Calculado da Porção */}
-                      <div className="w-full sm:w-24 text-right shrink-0 px-1">
+                      <div className="w-full sm:w-20 text-right shrink-0 px-1">
                         <span className="text-xs font-mono font-bold text-emerald-400 block">
                           R$ {totalItemCost.toFixed(2)}
                         </span>

@@ -19,6 +19,8 @@ export interface Ingredient {
   allergenDetails?: string[];
   isCustom?: boolean;
   preparationId?: string;
+  density?: number; // Densidade intrínseca ou aparente em g/ml ou kg/L
+  overrun?: number; // % de aeração mecânica ou processo (ex: 20 para mixer)
 }
 
 export interface NutrientValues {
@@ -55,6 +57,18 @@ export interface VariegatoItem {
   name: string;
   grams: number;
   costKg?: number;
+  density?: number; // Densidade aparente em kg/L ou g/ml (ex: 1.07 para Nutella c/ mixer)
+  overrun?: number; // % de aeração do mixer ou processo (ex: 20%)
+  processMethod?: 'mixer' | 'direct' | 'custom'; // Método de preparo aplicado
+}
+
+export interface VariegatoPhysicalDetail {
+  name: string;
+  grams: number;
+  density: number;
+  overrun: number;
+  volumeLiters: number;
+  processMethod?: 'mixer' | 'direct' | 'custom';
 }
 
 export interface Recipe {
@@ -79,6 +93,8 @@ export interface Preparation {
   ingredients: { name: string; grams: number }[];
   isCustom?: boolean;
   costKg?: number;
+  density?: number;
+  overrun?: number;
 }
 
 export interface NutrientValidation {
@@ -164,6 +180,7 @@ export interface BatchAnalysis {
     totalVolumeLiters: number;
     baseOverrunPct: number;
     effectiveOverrunPct: number;
+    variegatoDetails?: VariegatoPhysicalDetail[];
   };
   allergensLabel: string;
   costing: {

@@ -3,6 +3,7 @@ import {
   StyleStandard,
   RecipeItem,
   VariegatoItem,
+  VariegatoPhysicalDetail,
   BatchAnalysis,
   NutrientValidation,
   PricingSettings,
@@ -115,6 +116,91 @@ export function extractItemAllergens(
     allergens: Array.from(new Set(allergens)),
     hasLactose,
     hasGluten
+  };
+}
+
+/**
+ * Determina a densidade aparente (kg/L ou g/ml), o overrun de processo e o método para um variegato.
+ * Suporta:
+ * 1. Valores diretos informados pelo gelatiere (density / overrun / processMethod).
+ * 2. Reconhecimento de preparo com Mixer (ex: Nutella após mixer incorpora ~20% de ar, densidade cai de 1.28 para ~1.07 kg/L).
+ * 3. Cálculo estendido de Richmond se o ingrediente possui composição (Gordura, Sólidos, Água).
+ * 4. Presets gastronômicos inteligentes por categoria/nome.
+ */
+export function resolveVariegatoDensity(
+  item: VariegatoItem,
+  ing?: Ingredient
+): { density: number; overrun: number; method: 'mixer' | 'direct' | 'custom' } {
+  const nameLower = (item.name || '').toLowerCase().trim();
+  const hasMixerKeyword = /(mixer|aerad|batid|emulsionad|mousse|chantilly)/i.test(nameLower);
+  const isMixerMethod = item.processMethod === 'mixer' || hasMixerKeyword;
+
+  // 1. Se o gelatiere forneceu densidade explícita customizada
+  if (item.density && item.density > 0) {
+    const ov = item.overrun !== undefined ? item.overrun : (isMixerMethod ? 20 : 0);
+    return {
+      density: Math.round(item.density * 1000) / 1000,
+      overrun: ov,
+      method: item.processMethod || (item.density ? 'custom' : 'direct')
+    };
+  }
+
+  // 2. Determinar a densidade base não aerada (d0)
+  let d0 = 1.25;
+
+  if (ing && (ing.fat > 0 || ing.totalSolids > 0 || ing.water > 0)) {
+    // Cálculo por composição nutricional (Fórmula de Richmond estendida)
+    const fatTerm = (ing.fat * 100) / 0.93;
+    const nonFatSolidsTerm = Math.max(0, ((ing.totalSolids - ing.fat) * 100) / 1.58);
+    const waterTerm = (ing.water * 100) / 1.00;
+    const denom = fatTerm + nonFatSolidsTerm + waterTerm;
+    if (denom > 0) {
+      d0 = Math.max(0.95, Math.min(1.45, 100 / denom));
+    }
+  } else if (ing && ing.density && ing.density > 0) {
+    d0 = ing.density;
+  } else {
+    // Presets gastronômicos calibrados por categoria
+    if (/(nutella|gianduia|avelã|avela|amendoim|pistache|crema|pasta|cacau|chocolate)/i.test(nameLower)) {
+      d0 = 1.28;
+    } else if (/(geleia|calda|amarena|morango|frutas|fruta|damasco|framboesa|mirtilo|maracujá|maracuja)/i.test(nameLower)) {
+      d0 = 1.31;
+    } else if (/(caramelo|doce de leite|dulce|toffee)/i.test(nameLower)) {
+      d0 = 1.35;
+    } else if (/(ganache|trufa|brigadeiro)/i.test(nameLower)) {
+      d0 = 1.22;
+    } else if (/(crocante|biscoito|cookie|brownie|castanha|nozes)/i.test(nameLower)) {
+      d0 = 0.85;
+    } else {
+      d0 = 1.25;
+    }
+  }
+
+  // 3. Determinar o Overrun de processo (aeração mecânica por mixer ou batedeira)
+  let ov = 0;
+  let method: 'mixer' | 'direct' | 'custom' = 'direct';
+
+  if (item.overrun !== undefined) {
+    ov = Math.max(0, item.overrun);
+    method = item.processMethod || (ov > 0 ? 'mixer' : 'direct');
+  } else if (isMixerMethod) {
+    ov = 20; // 20% de aeração padrão comprovada pelo teste de bancada com mixer
+    method = 'mixer';
+  } else if (/(ganache batida|mousse)/i.test(nameLower)) {
+    ov = 30;
+    method = 'mixer';
+  } else if (ing && ing.overrun !== undefined) {
+    ov = Math.max(0, ing.overrun);
+    method = ov > 0 ? 'mixer' : 'direct';
+  }
+
+  // 4. Calcular densidade aparente final
+  const effectiveDensity = ov > 0 ? d0 / (1 + ov / 100) : d0;
+
+  return {
+    density: Math.round(effectiveDensity * 1000) / 1000,
+    overrun: Math.round(ov * 10) / 10,
+    method
   };
 }
 
@@ -397,13 +483,37 @@ export function calculateBatchAnalysis(
   // Volume da calda batida com ar (L)
   const baseVolumeLiters = baseLiquidVolumeLiters * (1 + (baseOverrunPct / 100));
 
-  // Variegatos e Mesclas (Overrun = 0%, densidade média comercial ~1.30 g/ml)
-  const VARIEGATO_DENSITY = 1.30;
-  const variegatoVolumeLiters = totalVariegatoGrams > 0 ? ((totalVariegatoGrams / 1000) / VARIEGATO_DENSITY) : 0;
+  // Variegatos e Mesclas: Cálculo individualizado por matriz físico-química e aeração de mixer
+  const variegatoDetails: VariegatoPhysicalDetail[] = [];
+  let totalVariegatoVolumeLiters = 0;
+  let totalVariegatoLiquidVolumeLiters = 0;
+
+  for (const v of variegatos) {
+    if (!v.grams || v.grams <= 0) continue;
+    const ing = ingredientsMap.get((v.name || '').toLowerCase().trim());
+    const physical = resolveVariegatoDensity(v, ing);
+    const volAeratedLiters = physical.density > 0 ? ((v.grams / 1000) / physical.density) : 0;
+
+    // Volume base não aerado (líquido/pastoso puro)
+    const baseDensity = physical.overrun > 0 ? physical.density * (1 + (physical.overrun / 100)) : physical.density;
+    const volLiquidLiters = baseDensity > 0 ? ((v.grams / 1000) / baseDensity) : volAeratedLiters;
+
+    totalVariegatoVolumeLiters += volAeratedLiters;
+    totalVariegatoLiquidVolumeLiters += volLiquidLiters;
+
+    variegatoDetails.push({
+      name: v.name,
+      grams: v.grams,
+      density: physical.density,
+      overrun: physical.overrun,
+      volumeLiters: Math.round(volAeratedLiters * 1000) / 1000,
+      processMethod: physical.method
+    });
+  }
 
   // Volume total consolidado e Overrun aparente do produto final
-  const totalVolumeLiters = baseVolumeLiters + variegatoVolumeLiters;
-  const totalLiquidVolumeLiters = baseLiquidVolumeLiters + variegatoVolumeLiters;
+  const totalVolumeLiters = baseVolumeLiters + totalVariegatoVolumeLiters;
+  const totalLiquidVolumeLiters = baseLiquidVolumeLiters + totalVariegatoLiquidVolumeLiters;
   const effectiveOverrunPct =
     totalLiquidVolumeLiters > 0
       ? ((totalVolumeLiters - totalLiquidVolumeLiters) / totalLiquidVolumeLiters) * 100
@@ -413,10 +523,11 @@ export function calculateBatchAnalysis(
     caldaDensity: Math.round(caldaDensity * 1000) / 1000,
     baseLiquidVolumeLiters: Math.round(baseLiquidVolumeLiters * 1000) / 1000,
     baseVolumeLiters: Math.round(baseVolumeLiters * 1000) / 1000,
-    variegatoVolumeLiters: Math.round(variegatoVolumeLiters * 1000) / 1000,
+    variegatoVolumeLiters: Math.round(totalVariegatoVolumeLiters * 1000) / 1000,
     totalVolumeLiters: Math.round(totalVolumeLiters * 1000) / 1000,
     baseOverrunPct: Math.round(baseOverrunPct),
-    effectiveOverrunPct: Math.round(effectiveOverrunPct * 10) / 10
+    effectiveOverrunPct: Math.round(effectiveOverrunPct * 10) / 10,
+    variegatoDetails
   };
 
   // Tub Suggested Price

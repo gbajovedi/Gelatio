@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { calculateBatchAnalysis, DEFAULT_PRICING } from '../calculator';
-import { RecipeItem, Ingredient, StyleStandard } from '../../types/gelato';
+import { calculateBatchAnalysis, resolveVariegatoDensity, DEFAULT_PRICING } from '../calculator';
+import { RecipeItem, VariegatoItem, Ingredient, StyleStandard } from '../../types/gelato';
 
 describe('Calculator Core Engine', () => {
   const mockIngredients: Ingredient[] = [
@@ -132,6 +132,86 @@ describe('Calculator Core Engine', () => {
     if (analysis.sandinessRisk) {
       expect(analysis.sandinessRisk.maxSafeMsnf).toBeGreaterThan(0);
       expect(typeof analysis.sandinessRisk.isAtRisk).toBe('boolean');
+    }
+  });
+
+  it('calcula densidade e aeração individual de variegatos (Mixer vs Direto)', () => {
+    // 1. Nutella com mixer (+20% ar)
+    const nutellaMixer: VariegatoItem = {
+      name: 'Variegato de Nutella',
+      grams: 350,
+      processMethod: 'mixer'
+    };
+    const resMixer = resolveVariegatoDensity(nutellaMixer);
+    expect(resMixer.method).toBe('mixer');
+    expect(resMixer.overrun).toBe(20);
+    // 1.28 / 1.20 = 1.067
+    expect(resMixer.density).toBeCloseTo(1.067, 2);
+
+    // 2. Nutella pura sem mixer
+    const nutellaPura: VariegatoItem = {
+      name: 'Variegato de Nutella',
+      grams: 350,
+      processMethod: 'direct'
+    };
+    const resPura = resolveVariegatoDensity(nutellaPura);
+    expect(resPura.method).toBe('direct');
+    expect(resPura.overrun).toBe(0);
+    expect(resPura.density).toBe(1.28);
+
+    // 3. Geleia de frutas
+    const geleia: VariegatoItem = {
+      name: 'Geleia de Frutas Vermelhas',
+      grams: 250
+    };
+    const resGeleia = resolveVariegatoDensity(geleia);
+    expect(resGeleia.density).toBe(1.31);
+    expect(resGeleia.overrun).toBe(0);
+
+    // 4. Densidade customizada explícita
+    const custom: VariegatoItem = {
+      name: 'Ganache Especial',
+      grams: 200,
+      density: 1.05
+    };
+    const resCustom = resolveVariegatoDensity(custom);
+    expect(resCustom.density).toBe(1.05);
+  });
+
+  it('expande o volume total do lote com variegato passado no mixer', () => {
+    const items: RecipeItem[] = [
+      { name: 'Leite Integral Tipo A', grams: 1950 },
+      { name: 'Creme de Leite 35%', grams: 540 },
+      { name: 'Açúcar', grams: 390 },
+      { name: 'Dextrose', grams: 120 }
+    ]; // 3000g de calda
+
+    const variegatosMixer: VariegatoItem[] = [
+      { name: 'Variegato de Nutella', grams: 350, processMethod: 'mixer' }
+    ];
+
+    const variegatosPuro: VariegatoItem[] = [
+      { name: 'Variegato de Nutella', grams: 350, processMethod: 'direct' }
+    ];
+
+    const analysisMixer = calculateBatchAnalysis(items, variegatosMixer, mockStyle, ingMap, DEFAULT_PRICING);
+    const analysisPuro = calculateBatchAnalysis(items, variegatosPuro, mockStyle, ingMap, DEFAULT_PRICING);
+
+    expect(analysisMixer.densityAndVolume).toBeDefined();
+    expect(analysisPuro.densityAndVolume).toBeDefined();
+
+    if (analysisMixer.densityAndVolume && analysisPuro.densityAndVolume) {
+      // O volume da Nutella no mixer (~0.328L) deve ser maior que da Nutella pura (~0.273L)
+      expect(analysisMixer.densityAndVolume.variegatoVolumeLiters).toBeGreaterThan(
+        analysisPuro.densityAndVolume.variegatoVolumeLiters
+      );
+      // Volume total com mixer é maior
+      expect(analysisMixer.densityAndVolume.totalVolumeLiters).toBeGreaterThan(
+        analysisPuro.densityAndVolume.totalVolumeLiters
+      );
+      // Detalhes individuais gravados
+      expect(analysisMixer.densityAndVolume.variegatoDetails).toHaveLength(1);
+      expect(analysisMixer.densityAndVolume.variegatoDetails![0].processMethod).toBe('mixer');
     }
   });
 });

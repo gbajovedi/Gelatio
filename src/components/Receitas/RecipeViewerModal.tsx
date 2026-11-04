@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Recipe, VariegatoItem, Ingredient } from '../../types/gelato';
 import { CategoryBadge } from '../../core/categoryThemes';
 import { db } from '../../db/database';
+import { resolveVariegatoDensity } from '../../core/calculator';
 import {
   X,
   Scale,
@@ -387,6 +388,10 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
               <div className="space-y-2.5">
                 {variegatos.map((v, i) => {
                   const scaledVarGrams = Math.round(v.grams * scaleRatio * 10) / 10;
+                  const physical = resolveVariegatoDensity(
+                    v,
+                    availableIngredients?.find(ing => ing.name.toLowerCase().trim() === (v.name || '').toLowerCase().trim())
+                  );
                   return (
                     <div
                       key={i}
@@ -402,6 +407,13 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
                           placeholder="Nome da mescla (ex: Variegato de Nutella)..."
                           className="w-full bg-slate-800 border border-slate-700 focus:border-amber-500 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-bold text-amber-200 placeholder-slate-500 focus:outline-none"
                         />
+                        {physical.method === 'mixer' && (
+                          <div className="mt-1 flex items-center gap-1 text-[10px] text-amber-400 font-medium">
+                            <span>🌪️ Mixer (+{physical.overrun}% ar)</span>
+                            <span className="text-slate-500">•</span>
+                            <span className="text-cyan-300 font-mono">~{Math.round(scaledVarGrams > 0 && physical.density > 0 ? scaledVarGrams / physical.density : 0)} ml</span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Quantidade na Receita Base & Lote Escalonado */}

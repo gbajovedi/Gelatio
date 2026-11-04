@@ -19,7 +19,7 @@ import {
   Minus
 } from 'lucide-react';
 import { PricingParams, saveStoredPricingParams } from '../../core/pricingStorage';
-import { PricingSettings } from '../../types/gelato';
+import { PricingSettings, VariegatoPhysicalDetail } from '../../types/gelato';
 
 export interface DensityAndVolumeMetrics {
   caldaDensity: number;
@@ -29,6 +29,7 @@ export interface DensityAndVolumeMetrics {
   totalVolumeLiters: number;
   baseOverrunPct: number;
   effectiveOverrunPct: number;
+  variegatoDetails?: VariegatoPhysicalDetail[];
 }
 
 interface ProfitSimulatorProps {
@@ -166,15 +167,17 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
   const [customWeightInput, setCustomWeightInput] = useState<number>(100);
   const [customPackCostInput, setCustomPackCostInput] = useState<number>(1.00);
 
-  // Physical calculations based on Calda, Overrun and Variegatos
+  // Physical calculations based on Calda, Overrun and Individual Variegatos
   const actualCaldaWeight = caldaWeightGrams || Math.max(0, batchWeightGrams - totalVariegatoGrams);
   const caldaDensity = densityAndVolume?.caldaDensity || 1.10;
-  const VARIEGATO_DENSITY = 1.30;
 
-  // Volumes
+  // Volumes (Variegatos individualizados com overrun de mixer e densidade específica)
   const baseLiquidVolLiters = caldaDensity > 0 ? (actualCaldaWeight / 1000) / caldaDensity : 0;
   const baseAeratedVolLiters = baseLiquidVolLiters * (1 + (userOverrun / 100));
-  const variegatoVolLiters = totalVariegatoGrams > 0 ? (totalVariegatoGrams / 1000) / VARIEGATO_DENSITY : 0;
+  const variegatoVolLiters =
+    densityAndVolume?.variegatoVolumeLiters !== undefined
+      ? densityAndVolume.variegatoVolumeLiters
+      : (totalVariegatoGrams > 0 ? (totalVariegatoGrams / 1000) / 1.25 : 0);
   const totalBatchVolLiters = baseAeratedVolLiters + variegatoVolLiters;
   const totalBatchVolMl = totalBatchVolLiters * 1000;
 
