@@ -65,7 +65,7 @@ export const CustosCard: React.FC<CustosCardProps> = ({
           </div>
         </div>
 
-        {/* Quadrante 2: Custo c/ Mescla (ou Calda Base se não houver mesclas) */}
+        {/* Quadrante 2: Custo c/ Mescla ou Aviso de Nenhuma Mescla */}
         <div
           className={`p-2.5 rounded-xl border flex flex-col justify-between shadow-inner transition-all ${
             hasVariegatos
@@ -73,47 +73,46 @@ export const CustosCard: React.FC<CustosCardProps> = ({
               : 'bg-slate-950/80 border-slate-800'
           }`}
         >
-          <div>
-            <span
-              className={`text-[10px] font-bold uppercase tracking-wider block truncate ${
-                hasVariegatos ? 'text-amber-300' : 'text-slate-400'
-              }`}
-            >
-              Custo c/ Mescla
-            </span>
-            <div className="flex items-baseline gap-1 mt-0.5">
-              <span
-                className={`text-base sm:text-xl font-black font-mono ${
-                  hasVariegatos ? 'text-amber-200' : 'text-slate-300'
-                }`}
-              >
-                R$ {(hasVariegatos ? costing.finalCostKg : costing.caldaCostKg).toFixed(2)}
-              </span>
-              <span
-                className={`text-[10px] font-medium ${
-                  hasVariegatos ? 'text-amber-300/80' : 'text-slate-400'
-                }`}
-              >
-                / kg
-              </span>
-            </div>
-          </div>
-          <div
-            className={`pt-1.5 border-t mt-1.5 flex items-center justify-between text-[10px] ${
-              hasVariegatos ? 'border-amber-500/20' : 'border-slate-800/80'
-            }`}
-          >
-            <span className={hasVariegatos ? 'text-amber-300/80' : 'text-slate-400'}>
-              {hasVariegatos ? 'Mescla no total:' : 'Pós-Produção:'}
-            </span>
-            <span
-              className={`font-mono font-bold ${
-                hasVariegatos ? 'text-amber-200' : 'text-slate-400'
-              }`}
-            >
-              {hasVariegatos ? `${costing.variegatoRatioPercent}%` : '0%'}
-            </span>
-          </div>
+          {hasVariegatos ? (
+            <>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider block truncate text-amber-300">
+                  Custo c/ Mescla
+                </span>
+                <div className="flex items-baseline gap-1 mt-0.5">
+                  <span className="text-base sm:text-xl font-black font-mono text-amber-200">
+                    R$ {costing.finalCostKg.toFixed(2)}
+                  </span>
+                  <span className="text-[10px] font-medium text-amber-300/80">
+                    / kg
+                  </span>
+                </div>
+              </div>
+              <div className="pt-1.5 border-t border-amber-500/20 mt-1.5 flex items-center justify-between text-[10px]">
+                <span className="text-amber-300/80">Mescla no total:</span>
+                <span className="font-mono font-bold text-amber-200">
+                  {costing.variegatoRatioPercent}%
+                </span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider block truncate text-slate-400">
+                  Custo c/ Mescla
+                </span>
+                <div className="mt-1 flex items-center">
+                  <span className="text-xs sm:text-[13px] font-semibold text-slate-300">
+                    Nenhuma mescla adicionada
+                  </span>
+                </div>
+              </div>
+              <div className="pt-1.5 border-t border-slate-800/80 mt-1.5 flex items-center justify-between text-[10px]">
+                <span className="text-slate-400">Pós-Produção:</span>
+                <span className="font-mono text-slate-400">0% (Calda pura)</span>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Quadrante 3: Custo Total do Lote */}
