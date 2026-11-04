@@ -413,7 +413,12 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="style-settings-title"
+        className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden"
+      >
         
         {/* Modal Header */}
         <div className="px-5 py-4 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between">
@@ -423,7 +428,7 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-white">
+                <h2 id="style-settings-title" className="text-lg font-bold text-white">
                   {isCreating ? 'Criar Novo Estilo Personalizado' : 'Metas e Parâmetros Físico-Químicos'}
                 </h2>
                 {isCreating ? (

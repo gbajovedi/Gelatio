@@ -57,6 +57,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
   const [balanceFilter, setBalanceFilter] = useState<'all' | 'balanced' | 'critical'>('all');
   const [sortBy, setSortBy] = useState<'name-asc' | 'custom-first' | 'cost-asc' | 'pac-desc'>('name-asc');
   const [viewingRecipe, setViewingRecipe] = useState<Recipe | null>(null);
+  const [showAdvancedFiltersMobile, setShowAdvancedFiltersMobile] = useState<boolean>(false);
 
   // Sincronizar viewingRecipe quando as mesclas forem salvas ou recarregadas
   useEffect(() => {
@@ -387,30 +388,47 @@ export const RecipeList: React.FC<RecipeListProps> = ({
           </div>
 
           <div className="space-y-3">
-            {/* Search bar */}
-            <div className="relative w-full">
-              <Search className="w-5 h-5 text-amber-400 absolute left-3.5 top-3.5" />
-              <input
-                type="text"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Buscar por sabor ou insumo (ex: pistache, chocolate, maracujá, manga)..."
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-11 pr-10 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-semibold shadow-inner"
-              />
-              {search && (
-                <button
-                  type="button"
-                  onClick={() => setSearch('')}
-                  className="absolute right-3 top-3 p-1 text-slate-400 hover:text-white rounded-lg transition-colors"
-                  title="Limpar busca"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
+            {/* Search bar & Mobile Filter Toggle */}
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="w-5 h-5 text-amber-400 absolute left-3.5 top-3.5" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Buscar por sabor ou insumo (ex: pistache, chocolate, maracujá, manga)..."
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-11 pr-10 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-semibold shadow-inner"
+                />
+                {search && (
+                  <button
+                    type="button"
+                    onClick={() => setSearch('')}
+                    className="absolute right-3 top-3 p-1 text-slate-400 hover:text-white rounded-lg transition-colors"
+                    title="Limpar busca"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
+              {/* Botão de alternância de filtros no mobile */}
+              <button
+                type="button"
+                onClick={() => setShowAdvancedFiltersMobile(!showAdvancedFiltersMobile)}
+                className={`sm:hidden px-3.5 py-3 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 ${
+                  showAdvancedFiltersMobile || balanceFilter !== 'all' || activePreset !== 'gold'
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                    : 'bg-slate-900 border-slate-700 text-slate-400'
+                }`}
+                title="Alternar metodologia e filtros técnicos"
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                <span>Filtros</span>
+              </button>
             </div>
 
             {/* Linha de Controles: Seletor de Fórmula (Metodologia) + Cockpit de Status */}
-            <div className="flex flex-wrap items-center justify-between gap-2.5 pt-0.5 pb-1">
+            <div className={`${showAdvancedFiltersMobile ? 'flex' : 'hidden sm:flex'} flex-wrap items-center justify-between gap-2.5 pt-0.5 pb-1`}>
               {/* Seletor de Metodologia/Fórmula */}
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-0.5">

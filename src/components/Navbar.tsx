@@ -24,21 +24,23 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
   return (
     <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-md w-full">
       <div className="max-w-screen-2xl mx-auto px-3 sm:px-4 lg:px-5 xl:px-6 flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-3 xl:gap-4 w-full">
-        {/* Brand - Gelatio Logo */}
-        <div
+        {/* Brand - Gelatio Logo (Semantic button) */}
+        <button
+          type="button"
           onClick={() => onTabChange('balanceamento')}
-          className="flex items-center cursor-pointer group shrink-0 select-none py-1"
+          className="flex items-center cursor-pointer group shrink-0 select-none py-1 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-xl"
           title="Gelatio — Calculadora & Balanceamento de Gelatos"
+          aria-label="Ir para a Bancada de Balanceamento"
         >
           <img
             src={gelatioLogo}
             alt="Gelatio"
             className="h-8 sm:h-9 xl:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-sm"
           />
-        </div>
+        </button>
 
         {/* Desktop Unified Navigation Bar with Integrated Backup Button */}
-        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-800/90 p-1 xl:p-1.5 rounded-2xl border border-slate-700/80 shadow-inner shrink-0">
+        <nav aria-label="Navegação Principal" className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-800/90 p-1 xl:p-1.5 rounded-2xl border border-slate-700/80 shadow-inner shrink-0">
           {tabs.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -47,6 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
                 key={tab.id}
                 type="button"
                 onClick={() => onTabChange(tab.id as NavTab)}
+                aria-current={isActive ? 'page' : undefined}
                 className={`h-9 xl:h-10 px-2 lg:px-2.5 xl:px-3.5 2xl:px-4 rounded-xl text-xs xl:text-sm font-bold flex items-center gap-1.5 xl:gap-2 whitespace-nowrap select-none transition-all shrink-0 ${
                   isActive
                     ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
@@ -110,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
       </div>
 
       {/* Mobile/Tablet Horizontal Tabs Bar */}
-      <div className="flex lg:hidden overflow-x-auto px-3 sm:px-4 py-2 bg-slate-900 border-t border-slate-800 gap-1.5">
+      <nav aria-label="Navegação Móvel" className="flex lg:hidden overflow-x-auto px-3 sm:px-4 py-2 bg-slate-900 border-t border-slate-800 gap-1.5">
         {tabs.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -119,6 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
               key={tab.id}
               type="button"
               onClick={() => onTabChange(tab.id as NavTab)}
+              aria-current={isActive ? 'page' : undefined}
               className={`h-9 px-3 sm:px-3.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all shrink-0 select-none ${
                 isActive
                   ? 'bg-amber-500 text-slate-950 font-black shadow-md'
@@ -130,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
             </button>
           );
         })}
-      </div>
+      </nav>
     </header>
   );
 };

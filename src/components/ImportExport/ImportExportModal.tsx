@@ -200,7 +200,12 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md">
-      <div className="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-2xl p-5 sm:p-7 shadow-2xl relative space-y-4 max-h-[92vh] overflow-y-auto">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="backup-modal-title"
+        className="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-2xl p-5 sm:p-7 shadow-2xl relative space-y-4 max-h-[92vh] overflow-y-auto"
+      >
         {/* Botão de Fechar */}
         <button
           onClick={() => {
@@ -210,6 +215,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
           }}
           className="absolute top-5 right-5 text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
           title="Fechar"
+          aria-label="Fechar diálogo de backup"
         >
           <X className="w-5 h-5" />
         </button>
@@ -220,7 +226,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
             💾
           </div>
           <div>
-            <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+            <h3 id="backup-modal-title" className="text-lg sm:text-xl font-black text-white tracking-tight">
               Gerenciador de Backup
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">

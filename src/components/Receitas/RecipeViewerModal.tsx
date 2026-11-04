@@ -167,7 +167,12 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   return (
     <div className="print-modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-0 sm:p-4">
       {/* Full screen on mobile (w-full h-full), elegant rounded modal on desktop */}
-      <div className="print-recipe-card bg-slate-900 border border-slate-700/80 w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="recipe-viewer-title"
+        className="print-recipe-card bg-slate-900 border border-slate-700/80 w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+      >
         {/* Sticky Header */}
         <div className="p-4 sm:p-5 bg-slate-800 border-b border-slate-700/80 flex items-start justify-between gap-3 shrink-0">
           <div className="space-y-1 min-w-0 pr-2">
@@ -180,6 +185,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
             </div>
 
             <h2
+              id="recipe-viewer-title"
               className="text-xl sm:text-2xl font-black text-white tracking-tight break-words leading-tight"
               title={recipe.name}
             >

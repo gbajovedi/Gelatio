@@ -52,6 +52,7 @@ const getInitialRecipeId = (): string => {
 
 export function App() {
   const [activeTab, setActiveTab] = useState<NavTab>(getInitialTab);
+  const [visitedTabs, setVisitedTabs] = useState<Set<string>>(() => new Set([getInitialTab()]));
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [preparations, setPreparations] = useState<Preparation[]>([]);
@@ -122,6 +123,12 @@ export function App() {
 
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
+    setVisitedTabs(prev => {
+      if (prev.has(tab)) return prev;
+      const next = new Set(prev);
+      next.add(tab);
+      return next;
+    });
     try {
       localStorage.setItem(STORAGE_TAB_KEY, tab);
       window.location.hash = tab;
@@ -140,6 +147,12 @@ export function App() {
       const hash = window.location.hash.replace('#', '') as NavTab;
       if (VALID_TABS.includes(hash)) {
         setActiveTab(hash);
+        setVisitedTabs(prev => {
+          if (prev.has(hash)) return prev;
+          const next = new Set(prev);
+          next.add(hash);
+          return next;
+        });
         localStorage.setItem(STORAGE_TAB_KEY, hash);
       }
     };
@@ -180,67 +193,79 @@ export function App() {
         onOpenBackup={() => setIsBackupModalOpen(true)}
       />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
         <div style={{ display: activeTab === 'balanceamento' ? 'block' : 'none' }}>
-          <BalancingScreen
-            recipes={recipes}
-            ingredients={ingredients}
-            initialRecipeId={activeRecipeId}
-            recipeSelectionToken={recipeSelectionToken}
-            onRecipeSaved={refreshData}
-            onActiveRecipeChange={(id) => {
-              setActiveRecipeId(id);
-              try {
-                localStorage.setItem(STORAGE_RECIPE_KEY, id);
-              } catch {}
-            }}
-          />
+          {visitedTabs.has('balanceamento') && (
+            <BalancingScreen
+              recipes={recipes}
+              ingredients={ingredients}
+              initialRecipeId={activeRecipeId}
+              recipeSelectionToken={recipeSelectionToken}
+              onRecipeSaved={refreshData}
+              onActiveRecipeChange={(id) => {
+                setActiveRecipeId(id);
+                try {
+                  localStorage.setItem(STORAGE_RECIPE_KEY, id);
+                } catch {}
+              }}
+            />
+          )}
         </div>
 
         <div style={{ display: activeTab === 'receitas' ? 'block' : 'none' }}>
-          <RecipeList
-            recipes={recipes}
-            ingredients={ingredients}
-            onSelectRecipe={handleSelectRecipeFromCatalog}
-            onProduceRecipe={handleProduceRecipeFromCatalog}
-            onRefresh={refreshData}
-          />
+          {visitedTabs.has('receitas') && (
+            <RecipeList
+              recipes={recipes}
+              ingredients={ingredients}
+              onSelectRecipe={handleSelectRecipeFromCatalog}
+              onProduceRecipe={handleProduceRecipeFromCatalog}
+              onRefresh={refreshData}
+            />
+          )}
         </div>
 
         <div style={{ display: activeTab === 'ingredientes' ? 'block' : 'none' }}>
-          <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando catálogo de insumos...</div>}>
-            <IngredientManager
-              ingredients={ingredients}
-              onRefresh={refreshData}
-            />
-          </Suspense>
+          {visitedTabs.has('ingredientes') && (
+            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando catálogo de insumos...</div>}>
+              <IngredientManager
+                ingredients={ingredients}
+                onRefresh={refreshData}
+              />
+            </Suspense>
+          )}
         </div>
 
         <div style={{ display: activeTab === 'preparos' ? 'block' : 'none' }}>
-          <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando pré-preparos...</div>}>
-            <PrePreparosList
-              preparations={preparations}
-              availableIngredients={ingredients}
-              onRefresh={refreshData}
-            />
-          </Suspense>
+          {visitedTabs.has('preparos') && (
+            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando pré-preparos...</div>}>
+              <PrePreparosList
+                preparations={preparations}
+                availableIngredients={ingredients}
+                onRefresh={refreshData}
+              />
+            </Suspense>
+          )}
         </div>
 
         <div style={{ display: activeTab === 'financeiro' ? 'block' : 'none' }}>
-          <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando calculadora de custos...</div>}>
-            <PricingCalculator />
-          </Suspense>
+          {visitedTabs.has('financeiro') && (
+            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando calculadora de custos...</div>}>
+              <PricingCalculator />
+            </Suspense>
+          )}
         </div>
 
         <div style={{ display: activeTab === 'estoque' ? 'block' : 'none' }}>
-          <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando módulo de estoque...</div>}>
-            <StockScreen
-              recipes={recipes}
-              ingredients={ingredients}
-              initialProduceRecipeId={produceRecipeId}
-              onClearInitialProduceRecipeId={() => setProduceRecipeId(undefined)}
-            />
-          </Suspense>
+          {visitedTabs.has('estoque') && (
+            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando módulo de estoque...</div>}>
+              <StockScreen
+                recipes={recipes}
+                ingredients={ingredients}
+                initialProduceRecipeId={produceRecipeId}
+                onClearInitialProduceRecipeId={() => setProduceRecipeId(undefined)}
+              />
+            </Suspense>
+          )}
         </div>
       </main>
 

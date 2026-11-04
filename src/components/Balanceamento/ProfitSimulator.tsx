@@ -347,7 +347,7 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                 <span>Simulador de Lucro & Rendimento por Volume</span>
               </h3>
               <p className="text-xs text-slate-400">
-                Calcule preço de venda, margem líquida e rendimento exato de potes com base na aeração real.
+                Calcule preço de venda, margem líquida e rendimento projetado de potes com base no overrun e densidade calculados.
               </p>
             </div>
           </div>

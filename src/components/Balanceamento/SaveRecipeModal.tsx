@@ -66,16 +66,22 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-md p-6 shadow-2xl relative space-y-4">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="save-recipe-title"
+        className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-md p-6 shadow-2xl relative space-y-4"
+      >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition-colors"
+          aria-label="Fechar diálogo"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div>
-          <h3 className="text-xl font-black text-white">
+          <h3 id="save-recipe-title" className="text-xl font-black text-white">
             {mode === 'update' ? 'Atualizar Receita' : 'Salvar Receita Balanceada'}
           </h3>
           <p className="text-xs text-slate-400 mt-0.5">

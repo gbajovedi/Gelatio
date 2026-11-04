@@ -173,6 +173,18 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     return String(Math.round(totalG));
   });
 
+  // Protection against accidental page close or reload when there are unsaved edits
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty]);
+
   const [lastActiveRecipeId, setLastActiveRecipeId] = useState<string>(() => {
     return initialRecipe?.id || (initialRecipeId && initialRecipeId !== 'new' ? initialRecipeId : (getFirstAlphabeticalRecipe(recipes)?.id ?? ''));
   });
@@ -727,14 +739,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                 </button>
               </div>
 
-              {/* Batch Scale Controls with Quick-Pills */}
-              <div className="flex items-center gap-2 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-slate-700 shadow-inner shrink-0">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-300">
+              {/* Batch Scale Controls with Quick-Pills (Responsive wrap for mobile) */}
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-slate-700 shadow-inner max-w-full">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-300 shrink-0">
                   <Scale className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   <span>Lote:</span>
                 </div>
 
-                <div className="flex items-center bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-lg px-2 py-1 shadow-inner transition-colors">
+                <div className="flex items-center bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-lg px-2 py-1 shadow-inner transition-colors shrink-0">
                   <input
                     type="number"
                     min="100"
@@ -762,7 +774,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                 </button>
 
                 {/* Quick scale shortcut buttons */}
-                <div className="flex items-center gap-1 border-l border-slate-700/80 pl-2 ml-1">
+                <div className="flex items-center gap-1 border-t sm:border-t-0 sm:border-l border-slate-700/80 pt-1.5 sm:pt-0 sm:pl-2 sm:ml-1 w-full sm:w-auto justify-end sm:justify-start">
                   {[
                     { label: '1kg', grams: 1000, title: '1 kg (Receita Base / Teste)' },
                     { label: '3kg', grams: 3000, title: '3 kg (Produção Média / Cuba)' },
