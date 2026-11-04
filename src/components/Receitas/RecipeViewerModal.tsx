@@ -414,7 +414,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
                             step="5"
                             value={v.grams || ''}
                             onChange={e => handleChangeVariegatoGrams(i, parseFloat(e.target.value) || 0)}
-                            className="w-16 bg-transparent text-right font-mono font-black text-amber-300 text-xs sm:text-sm focus:outline-none"
+                            className="w-20 bg-transparent text-right font-mono font-black text-amber-300 text-xs sm:text-sm tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             placeholder="0"
                           />
                           <span className="text-xs font-mono text-slate-400 font-bold">g</span>

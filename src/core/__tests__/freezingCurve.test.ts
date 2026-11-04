@@ -39,3 +39,4 @@ describe('Freezing Curve & Cryoscopic Model (Raoult-Goff)', () => {
     expect(state.statusBorderColor).toBeDefined();
   });
 });
+

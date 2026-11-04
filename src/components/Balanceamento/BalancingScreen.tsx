@@ -438,6 +438,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     setIsDirty(true);
   };
 
+  // Dynamic font sizing for gram inputs to prevent clipping on scaled batches
+  const getGramsInputFontSize = (val: number | string) => {
+    const len = String(val).length;
+    if (len >= 7) return 'text-[11px] sm:text-xs';
+    if (len >= 6) return 'text-xs sm:text-sm';
+    return 'text-sm';
+  };
+
   // Save changes to current recipe in IndexedDB
   const handleUpdateExisting = async (updatedName?: string, updatedCategory?: string, updatedNotes?: string) => {
     if (selectedRecipeId === 'new') return;
@@ -738,7 +746,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                         handleApplyBatchScale(parseFloat(batchScaleInput) || 1000);
                       }
                     }}
-                    className="w-16 bg-transparent text-sm text-right font-mono font-black text-amber-300 focus:outline-none"
+                    className="w-20 bg-transparent text-sm text-right font-mono font-black text-amber-300 tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     title="Digite o peso desejado do lote em gramas"
                   />
                   <span className="text-xs text-slate-400 font-mono font-bold pl-1">g</span>
@@ -790,7 +798,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                 <thead>
                   <tr className="text-slate-400 border-b border-slate-700 text-xs uppercase tracking-wider font-bold">
                     <th className="py-3 pl-2">Ingrediente / Matéria-Prima</th>
-                    <th className="py-3 text-right w-44">Peso (g)</th>
+                    <th className="py-3 text-right w-48">Peso (g)</th>
                     <th className="py-3 text-right w-24">% Calda</th>
                     <th className="py-3 text-right w-28">Custo R$</th>
                     <th className="py-3 text-center w-12">Ação</th>
@@ -859,7 +867,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                               type="number"
                               value={item.grams === 0 ? '' : item.grams}
                               onChange={e => handleGramsChange(idx, parseFloat(e.target.value) || 0)}
-                              className="w-20 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-right font-mono text-sm text-white focus:outline-none focus:border-amber-500 font-bold"
+                              className={`w-24 sm:w-28 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-right font-mono font-bold text-white tabular-nums tracking-tight focus:outline-none focus:border-amber-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${getGramsInputFontSize(item.grams)}`}
                               placeholder="0"
                             />
                             <button

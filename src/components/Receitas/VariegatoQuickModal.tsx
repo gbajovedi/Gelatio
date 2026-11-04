@@ -240,7 +240,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
                           step="5"
                           value={item.grams || ''}
                           onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
-                          className="w-full bg-transparent text-sm text-right font-black font-mono text-amber-300 focus:outline-none"
+                          className="w-full bg-transparent text-sm text-right font-black font-mono text-amber-300 tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                           placeholder="0"
                         />
                         <span className="text-xs font-mono font-bold text-slate-400 pl-1.5 shrink-0">g</span>
@@ -255,7 +255,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
                           step="0.5"
                           value={costKg || ''}
                           onChange={e => handleChangeCost(idx, parseFloat(e.target.value) || 0)}
-                          className="w-full bg-transparent text-xs text-right font-bold font-mono text-emerald-400 focus:outline-none"
+                          className="w-full bg-transparent text-xs text-right font-bold font-mono text-emerald-400 tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                           placeholder="0.00"
                           title="Custo da matéria-prima por kg"
                         />
