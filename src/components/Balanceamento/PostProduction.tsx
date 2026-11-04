@@ -196,39 +196,38 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                   </button>
                 </div>
 
-                {/* Linha 2: Peso no Lote (Digitação Direta) & Informações de Dosagem e Custo */}
-                <div className="flex items-center justify-between gap-3 pt-0.5">
-                  {/* Bloco de Pesagem & Dosagem */}
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex items-center bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-xl px-2.5 py-1.5 shadow-inner transition-colors">
-                      <span className="text-[11px] font-bold text-slate-400 mr-1.5 select-none">Peso:</span>
-                      <input
-                        type="number"
-                        min="0"
-                        step="10"
-                        value={item.grams || ''}
-                        onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
-                        className="w-16 bg-transparent text-sm text-right font-black font-mono text-amber-300 tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        placeholder="0"
-                      />
-                      <span className="text-xs font-mono font-bold text-slate-400 pl-1 select-none">g</span>
-                    </div>
-
-                    <div
-                      className="text-left text-[11px] font-mono leading-tight"
-                      title={`${gPerKg}g de mescla por 1kg de calda base (~${pctCalda.toFixed(1)}% do peso do lote)`}
-                    >
-                      <span className="text-cyan-300 font-bold block">{gPerKg} g/kg</span>
-                      <span className="text-[10px] text-slate-400 block">~{pctCalda.toFixed(0)}% calda</span>
-                    </div>
+                {/* Linha 2: Peso no Lote, Dosagem e Custo Distribuídos Simetricamente */}
+                <div className="flex items-center justify-between gap-2 sm:gap-3 pt-0.5">
+                  {/* 1. Bloco de Pesagem */}
+                  <div className="flex items-center bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-xl px-2.5 py-1.5 shadow-inner transition-colors shrink-0">
+                    <span className="text-[11px] font-bold text-slate-400 mr-1.5 select-none">Peso:</span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="10"
+                      value={item.grams || ''}
+                      onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
+                      className="w-16 bg-transparent text-sm text-right font-black font-mono text-amber-300 tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      placeholder="0"
+                    />
+                    <span className="text-xs font-mono font-bold text-slate-400 pl-1 select-none">g</span>
                   </div>
 
-                  {/* Bloco de Custo */}
+                  {/* 2. Bloco de Dosagem (Centralizado Simetricamente) */}
+                  <div
+                    className="text-center text-[11px] font-mono leading-tight px-1"
+                    title={`${gPerKg}g de mescla por 1kg de calda base (~${pctCalda.toFixed(1)}% do peso do lote)`}
+                  >
+                    <span className="text-cyan-300 font-bold block whitespace-nowrap">{gPerKg} g/kg</span>
+                    <span className="text-[10px] text-slate-400 block whitespace-nowrap">~{pctCalda.toFixed(0)}% calda</span>
+                  </div>
+
+                  {/* 3. Bloco de Custo */}
                   <div className="text-right shrink-0">
-                    <span className="text-sm font-mono font-black text-emerald-400 block tracking-tight">
+                    <span className="text-sm font-mono font-black text-emerald-400 block tracking-tight whitespace-nowrap">
                       R$ {totalItemCost.toFixed(2)}
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono block">
+                    <span className="text-[10px] text-slate-400 font-mono block whitespace-nowrap">
                       R$ {costKg.toFixed(2)}/kg
                     </span>
                   </div>
