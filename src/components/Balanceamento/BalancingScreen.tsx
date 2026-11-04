@@ -1014,12 +1014,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               </button>
             </div>
           </div>
-
-          {/* Allergens Regulation Badge */}
-          <AllergensBadge allergensLabel={analysis.allergensLabel} />
         </div>
 
-        {/* Right Column: Alerts & Post-Production Inclusions (4 Cols) */}
+        {/* Right Column: Alerts, Post-Production Inclusions & Regulatory Allergens (4 Cols) */}
         <div className="lg:col-span-4 space-y-4">
           {/* 1. Calibração Necessária & Alerta de Arenosidade */}
           <CalibrationAlerts analysis={analysis} />
@@ -1034,6 +1031,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               setIsDirty(true);
             }}
           />
+
+          {/* 3. Rótulo Regulamentar de Alérgenos (abaixo das mesclas) */}
+          <AllergensBadge allergensLabel={analysis.allergensLabel} />
         </div>
       </div>
 
