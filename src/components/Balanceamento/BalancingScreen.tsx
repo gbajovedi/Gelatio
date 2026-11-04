@@ -804,8 +804,12 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
         </div>
       </div>
 
-      {/* Real-time Nutrient Gauges */}
-      <NutrientBars analysis={analysis} />
+      {/* Real-time Nutrient Gauges & Top Intelligence Grid (Térmico + Custos) */}
+      <NutrientBars
+        analysis={analysis}
+        categoryCostBreakdown={categoryCostBreakdown}
+        hasVariegatos={variegatos.length > 0}
+      />
 
       {/* Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1080,7 +1084,16 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             </div>
           </div>
 
-          {/* Variegatos & Inclusions Module */}
+          {/* Allergens Regulation Badge */}
+          <AllergensBadge allergensLabel={analysis.allergensLabel} />
+        </div>
+
+        {/* Right Column: Alerts & Post-Production Inclusions (4 Cols) */}
+        <div className="lg:col-span-4 space-y-4">
+          {/* 1. Calibração Necessária & Alerta de Arenosidade */}
+          <CalibrationAlerts analysis={analysis} />
+
+          {/* 2. Pós-Produção (Variegatos, Mesclas & Inclusões) no espaço lateral */}
           <PostProduction
             variegatos={variegatos}
             availableIngredients={ingredients}
@@ -1090,153 +1103,6 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               setIsDirty(true);
             }}
           />
-
-          {/* Allergens Regulation Badge */}
-          <AllergensBadge allergensLabel={analysis.allergensLabel} />
-        </div>
-
-        {/* Right Column: Financial & Factory Cost Summary (4 Cols) */}
-        <div className="lg:col-span-4 space-y-4">
-          {/* 1. Calibração Necessária & Alerta de Arenosidade */}
-          <CalibrationAlerts analysis={analysis} />
-
-          {/* 2. Engenharia de Custos */}
-          <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-700/80 pb-3">
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-base font-bold text-white">Engenharia de Custos</h3>
-              </div>
-              <span className="text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-slate-900 text-slate-300 border border-slate-700 shadow-sm">
-                Fábrica / CMV
-              </span>
-            </div>
-
-            {/* KPI Cards with Punchy Numbers */}
-            <div className="space-y-3">
-              <div className="bg-slate-900/90 p-4 rounded-xl border border-slate-700 flex items-center justify-between shadow-inner">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
-                    Custo Calda Base
-                  </span>
-                  <span className="text-2xl font-black text-white font-mono">
-                    R$ {analysis.costing.caldaCostKg.toFixed(2)}
-                  </span>
-                  <span className="text-xs text-slate-400 block font-medium">/ kg de calda</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
-                    Peso Calda
-                  </span>
-                  <span className="text-lg font-black text-amber-300 font-mono">
-                    {Math.round(analysis.caldaWeight)} g
-                  </span>
-                </div>
-              </div>
-
-              {variegatos.length > 0 && (
-                <div className="bg-amber-500/10 p-4 rounded-xl border border-amber-500/40 flex items-center justify-between shadow-inner">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-amber-300 block mb-0.5">
-                      Custo Final c/ Mescla
-                    </span>
-                    <span className="text-2xl font-black text-amber-200 font-mono">
-                      R$ {analysis.costing.finalCostKg.toFixed(2)}
-                    </span>
-                    <span className="text-xs text-amber-300/80 block font-medium">/ kg produto pronto</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-bold uppercase tracking-wider text-amber-300 block mb-0.5">
-                      Mescla no Total
-                    </span>
-                    <span className="text-lg font-black text-amber-200 font-mono">
-                      {analysis.costing.variegatoRatioPercent}%
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
-                    Custo do Lote
-                  </span>
-                  <span className="text-xl font-black text-white font-mono">
-                    R$ {analysis.costing.totalBatchCost.toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
-                    Bola (60g)
-                  </span>
-                  <span className="text-xl font-black text-white font-mono">
-                    R$ {analysis.costing.scoopCost60g.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Category Cost Composition Bar */}
-              {categoryCostBreakdown.length > 0 && (
-                <div className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-700/80 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                      <PieChart className="w-3.5 h-3.5 text-amber-400" />
-                      Decomposição do Custo
-                    </span>
-                    <span className="text-slate-400 font-mono text-xs">
-                      Base: R$ {analysis.totals.cost.toFixed(2)}
-                    </span>
-                  </div>
-
-                  {/* Multi-segment stacked progress bar */}
-                  <div className="h-2.5 w-full bg-slate-950 rounded-full overflow-hidden flex shadow-inner border border-slate-800">
-                    {categoryCostBreakdown.map((cat, i) => {
-                      const colors = [
-                        'bg-sky-400',
-                        'bg-amber-400',
-                        'bg-orange-400',
-                        'bg-rose-400',
-                        'bg-teal-400',
-                        'bg-purple-400',
-                        'bg-yellow-500'
-                      ];
-                      return (
-                        <div
-                          key={cat.category}
-                          className={`h-full ${colors[i % colors.length]} transition-all`}
-                          style={{ width: `${cat.pct}%` }}
-                          title={`${cat.category}: R$ ${cat.cost.toFixed(2)} (${cat.pct.toFixed(1)}%)`}
-                        />
-                      );
-                    })}
-                  </div>
-
-                  {/* Micro-legend */}
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-300 pt-0.5">
-                    {categoryCostBreakdown.slice(0, 4).map((cat, i) => {
-                      const dotColors = [
-                        'bg-sky-400',
-                        'bg-amber-400',
-                        'bg-orange-400',
-                        'bg-rose-400',
-                        'bg-teal-400',
-                        'bg-purple-400',
-                        'bg-yellow-500'
-                      ];
-                      return (
-                        <span key={cat.category} className="flex items-center gap-1">
-                          <span className={`w-2 h-2 rounded-full ${dotColors[i % dotColors.length]}`} />
-                          <span className="text-slate-400">{cat.category}:</span>
-                          <strong className="text-white font-mono">{cat.pct.toFixed(0)}%</strong>
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       </div>
 

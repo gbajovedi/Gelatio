@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BatchAnalysis, NutrientValidation } from '../../types/gelato';
 import { VitrineSimulator } from './VitrineSimulator';
+import { CustosCard, CategoryCostItem } from './CustosCard';
 import {
   CheckCircle2,
   AlertCircle,
@@ -17,6 +18,8 @@ import {
 
 interface NutrientBarsProps {
   analysis: BatchAnalysis;
+  categoryCostBreakdown?: CategoryCostItem[];
+  hasVariegatos?: boolean;
 }
 
 interface NutrientMeta {
@@ -123,7 +126,11 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
   }
 };
 
-export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
+export const NutrientBars: React.FC<NutrientBarsProps> = ({
+  analysis,
+  categoryCostBreakdown = [],
+  hasVariegatos = false
+}) => {
   const { validations, isBalanced, servingTemperature } = analysis;
   const [thermalMode, setThermalMode] = useState<'vitrine' | 'freezer'>('vitrine');
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
@@ -675,15 +682,21 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({ analysis }) => {
               </div>
             </div>
 
-          </div>
-
-          {/* Simulador Térmico de Vitrine (Curva de Dureza vs. °C) */}
-          <div className="pt-1">
+            {/* ROW 2 - CARD 3: Simulador Térmico da Vitrine (50% de largura, mesmo tamanho do Cenário Térmico acima) */}
             <VitrineSimulator
               waterPct={validations.water.val}
               pac={validations.pac.val}
               totalSolids={validations.totalSolids.val}
               caldaWeightGrams={analysis.caldaWeight}
+            />
+
+            {/* ROW 2 - CARD 4: Custos (50% de largura, ao lado do Simulador Térmico) */}
+            <CustosCard
+              costing={analysis.costing}
+              caldaWeight={analysis.caldaWeight}
+              totalsCost={analysis.totals.cost}
+              categoryCostBreakdown={categoryCostBreakdown}
+              hasVariegatos={hasVariegatos}
             />
           </div>
         </div>
