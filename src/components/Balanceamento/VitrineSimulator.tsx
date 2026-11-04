@@ -30,25 +30,25 @@ const EQUIPMENT_PRESETS: EquipmentPreset[] = [
     id: 'pozzetti',
     name: 'Pozzetti (-11°)',
     tempC: -11.0,
-    icon: <Layers className="w-3 h-3 text-emerald-400" />
+    icon: <Layers className="w-3.5 h-3.5 text-emerald-400" />
   },
   {
     id: 'ventilated',
     name: 'Vitrine (-12°)',
     tempC: -12.0,
-    icon: <Wind className="w-3 h-3 text-sky-400" />
+    icon: <Wind className="w-3.5 h-3.5 text-sky-400" />
   },
   {
     id: 'open',
     name: 'Aberta (-14°)',
     tempC: -14.0,
-    icon: <SunMedium className="w-3 h-3 text-amber-400" />
+    icon: <SunMedium className="w-3.5 h-3.5 text-amber-400" />
   },
   {
     id: 'freezer',
     name: 'Freezer (-18°)',
     tempC: -18.0,
-    icon: <Archive className="w-3 h-3 text-purple-400" />
+    icon: <Archive className="w-3.5 h-3.5 text-purple-400" />
   }
 ];
 
@@ -68,22 +68,19 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
   // Posição percentual do marcador na barra de textura (45% a 85% de gelo mapeado em 0% a 100%)
   const markerPosition = Math.max(0, Math.min(100, ((state.icePercent - 45) / (85 - 45)) * 100));
 
-  const isTempIdeal =
-    selectedTemp >= state.idealTempRange.minTemp && selectedTemp <= state.idealTempRange.maxTemp;
-
   return (
-    <div className="bg-slate-900/95 rounded-2xl border border-slate-700/80 p-4 shadow-md flex flex-col justify-between space-y-2.5 h-full">
+    <div className="bg-slate-900/95 rounded-2xl border border-slate-700/80 p-4 shadow-md flex flex-col justify-between space-y-3 h-full">
       {/* Header com Título, Subtítulo e Status da Textura */}
-      <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2">
-        <div className="flex items-center gap-2 text-cyan-300 min-w-0">
-          <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+      <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+        <div className="flex items-center gap-2.5 text-cyan-300 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
             <Thermometer className="w-4 h-4" />
           </div>
           <div className="min-w-0">
             <h4 className="text-xs sm:text-sm uppercase font-bold tracking-wider text-cyan-200 truncate leading-none">
               Simulador Térmico da Vitrine
             </h4>
-            <span className="text-[10px] text-slate-400 block truncate mt-0.5">
+            <span className="text-[11px] text-slate-400 block truncate mt-1">
               Curva de congelamento e colherabilidade por temperatura
             </span>
           </div>
@@ -91,7 +88,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
 
         <div className="flex items-center gap-1.5 shrink-0">
           <span
-            className={`text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full font-bold border shadow-sm ${state.statusBadgeColor} ${state.statusBorderColor}`}
+            className={`text-xs px-2.5 py-1 rounded-full font-bold border shadow-sm ${state.statusBadgeColor} ${state.statusBorderColor}`}
           >
             {state.statusLabel}
           </span>
@@ -100,7 +97,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           <div className="relative group/tip flex items-center">
             <button
               type="button"
-              className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-colors shadow-inner"
+              className="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-colors shadow-inner"
               title="Ver diagnóstico e metodologia"
               aria-label="Ver diagnóstico e metodologia"
             >
@@ -148,10 +145,10 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
       </div>
 
-      {/* Seletor Compacto de Equipamentos & Stepper Térmico */}
-      <div className="flex flex-wrap items-center justify-between gap-1.5">
+      {/* Seletor de Equipamentos & Stepper Térmico */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
         {/* Presets Rápidos */}
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1.5">
           {EQUIPMENT_PRESETS.map(preset => {
             const isActive = Math.abs(selectedTemp - preset.tempC) < 0.1;
             return (
@@ -159,7 +156,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
                 key={preset.id}
                 type="button"
                 onClick={() => setSelectedTemp(preset.tempC)}
-                className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1 border shadow-inner ${
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border shadow-inner ${
                   isActive
                     ? 'bg-cyan-500/25 text-white border-cyan-400/60 ring-1 ring-cyan-400/30 font-black'
                     : 'bg-slate-950/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
@@ -173,24 +170,24 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
 
         {/* Stepper Térmico Integrado */}
-        <div className="inline-flex items-center gap-1 bg-slate-950 px-1.5 py-0.5 rounded-lg border border-slate-800 shadow-inner">
+        <div className="inline-flex items-center gap-1.5 bg-slate-950 px-2 py-1 rounded-xl border border-slate-800 shadow-inner">
           <button
             type="button"
             onClick={() => setSelectedTemp(prev => Math.max(-20, +(prev - 0.5).toFixed(1)))}
-            className="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors"
+            className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors active:scale-95"
             title="Diminuir temperatura (-0.5°C)"
           >
             -
           </button>
-          <div className="px-1.5 text-center min-w-[56px]">
-            <span className="font-mono text-xs font-black text-amber-300 tracking-tight block">
+          <div className="px-1 text-center min-w-[58px]">
+            <span className="font-mono text-sm font-black text-amber-300 tracking-tight block">
               {selectedTemp.toFixed(1)}°C
             </span>
           </div>
           <button
             type="button"
             onClick={() => setSelectedTemp(prev => Math.min(-8, +(prev + 0.5).toFixed(1)))}
-            className="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors"
+            className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors active:scale-95"
             title="Aumentar temperatura (+0.5°C)"
           >
             +
@@ -198,29 +195,28 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
       </div>
 
-      {/* Régua Visual de Consistência e Fração de Gelo / Fase Líquida */}
-      <div className="space-y-1.5 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-        <div className="flex items-center justify-between text-[11px] text-slate-300 flex-wrap gap-1">
-          <span className="font-semibold flex items-center gap-1 text-slate-200">
-            <Sparkles className="w-3 h-3 text-cyan-400" />
+      {/* Régua Visual de Consistência e Fração de Gelo / Fase Líquida (Caixa Principal com flex-1) */}
+      <div className="flex-1 flex flex-col justify-between bg-slate-950/80 p-3 sm:p-3.5 rounded-xl border border-slate-800 space-y-2.5">
+        <div className="flex items-center justify-between text-xs text-slate-300 flex-wrap gap-1.5">
+          <span className="font-semibold flex items-center gap-1.5 text-slate-200">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
             <span>Fração em Equilíbrio ({selectedTemp.toFixed(1)}°C):</span>
           </span>
-          <div className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px]">
-            <span className="text-cyan-300 font-bold">
+          <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs">
+            <span className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-bold px-2 py-0.5 rounded-lg">
               ❄️ {state.icePercent.toFixed(1)}% gelo{' '}
-              <span className="text-slate-400 font-normal">({state.frozenWaterGrams}g)</span>
+              <span className="text-cyan-200/70 font-normal">({state.frozenWaterGrams}g)</span>
             </span>
-            <span className="text-slate-600">|</span>
-            <span className="text-amber-300 font-bold">
+            <span className="bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold px-2 py-0.5 rounded-lg">
               💧 {state.liquidPercent.toFixed(1)}% líquido{' '}
-              <span className="text-slate-400 font-normal">({state.liquidWaterGrams}g)</span>
+              <span className="text-amber-200/70 font-normal">({state.liquidWaterGrams}g)</span>
             </span>
           </div>
         </div>
 
         {/* Trilho Visual com Marcador Dinâmico */}
-        <div className="relative py-1 flex items-center">
-          <div className="vitrine-track h-2.5 w-full rounded-full bg-slate-900 border border-slate-700 overflow-hidden flex shadow-inner">
+        <div className="relative py-1.5 flex items-center">
+          <div className="vitrine-track h-3 w-full rounded-full bg-slate-900 border border-slate-700 overflow-hidden flex shadow-inner">
             <div
               style={{ width: '27.5%' }}
               className="bg-amber-500/30 border-r border-slate-950/50"
@@ -252,14 +248,14 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
             className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none"
             style={{ left: `${markerPosition}%` }}
           >
-            <div className="vitrine-marker-ring w-4 h-4 rounded-full bg-amber-400 border-2 border-slate-950 shadow-md shadow-amber-500/50 flex items-center justify-center">
-              <div className="vitrine-marker-dot w-1 h-1 rounded-full bg-slate-950" />
+            <div className="vitrine-marker-ring w-4.5 h-4.5 rounded-full bg-amber-400 border-2 border-slate-950 shadow-md shadow-amber-500/50 flex items-center justify-center">
+              <div className="vitrine-marker-dot w-1.5 h-1.5 rounded-full bg-slate-950" />
             </div>
           </div>
         </div>
 
         {/* Legenda das Zonas Compacta */}
-        <div className="flex justify-between text-[9px] font-bold text-slate-400 select-none">
+        <div className="flex justify-between text-[10px] font-bold text-slate-400 select-none pt-0.5">
           <span className="text-amber-400/80">Muito Macio</span>
           <span className="text-amber-300">Macio</span>
           <span className="text-emerald-400 font-extrabold">★ Espatulabilidade Ideal</span>
@@ -268,36 +264,12 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
       </div>
 
-      {/* Faixa Ideal Recomendada para o Termostato */}
-      <div className="bg-slate-950/70 px-2.5 py-1.5 rounded-xl border border-slate-800/80 flex items-center justify-between text-[11px] gap-2 flex-wrap">
-        <div className="flex items-center gap-1.5 text-slate-300">
-          <span className="text-xs">🎯</span>
-          <span className="text-slate-400 font-medium">Faixa ideal de vitrine:</span>
-          <span className="font-mono font-bold text-amber-300">
-            {state.idealTempRange.minTemp.toFixed(1)}°C a {state.idealTempRange.maxTemp.toFixed(1)}°C
-          </span>
-        </div>
-
-        <div className="text-[10px]">
-          {isTempIdeal ? (
-            <span className="text-emerald-400 font-semibold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-              Na faixa ideal
-            </span>
-          ) : selectedTemp > state.idealTempRange.maxTemp ? (
-            <span className="text-amber-400 font-medium">Acima do ideal (mais macio)</span>
-          ) : (
-            <span className="text-sky-400 font-medium">Abaixo do ideal (mais firme)</span>
-          )}
-        </div>
-      </div>
-
       {/* Nota Metodológica e Disclaimer do Modelo Crioscópico */}
-      <div className="pt-1.5 text-[10px] text-slate-400 border-t border-slate-800/80 flex items-center justify-between gap-1 leading-tight">
+      <div className="pt-2 text-[10px] text-slate-400 border-t border-slate-800/80 flex items-center justify-between gap-1 leading-tight">
         <span className="truncate">
           * Estimativa termodinâmica pela <strong>Lei Crioscópica de Raoult</strong> (W<sub>livre</sub> = PAC × 5,434 / |T|).
         </span>
-        <span className="shrink-0 font-medium text-slate-400 text-[9px] bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">
+        <span className="shrink-0 font-medium text-slate-400 text-[9px] bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800">
           Goff &amp; Hartel
         </span>
       </div>
