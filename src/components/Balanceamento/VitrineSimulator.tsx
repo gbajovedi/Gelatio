@@ -145,73 +145,73 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
       </div>
 
-      {/* Seletor de Equipamentos & Stepper Térmico */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        {/* Presets Rápidos */}
-        <div className="flex flex-wrap gap-1.5">
-          {EQUIPMENT_PRESETS.map(preset => {
-            const isActive = Math.abs(selectedTemp - preset.tempC) < 0.1;
-            return (
-              <button
-                key={preset.id}
-                type="button"
-                onClick={() => setSelectedTemp(preset.tempC)}
-                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border shadow-inner ${
-                  isActive
-                    ? 'bg-cyan-500/25 text-white border-cyan-400/60 ring-1 ring-cyan-400/30 font-black'
-                    : 'bg-slate-950/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
-                }`}
-              >
-                {preset.icon}
-                <span>{preset.name}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Stepper Térmico Integrado */}
-        <div className="inline-flex items-center gap-1.5 bg-slate-950 px-2 py-1 rounded-xl border border-slate-800 shadow-inner">
-          <button
-            type="button"
-            onClick={() => setSelectedTemp(prev => Math.max(-20, +(prev - 0.5).toFixed(1)))}
-            className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors active:scale-95"
-            title="Diminuir temperatura (-0.5°C)"
-          >
-            -
-          </button>
-          <div className="px-1 text-center min-w-[58px]">
-            <span className="font-mono text-sm font-black text-amber-300 tracking-tight block">
-              {selectedTemp.toFixed(1)}°C
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setSelectedTemp(prev => Math.min(-8, +(prev + 0.5).toFixed(1)))}
-            className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors active:scale-95"
-            title="Aumentar temperatura (+0.5°C)"
-          >
-            +
-          </button>
-        </div>
+      {/* Seletor de Equipamentos (4 Cards com Tamanho Adaptativo preenchendo 100% da largura) */}
+      <div className="grid grid-cols-4 gap-1.5 w-full">
+        {EQUIPMENT_PRESETS.map(preset => {
+          const isActive = Math.abs(selectedTemp - preset.tempC) < 0.1;
+          return (
+            <button
+              key={preset.id}
+              type="button"
+              onClick={() => setSelectedTemp(preset.tempC)}
+              className={`w-full py-2 px-1 rounded-xl text-[10px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 border shadow-inner text-center select-none ${
+                isActive
+                  ? 'bg-cyan-500/25 text-white border-cyan-400/60 ring-1 ring-cyan-400/30 font-black'
+                  : 'bg-slate-950/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
+              }`}
+            >
+              {preset.icon}
+              <span className="truncate">{preset.name}</span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Régua Visual de Consistência e Fração de Gelo / Fase Líquida (Caixa Principal com flex-1) */}
-      <div className="flex-1 flex flex-col justify-between bg-slate-950/80 p-3 sm:p-3.5 rounded-xl border border-slate-800 space-y-2.5">
-        <div className="flex items-center justify-between text-xs text-slate-300 flex-wrap gap-1.5">
-          <span className="font-semibold flex items-center gap-1.5 text-slate-200">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Fração em Equilíbrio ({selectedTemp.toFixed(1)}°C):</span>
+      {/* Caixa de Fração em Equilíbrio (com Controle Térmico fixado no topo direito do card) */}
+      <div className="relative flex-1 flex flex-col justify-between bg-slate-950/80 p-3 sm:p-3.5 rounded-xl border border-slate-800 space-y-2.5">
+        {/* Topo do Card de Fração em Equilíbrio: Título na Esquerda e Controle de Temperatura na Direita */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="font-bold flex items-center gap-1.5 text-slate-100 text-xs sm:text-sm">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <span>Fração em Equilíbrio:</span>
           </span>
-          <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs">
-            <span className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-bold px-2 py-0.5 rounded-lg">
-              ❄️ {state.icePercent.toFixed(1)}% gelo{' '}
-              <span className="text-cyan-200/70 font-normal">({state.frozenWaterGrams}g)</span>
-            </span>
-            <span className="bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold px-2 py-0.5 rounded-lg">
-              💧 {state.liquidPercent.toFixed(1)}% líquido{' '}
-              <span className="text-amber-200/70 font-normal">({state.liquidWaterGrams}g)</span>
-            </span>
+
+          {/* Stepper Térmico com Posição Relativa Fixa à Direita do Card */}
+          <div className="inline-flex items-center gap-1 bg-slate-900 px-1.5 py-0.5 rounded-xl border border-slate-700/80 shadow-inner shrink-0">
+            <button
+              type="button"
+              onClick={() => setSelectedTemp(prev => Math.max(-20, +(prev - 0.5).toFixed(1)))}
+              className="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors active:scale-95"
+              title="Diminuir temperatura (-0.5°C)"
+            >
+              -
+            </button>
+            <div className="px-1.5 text-center min-w-[54px]">
+              <span className="font-mono text-xs sm:text-sm font-black text-amber-300 tracking-tight block">
+                {selectedTemp.toFixed(1)}°C
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSelectedTemp(prev => Math.min(-8, +(prev + 0.5).toFixed(1)))}
+              className="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors active:scale-95"
+              title="Aumentar temperatura (+0.5°C)"
+            >
+              +
+            </button>
           </div>
+        </div>
+
+        {/* Pílulas de Balanço Dual (Gelo vs Fase Líquida) */}
+        <div className="flex items-center justify-between gap-2 font-mono text-[11px] sm:text-xs">
+          <span className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-bold px-2 py-0.5 rounded-lg">
+            ❄️ {state.icePercent.toFixed(1)}% gelo{' '}
+            <span className="text-cyan-200/70 font-normal">({state.frozenWaterGrams}g)</span>
+          </span>
+          <span className="bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold px-2 py-0.5 rounded-lg">
+            💧 {state.liquidPercent.toFixed(1)}% líquido{' '}
+            <span className="text-amber-200/70 font-normal">({state.liquidWaterGrams}g)</span>
+          </span>
         </div>
 
         {/* Trilho Visual com Marcador Dinâmico */}
