@@ -68,21 +68,31 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
   // Posição percentual do marcador na barra de textura (45% a 85% de gelo mapeado em 0% a 100%)
   const markerPosition = Math.max(0, Math.min(100, ((state.icePercent - 45) / (85 - 45)) * 100));
 
+  const isTempIdeal =
+    selectedTemp >= state.idealTempRange.minTemp && selectedTemp <= state.idealTempRange.maxTemp;
+
   return (
-    <div className="bg-slate-900/95 rounded-2xl border border-slate-700/80 p-4 shadow-md flex flex-col justify-between space-y-3 h-full">
-      {/* Header com Título Compacto e Status da Textura */}
-      <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+    <div className="bg-slate-900/95 rounded-2xl border border-slate-700/80 p-4 shadow-md flex flex-col justify-between space-y-2.5 h-full">
+      {/* Header com Título, Subtítulo e Status da Textura */}
+      <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2">
         <div className="flex items-center gap-2 text-cyan-300 min-w-0">
           <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
             <Thermometer className="w-4 h-4" />
           </div>
-          <h4 className="text-xs sm:text-sm uppercase font-bold tracking-wider text-cyan-200 truncate">
-            Simulador Térmico da Vitrine
-          </h4>
+          <div className="min-w-0">
+            <h4 className="text-xs sm:text-sm uppercase font-bold tracking-wider text-cyan-200 truncate leading-none">
+              Simulador Térmico da Vitrine
+            </h4>
+            <span className="text-[10px] text-slate-400 block truncate mt-0.5">
+              Curva de congelamento e colherabilidade por temperatura
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className={`text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full font-bold border shadow-sm ${state.statusBadgeColor} ${state.statusBorderColor}`}>
+          <span
+            className={`text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full font-bold border shadow-sm ${state.statusBadgeColor} ${state.statusBorderColor}`}
+          >
             {state.statusLabel.replace(' (Padrão Ouro)', '')}
           </span>
 
@@ -139,7 +149,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
       </div>
 
       {/* Seletor Compacto de Equipamentos & Stepper Térmico */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-1.5">
         {/* Presets Rápidos */}
         <div className="flex flex-wrap gap-1">
           {EQUIPMENT_PRESETS.map(preset => {
@@ -188,27 +198,54 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
       </div>
 
-      {/* Régua Visual de Consistência e Dureza */}
-      <div className="space-y-1 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-        <div className="flex items-center justify-between text-[11px] text-slate-300">
-          <span className="font-semibold flex items-center gap-1">
+      {/* Régua Visual de Consistência e Fração de Gelo / Fase Líquida */}
+      <div className="space-y-1.5 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+        <div className="flex items-center justify-between text-[11px] text-slate-300 flex-wrap gap-1">
+          <span className="font-semibold flex items-center gap-1 text-slate-200">
             <Sparkles className="w-3 h-3 text-cyan-400" />
-            <span>Consistência:</span>
+            <span>Fração em Equilíbrio ({selectedTemp.toFixed(1)}°C):</span>
           </span>
-          <span className="font-mono text-slate-200 font-bold">
-            ❄️ <strong>{state.icePercent.toFixed(1)}% gelo</strong>
-            <span className="text-slate-400 font-normal ml-1">({state.frozenWaterGrams}g)</span>
-          </span>
+          <div className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px]">
+            <span className="text-cyan-300 font-bold">
+              ❄️ {state.icePercent.toFixed(1)}% gelo{' '}
+              <span className="text-slate-400 font-normal">({state.frozenWaterGrams}g)</span>
+            </span>
+            <span className="text-slate-600">|</span>
+            <span className="text-amber-300 font-bold">
+              💧 {state.liquidPercent.toFixed(1)}% líquido{' '}
+              <span className="text-slate-400 font-normal">({state.liquidWaterGrams}g)</span>
+            </span>
+          </div>
         </div>
 
         {/* Trilho Visual com Marcador Dinâmico */}
-        <div className="relative py-1.5 flex items-center">
+        <div className="relative py-1 flex items-center">
           <div className="vitrine-track h-2.5 w-full rounded-full bg-slate-900 border border-slate-700 overflow-hidden flex shadow-inner">
-            <div style={{ width: '27.5%' }} className="bg-amber-500/30 border-r border-slate-950/50" title="Muito Macio (< 56%)" />
-            <div style={{ width: '20%' }} className="bg-amber-500/50 border-r border-slate-950/50" title="Macio & Cremoso (56% a 64%)" />
-            <div style={{ width: '27.5%' }} className="bg-emerald-500/80 border-r border-slate-950/50 ring-1 ring-emerald-400" title="Spatolabile Ideal (64% a 75%)" />
-            <div style={{ width: '17.5%' }} className="bg-sky-500/60 border-r border-slate-950/50" title="Firme / Estruturado (75% a 82%)" />
-            <div style={{ width: '7.5%' }} className="bg-purple-500/70" title="Ponto de Freezer (> 82%)" />
+            <div
+              style={{ width: '27.5%' }}
+              className="bg-amber-500/30 border-r border-slate-950/50"
+              title="Muito Macio (< 56%)"
+            />
+            <div
+              style={{ width: '20%' }}
+              className="bg-amber-500/50 border-r border-slate-950/50"
+              title="Macio & Cremoso (56% a 64%)"
+            />
+            <div
+              style={{ width: '27.5%' }}
+              className="bg-emerald-500/80 border-r border-slate-950/50 ring-1 ring-emerald-400"
+              title="Spatolabile Ideal (64% a 75%)"
+            />
+            <div
+              style={{ width: '17.5%' }}
+              className="bg-sky-500/60 border-r border-slate-950/50"
+              title="Firme / Estruturado (75% a 82%)"
+            />
+            <div
+              style={{ width: '7.5%' }}
+              className="bg-purple-500/70"
+              title="Ponto de Freezer (> 82%)"
+            />
           </div>
 
           <div
@@ -229,6 +266,40 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           <span className="text-sky-300">Firme</span>
           <span className="text-purple-300">Freezer</span>
         </div>
+      </div>
+
+      {/* Faixa Ideal Recomendada para o Termostato */}
+      <div className="bg-slate-950/70 px-2.5 py-1.5 rounded-xl border border-slate-800/80 flex items-center justify-between text-[11px] gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 text-slate-300">
+          <span className="text-xs">🎯</span>
+          <span className="text-slate-400 font-medium">Faixa ideal de vitrine:</span>
+          <span className="font-mono font-bold text-amber-300">
+            {state.idealTempRange.minTemp.toFixed(1)}°C a {state.idealTempRange.maxTemp.toFixed(1)}°C
+          </span>
+        </div>
+
+        <div className="text-[10px]">
+          {isTempIdeal ? (
+            <span className="text-emerald-400 font-semibold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+              Na faixa ideal
+            </span>
+          ) : selectedTemp > state.idealTempRange.maxTemp ? (
+            <span className="text-amber-400 font-medium">Acima do ideal (mais macio)</span>
+          ) : (
+            <span className="text-sky-400 font-medium">Abaixo do ideal (mais firme)</span>
+          )}
+        </div>
+      </div>
+
+      {/* Nota Metodológica e Disclaimer do Modelo Crioscópico */}
+      <div className="pt-1.5 text-[10px] text-slate-400 border-t border-slate-800/80 flex items-center justify-between gap-1 leading-tight">
+        <span className="truncate">
+          * Estimativa termodinâmica pela <strong>Lei Crioscópica de Raoult</strong> (W<sub>livre</sub> = PAC × 5,434 / |T|).
+        </span>
+        <span className="shrink-0 font-medium text-slate-400 text-[9px] bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800">
+          Goff &amp; Hartel
+        </span>
       </div>
     </div>
   );
