@@ -689,21 +689,23 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                   <div
                     className="h-full bg-gradient-to-r from-sky-400 via-purple-400 to-emerald-400 rounded-full transition-all duration-500 shadow-sm"
                     style={{
-                      width: `${Math.min(100, Math.max(12, (((emulsion?.overrunEstimatePct || 30) - 15) / 30) * 100))}%`
+                      width: `${Math.min(100, Math.max(6, (((emulsion?.overrunEstimatePct || 32) - 18) / 28) * 100))}%`
                     }}
                   />
 
-                  {/* Marcador discreto de referência aos 32% (Clássico Italiano) */}
+                  {/* Marcador discreto de referência aos 32% (Clássico Italiano) no centro exato da barra (50%) */}
                   <div
                     className="absolute top-0 bottom-0 w-[2px] bg-white/85 shadow-[0_0_4px_rgba(255,255,255,0.9)] z-10 pointer-events-none -translate-x-1/2"
-                    style={{ left: `${((32 - 15) / 30) * 100}%` }}
-                    title="Alvo Clássico Italiano: 32% de overrun"
+                    style={{ left: '50%' }}
+                    title="Alvo Clássico Italiano: 32% de overrun (Centro da Escala: 18% a 46%)"
                   />
                 </div>
-                <div className="flex items-center justify-between text-xs text-slate-300 font-medium font-sans">
+                <div className="relative flex items-center justify-between text-[11px] sm:text-xs text-slate-300 font-medium font-sans">
                   <span>Denso (18%)</span>
-                  <span className="text-purple-300 font-bold">Clássico Italiano (~32%)</span>
-                  <span>Aerado (45%)</span>
+                  <span className="absolute left-1/2 -translate-x-1/2 text-purple-300 font-bold whitespace-nowrap">
+                    Clássico Italiano (~32%)
+                  </span>
+                  <span>Aerado (46%)</span>
                 </div>
               </div>
             </div>
