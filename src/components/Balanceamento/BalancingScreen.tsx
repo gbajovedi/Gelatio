@@ -168,21 +168,6 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     } else {
       raw = initialRecipe?.ingredients ? JSON.parse(JSON.stringify(initialRecipe.ingredients)) : [];
     }
-
-    const isInitiallyRounded = (() => {
-      try {
-        return localStorage.getItem(STORAGE_KEY_SHOW_ROUNDED) === 'true';
-      } catch {
-        return false;
-      }
-    })();
-
-    if (isInitiallyRounded) {
-      return raw.map(i => ({
-        ...i,
-        grams: roundIngredientGrams(i.grams, isNeutroIngredient(i.name), true)
-      }));
-    }
     return raw;
   });
 
@@ -252,22 +237,6 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     let loadedItems: RecipeItem[] = rec.ingredients ? JSON.parse(JSON.stringify(rec.ingredients)) : [];
     let loadedVariegatos: VariegatoItem[] = rec.variegatos ? JSON.parse(JSON.stringify(rec.variegatos)) : [];
 
-    // Se o modo de valores arredondados estiver ativo, preserva o estado ativo e arredonda não-neutros (Neutro SEMPRE preserva decimal)
-    if (showRoundedValuesRef.current) {
-      loadedItems = loadedItems.map(i => {
-        const ing = ingredientsMap.get((i.name || '').toLowerCase().trim());
-        const isNeutro = isNeutroIngredient(i.name, ing?.category);
-        return {
-          ...i,
-          grams: roundIngredientGrams(i.grams, isNeutro, true)
-        };
-      });
-      loadedVariegatos = loadedVariegatos.map(v => ({
-        ...v,
-        grams: Math.round(v.grams)
-      }));
-    }
-
     setItems(loadedItems);
     setVariegatos(loadedVariegatos);
     const totalG = loadedItems.reduce((acc, i) => acc + i.grams, 0);
@@ -275,7 +244,8 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     setIsDirty(false);
   };
 
-  // Alternar preferência de mostrar valores arredondados (Neutro NUNCA é arredondado)
+  // Alternar preferência de mostrar valores arredondados na tela (Neutro NUNCA é arredondado)
+  // Altera EXCLUSIVAMENTE a apresentação visual na tela, sem alterar os dados da receita nem marcar como modificada (isDirty).
   const handleToggleShowRounded = () => {
     const next = !showRoundedValues;
     setShowRoundedValues(next);
@@ -284,26 +254,6 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
       localStorage.setItem(STORAGE_KEY_SHOW_ROUNDED, String(next));
     } catch (err) {
       console.warn('Erro ao salvar preferência de arredondamento:', err);
-    }
-
-    if (next) {
-      setItems(prevItems =>
-        prevItems.map(i => {
-          const ing = ingredientsMap.get((i.name || '').toLowerCase().trim());
-          const isNeutro = isNeutroIngredient(i.name, ing?.category);
-          return {
-            ...i,
-            grams: roundIngredientGrams(i.grams, isNeutro, true)
-          };
-        })
-      );
-      setVariegatos(prevVar =>
-        prevVar.map(v => ({
-          ...v,
-          grams: Math.round(v.grams)
-        }))
-      );
-      setIsDirty(true);
     }
   };
 
@@ -485,10 +435,8 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   // Modify row grammage
   const handleGramsChange = (index: number, newGrams: number) => {
     const next = [...items];
-    const ing = ingredientsMap.get((next[index].name || '').toLowerCase().trim());
-    const isNeutro = isNeutroIngredient(next[index].name, ing?.category);
-    const finalGrams = roundIngredientGrams(Math.max(0, newGrams), isNeutro, showRoundedValues);
-    next[index] = { ...next[index], grams: finalGrams };
+    const val = Math.max(0, newGrams);
+    next[index] = { ...next[index], grams: Math.round(val * 10) / 10 };
     setItems(next);
     setIsDirty(true);
   };
@@ -521,20 +469,16 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     const ratio = targetGrams / analysis.caldaWeight;
 
     const scaledItems = items.map(i => {
-      const ing = ingredientsMap.get((i.name || '').toLowerCase().trim());
-      const isNeutro = isNeutroIngredient(i.name, ing?.category);
       const rawGrams = i.grams * ratio;
       return {
         ...i,
-        grams: roundIngredientGrams(rawGrams, isNeutro, showRoundedValues)
+        grams: Math.round(rawGrams * 10) / 10
       };
     });
 
     const scaledVariegatos = variegatos.map(v => ({
       ...v,
-      grams: showRoundedValues
-        ? Math.round(v.grams * ratio)
-        : Math.round(v.grams * ratio * 10) / 10
+      grams: Math.round(v.grams * ratio * 10) / 10
     }));
 
     setItems(scaledItems);
@@ -817,54 +761,49 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
         <div className="lg:col-span-8 space-y-4">
           <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
             {/* Table Header Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-700">
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <div className="flex items-center gap-2">
+            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 pb-3 border-b border-slate-700">
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <div className="flex items-center gap-2 shrink-0">
                   <Layers className="w-5 h-5 text-amber-400" />
-                  <h3 className="text-base font-bold text-white">Composição da Calda Base</h3>
+                  <h3 className="text-base font-bold text-white whitespace-nowrap">Composição da Calda Base</h3>
                   <span className="text-xs font-medium text-slate-400">({items.length} insumos)</span>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleSortByWeight}
-                  className="px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm ml-1"
-                  title="Ordenar ingredientes por maior peso (prática culinária profissional)"
-                >
-                  <ArrowDownWideNarrow className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Ordenar por Peso</span>
-                </button>
+                {/* Ações da Tabela (Agrupados para evitar quebra de linha em telas grandes) */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleSortByWeight}
+                    className="px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm whitespace-nowrap"
+                    title="Ordenar ingredientes por maior peso (prática culinária profissional)"
+                  >
+                    <ArrowDownWideNarrow className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Ordenar por Peso</span>
+                  </button>
 
-                {/* Botão Mostrar Valores Arredondados */}
-                <button
-                  type="button"
-                  onClick={handleToggleShowRounded}
-                  className={`px-2.5 py-1 rounded-lg border text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm select-none ${
-                    showRoundedValues
-                      ? 'border-amber-500/70 bg-amber-500/20 text-amber-300 shadow-amber-500/10'
-                      : 'border-slate-700 bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white'
-                  }`}
-                  title={
-                    showRoundedValues
-                      ? 'Valores arredondados ATIVOS (Neutro sempre preserva decimais). Clique para ver decimais exatos.'
-                      : 'Clique para mostrar valores inteiros arredondados na calda (Neutro nunca é arredondado).'
-                  }
-                >
-                  <span className="font-mono text-sm leading-none font-bold">≈</span>
-                  <span>{showRoundedValues ? 'Arredondado: Ativo' : 'Mostrar valores arredondados'}</span>
-                  {showRoundedValues && (
-                    <span
-                      className="text-[10px] bg-teal-500/20 text-teal-300 border border-teal-500/40 rounded px-1 py-0.2 font-mono font-bold"
-                      title="Ingrediente Neutro sempre mantém precisão decimal"
-                    >
-                      Neutro .0g
-                    </span>
-                  )}
-                </button>
+                  {/* Botão Mostrar Valores Arredondados */}
+                  <button
+                    type="button"
+                    onClick={handleToggleShowRounded}
+                    className={`px-2.5 py-1 rounded-lg border text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm select-none whitespace-nowrap ${
+                      showRoundedValues
+                        ? 'border-amber-500/70 bg-amber-500/20 text-amber-300 shadow-amber-500/10'
+                        : 'border-slate-700 bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white'
+                    }`}
+                    title={
+                      showRoundedValues
+                        ? 'Visualização arredondada ATIVA na tela (Neutro sempre preserva precisão decimal). Clique para ver decimais exatos.'
+                        : 'Clique para exibir valores inteiros arredondados na tela (Neutro nunca é arredondado).'
+                    }
+                  >
+                    <span className="font-mono text-sm leading-none font-bold">≈</span>
+                    <span>{showRoundedValues ? 'Arredondado: Ativo' : 'Arredondar'}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Batch Scale Controls with Quick-Pills (Responsive wrap for mobile) */}
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-slate-700 shadow-inner max-w-full">
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-slate-700 shadow-inner max-w-full shrink-0 self-start xl:self-auto">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-slate-300 shrink-0">
                   <Scale className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   <span>Lote:</span>
@@ -944,7 +883,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                   {items.map((item, idx) => {
                     const ing = ingredientsMap.get(item.name.toLowerCase().trim());
                     const isNeutro = isNeutroIngredient(item.name, ing?.category);
-                    const displayedGrams = showRoundedValues && !isNeutro ? Math.round(item.grams) : item.grams;
+                    const displayedGrams = roundIngredientGrams(item.grams, isNeutro, showRoundedValues);
                     const pct = analysis.caldaWeight > 0 ? (item.grams / analysis.caldaWeight) * 100 : 0;
                     const itemCost = ing ? (item.grams * ing.costKg) / 1000 : 0;
                     const catPill = ing ? getIngredientCategoryPill(ing.category) : null;
@@ -976,14 +915,6 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                                 >
                                   <span>{catPill.icon}</span>
                                   <span>{catPill.label}</span>
-                                  {isNeutro && showRoundedValues && (
-                                    <span
-                                      className="ml-0.5 text-[10px] bg-teal-500/30 text-teal-200 border border-teal-500/50 rounded px-1 font-mono font-bold"
-                                      title="Ingrediente Neutro: dosagem protegida com precisão decimal (0.1g)"
-                                    >
-                                      .0g
-                                    </span>
-                                  )}
                                 </span>
                               )}
                               {isUnknown && (
