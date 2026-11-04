@@ -104,10 +104,11 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
   }, [ingredients]);
 
   const filtered = useMemo(() => {
+    const searchLower = search.trim().toLowerCase();
     return ingredients.filter(i => {
       const matchCat = categoryFilter === 'Todas' || i.category === categoryFilter;
       const matchSearch =
-        search === '' || i.name.toLowerCase().includes(search.toLowerCase());
+        !searchLower || i.name.toLowerCase().includes(searchLower);
       return matchCat && matchSearch;
     });
   }, [ingredients, search, categoryFilter]);

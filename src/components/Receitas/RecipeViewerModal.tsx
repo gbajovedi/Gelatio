@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Recipe, VariegatoItem, Ingredient } from '../../types/gelato';
+import { Recipe, VariegatoItem, Ingredient, PreparationStep } from '../../types/gelato';
 import { CategoryBadge } from '../../core/categoryThemes';
 import { db } from '../../db/database';
 import { resolveVariegatoDensity, isNeutroIngredient, roundIngredientGrams, STORAGE_KEY_SHOW_ROUNDED } from '../../core/calculator';
+import { PreparationStepsModal } from './PreparationStepsModal';
 import {
   X,
   Scale,
@@ -69,6 +70,31 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   const [isSavingVariegatos, setIsSavingVariegatos] = useState(false);
   const [saveVariegatoSuccess, setSaveVariegatoSuccess] = useState(false);
 
+  // Estado do Modal de Modo de Preparo
+  const [isPrepModalOpen, setIsPrepModalOpen] = useState(false);
+
+  const handleSavePreparationSteps = async (newSteps: PreparationStep[]) => {
+    await db.recipes.update(recipe.id, {
+      preparationSteps: newSteps,
+      updatedAt: new Date().toISOString()
+    });
+    recipe.preparationSteps = newSteps;
+    if (onRecipeUpdated) {
+      onRecipeUpdated();
+    }
+  };
+
+  // Mapa hash memoizado O(1) de insumos disponíveis por nome minúsculo
+  const ingredientsMap = useMemo(() => {
+    const map = new Map<string, Ingredient>();
+    if (availableIngredients) {
+      for (const ing of availableIngredients) {
+        map.set(ing.name.toLowerCase().trim(), ing);
+      }
+    }
+    return map;
+  }, [availableIngredients]);
+
   // Reset batch, checklist e mesclas quando a receita muda
   useEffect(() => {
     setTargetBatchGrams(Math.round(baseWeight));
@@ -131,9 +157,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   const handleChangeVariegatoName = (index: number, name: string) => {
     setVariegatos(prev => {
       const next = [...prev];
-      const ing = availableIngredients.find(
-        i => i.name.toLowerCase().trim() === name.toLowerCase().trim()
-      );
+      const ing = ingredientsMap.get(name.toLowerCase().trim());
       next[index] = {
         ...next[index],
         name,
@@ -151,9 +175,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
       const cleanVariegatos = variegatos
         .filter(v => v.name.trim().length > 0 && v.grams > 0)
         .map(v => {
-          const ing = availableIngredients.find(
-            i => i.name.toLowerCase().trim() === v.name.toLowerCase().trim()
-          );
+          const ing = ingredientsMap.get(v.name.toLowerCase().trim());
           return {
             name: v.name.trim(),
             grams: v.grams,
@@ -323,9 +345,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
             <div className="bg-slate-800/70 rounded-2xl border border-slate-700/80 divide-y divide-slate-700/50 overflow-hidden shadow-lg">
               {recipe.ingredients &&
                 recipe.ingredients.map((item, idx) => {
-                  const ing = availableIngredients?.find(
-                    i => i.name.toLowerCase().trim() === (item.name || '').toLowerCase().trim()
-                  );
+                  const ing = ingredientsMap.get((item.name || '').toLowerCase().trim());
                   const isNeutro = isNeutroIngredient(item.name, ing?.category);
                   const scaledGrams = roundIngredientGrams(item.grams * scaleRatio, isNeutro, showRoundedValues);
                   const pct = baseWeight > 0 ? (item.grams / baseWeight) * 100 : 0;
@@ -461,7 +481,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
                     : Math.round(v.grams * scaleRatio * 10) / 10;
                   const physical = resolveVariegatoDensity(
                     v,
-                    availableIngredients?.find(ing => ing.name.toLowerCase().trim() === (v.name || '').toLowerCase().trim())
+                    ingredientsMap.get((v.name || '').toLowerCase().trim())
                   );
                   return (
                     <div
@@ -554,6 +574,59 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
               <p className="leading-relaxed">{recipe.notes}</p>
             </div>
           )}
+
+          {/* Modo de Preparo (Resumo na Ficha Técnica & Impressão) */}
+          {recipe.preparationSteps && recipe.preparationSteps.length > 0 && (
+            <div className="p-4 bg-slate-800/50 rounded-2xl border border-slate-700 text-xs text-slate-300 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5 text-xs">
+                  <ChefHat className="w-4 h-4 text-amber-400" />
+                  <span>Modo de Preparo ({recipe.preparationSteps.length} passos operacionais)</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsPrepModalOpen(true)}
+                  className="no-print text-amber-400 hover:text-amber-300 font-bold transition-colors flex items-center gap-1 text-[11px]"
+                >
+                  <Edit3 className="w-3 h-3" />
+                  <span>Editar Modo de Preparo</span>
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                {recipe.preparationSteps.map((step, idx) => (
+                  <div
+                    key={step.id || idx}
+                    className="p-3 rounded-xl bg-slate-900/80 border border-slate-700/60 text-xs space-y-1"
+                  >
+                    <div className="flex items-center justify-between font-bold text-white flex-wrap gap-1">
+                      <span className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-md bg-amber-500/20 text-amber-300 text-[10px] flex items-center justify-center font-mono">
+                          {idx + 1}
+                        </span>
+                        <span>{step.title}</span>
+                      </span>
+                      <div className="flex items-center gap-2 text-[10px] font-mono">
+                        {step.temperature && (
+                          <span className="text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
+                            {step.temperature}
+                          </span>
+                        )}
+                        {step.duration && (
+                          <span className="text-sky-300 bg-sky-500/10 px-1.5 py-0.5 rounded border border-sky-500/20">
+                            {step.duration}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-slate-300 text-[11px] leading-relaxed pl-7 whitespace-pre-line">
+                      {step.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Sticky Footer Actions */}
@@ -580,19 +653,46 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
               <span className="hidden sm:inline">Imprimir</span>
             </button>
 
+            {/* Novo Botão Modo de Preparo posicionado entre Imprimir e Balancear */}
+            <button
+              type="button"
+              onClick={() => setIsPrepModalOpen(true)}
+              className="px-3.5 sm:px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
+              title="Visualizar ou editar o modo de preparo passo a passo desta receita"
+            >
+              <ChefHat className="w-4 h-4 text-amber-400" />
+              <span>Modo de Preparo</span>
+              {recipe.preparationSteps && recipe.preparationSteps.length > 0 && (
+                <span className="ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                  {recipe.preparationSteps.length}
+                </span>
+              )}
+            </button>
+
             <button
               type="button"
               onClick={() => {
                 onClose();
                 onOpenInCalculator(recipe.id);
               }}
-              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-amber-500/25 transition-all flex items-center gap-2 active:scale-95"
+              className="px-3.5 sm:px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-md shadow-amber-500/20 transition-all flex items-center gap-1.5 active:scale-95"
+              title="Abrir receita no Balanceador"
             >
               <Edit3 className="w-4 h-4" />
-              <span>Editar no Balanceador</span>
+              <span>Balancear</span>
             </button>
           </div>
         </div>
+
+        {/* Modal Interativo de Modo de Preparo */}
+        {isPrepModalOpen && (
+          <PreparationStepsModal
+            recipe={recipe}
+            isOpen={isPrepModalOpen}
+            onClose={() => setIsPrepModalOpen(false)}
+            onSaveSteps={handleSavePreparationSteps}
+          />
+        )}
 
         <datalist id="viewer-variegatos-options">
           {variegatoCandidates.map(i => (

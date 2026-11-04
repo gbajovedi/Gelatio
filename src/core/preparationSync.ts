@@ -199,10 +199,13 @@ export async function syncPreparationToIngredient(
 async function updateIngredientReferencesAcrossRecipes(oldName: string, newName: string) {
   try {
     const recipes = await db.recipes.toArray();
+    const oldLower = oldName.trim().toLowerCase();
+    const updates: { id: string; ingredients: any[]; variegatos?: any[] }[] = [];
+
     for (const rec of recipes) {
       let modified = false;
       const updatedIngredients = rec.ingredients.map(item => {
-        if (item.name.trim().toLowerCase() === oldName.toLowerCase()) {
+        if (item.name.trim().toLowerCase() === oldLower) {
           modified = true;
           return { ...item, name: newName };
         }
@@ -212,7 +215,7 @@ async function updateIngredientReferencesAcrossRecipes(oldName: string, newName:
       let updatedVariegatos = rec.variegatos;
       if (rec.variegatos && rec.variegatos.length > 0) {
         updatedVariegatos = rec.variegatos.map(item => {
-          if (item.name.trim().toLowerCase() === oldName.toLowerCase()) {
+          if (item.name.trim().toLowerCase() === oldLower) {
             modified = true;
             return { ...item, name: newName };
           }
@@ -221,11 +224,24 @@ async function updateIngredientReferencesAcrossRecipes(oldName: string, newName:
       }
 
       if (modified) {
-        await db.recipes.update(rec.id, {
+        updates.push({
+          id: rec.id,
           ingredients: updatedIngredients,
           variegatos: updatedVariegatos,
         });
       }
+    }
+
+    // Executa todas as atualizações em uma única transação atômica de disco no IndexedDB
+    if (updates.length > 0) {
+      await db.transaction('rw', db.recipes, async () => {
+        for (const u of updates) {
+          await db.recipes.update(u.id, {
+            ingredients: u.ingredients,
+            variegatos: u.variegatos,
+          });
+        }
+      });
     }
   } catch (err) {
     console.warn('Erro ao atualizar referências do ingrediente em receitas:', err);
@@ -269,7 +285,12 @@ export async function syncAllPreparationsToIngredients(
       currentIngredients.push(res.ingredient);
     } else {
       updatedCount++;
-      currentIngredients = currentIngredients.map(i => i.id === res.ingredient.id ? res.ingredient : i);
+      const existingIdx = currentIngredients.findIndex(i => i.id === res.ingredient.id);
+      if (existingIdx !== -1) {
+        currentIngredients[existingIdx] = res.ingredient;
+      } else {
+        currentIngredients.push(res.ingredient);
+      }
     }
   }
 

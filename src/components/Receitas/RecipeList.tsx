@@ -259,11 +259,13 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { Todas: 0 };
+    const searchLower = search.trim().toLowerCase();
+
     for (const r of recipes) {
       const matchSearch =
-        search === '' ||
-        r.name.toLowerCase().includes(search.toLowerCase()) ||
-        (r.ingredients && r.ingredients.some(i => i.name.toLowerCase().includes(search.toLowerCase())));
+        !searchLower ||
+        r.name.toLowerCase().includes(searchLower) ||
+        (r.ingredients && r.ingredients.some(i => i.name.toLowerCase().includes(searchLower)));
       if (!matchSearch) continue;
 
       const isCritical = metrics.get(r.id)?.needsAdjustment;
@@ -283,13 +285,14 @@ export const RecipeList: React.FC<RecipeListProps> = ({
     let all = 0;
     let balanced = 0;
     let critical = 0;
+    const searchLower = search.trim().toLowerCase();
 
     for (const r of recipes) {
       const matchCat = selectedCategory === 'Todas' || r.category === selectedCategory;
       const matchSearch =
-        search === '' ||
-        r.name.toLowerCase().includes(search.toLowerCase()) ||
-        (r.ingredients && r.ingredients.some(i => i.name.toLowerCase().includes(search.toLowerCase())));
+        !searchLower ||
+        r.name.toLowerCase().includes(searchLower) ||
+        (r.ingredients && r.ingredients.some(i => i.name.toLowerCase().includes(searchLower)));
       if (!matchCat || !matchSearch) continue;
 
       all++;
@@ -304,12 +307,14 @@ export const RecipeList: React.FC<RecipeListProps> = ({
   }, [recipes, selectedCategory, search, metrics]);
 
   const filteredRecipes = useMemo(() => {
+    const searchLower = search.trim().toLowerCase();
+
     return recipes.filter(r => {
       const matchCat = selectedCategory === 'Todas' || r.category === selectedCategory;
       const matchSearch =
-        search === '' ||
-        r.name.toLowerCase().includes(search.toLowerCase()) ||
-        (r.ingredients && r.ingredients.some(i => i.name.toLowerCase().includes(search.toLowerCase())));
+        !searchLower ||
+        r.name.toLowerCase().includes(searchLower) ||
+        (r.ingredients && r.ingredients.some(i => i.name.toLowerCase().includes(searchLower)));
       if (!matchCat || !matchSearch) return false;
 
       const isCritical = metrics.get(r.id)?.needsAdjustment;

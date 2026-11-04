@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Plus, Trash2, Save, Sparkles, Scale, DollarSign } from 'lucide-react';
 import { Recipe, VariegatoItem, Ingredient } from '../../types/gelato';
 import { db } from '../../db/database';
@@ -31,14 +31,25 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
     }
   }, [recipe, isOpen]);
 
-  if (!isOpen || !recipe) return null;
+  // Mapa hash memoizado O(1) de insumos disponíveis por nome minúsculo
+  const ingredientsMap = useMemo(() => {
+    const map = new Map<string, Ingredient>();
+    for (const ing of availableIngredients) {
+      map.set(ing.name.toLowerCase().trim(), ing);
+    }
+    return map;
+  }, [availableIngredients]);
 
   // Insumos candidatos para autocomplete de mesclas
-  const variegatoCandidates = availableIngredients.filter(i =>
-    /(variegato|brigadeiro|nutella|caramelo|cocada|goiabada|doce de leite|biscoff|croissant|pudim|torrone|paçoca|pasta|calda|amendoim|castanha|avelã|pistache|nozes|amêndoa|biscoito|cereja|geleia|morango|frutas)/i.test(
-      i.name
-    )
-  );
+  const variegatoCandidates = useMemo(() => {
+    return availableIngredients.filter(i =>
+      /(variegato|brigadeiro|nutella|caramelo|cocada|goiabada|doce de leite|biscoff|croissant|pudim|torrone|paçoca|pasta|calda|amendoim|castanha|avelã|pistache|nozes|amêndoa|biscoito|cereja|geleia|morango|frutas)/i.test(
+        i.name
+      )
+    );
+  }, [availableIngredients]);
+
+  if (!isOpen || !recipe) return null;
 
   const handleAdd = () => {
     setItems(prev => [...prev, { name: '', grams: 100, costKg: 0 }]);
@@ -50,9 +61,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
 
   const handleChangeName = (index: number, name: string) => {
     const next = [...items];
-    const ing = availableIngredients.find(
-      i => i.name.toLowerCase().trim() === name.toLowerCase().trim()
-    );
+    const ing = ingredientsMap.get(name.toLowerCase().trim());
     next[index] = {
       ...next[index],
       name,
@@ -75,9 +84,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
 
   const handleToggleMixer = (index: number) => {
     const next = [...items];
-    const ing = availableIngredients.find(
-      i => i.name.toLowerCase().trim() === (next[index].name || '').toLowerCase().trim()
-    );
+    const ing = ingredientsMap.get((next[index].name || '').toLowerCase().trim());
     const resolved = resolveVariegatoDensity(next[index], ing);
     const isCurrentlyMixer = resolved.method === 'mixer';
     next[index] = {
@@ -89,47 +96,52 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
     setItems(next);
   };
 
-  // Cálculo da Calda Base
-  const caldaGrams = (recipe.ingredients || []).reduce((acc, i) => acc + (i.grams || 0), 0);
-  let caldaCost = 0;
-  for (const ingItem of recipe.ingredients || []) {
-    const ing = availableIngredients.find(
-      i => i.name.toLowerCase().trim() === ingItem.name.toLowerCase().trim()
-    );
-    if (ing) {
-      caldaCost += (ingItem.grams / 1000) * (ing.costKg || 0);
+  // Cálculo da Calda Base com Map O(1)
+  const { caldaGrams, caldaCost, caldaCostKg } = useMemo(() => {
+    let grams = 0;
+    let cost = 0;
+    for (const ingItem of recipe.ingredients || []) {
+      grams += ingItem.grams || 0;
+      const ing = ingredientsMap.get(ingItem.name.toLowerCase().trim());
+      if (ing) {
+        cost += (ingItem.grams / 1000) * (ing.costKg || 0);
+      }
     }
-  }
-  const caldaCostKg = caldaGrams > 0 ? (caldaCost / (caldaGrams / 1000)) : 0;
+    const costKg = grams > 0 ? (cost / (grams / 1000)) : 0;
+    return { caldaGrams: grams, caldaCost: cost, caldaCostKg: costKg };
+  }, [recipe.ingredients, ingredientsMap]);
 
-  // Cálculo das Mesclas
-  let variegatoGrams = 0;
-  let variegatoCost = 0;
-  for (const v of items) {
-    if (!v.name || v.grams <= 0) continue;
-    variegatoGrams += v.grams;
-    const ing = availableIngredients.find(
-      i => i.name.toLowerCase().trim() === v.name.toLowerCase().trim()
-    );
-    const unitCost = v.costKg ?? (ing ? ing.costKg : 0);
-    variegatoCost += (v.grams / 1000) * unitCost;
-  }
-
-  // Valores Consolidados Finais
-  const finalWeightGrams = caldaGrams + variegatoGrams;
-  const finalTotalCost = caldaCost + variegatoCost;
-  const finalCostKg = finalWeightGrams > 0 ? (finalTotalCost / (finalWeightGrams / 1000)) : caldaCostKg;
+  // Cálculo das Mesclas e Totais com Map O(1)
+  const { variegatoGrams, variegatoCost, finalWeightGrams, finalTotalCost, finalCostKg } = useMemo(() => {
+    let vGrams = 0;
+    let vCost = 0;
+    for (const v of items) {
+      if (!v.name || v.grams <= 0) continue;
+      vGrams += v.grams;
+      const ing = ingredientsMap.get(v.name.toLowerCase().trim());
+      const unitCost = v.costKg ?? (ing ? ing.costKg : 0);
+      vCost += (v.grams / 1000) * unitCost;
+    }
+    const finalWeight = caldaGrams + vGrams;
+    const finalCost = caldaCost + vCost;
+    const fCostKg = finalWeight > 0 ? (finalCost / (finalWeight / 1000)) : caldaCostKg;
+    return {
+      variegatoGrams: vGrams,
+      variegatoCost: vCost,
+      finalWeightGrams: finalWeight,
+      finalTotalCost: finalCost,
+      finalCostKg: fCostKg
+    };
+  }, [items, caldaGrams, caldaCost, caldaCostKg, ingredientsMap]);
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Filtrar apenas mesclas preenchidas
+      // Filtrar apenas mesclas preenchidas usando lookup O(1)
       const cleanVariegatos = items
         .filter(v => v.name.trim().length > 0 && v.grams > 0)
         .map(v => {
-          const ing = availableIngredients.find(
-            i => i.name.toLowerCase().trim() === v.name.toLowerCase().trim()
-          );
+          const ing = ingredientsMap.get(v.name.toLowerCase().trim());
           return {
             name: v.name.trim(),
             grams: v.grams,
@@ -225,9 +237,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
             ) : (
               <div className="space-y-2.5">
                 {items.map((item, idx) => {
-                  const ing = availableIngredients.find(
-                    i => i.name.toLowerCase().trim() === (item.name || '').toLowerCase().trim()
-                  );
+                  const ing = ingredientsMap.get((item.name || '').toLowerCase().trim());
                   const physical = resolveVariegatoDensity(item, ing);
                   const costKg = item.costKg !== undefined && item.costKg > 0 ? item.costKg : (ing ? ing.costKg : 0);
                   const totalItemCost = (item.grams * costKg) / 1000;

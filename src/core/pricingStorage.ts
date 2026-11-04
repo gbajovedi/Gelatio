@@ -296,3 +296,62 @@ export function getPricingSettings(params: PricingParams = getStoredPricingParam
     salesTaxPercent: params.salesTaxPercent
   };
 }
+
+export const PRICING_UI_PREFS_KEY = 'gelato_pricing_ui_prefs_v1';
+
+export interface PricingCostGroupExpanded {
+  occupancy: boolean;
+  personnel: boolean;
+  equipment: boolean;
+  legal: boolean;
+  custom: boolean;
+}
+
+export interface PricingUIPreferences {
+  expandedCostGroups: PricingCostGroupExpanded;
+  isCardFeeExpanded: boolean;
+  isTaxExpanded: boolean;
+  isPaymentMatrixExpanded: boolean;
+}
+
+export const DEFAULT_PRICING_UI_PREFS: PricingUIPreferences = {
+  expandedCostGroups: {
+    occupancy: false,
+    personnel: false,
+    equipment: false,
+    legal: false,
+    custom: false,
+  },
+  isCardFeeExpanded: false,
+  isTaxExpanded: false,
+  isPaymentMatrixExpanded: false,
+};
+
+export function getPricingUIPreferences(): PricingUIPreferences {
+  try {
+    const raw = localStorage.getItem(PRICING_UI_PREFS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return {
+        ...DEFAULT_PRICING_UI_PREFS,
+        ...parsed,
+        expandedCostGroups: {
+          ...DEFAULT_PRICING_UI_PREFS.expandedCostGroups,
+          ...(parsed.expandedCostGroups || {})
+        }
+      };
+    }
+  } catch (err) {
+    console.warn('Erro ao carregar preferências de UI de precificação:', err);
+  }
+  return DEFAULT_PRICING_UI_PREFS;
+}
+
+export function savePricingUIPreferences(prefs: PricingUIPreferences): void {
+  try {
+    localStorage.setItem(PRICING_UI_PREFS_KEY, JSON.stringify(prefs));
+  } catch (err) {
+    console.warn('Erro ao salvar preferências de UI de precificação:', err);
+  }
+}
+

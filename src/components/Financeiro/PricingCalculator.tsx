@@ -17,7 +17,10 @@ import {
   Scale,
   Trash2,
   Plus,
-  Percent
+  Percent,
+  ChevronDown,
+  ChevronUp,
+  Check
 } from 'lucide-react';
 import {
   getStoredPricingParams,
@@ -30,11 +33,76 @@ import {
   DEFAULT_PAYMENT_PLANS,
   calculateEffectiveCardFee,
   PricingParams,
-  CustomCostItem
+  CustomCostItem,
+  getPricingUIPreferences,
+  savePricingUIPreferences,
+  PricingUIPreferences,
+  PricingCostGroupExpanded
 } from '../../core/pricingStorage';
 
 export const PricingCalculator: React.FC = () => {
   const initial = getStoredPricingParams();
+
+  // Preferências visuais da UI (acordeões e expansões com persistência no localStorage)
+  const [uiPrefs, setUiPrefs] = useState<PricingUIPreferences>(() => getPricingUIPreferences());
+
+  const updateUiPrefs = (updater: (prev: PricingUIPreferences) => PricingUIPreferences) => {
+    setUiPrefs(prev => {
+      const next = updater(prev);
+      savePricingUIPreferences(next);
+      return next;
+    });
+  };
+
+  const toggleCostGroup = (groupKey: keyof PricingCostGroupExpanded) => {
+    updateUiPrefs(prev => ({
+      ...prev,
+      expandedCostGroups: {
+        ...prev.expandedCostGroups,
+        [groupKey]: !prev.expandedCostGroups[groupKey]
+      }
+    }));
+  };
+
+  const expandAllCostGroups = () => {
+    updateUiPrefs(prev => ({
+      ...prev,
+      expandedCostGroups: {
+        occupancy: true,
+        personnel: true,
+        equipment: true,
+        legal: true,
+        custom: true
+      }
+    }));
+  };
+
+  const collapseAllCostGroups = () => {
+    updateUiPrefs(prev => ({
+      ...prev,
+      expandedCostGroups: {
+        occupancy: false,
+        personnel: false,
+        equipment: false,
+        legal: false,
+        custom: false
+      }
+    }));
+  };
+
+  const toggleCardFee = () => {
+    updateUiPrefs(prev => ({
+      ...prev,
+      isCardFeeExpanded: !prev.isCardFeeExpanded
+    }));
+  };
+
+  const togglePaymentMatrix = () => {
+    updateUiPrefs(prev => ({
+      ...prev,
+      isPaymentMatrixExpanded: !prev.isPaymentMatrixExpanded
+    }));
+  };
 
   // 1. Ocupação & Utilidades
   const [rent, setRent] = useState<number>(initial.rent);
@@ -189,6 +257,7 @@ export const PricingCalculator: React.FC = () => {
     commercialInsurance,
     posRentalMonthly,
     marketing,
+    customCosts,
     monthlyUnits,
     tubWeightGrams,
     tubPackCost,
@@ -259,6 +328,7 @@ export const PricingCalculator: React.FC = () => {
     commercialInsurance,
     posRentalMonthly,
     marketing,
+    customCosts,
     monthlyUnits,
     tubWeightGrams,
     tubPackCost,
@@ -296,6 +366,7 @@ export const PricingCalculator: React.FC = () => {
       setCommercialInsurance(def.commercialInsurance);
       setPosRentalMonthly(def.posRentalMonthly);
       setMarketing(def.marketing);
+      setCustomCosts(def.customCosts || []);
       setMonthlyUnits(def.monthlyUnits);
       setTubWeightGrams(def.tubWeightGrams);
       setTubPackCost(def.tubPackCost);
@@ -510,376 +581,562 @@ export const PricingCalculator: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Custos Fixos Mensais com 4 Grupos Temáticos */}
         <div className="lg:col-span-6 bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-700 pb-3">
+          <div className="flex items-center justify-between border-b border-slate-700 pb-2.5">
             <div className="flex items-center gap-2">
               <Landmark className="w-4 h-4 text-amber-400" />
-              <h3 className="text-base font-bold text-white">Custos Fixos Mensais</h3>
+              <div>
+                <h3 className="text-sm sm:text-base font-bold text-white leading-tight">Custos Fixos Mensais</h3>
+                <span className="text-[10px] text-slate-400">Estrutura de rateio industrial da gelateria</span>
+              </div>
             </div>
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300">
-              5 Grupos de Custo
-            </span>
+            <div className="flex items-center gap-1.5 text-[11px]">
+              <button
+                type="button"
+                onClick={expandAllCostGroups}
+                className="px-2 py-0.5 bg-slate-900 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 rounded-md font-semibold transition-all cursor-pointer"
+                title="Expandir todos os 5 grupos de custos"
+              >
+                Expandir
+              </button>
+              <button
+                type="button"
+                onClick={collapseAllCostGroups}
+                className="px-2 py-0.5 bg-slate-900 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 rounded-md font-semibold transition-all cursor-pointer"
+                title="Recolher todos os 5 grupos de custos"
+              >
+                Recolher
+              </button>
+            </div>
           </div>
 
           {/* 1. GRUPO: OCUPAÇÃO & UTILIDADES */}
-          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-700/80 space-y-2.5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-              <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-amber-400" />
-                1. Ocupação & Utilidades
-              </span>
-              <span className="text-xs font-mono font-semibold text-slate-400">
-                R$ {subtotalOccupancy.toFixed(2)}
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-2.5 text-xs">
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5">Aluguel do Espaço:</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={rent || ''}
-                  onChange={e => setRent(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+          <div className={`rounded-xl border transition-all ${
+            uiPrefs.expandedCostGroups.occupancy
+              ? 'bg-slate-900/90 border-slate-700/80 shadow-md'
+              : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+          }`}>
+            <button
+              type="button"
+              onClick={() => toggleCostGroup('occupancy')}
+              className="w-full p-2.5 sm:p-3 flex items-center justify-between gap-2 text-left cursor-pointer transition-colors"
+              aria-expanded={uiPrefs.expandedCostGroups.occupancy}
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <Building2 className="w-4 h-4 text-amber-400 shrink-0" />
+                <span className="text-xs sm:text-sm font-bold text-white truncate">
+                  1. Ocupação & Utilidades
+                </span>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5">Energia Elétrica (Freezers 24h):</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={electricity || ''}
-                  onChange={e => setElectricity(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 border border-amber-500/30 text-xs font-mono font-bold">
+                  <span className="text-amber-300">
+                    R$ {subtotalOccupancy.toFixed(2)}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-sans font-normal">
+                    ({pctOccupancy.toFixed(0)}%)
+                  </span>
+                </div>
+
+                <span className="p-1 rounded text-slate-400 hover:text-white transition-colors">
+                  {uiPrefs.expandedCostGroups.occupancy ? (
+                    <ChevronUp className="w-4 h-4 text-amber-400" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                  )}
+                </span>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5">Água & Esgoto:</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={water || ''}
-                  onChange={e => setWater(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+            </button>
+
+            {uiPrefs.expandedCostGroups.occupancy && (
+              <div className="p-3 pt-1 border-t border-slate-800 space-y-2.5 animate-in fade-in duration-150">
+                <div className="grid grid-cols-2 gap-2.5 text-xs">
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5">Aluguel do Espaço:</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={rent || ''}
+                      onChange={e => setRent(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5">Energia Elétrica (Freezers 24h):</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={electricity || ''}
+                      onChange={e => setElectricity(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5">Água & Esgoto:</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={water || ''}
+                      onChange={e => setWater(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5">Internet & Telecom:</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={telecom || ''}
+                      onChange={e => setTelecom(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5">Internet & Telecom:</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={telecom || ''}
-                  onChange={e => setTelecom(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
-              </div>
-            </div>
+            )}
           </div>
 
           {/* 2. GRUPO: PESSOAL & GESTÃO */}
-          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-700/80 space-y-2.5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-              <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5 text-cyan-400" />
-                2. Pessoal & Gestão
-              </span>
-              <span className="text-xs font-mono font-semibold text-slate-400">
-                R$ {subtotalPersonnel.toFixed(2)}
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-2.5 text-xs">
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5">Folha da Equipe (CLT/Extra):</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={payroll || ''}
-                  onChange={e => setPayroll(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+          <div className={`rounded-xl border transition-all ${
+            uiPrefs.expandedCostGroups.personnel
+              ? 'bg-slate-900/90 border-slate-700/80 shadow-md'
+              : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+          }`}>
+            <button
+              type="button"
+              onClick={() => toggleCostGroup('personnel')}
+              className="w-full p-2.5 sm:p-3 flex items-center justify-between gap-2 text-left cursor-pointer transition-colors"
+              aria-expanded={uiPrefs.expandedCostGroups.personnel}
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <Users className="w-4 h-4 text-cyan-400 shrink-0" />
+                <span className="text-xs sm:text-sm font-bold text-white truncate">
+                  2. Pessoal & Gestão
+                </span>
               </div>
-              <div>
-                <div className="flex justify-between items-center mb-0.5">
-                  <label className="text-cyan-300 font-bold block">Pró-Labore (Gelatiere):</label>
-                  <span className="text-[9px] text-cyan-400 font-semibold bg-cyan-950/60 px-1 rounded">Dono</span>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 border border-cyan-500/30 text-xs font-mono font-bold">
+                  <span className="text-cyan-300">
+                    R$ {subtotalPersonnel.toFixed(2)}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-sans font-normal">
+                    ({pctPersonnel.toFixed(0)}%)
+                  </span>
                 </div>
-                <input
-                  type="number"
-                  min="0"
-                  value={ownerSalary || ''}
-                  onChange={e => setOwnerSalary(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-cyan-500/50 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                  title="Salário mensal retirado pelo dono/mestre gelatiere"
-                />
+
+                <span className="p-1 rounded text-slate-400 hover:text-white transition-colors">
+                  {uiPrefs.expandedCostGroups.personnel ? (
+                    <ChevronUp className="w-4 h-4 text-cyan-400" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                  )}
+                </span>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5">Contabilidade & Honorários:</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={accounting || ''}
-                  onChange={e => setAccounting(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+            </button>
+
+            {uiPrefs.expandedCostGroups.personnel && (
+              <div className="p-3 pt-1 border-t border-slate-800 space-y-2.5 animate-in fade-in duration-150">
+                <div className="grid grid-cols-2 gap-2.5 text-xs">
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5">Folha da Equipe (CLT/Extra):</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={payroll || ''}
+                      onChange={e => setPayroll(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex justify-between items-center mb-0.5">
+                      <label className="text-cyan-300 font-bold block">Pró-Labore (Gelatiere):</label>
+                      <span className="text-[9px] text-cyan-400 font-semibold bg-cyan-950/60 px-1 rounded">Dono</span>
+                    </div>
+                    <input
+                      type="number"
+                      min="0"
+                      value={ownerSalary || ''}
+                      onChange={e => setOwnerSalary(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-cyan-500/50 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                      title="Salário mensal retirado pelo dono/mestre gelatiere"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5">Contabilidade & Honorários:</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={accounting || ''}
+                      onChange={e => setAccounting(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5">Software, PDV & Cardápio:</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={software || ''}
+                      onChange={e => setSoftware(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5">Software, PDV & Cardápio:</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={software || ''}
-                  onChange={e => setSoftware(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
-              </div>
-            </div>
+            )}
           </div>
 
           {/* 3. GRUPO: REFRIGERAÇÃO, MÁQUINAS & SANITIZAÇÃO */}
-          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-700/80 space-y-2.5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-              <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                <Snowflake className="w-3.5 h-3.5 text-emerald-400" />
-                3. Refrigeração, Máquinas & Sanitização
-              </span>
-              <span className="text-xs font-mono font-semibold text-slate-400">
-                R$ {subtotalEquipment.toFixed(2)}
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-2.5 text-xs">
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5" title="Manutenção preventiva de compressores, gás e filtros">
-                  Manutenção Refrigeração:
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={equipmentMaintenance || ''}
-                  onChange={e => setEquipmentMaintenance(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+          <div className={`rounded-xl border transition-all ${
+            uiPrefs.expandedCostGroups.equipment
+              ? 'bg-slate-900/90 border-slate-700/80 shadow-md'
+              : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+          }`}>
+            <button
+              type="button"
+              onClick={() => toggleCostGroup('equipment')}
+              className="w-full p-2.5 sm:p-3 flex items-center justify-between gap-2 text-left cursor-pointer transition-colors"
+              aria-expanded={uiPrefs.expandedCostGroups.equipment}
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <Snowflake className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="text-xs sm:text-sm font-bold text-white truncate">
+                  3. Refrigeração & Máquinas
+                </span>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5" title="Fundo mensal para substituição futura de mantecadora e pasteurizador">
-                  Depreciação de Maquinário:
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={equipmentDepreciation || ''}
-                  onChange={e => setEquipmentDepreciation(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 border border-emerald-500/30 text-xs font-mono font-bold">
+                  <span className="text-emerald-300">
+                    R$ {subtotalEquipment.toFixed(2)}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-sans font-normal">
+                    ({pctEquipment.toFixed(0)}%)
+                  </span>
+                </div>
+
+                <span className="p-1 rounded text-slate-400 hover:text-white transition-colors">
+                  {uiPrefs.expandedCostGroups.equipment ? (
+                    <ChevronUp className="w-4 h-4 text-emerald-400" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                  )}
+                </span>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5" title="Químicos CIP, sanitizantes de pasteurizadora, álcool 70% e luvas">
-                  Higiene & Sanitizantes CIP:
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={cleaningHygiene || ''}
-                  onChange={e => setCleaningHygiene(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+            </button>
+
+            {uiPrefs.expandedCostGroups.equipment && (
+              <div className="p-3 pt-1 border-t border-slate-800 space-y-2.5 animate-in fade-in duration-150">
+                <div className="grid grid-cols-2 gap-2.5 text-xs">
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5" title="Manutenção preventiva de compressores, gás e filtros">
+                      Manutenção Refrigeração:
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={equipmentMaintenance || ''}
+                      onChange={e => setEquipmentMaintenance(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5" title="Fundo mensal para substituição futura de mantecadora e pasteurizador">
+                      Depreciação de Maquinário:
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={equipmentDepreciation || ''}
+                      onChange={e => setEquipmentDepreciation(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5" title="Químicos CIP, sanitizantes de pasteurizadora, álcool 70% e luvas">
+                      Higiene & Sanitizantes CIP:
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={cleaningHygiene || ''}
+                      onChange={e => setCleaningHygiene(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5" title="Sacolas, guardanapos, colherinhas descartáveis">
+                      Embalagens Secundárias:
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={secPackaging || ''}
+                      onChange={e => setSecPackaging(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5" title="Sacolas, guardanapos, colherinhas descartáveis">
-                  Embalagens Secundárias:
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={secPackaging || ''}
-                  onChange={e => setSecPackaging(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
-              </div>
-            </div>
+            )}
           </div>
 
           {/* 4. GRUPO: TRIBUTOS, LICENÇAS & PROTEÇÃO */}
-          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-700/80 space-y-2.5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-              <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-rose-400" />
-                4. Tributos, Licenças & Proteção
-              </span>
-              <span className="text-xs font-mono font-semibold text-slate-400">
-                R$ {subtotalLegal.toFixed(2)}
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-2.5 text-xs">
-              <div>
-                <label className="text-amber-300 font-bold block mb-0.5">Impostos Fixos:</label>
-                <input
-                  type="number"
-                  min="0"
-                  step="5"
-                  value={fixedTaxes || ''}
-                  onChange={e => setFixedTaxes(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-amber-500/50 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+          <div className={`rounded-xl border transition-all ${
+            uiPrefs.expandedCostGroups.legal
+              ? 'bg-slate-900/90 border-slate-700/80 shadow-md'
+              : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+          }`}>
+            <button
+              type="button"
+              onClick={() => toggleCostGroup('legal')}
+              className="w-full p-2.5 sm:p-3 flex items-center justify-between gap-2 text-left cursor-pointer transition-colors"
+              aria-expanded={uiPrefs.expandedCostGroups.legal}
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <ShieldCheck className="w-4 h-4 text-rose-400 shrink-0" />
+                <span className="text-xs sm:text-sm font-bold text-white truncate">
+                  4. Tributos, Licenças & Proteção
+                </span>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5" title="Alvará, laudo dos bombeiros, dedetização trimestral rateada e RT">
-                  Alvarás, Laudos & RT:
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={licensesAndPermits || ''}
-                  onChange={e => setLicensesAndPermits(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 border border-rose-500/30 text-xs font-mono font-bold">
+                  <span className="text-rose-300">
+                    R$ {subtotalLegal.toFixed(2)}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-sans font-normal">
+                    ({pctLegal.toFixed(0)}%)
+                  </span>
+                </div>
+
+                <span className="p-1 rounded text-slate-400 hover:text-white transition-colors">
+                  {uiPrefs.expandedCostGroups.legal ? (
+                    <ChevronUp className="w-4 h-4 text-rose-400" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                  )}
+                </span>
               </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5" title="Seguro contra queima de compressores e perda de caldas congeladas">
-                  Seguro / Perda de Estoque:
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={commercialInsurance || ''}
-                  onChange={e => setCommercialInsurance(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
-              </div>
-              <div>
-                <label className="text-slate-300 font-semibold block mb-0.5">Marketing & Redes Sociais:</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={marketing || ''}
-                  onChange={e => setMarketing(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
-                  placeholder="0.00"
-                />
-              </div>
-              <div className="col-span-2 flex items-center justify-between pt-1 border-t border-slate-800">
-                <span className="text-slate-400 text-[11px]">Aluguel Maquininha (R$/mês):</span>
-                <div className="flex items-center gap-1.5">
-                  <input
-                    type="number"
-                  min="0"
-                    step="10"
-                    value={posRentalMonthly || ''}
-                    onChange={e => setPosRentalMonthly(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="w-20 bg-slate-950 border border-slate-700 rounded p-1 text-xs text-white font-mono font-bold text-right"
-                    placeholder="0.00"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setPosRentalMonthly(posRentalMonthly > 0 ? 0 : 99.9)}
-                    className="text-[10px] px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded font-semibold"
-                  >
-                    {posRentalMonthly > 0 ? 'Isento' : 'R$ 99,90'}
-                  </button>
+            </button>
+
+            {uiPrefs.expandedCostGroups.legal && (
+              <div className="p-3 pt-1 border-t border-slate-800 space-y-2.5 animate-in fade-in duration-150">
+                <div className="grid grid-cols-2 gap-2.5 text-xs">
+                  <div>
+                    <label className="text-amber-300 font-bold block mb-0.5">Impostos Fixos:</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="5"
+                      value={fixedTaxes || ''}
+                      onChange={e => setFixedTaxes(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-amber-500/50 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5" title="Alvará, laudo dos bombeiros, dedetização trimestral rateada e RT">
+                      Alvarás, Laudos & RT:
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={licensesAndPermits || ''}
+                      onChange={e => setLicensesAndPermits(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5" title="Seguro contra queima de compressores e perda de caldas congeladas">
+                      Seguro / Perda de Estoque:
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={commercialInsurance || ''}
+                      onChange={e => setCommercialInsurance(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-300 font-semibold block mb-0.5">Marketing & Redes Sociais:</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={marketing || ''}
+                      onChange={e => setMarketing(Math.max(0, parseFloat(e.target.value) || 0))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-white font-mono font-bold"
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div className="col-span-2 flex items-center justify-between pt-1 border-t border-slate-800">
+                    <span className="text-slate-400 text-[11px]">Aluguel Maquininha (R$/mês):</span>
+                    <div className="flex items-center gap-1.5">
+                      <input
+                        type="number"
+                        min="0"
+                        step="10"
+                        value={posRentalMonthly || ''}
+                        onChange={e => setPosRentalMonthly(Math.max(0, parseFloat(e.target.value) || 0))}
+                        className="w-20 bg-slate-950 border border-slate-700 rounded p-1 text-xs text-white font-mono font-bold text-right"
+                        placeholder="0.00"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setPosRentalMonthly(posRentalMonthly > 0 ? 0 : 99.9)}
+                        className="text-[10px] px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded font-semibold cursor-pointer"
+                      >
+                        {posRentalMonthly > 0 ? 'Isento' : 'R$ 99,90'}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* 5. GRUPO: CUSTOS EXTRAS & PERSONALIZADOS */}
-          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-700/80 space-y-2.5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-              <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
-                5. Custos Extras & Personalizados
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-purple-300">
-                  R$ {subtotalCustom.toFixed(2)}
+          <div className={`rounded-xl border transition-all ${
+            uiPrefs.expandedCostGroups.custom
+              ? 'bg-slate-900/90 border-slate-700/80 shadow-md'
+              : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+          }`}>
+            <div className="w-full p-2.5 sm:p-3 flex items-center justify-between gap-2 text-left transition-colors">
+              <button
+                type="button"
+                onClick={() => toggleCostGroup('custom')}
+                className="flex items-center gap-2 min-w-0 flex-1 text-left cursor-pointer"
+                aria-expanded={uiPrefs.expandedCostGroups.custom}
+              >
+                <SlidersHorizontal className="w-4 h-4 text-purple-400 shrink-0" />
+                <span className="text-xs sm:text-sm font-bold text-white truncate">
+                  5. Custos Extras & Personalizados
                 </span>
+              </button>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 border border-purple-500/30 text-xs font-mono font-bold">
+                  <span className="text-purple-300">
+                    R$ {subtotalCustom.toFixed(2)}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-sans font-normal">
+                    ({pctCustom.toFixed(0)}%)
+                  </span>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => handleAddCustomCost()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddCustomCost();
+                    if (!uiPrefs.expandedCostGroups.custom) {
+                      toggleCostGroup('custom');
+                    }
+                  }}
                   className="px-2 py-0.5 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 rounded text-[11px] font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
                   title="Cadastrar um novo custo fixo personalizado"
                 >
                   <Plus className="w-3 h-3" />
-                  <span>Adicionar</span>
+                  <span className="hidden sm:inline">Adicionar</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => toggleCostGroup('custom')}
+                  className="p-1 rounded text-slate-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  {uiPrefs.expandedCostGroups.custom ? (
+                    <ChevronUp className="w-4 h-4 text-purple-400" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                  )}
                 </button>
               </div>
             </div>
 
-            {customCosts.length === 0 ? (
-              <div className="text-center py-3 px-3.5 bg-slate-950/40 rounded-lg border border-dashed border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2.5">
-                <p className="text-[11px] text-slate-400 text-left">
-                  Nenhum custo extra cadastrado. Clique em <strong>Adicionar</strong> para cadastrar novas despesas fixas da sua operação.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => handleAddCustomCost()}
-                  className="px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 rounded text-xs font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer shrink-0"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Adicionar Custo</span>
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <div className="space-y-1.5">
-                  {customCosts.map(item => (
-                    <div key={item.id} className="flex items-center gap-2 bg-slate-950/70 p-1.5 rounded-lg border border-slate-800">
-                      <input
-                        type="text"
-                        value={item.name}
-                        onChange={e => handleUpdateCustomCost(item.id, 'name', e.target.value)}
-                        placeholder="Nome do custo (ex: Segurança Noturna)"
-                        className="flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder-slate-500 font-medium focus:border-purple-400 focus:outline-none"
-                      />
-                      <div className="relative w-28 shrink-0">
-                        <input
-                          type="number"
-                          min="0"
-                          step="10"
-                          value={item.amount || ''}
-                          onChange={e => handleUpdateCustomCost(item.id, 'amount', Math.max(0, parseFloat(e.target.value) || 0))}
-                          placeholder="0.00"
-                          className="w-full bg-slate-900 border border-slate-700 rounded pl-6 pr-2 py-1 text-xs text-white font-mono font-bold text-right focus:border-purple-400 focus:outline-none"
-                        />
-                        <span className="absolute left-2 top-1 text-[10px] text-slate-500 pointer-events-none font-bold">R$</span>
-                      </div>
+            {uiPrefs.expandedCostGroups.custom && (
+              <div className="p-3 pt-1 border-t border-slate-800 space-y-2.5 animate-in fade-in duration-150">
+                {customCosts.length === 0 ? (
+                  <div className="text-center py-3 px-3.5 bg-slate-950/40 rounded-lg border border-dashed border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                    <p className="text-[11px] text-slate-400 text-left">
+                      Nenhum custo extra cadastrado. Clique em <strong>Adicionar</strong> para cadastrar novas despesas fixas da sua operação.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => handleAddCustomCost()}
+                      className="px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 rounded text-xs font-bold flex items-center gap-1 transition-all active:scale-95 cursor-pointer shrink-0"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Adicionar Custo</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="space-y-1.5">
+                      {customCosts.map(item => (
+                        <div key={item.id} className="flex items-center gap-2 bg-slate-950/70 p-1.5 rounded-lg border border-slate-800">
+                          <input
+                            type="text"
+                            value={item.name}
+                            onChange={e => handleUpdateCustomCost(item.id, 'name', e.target.value)}
+                            placeholder="Nome do custo (ex: Segurança Noturna)"
+                            className="flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white placeholder-slate-500 font-medium focus:border-purple-400 focus:outline-none"
+                          />
+                          <div className="relative w-28 shrink-0">
+                            <input
+                              type="number"
+                              min="0"
+                              step="10"
+                              value={item.amount || ''}
+                              onChange={e => handleUpdateCustomCost(item.id, 'amount', Math.max(0, parseFloat(e.target.value) || 0))}
+                              placeholder="0.00"
+                              className="w-full bg-slate-900 border border-slate-700 rounded pl-6 pr-2 py-1 text-xs text-white font-mono font-bold text-right focus:border-purple-400 focus:outline-none"
+                            />
+                            <span className="absolute left-2 top-1 text-[10px] text-slate-500 pointer-events-none font-bold">R$</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveCustomCost(item.id)}
+                            className="p-1 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors cursor-pointer"
+                            title="Remover custo"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px]">
                       <button
                         type="button"
-                        onClick={() => handleRemoveCustomCost(item.id)}
-                        className="p-1 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors cursor-pointer"
-                        title="Remover custo"
+                        onClick={() => handleAddCustomCost()}
+                        className="text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors cursor-pointer"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Plus className="w-3 h-3" />
+                        <span>Adicionar mais um custo</span>
                       </button>
+                      <span className="text-slate-500 text-[10px]">
+                        {customCosts.length} {customCosts.length === 1 ? 'item extra' : 'itens extras'}
+                      </span>
                     </div>
-                  ))}
-                </div>
-
-                <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px]">
-                  <button
-                    type="button"
-                    onClick={() => handleAddCustomCost()}
-                    className="text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors cursor-pointer"
-                  >
-                    <Plus className="w-3 h-3" />
-                    <span>Adicionar mais um custo</span>
-                  </button>
-                  <span className="text-slate-500 text-[10px]">
-                    {customCosts.length} {customCosts.length === 1 ? 'item extra' : 'itens extras'}
-                  </span>
-                </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -1279,388 +1536,424 @@ export const PricingCalculator: React.FC = () => {
               </div>
             </div>
 
-                        {/* MÓDULO MAQUININHA / MEIOS DE PAGAMENTO */}
-            <div className="bg-slate-900/90 p-4 rounded-xl border border-emerald-500/40 space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
-                <div className="flex items-center gap-2">
-                  <CreditCard className="w-5 h-5 text-emerald-400" />
-                  <div>
-                    <h4 className="text-sm font-bold text-white leading-tight">
+            {/* MÓDULO MAQUININHA / MEIOS DE PAGAMENTO (RETRÁTIL & SINTÉTICO) */}
+            <div className={`rounded-xl border transition-all ${
+              uiPrefs.isCardFeeExpanded
+                ? 'bg-slate-900/90 border-emerald-500/50 p-4 space-y-3 shadow-md'
+                : 'bg-slate-900/70 border-emerald-500/30 p-3 hover:border-emerald-500/50'
+            }`}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <CreditCard className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <div className="min-w-0">
+                    <h4 className="text-xs sm:text-sm font-bold text-white leading-tight truncate">
                       Maquininha & Taxas de Pagamento
                     </h4>
-                    <span className="text-[11px] text-slate-400">
-                      Configure as taxas reais da sua maquininha e o mix do balcão
+                    <span className="text-[10px] text-slate-400 truncate block">
+                      {useSalesMix ? `Mix Ponderado (${selectedPlan.toUpperCase()})` : 'Taxa Única Fixa de Venda'}
                     </span>
                   </div>
                 </div>
 
-                {/* Alternância de Modo (Ponderado vs Manual) */}
-                <div className="flex items-center bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-[11px] font-bold shrink-0">
+                <div className="flex items-center gap-2 shrink-0">
+                  {/* Taxa Média Consolidada */}
+                  <div className="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-xs font-mono font-bold text-emerald-300 flex items-center gap-1.5">
+                    <span className="text-[10px] text-emerald-400/80 font-sans font-semibold">Taxa Efetiva:</span>
+                    <span>{activeFeePercent.toFixed(2)}%</span>
+                  </div>
+
+                  {/* Botão de Expansão / Configuração */}
                   <button
                     type="button"
-                    onClick={() => setUseSalesMix(true)}
-                    className={`px-2.5 py-1 rounded-md transition-all ${
-                      useSalesMix
-                        ? 'bg-emerald-500 text-slate-950 font-black shadow'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
+                    onClick={toggleCardFee}
+                    className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer"
                   >
-                    Mix Ponderado
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setUseSalesMix(false)}
-                    className={`px-2.5 py-1 rounded-md transition-all ${
-                      !useSalesMix
-                        ? 'bg-amber-500 text-slate-950 font-black shadow'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Taxa Manual
+                    <span>{uiPrefs.isCardFeeExpanded ? 'Recolher' : 'Configurar'}</span>
+                    {uiPrefs.isCardFeeExpanded ? (
+                      <ChevronUp className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                    )}
                   </button>
                 </div>
               </div>
 
-              {useSalesMix ? (
-                <div className="space-y-3 pt-1">
-                  {/* Botões dos 3 Planos Customizados */}
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-[11px] text-slate-400 font-semibold mr-1 flex items-center gap-1">
-                      <Zap className="w-3 h-3 text-amber-400" />
-                      Planos:
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedPlan('d1')}
-                      className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                        selectedPlan === 'd1'
-                          ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                          : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
-                      }`}
-                      title="Plano D+1"
-                    >
-                      D+1
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedPlan('d30')}
-                      className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                        selectedPlan === 'd30'
-                          ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                          : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
-                      }`}
-                      title="Plano D+30"
-                    >
-                      D+30
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedPlan('outro')}
-                      className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                        selectedPlan === 'outro'
-                          ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
-                          : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
-                      }`}
-                      title="Plano Outro"
-                    >
-                      Outro
-                    </button>
+              {uiPrefs.isCardFeeExpanded && (
+                <div className="pt-3 border-t border-slate-800 space-y-3 animate-in fade-in duration-150">
+                  {/* Alternância de Modo (Ponderado vs Manual) */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs text-slate-300 font-semibold">Método de Apuração:</span>
+                    <div className="flex items-center bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-[11px] font-bold">
+                      <button
+                        type="button"
+                        onClick={() => setUseSalesMix(true)}
+                        className={`px-2.5 py-1 rounded-md transition-all ${
+                          useSalesMix
+                            ? 'bg-emerald-500 text-slate-950 font-black shadow'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        Mix Ponderado
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setUseSalesMix(false)}
+                        className={`px-2.5 py-1 rounded-md transition-all ${
+                          !useSalesMix
+                            ? 'bg-amber-500 text-slate-950 font-black shadow'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        Taxa Manual
+                      </button>
+                    </div>
                   </div>
-                  {/* Grid das 4 modalidades de pagamento */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                    {/* 1. Pix */}
-                    <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
-                      <div className="flex justify-between items-center">
-                        <span className="font-bold text-emerald-400">Pix</span>
-                        <span className="text-[10px] text-slate-400">Imediato</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
-                        <input
-                          type="number"
-                          min="0"
-                          step="0.05"
-                          value={cardFeePix !== undefined && cardFeePix !== null ? cardFeePix : ''}
-                          placeholder="0.00"
-                          onChange={e => handleUpdateRate('cardFeePix', Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
-                        />
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={mixPix !== undefined && mixPix !== null ? mixPix : ''}
-                          placeholder="0"
-                          onChange={e => setMixPix(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
-                          className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-emerald-300 transition-colors ${
-                            totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+
+                  {useSalesMix ? (
+                    <div className="space-y-3 pt-1">
+                      {/* Botões dos 3 Planos Customizados */}
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="text-[11px] text-slate-400 font-semibold mr-1 flex items-center gap-1">
+                          <Zap className="w-3 h-3 text-amber-400" />
+                          Planos:
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedPlan('d1')}
+                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                            selectedPlan === 'd1'
+                              ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                              : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
                           }`}
-                        />
+                          title="Plano D+1"
+                        >
+                          D+1
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedPlan('d30')}
+                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                            selectedPlan === 'd30'
+                              ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                              : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
+                          }`}
+                          title="Plano D+30"
+                        >
+                          D+30
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedPlan('outro')}
+                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                            selectedPlan === 'outro'
+                              ? 'bg-emerald-500 text-slate-950 font-black shadow-sm'
+                              : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
+                          }`}
+                          title="Plano Outro"
+                        >
+                          Outro
+                        </button>
+                      </div>
+                      {/* Grid das 4 modalidades de pagamento */}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        {/* 1. Pix */}
+                        <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-emerald-400">Pix</span>
+                            <span className="text-[10px] text-slate-400">Imediato</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.05"
+                              value={cardFeePix !== undefined && cardFeePix !== null ? cardFeePix : ''}
+                              placeholder="0.00"
+                              onChange={e => handleUpdateRate('cardFeePix', Math.max(0, parseFloat(e.target.value) || 0))}
+                              className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
+                            />
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
+                            <input
+                              type="number"
+                              min="0"
+                              max="100"
+                              value={mixPix !== undefined && mixPix !== null ? mixPix : ''}
+                              placeholder="0"
+                              onChange={e => setMixPix(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                              className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-emerald-300 transition-colors ${
+                                totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+                              }`}
+                            />
+                          </div>
+                        </div>
+
+                        {/* 2. Débito */}
+                        <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-cyan-400">Débito</span>
+                            <span className="text-[10px] text-slate-400">D+1</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.05"
+                              value={cardFeeDebit !== undefined && cardFeeDebit !== null ? cardFeeDebit : ''}
+                              placeholder="0.00"
+                              onChange={e => handleUpdateRate('cardFeeDebit', Math.max(0, parseFloat(e.target.value) || 0))}
+                              className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
+                            />
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
+                            <input
+                              type="number"
+                              min="0"
+                              max="100"
+                              value={mixDebit !== undefined && mixDebit !== null ? mixDebit : ''}
+                              placeholder="0"
+                              onChange={e => setMixDebit(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                              className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-cyan-300 transition-colors ${
+                                totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+                              }`}
+                            />
+                          </div>
+                        </div>
+
+                        {/* 3. Crédito à Vista */}
+                        <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-amber-400">Crédito 1x</span>
+                            <span className="text-[10px] text-slate-400">À Vista</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.05"
+                              value={cardFeeCreditSight !== undefined && cardFeeCreditSight !== null ? cardFeeCreditSight : ''}
+                              placeholder="0.00"
+                              onChange={e => handleUpdateRate('cardFeeCreditSight', Math.max(0, parseFloat(e.target.value) || 0))}
+                              className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
+                            />
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
+                            <input
+                              type="number"
+                              min="0"
+                              max="100"
+                              value={mixCreditSight !== undefined && mixCreditSight !== null ? mixCreditSight : ''}
+                              placeholder="0"
+                              onChange={e => setMixCreditSight(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                              className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-amber-300 transition-colors ${
+                                totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+                              }`}
+                            />
+                          </div>
+                        </div>
+
+                        {/* 4. Crédito Parcelado */}
+                        <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-rose-400">Parcelado</span>
+                            <span className="text-[10px] text-slate-400">2x-6x</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.1"
+                              value={cardFeeCreditInstallment !== undefined && cardFeeCreditInstallment !== null ? cardFeeCreditInstallment : ''}
+                              placeholder="0.00"
+                              onChange={e => handleUpdateRate('cardFeeCreditInstallment', Math.max(0, parseFloat(e.target.value) || 0))}
+                              className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
+                            />
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
+                            <input
+                              type="number"
+                              min="0"
+                              max="100"
+                              value={mixCreditInstallment !== undefined && mixCreditInstallment !== null ? mixCreditInstallment : ''}
+                              placeholder="0"
+                              onChange={e => setMixCreditInstallment(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
+                              className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-rose-300 transition-colors ${
+                                totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
+                              }`}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Aviso de Segurança de Excesso de 100% */}
+                      {totalMixSum > 100 && (
+                        <div className="p-3 bg-rose-500/15 border border-rose-500/40 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-rose-300">
+                          <div className="flex items-center gap-2.5">
+                            <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                            <div>
+                              <span className="font-bold text-rose-200">Aviso: Composição em {totalMixSum}%</span>
+                              <span className="block text-[11px] text-rose-300/85 mt-0.5">
+                                A soma dos canais não pode ultrapassar 100% (+{totalMixSum - 100}% excesso).
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleNormalizeMix}
+                            className="px-3 py-1 bg-rose-500 hover:bg-rose-400 text-slate-950 font-black rounded-lg text-xs whitespace-nowrap transition-all shadow-md active:scale-95 self-start sm:self-auto shrink-0 cursor-pointer"
+                          >
+                            Ajustar para 100%
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Aviso de Composição Incompleta */}
+                      {totalMixSum < 100 && totalMixSum > 0 && (
+                        <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-amber-300">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm shrink-0">ℹ️</span>
+                            <span>
+                              Composição soma <strong>{totalMixSum}%</strong> (faltam <strong>{100 - totalMixSum}%</strong> para 100%).
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleNormalizeMix}
+                            className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs whitespace-nowrap transition-all active:scale-95 self-start sm:self-auto shrink-0 cursor-pointer"
+                          >
+                            Completar para 100%
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Barra Visual do Mix de Vendas */}
+                      <div className="space-y-1.5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] font-medium gap-1">
+                          <span className="flex items-center gap-1.5">
+                            <PieChart className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-slate-400">Composição das Vendas:</span>
+                            <span
+                              className={`font-mono font-bold px-2 py-0.5 rounded text-[10px] ${
+                                totalMixSum === 100
+                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                  : totalMixSum > 100
+                                  ? 'bg-rose-500/25 text-rose-300 border border-rose-500/40'
+                                  : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                              }`}
+                            >
+                              {totalMixSum === 100
+                                ? '100% ✓ Equilibrado'
+                                : totalMixSum > 100
+                                ? `${totalMixSum}% ⚠️ Excesso (+${totalMixSum - 100}%)`
+                                : `${totalMixSum}% (Faltam ${100 - totalMixSum}%)`}
+                            </span>
+                          </span>
+                          <span className="text-white font-mono font-bold text-[11px]">
+                            Pix {mixPix}% | Déb {mixDebit}% | Créd {mixCreditSight}% | Parc {mixCreditInstallment}%
+                          </span>
+                        </div>
+                        <div className={`w-full h-2.5 rounded-full bg-slate-950 flex overflow-hidden border transition-colors ${
+                          totalMixSum > 100 ? 'border-rose-500 ring-1 ring-rose-500/40' : 'border-slate-800'
+                        }`}>
+                          <div
+                            style={{ width: `${totalMixSum > 0 ? (mixPix / Math.max(100, totalMixSum)) * 100 : 0}%` }}
+                            className="bg-emerald-500 h-full transition-all"
+                            title={`Pix: ${mixPix}%`}
+                          />
+                          <div
+                            style={{ width: `${totalMixSum > 0 ? (mixDebit / Math.max(100, totalMixSum)) * 100 : 0}%` }}
+                            className="bg-cyan-500 h-full transition-all"
+                            title={`Débito: ${mixDebit}%`}
+                          />
+                          <div
+                            style={{ width: `${totalMixSum > 0 ? (mixCreditSight / Math.max(100, totalMixSum)) * 100 : 0}%` }}
+                            className="bg-amber-500 h-full transition-all"
+                            title={`Crédito: ${mixCreditSight}%`}
+                          />
+                          <div
+                            style={{ width: `${totalMixSum > 0 ? (mixCreditInstallment / Math.max(100, totalMixSum)) * 100 : 0}%` }}
+                            className="bg-rose-500 h-full transition-all"
+                            title={`Parcelado: ${mixCreditInstallment}%`}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Destaque da Taxa Média Efetiva */}
+                      <div className={`p-2.5 rounded-xl border flex items-center justify-between transition-all ${
+                        totalMixSum > 100
+                          ? 'bg-rose-950/30 border-rose-500/40'
+                          : totalMixSum === 100
+                          ? 'bg-emerald-950/40 border-emerald-500/30'
+                          : 'bg-slate-900/60 border-slate-750'
+                      }`}>
+                        <div>
+                          <span className={`text-xs font-bold block ${
+                            totalMixSum > 100 ? 'text-rose-300' : 'text-emerald-300'
+                          }`}>
+                            Taxa Média Efetiva da Maquininha:
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            {totalMixSum > 100
+                              ? `⚠️ Ponderada com base normalizada`
+                              : 'Ponderada pelo volume real de Pix, Débito e Crédito'}
+                          </span>
+                        </div>
+                        <span className={`text-base font-black font-mono ${
+                          totalMixSum > 100 ? 'text-rose-400' : 'text-emerald-400'
+                        }`}>
+                          {effectiveCardFee.toFixed(2)}%
+                        </span>
                       </div>
                     </div>
-
-                    {/* 2. Débito */}
-                    <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
-                      <div className="flex justify-between items-center">
-                        <span className="font-bold text-cyan-400">Débito</span>
-                        <span className="text-[10px] text-slate-400">D+1</span>
-                      </div>
+                  ) : (
+                    /* Modo Taxa Manual Única */
+                    <div className="pt-2 flex items-center justify-between">
                       <div>
-                        <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
-                        <input
-                          type="number"
-                          min="0"
-                          step="0.05"
-                          value={cardFeeDebit !== undefined && cardFeeDebit !== null ? cardFeeDebit : ''}
-                          placeholder="0.00"
-                          onChange={e => handleUpdateRate('cardFeeDebit', Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
-                        />
+                        <label className="text-white font-bold block text-xs">Taxa Única Fixa de Venda (%):</label>
+                        <span className="text-[11px] text-slate-400">Informe uma taxa média única para todas as vendas.</span>
                       </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={mixDebit !== undefined && mixDebit !== null ? mixDebit : ''}
-                          placeholder="0"
-                          onChange={e => setMixDebit(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
-                          className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-cyan-300 transition-colors ${
-                            totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
-                          }`}
-                        />
-                      </div>
-                    </div>
-
-                    {/* 3. Crédito à Vista */}
-                    <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
-                      <div className="flex justify-between items-center">
-                        <span className="font-bold text-amber-400">Crédito 1x</span>
-                        <span className="text-[10px] text-slate-400">À Vista</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
-                        <input
-                          type="number"
-                          min="0"
-                          step="0.05"
-                          value={cardFeeCreditSight !== undefined && cardFeeCreditSight !== null ? cardFeeCreditSight : ''}
-                          placeholder="0.00"
-                          onChange={e => handleUpdateRate('cardFeeCreditSight', Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
-                        />
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={mixCreditSight !== undefined && mixCreditSight !== null ? mixCreditSight : ''}
-                          placeholder="0"
-                          onChange={e => setMixCreditSight(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
-                          className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-amber-300 transition-colors ${
-                            totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
-                          }`}
-                        />
-                      </div>
-                    </div>
-
-                    {/* 4. Crédito Parcelado */}
-                    <div className="bg-slate-950/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
-                      <div className="flex justify-between items-center">
-                        <span className="font-bold text-rose-400">Parcelado</span>
-                        <span className="text-[10px] text-slate-400">2x-6x</span>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 block">Taxa (%):</span>
+                      <div className="relative">
                         <input
                           type="number"
                           min="0"
                           step="0.1"
-                          value={cardFeeCreditInstallment !== undefined && cardFeeCreditInstallment !== null ? cardFeeCreditInstallment : ''}
+                          value={cardFeeManual || ''}
+                          onChange={e => setCardFeeManual(Math.max(0, parseFloat(e.target.value) || 0))}
+                          className="w-28 bg-slate-950 border border-amber-500/60 rounded-lg p-1.5 text-sm font-mono font-bold text-amber-300 text-right pr-6"
                           placeholder="0.00"
-                          onChange={e => handleUpdateRate('cardFeeCreditInstallment', Math.max(0, parseFloat(e.target.value) || 0))}
-                          className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-sm font-mono font-bold text-white"
                         />
+                        <span className="absolute right-2 top-2 text-slate-500 font-bold text-xs">%</span>
                       </div>
-                      <div>
-                        <span className="text-[10px] text-slate-400 block">% no Balcão:</span>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={mixCreditInstallment !== undefined && mixCreditInstallment !== null ? mixCreditInstallment : ''}
-                          placeholder="0"
-                          onChange={e => setMixCreditInstallment(Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)))}
-                          className={`w-full bg-slate-900 border rounded p-1 text-sm font-mono font-bold text-rose-300 transition-colors ${
-                            totalMixSum > 100 ? 'border-rose-500/80 bg-rose-950/20 text-rose-300' : 'border-slate-700'
-                          }`}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Aviso de Segurança de Excesso de 100% */}
-                  {totalMixSum > 100 && (
-                    <div className="p-3 bg-rose-500/15 border border-rose-500/40 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-rose-300">
-                      <div className="flex items-center gap-2.5">
-                        <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-                        <div>
-                          <span className="font-bold text-rose-200">Aviso de Segurança: Composição das vendas em {totalMixSum}%</span>
-                          <span className="block text-[11px] text-rose-300/85 mt-0.5">
-                            A soma dos canais de venda não pode ultrapassar 100% (excesso de +{totalMixSum - 100}%).
-                          </span>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleNormalizeMix}
-                        className="px-3.5 py-1.5 bg-rose-500 hover:bg-rose-400 text-slate-950 font-black rounded-lg text-xs whitespace-nowrap transition-all shadow-md active:scale-95 self-start sm:self-auto shrink-0"
-                      >
-                        Ajustar para 100%
-                      </button>
                     </div>
                   )}
-
-                  {/* Aviso de Composição Incompleta */}
-                  {totalMixSum < 100 && totalMixSum > 0 && (
-                    <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-amber-300">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm shrink-0">ℹ️</span>
-                        <span>
-                          Composição atual soma <strong>{totalMixSum}%</strong> (faltam <strong>{100 - totalMixSum}%</strong> para completar 100%).
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleNormalizeMix}
-                        className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs whitespace-nowrap transition-all active:scale-95 self-start sm:self-auto shrink-0"
-                      >
-                        Completar para 100%
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Barra Visual do Mix de Vendas */}
-                  <div className="space-y-1.5">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] font-medium gap-1">
-                      <span className="flex items-center gap-1.5">
-                        <PieChart className="w-3.5 h-3.5 text-slate-400" />
-                        <span className="text-slate-400">Composição das Vendas:</span>
-                        <span
-                          className={`font-mono font-bold px-2 py-0.5 rounded text-[10px] ${
-                            totalMixSum === 100
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                              : totalMixSum > 100
-                              ? 'bg-rose-500/25 text-rose-300 border border-rose-500/40'
-                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                          }`}
-                        >
-                          {totalMixSum === 100
-                            ? '100% ✓ Equilibrado'
-                            : totalMixSum > 100
-                            ? `${totalMixSum}% ⚠️ Excesso de +${totalMixSum - 100}%`
-                            : `${totalMixSum}% (Faltam ${100 - totalMixSum}%)`}
-                        </span>
-                      </span>
-                      <span className="text-white font-mono font-bold text-[11px]">
-                        Pix {mixPix}% | Déb {mixDebit}% | Créd {mixCreditSight}% | Parc {mixCreditInstallment}%
-                      </span>
-                    </div>
-                    <div className={`w-full h-2.5 rounded-full bg-slate-950 flex overflow-hidden border transition-colors ${
-                      totalMixSum > 100 ? 'border-rose-500 ring-1 ring-rose-500/40' : 'border-slate-800'
-                    }`}>
-                      <div
-                        style={{ width: `${totalMixSum > 0 ? (mixPix / Math.max(100, totalMixSum)) * 100 : 0}%` }}
-                        className="bg-emerald-500 h-full transition-all"
-                        title={`Pix: ${mixPix}%`}
-                      />
-                      <div
-                        style={{ width: `${totalMixSum > 0 ? (mixDebit / Math.max(100, totalMixSum)) * 100 : 0}%` }}
-                        className="bg-cyan-500 h-full transition-all"
-                        title={`Débito: ${mixDebit}%`}
-                      />
-                      <div
-                        style={{ width: `${totalMixSum > 0 ? (mixCreditSight / Math.max(100, totalMixSum)) * 100 : 0}%` }}
-                        className="bg-amber-500 h-full transition-all"
-                        title={`Crédito: ${mixCreditSight}%`}
-                      />
-                      <div
-                        style={{ width: `${totalMixSum > 0 ? (mixCreditInstallment / Math.max(100, totalMixSum)) * 100 : 0}%` }}
-                        className="bg-rose-500 h-full transition-all"
-                        title={`Parcelado: ${mixCreditInstallment}%`}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Destaque da Taxa Média Efetiva */}
-                  <div className={`p-3 rounded-xl border flex items-center justify-between transition-all ${
-                    totalMixSum > 100
-                      ? 'bg-rose-950/30 border-rose-500/40'
-                      : totalMixSum === 100
-                      ? 'bg-emerald-950/40 border-emerald-500/30'
-                      : 'bg-slate-900/60 border-slate-750'
-                  }`}>
-                    <div>
-                      <span className={`text-xs font-bold block ${
-                        totalMixSum > 100 ? 'text-rose-300' : 'text-emerald-300'
-                      }`}>
-                        Taxa Média Efetiva da Maquininha:
-                      </span>
-                      <span className="text-[10px] text-slate-400">
-                        {totalMixSum > 100
-                          ? `⚠️ Ponderada com base normalizada (Aviso: soma atual em ${totalMixSum}% precisa de ajuste)`
-                          : 'Ponderada pelo seu volume real de Pix, Débito e Crédito'}
-                      </span>
-                    </div>
-                    <span className={`text-lg font-black font-mono ${
-                      totalMixSum > 100 ? 'text-rose-400' : 'text-emerald-400'
-                    }`}>
-                      {effectiveCardFee.toFixed(2)}%
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                /* Modo Taxa Manual Única */
-                <div className="pt-2 flex items-center justify-between">
-                  <div>
-                    <label className="text-white font-bold block text-xs">Taxa Única Fixa de Venda (%):</label>
-                    <span className="text-[11px] text-slate-400">Informe uma taxa média única para todas as vendas.</span>
-                  </div>
-                  <div className="relative">
-                    <input
-                      type="number"
-                  min="0"
-                      step="0.1"
-                      value={cardFeeManual || ''}
-                      onChange={e => setCardFeeManual(Math.max(0, parseFloat(e.target.value) || 0))}
-                      className="w-28 bg-slate-950 border border-amber-500/60 rounded-lg p-1.5 text-sm font-mono font-bold text-amber-300 text-right pr-6"
-                      placeholder="0.00"
-                    />
-                    <span className="absolute right-2 top-2 text-slate-500 font-bold text-xs">%</span>
-                  </div>
                 </div>
               )}
             </div>
 
-            {/* Impostos sobre a Venda */}
-            <div className="bg-slate-900/90 p-3.5 rounded-xl border border-cyan-500/30 space-y-2">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <label className="text-white font-bold block text-xs sm:text-sm flex items-center gap-1.5">
-                    <Receipt className="w-4 h-4 text-cyan-400" />
-                    <span>Impostos sobre Venda (% do Faturamento):</span>
-                  </label>
-                  <span className="text-[11px] text-slate-400 block">
-                    Alíquota do Simples Nacional ou regime tributário (se MEI, use 0%).
-                  </span>
+            {/* Impostos sobre a Venda (Compacto & Integrado) */}
+            <div className="bg-slate-900/90 p-3 rounded-xl border border-cyan-500/30 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Receipt className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <div className="min-w-0">
+                    <label className="text-xs sm:text-sm font-bold text-white block truncate">
+                      Impostos sobre Venda (% Faturamento):
+                    </label>
+                    <span className="text-[10px] text-slate-400 block truncate">
+                      Simples Nacional / Alíquota efetiva
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 self-start sm:self-auto">
+
+                <div className="flex items-center gap-1.5 shrink-0">
                   <div className="relative">
                     <input
                       type="number"
@@ -1669,31 +1962,31 @@ export const PricingCalculator: React.FC = () => {
                       max="90"
                       value={salesTaxPercent || ''}
                       onChange={e => setSalesTaxPercent(Math.max(0, parseFloat(e.target.value) || 0))}
-                      className="w-28 bg-slate-950 border-2 border-cyan-500/60 focus:border-cyan-400 focus:outline-none rounded-lg pl-3 pr-6 py-1.5 text-sm text-cyan-300 font-mono font-black text-right"
+                      className="w-24 bg-slate-950 border border-cyan-500/60 focus:border-cyan-400 focus:outline-none rounded-lg px-2.5 py-1 text-xs sm:text-sm text-cyan-300 font-mono font-bold text-right pr-6"
                       placeholder="0.00"
                     />
-                    <span className="absolute right-2.5 top-2 text-slate-500 font-bold text-xs pointer-events-none">%</span>
+                    <span className="absolute right-2 top-1 text-[10px] text-slate-400 font-bold pointer-events-none">%</span>
                   </div>
                 </div>
               </div>
 
               {/* Botões de Atalhos Rápidos Impostos */}
-              <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-800">
-                <span className="text-[11px] text-slate-400 font-semibold mr-1">Atalhos:</span>
+              <div className="flex flex-wrap items-center gap-1 pt-1.5 border-t border-slate-800/80 text-[10px]">
+                <span className="text-slate-400 font-semibold mr-1">Atalhos:</span>
                 {[
                   { label: 'MEI (0%)', val: 0 },
-                  { label: 'Simples Comércio 4.0%', val: 4.0 },
-                  { label: 'Simples Indústria 4.5%', val: 4.5 },
-                  { label: 'Simples Faixa 2 (6.8%)', val: 6.8 },
+                  { label: 'Comércio 4.0%', val: 4.0 },
+                  { label: 'Indústria 4.5%', val: 4.5 },
+                  { label: 'Faixa 2 (6.8%)', val: 6.8 },
                 ].map(p => (
                   <button
                     key={p.label}
                     type="button"
                     onClick={() => setSalesTaxPercent(p.val)}
-                    className={`px-2 py-0.5 rounded-lg text-[11px] font-bold transition-all ${
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
                       salesTaxPercent === p.val
                         ? 'bg-cyan-500 text-slate-950 font-black shadow-sm'
-                        : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 active:scale-95'
+                        : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800'
                     }`}
                   >
                     {p.label}
@@ -1788,52 +2081,86 @@ export const PricingCalculator: React.FC = () => {
             </div>
           </div>
 
-          {/* MATRIZ COMPARATIVA DE LUCRO POR MEIO DE PAGAMENTO */}
-          <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-700 pb-2.5">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <h3 className="text-sm font-bold text-white">
+          {/* MATRIZ COMPARATIVA DE LUCRO POR MEIO DE PAGAMENTO (RECOLHÍVEL) */}
+          <div className={`rounded-2xl border transition-all ${
+            uiPrefs.isPaymentMatrixExpanded
+              ? 'bg-slate-800/90 border-slate-700/80 p-5 shadow-xl space-y-3'
+              : 'bg-slate-800/70 border-slate-700/60 p-3.5 space-y-2 hover:border-slate-700'
+          }`}>
+            <div className="flex items-center justify-between gap-2 border-b border-slate-700/80 pb-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                <h3 className="text-xs sm:text-sm font-bold text-white truncate">
                   Comparativo de Lucro por Meio de Pagamento
                 </h3>
               </div>
-              <span className="text-xs text-slate-400 font-mono">
-                Para o Pote a R$ {suggestedTubPrice.toFixed(2)}
-              </span>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-[11px] text-slate-400 font-mono hidden sm:inline">
+                  Pote R$ {suggestedTubPrice.toFixed(2)}
+                </span>
+                <button
+                  type="button"
+                  onClick={togglePaymentMatrix}
+                  className="px-2.5 py-1 bg-slate-900 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer"
+                >
+                  <span>{uiPrefs.isPaymentMatrixExpanded ? 'Recolher' : 'Expandir'}</span>
+                  {uiPrefs.isPaymentMatrixExpanded ? (
+                    <ChevronUp className="w-3.5 h-3.5 text-amber-400" />
+                  ) : (
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                  )}
+                </button>
+              </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Veja quanto sobra líquido no caixa conforme a forma como o cliente paga o mesmo gelato:
-            </p>
+            {/* Visualização Sintética quando Recolhido */}
+            {!uiPrefs.isPaymentMatrixExpanded ? (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs font-mono">
+                {paymentScenarios.map(s => (
+                  <div key={s.name} className="flex items-center justify-between p-1.5 px-2 bg-slate-950/60 rounded-lg border border-slate-800">
+                    <span className="text-slate-400 text-[11px] font-sans font-bold">{s.name}:</span>
+                    <span className="text-white font-black text-xs">R$ {s.profit.toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* Visualização Completa quando Expandido */
+              <div className="space-y-3 pt-1 animate-in fade-in duration-150">
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Veja quanto sobra líquido no caixa conforme a forma como o cliente paga o mesmo gelato:
+                </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
-              {paymentScenarios.map(s => (
-                <div key={s.name} className={`p-3 rounded-xl border ${s.color} space-y-1.5 flex flex-col justify-between`}>
-                  <div>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-black text-white text-xs">{s.name}</span>
-                      <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${s.badge}`}>
-                        {s.rate}%
-                      </span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                  {paymentScenarios.map(s => (
+                    <div key={s.name} className={`p-3 rounded-xl border ${s.color} space-y-1.5 flex flex-col justify-between`}>
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-black text-white text-xs">{s.name}</span>
+                          <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${s.badge}`}>
+                            {s.rate}%
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-slate-400 block">
+                          Taxa: <strong className="font-mono text-slate-200">R$ {s.feeVal.toFixed(2)}</strong>
+                        </span>
+                      </div>
+                      <div className="pt-1.5 border-t border-slate-700/60">
+                        <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Lucro no Caixa:</span>
+                        <span className="text-base font-black font-mono text-white block">
+                          R$ {s.profit.toFixed(2)}
+                        </span>
+                        <span className="text-[10px] text-emerald-400 font-semibold block">
+                          {pricingMethod === 'margin'
+                            ? `Margem: ${s.marginPct.toFixed(1)}%`
+                            : `Markup: +${s.markupPct.toFixed(1)}%`}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-[11px] text-slate-400 block">
-                      Taxa: <strong className="font-mono text-slate-200">R$ {s.feeVal.toFixed(2)}</strong>
-                    </span>
-                  </div>
-                  <div className="pt-1.5 border-t border-slate-700/60">
-                    <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Lucro no Caixa:</span>
-                    <span className="text-base font-black font-mono text-white block">
-                      R$ {s.profit.toFixed(2)}
-                    </span>
-                    <span className="text-[10px] text-emerald-400 font-semibold block">
-                      {pricingMethod === 'margin'
-                        ? `Margem: ${s.marginPct.toFixed(1)}%`
-                        : `Markup: +${s.markupPct.toFixed(1)}%`}
-                    </span>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

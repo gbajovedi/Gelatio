@@ -14,6 +14,8 @@ import {
   AlertCircle,
   CheckCircle2,
   RefreshCw,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import {
   calculatePreparationNutrients,
@@ -54,6 +56,16 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
   const [items, setItems] = useState<PreparationFormItem[]>([
     { name: '', grams: '' },
   ]);
+
+  // Modo de Preparo: controle de expansão individual por card
+  const [expandedInstructions, setExpandedInstructions] = useState<Record<string, boolean>>({});
+
+  const toggleInstructions = (prepId: string) => {
+    setExpandedInstructions(prev => ({
+      ...prev,
+      [prepId]: !prev[prepId]
+    }));
+  };
 
   const filtered = preparations.filter(p => {
     const matchCat = catFilter === 'Todas' || p.category === catFilter;
@@ -370,52 +382,49 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                   </div>
                 </div>
 
-                {/* Parâmetros Físico-Químicos e Custo Sincronizados com a Aba Insumos */}
-                <div className="bg-slate-950/70 rounded-xl p-3 border border-slate-700/70 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-300 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Insumo Sincronizado</span>
-                    </span>
-                    <span className="font-mono font-bold text-emerald-400">
-                      R$ {cardProfile.costKg.toFixed(2)}/kg
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 text-[11px] font-mono text-center">
-                    <div className="bg-slate-900/90 py-1 px-1 rounded-lg border border-slate-800">
-                      <span className="text-[9px] uppercase font-sans text-slate-400 block">Açúcar</span>
-                      <span className="text-amber-300 font-bold">{(cardProfile.sugars * 100).toFixed(1)}%</span>
-                    </div>
-                    <div className="bg-slate-900/90 py-1 px-1 rounded-lg border border-slate-800">
-                      <span className="text-[9px] uppercase font-sans text-slate-400 block">Gordura</span>
-                      <span className="text-amber-300 font-bold">{(cardProfile.fat * 100).toFixed(1)}%</span>
-                    </div>
-                    <div className="bg-slate-900/90 py-1 px-1 rounded-lg border border-slate-800">
-                      <span className="text-[9px] uppercase font-sans text-slate-400 block">SLNG</span>
-                      <span className="text-cyan-300 font-bold">{(cardProfile.msnf * 100).toFixed(1)}%</span>
-                    </div>
-                    <div className="bg-slate-900/90 py-1 px-1 rounded-lg border border-slate-800">
-                      <span className="text-[9px] uppercase font-sans text-slate-400 block">Outros</span>
-                      <span className="text-purple-300 font-bold">{(cardProfile.otherSolids * 100).toFixed(1)}%</span>
-                    </div>
-                    <div className="bg-slate-900/90 py-1 px-1 rounded-lg border border-slate-800">
-                      <span className="text-[9px] uppercase font-sans text-slate-400 block">PAC</span>
-                      <span className="text-sky-300 font-bold">{Math.round(cardProfile.pac)}</span>
-                    </div>
-                    <div className="bg-slate-900/90 py-1 px-1 rounded-lg border border-slate-800">
-                      <span className="text-[9px] uppercase font-sans text-slate-400 block">POD</span>
-                      <span className="text-amber-400 font-bold">{Math.round(cardProfile.pod)}</span>
-                    </div>
-                  </div>
+                {/* Insumo Sincronizado e Custo por Quilo */}
+                <div className="bg-slate-950/70 rounded-xl px-3 py-2 border border-slate-700/70 flex items-center justify-between">
+                  <span className="font-bold text-xs sm:text-sm text-slate-200 flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Insumo Sincronizado</span>
+                  </span>
+                  <span className="font-mono font-bold text-xs sm:text-sm text-emerald-400">
+                    R$ {cardProfile.costKg.toFixed(2)}/kg
+                  </span>
                 </div>
 
-                {/* Instructions */}
-                {prep.instructions && (
-                  <div className="text-xs sm:text-sm text-slate-300 bg-slate-900/40 p-3 rounded-xl border border-slate-800">
-                    <span className="text-xs uppercase font-bold text-amber-400/90 block mb-1">
-                      Modo de Preparo:
-                    </span>
-                    <p className="leading-relaxed whitespace-pre-line text-slate-300 break-words">{prep.instructions}</p>
+                {/* Modo de Preparo (Oculto por padrão, expansível ao clicar) */}
+                {prep.instructions && prep.instructions.trim().length > 0 && (
+                  <div className="rounded-xl border border-slate-700/70 bg-slate-950/40 overflow-hidden transition-all">
+                    <button
+                      type="button"
+                      onClick={() => toggleInstructions(prep.id)}
+                      className="w-full px-3 py-2 flex items-center justify-between text-left hover:bg-slate-800/50 transition-colors group cursor-pointer"
+                      aria-expanded={!!expandedInstructions[prep.id]}
+                    >
+                      <span className="text-xs uppercase font-bold text-amber-400/90 flex items-center gap-1.5 tracking-wider">
+                        <ChefHat className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Modo de Preparo</span>
+                      </span>
+                      <span className="flex items-center gap-1 text-xs font-semibold text-slate-400 group-hover:text-amber-300 transition-colors">
+                        {expandedInstructions[prep.id] ? (
+                          <>
+                            <span>Recolher</span>
+                            <ChevronUp className="w-3.5 h-3.5 text-amber-400" />
+                          </>
+                        ) : (
+                          <>
+                            <span>Expandir</span>
+                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-300" />
+                          </>
+                        )}
+                      </span>
+                    </button>
+                    {expandedInstructions[prep.id] && (
+                      <div className="px-3 pb-3 pt-1 border-t border-slate-800/70 text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line break-words animate-in fade-in duration-150">
+                        <p>{prep.instructions}</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

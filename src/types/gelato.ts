@@ -71,6 +71,27 @@ export interface VariegatoPhysicalDetail {
   processMethod?: 'mixer' | 'direct' | 'custom';
 }
 
+export type PreparationStepCategory =
+  | 'pesagem'      // Separação e pesagem de pós e líquidos
+  | 'aquecimento'  // Pasteurização / dissolução a quente
+  | 'emulsao'      // Mixer de alta rotação / homogeneização
+  | 'maturacao'    // Tina de maturação / repouso a 4°C
+  | 'fruta'        // Adição e incorporação de frutas frescas/polpas a frio
+  | 'batimento'    // Mantecação / congelamento dinâmico na produtora
+  | 'mesclagem'    // Variegatura e inclusões na extração
+  | 'abatimento'   // Ultracongelamento (-35°C) / casquinha térmica
+  | 'outro';
+
+export interface PreparationStep {
+  id: string;                         // Identificador único (ex: 'step_1')
+  order: number;                      // Sequência ordinal (1, 2, 3...)
+  title: string;                      // Título do passo (ex: "Pasteurização Alta")
+  description: string;                // Instrução técnica detalhada
+  temperature?: string;               // Temperatura-chave (ex: "85°C", "4°C", "-8°C")
+  duration?: string;                  // Tempo estimado ou repouso (ex: "15 min", "4h a 12h")
+  category?: PreparationStepCategory; // Categoria operacional para ícone e tema visual
+}
+
 export interface Recipe {
   id: string;
   name: string;
@@ -81,6 +102,7 @@ export interface Recipe {
   totalGrams: number;
   isCustom?: boolean;
   notes?: string;
+  preparationSteps?: PreparationStep[];
   createdAt?: string;
   updatedAt?: string;
 }

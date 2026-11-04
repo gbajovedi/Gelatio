@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { VariegatoItem, Ingredient } from '../../types/gelato';
 import { Plus, Trash2, Wind, Sliders, Check, X, Beaker } from 'lucide-react';
 import { resolveVariegatoDensity } from '../../core/calculator';
@@ -21,6 +21,15 @@ export const PostProduction: React.FC<PostProductionProps> = ({
   const [cupWeightInput, setCupWeightInput] = useState<number>(107);
   const [directDensityInput, setDirectDensityInput] = useState<string>('');
 
+  // Mapa hash memoizado O(1) de insumos disponíveis por nome minúsculo
+  const ingredientsMap = useMemo(() => {
+    const map = new Map<string, Ingredient>();
+    for (const ing of availableIngredients) {
+      map.set(ing.name.toLowerCase().trim(), ing);
+    }
+    return map;
+  }, [availableIngredients]);
+
   const handleAdd = () => {
     onUpdateVariegatos([...variegatos, { name: '', grams: 100, costKg: 0 }]);
   };
@@ -34,7 +43,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
 
   const handleChangeName = (index: number, name: string) => {
     const next = [...variegatos];
-    const ing = availableIngredients.find(i => i.name.toLowerCase() === name.toLowerCase().trim());
+    const ing = ingredientsMap.get(name.toLowerCase().trim());
     next[index] = {
       ...next[index],
       name,
@@ -51,9 +60,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
 
   const handleToggleMixer = (index: number) => {
     const next = [...variegatos];
-    const ing = availableIngredients.find(
-      i => i.name.toLowerCase() === (next[index].name || '').toLowerCase().trim()
-    );
+    const ing = ingredientsMap.get((next[index].name || '').toLowerCase().trim());
     const resolved = resolveVariegatoDensity(next[index], ing);
     const isCurrentlyMixer = resolved.method === 'mixer';
 
@@ -90,30 +97,38 @@ export const PostProduction: React.FC<PostProductionProps> = ({
     setCalibratingIndex(null);
   };
 
-  const variegatoCandidates = availableIngredients.filter(i =>
-    /(variegato|brigadeiro|nutella|caramelo|cocada|goiabada|doce de leite|biscoff|croissant|pudim|torrone|paçoca|pasta|calda|amendoim|castanha|avelã|pistache|nozes|amêndoa|biscoito|cereja)/i.test(
-      i.name
-    )
-  );
-
-  const totalVariegatosGrams = variegatos.reduce((acc, v) => acc + (v.grams || 0), 0);
-  const totalVariegatosCost = variegatos.reduce((acc, v) => {
-    const ing = availableIngredients.find(
-      i => i.name.toLowerCase() === (v.name || '').toLowerCase().trim()
+  const variegatoCandidates = useMemo(() => {
+    return availableIngredients.filter(i =>
+      /(variegato|brigadeiro|nutella|caramelo|cocada|goiabada|doce de leite|biscoff|croissant|pudim|torrone|paçoca|pasta|calda|amendoim|castanha|avelã|pistache|nozes|amêndoa|biscoito|cereja)/i.test(
+        i.name
+      )
     );
-    const costKg = v.costKg ?? (ing ? ing.costKg : 0);
-    return acc + (v.grams * costKg) / 1000;
-  }, 0);
-  const totalVariegatosVolMl = Math.round(
-    variegatos.reduce((acc, v) => {
-      const ing = availableIngredients.find(
-        i => i.name.toLowerCase() === (v.name || '').toLowerCase().trim()
-      );
+  }, [availableIngredients]);
+
+  // Cálculo consolidado de peso, custo e volume em uma única passagem O(N) com Map O(1)
+  const { totalVariegatosGrams, totalVariegatosCost, totalVariegatosVolMl } = useMemo(() => {
+    let grams = 0;
+    let cost = 0;
+    let volMl = 0;
+
+    for (const v of variegatos) {
+      const g = v.grams || 0;
+      grams += g;
+      const ing = ingredientsMap.get((v.name || '').toLowerCase().trim());
+      const costKg = v.costKg ?? (ing ? ing.costKg : 0);
+      cost += (g * costKg) / 1000;
       const physical = resolveVariegatoDensity(v, ing);
-      const vol = v.grams > 0 && physical.density > 0 ? v.grams / physical.density : 0;
-      return acc + vol;
-    }, 0)
-  );
+      if (g > 0 && physical.density > 0) {
+        volMl += g / physical.density;
+      }
+    }
+
+    return {
+      totalVariegatosGrams: grams,
+      totalVariegatosCost: cost,
+      totalVariegatosVolMl: Math.round(volMl)
+    };
+  }, [variegatos, ingredientsMap]);
 
   return (
     <div className="bg-slate-800/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-xl space-y-3.5">
@@ -153,9 +168,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
       ) : (
         <div className="space-y-2.5">
           {variegatos.map((item, idx) => {
-            const ing = availableIngredients.find(
-              i => i.name.toLowerCase() === (item.name || '').toLowerCase().trim()
-            );
+            const ing = ingredientsMap.get((item.name || '').toLowerCase().trim());
             const physical = resolveVariegatoDensity(item, ing);
             const costKg = item.costKg ?? (ing ? ing.costKg : 0);
             const totalItemCost = (item.grams * costKg) / 1000;
