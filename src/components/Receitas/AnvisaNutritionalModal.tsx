@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Recipe, Ingredient } from '../../types/gelato';
 import { calculateAnvisaNutrition } from '../../core/anvisaNutrition';
+import { useModalDismiss } from '../../core/useModalDismiss';
 import {
   X,
   Printer,
@@ -132,9 +133,13 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
   const [density, setDensity] = useState<number>(0.75); // Densidade média do gelato artesanal (~30-35% overrun)
   const [showDensitySettings, setShowDensitySettings] = useState<boolean>(false);
 
+  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
+  useModalDismiss(isOpen, onClose);
+
   // Estados de Interface
   const [showFOP, setShowFOP] = useState<boolean>(true); // Toggle switch para a Lupa Frontal
   const [showFopDetails, setShowFopDetails] = useState<boolean>(false); // Painel de limites ANVISA
+  const [isToolbarExpanded, setIsToolbarExpanded] = useState<boolean>(false); // Accordion de parâmetros no mobile
   const [copied, setCopied] = useState<boolean>(false);
 
   // Converte o tamanho da embalagem em gramas líquidas efetivas
@@ -213,41 +218,69 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
   const fopLimits = nutrition.frontOfPack.thresholds;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 print:p-0 print:bg-white print:static">
-      <div className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-2xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden print:border-none print:shadow-none print:max-w-none print:max-h-none print:bg-white">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 print:p-0 print:bg-white print:static cursor-pointer"
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="bg-slate-900 border border-slate-700/80 rounded-2xl sm:rounded-3xl w-full max-w-2xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden print:border-none print:shadow-none print:max-w-none print:max-h-none print:bg-white cursor-default"
+      >
         
         {/* Header (Ocultado na impressão) */}
-        <div className="px-5 py-3.5 border-b border-slate-800 bg-slate-950/70 flex items-center justify-between gap-3 print:hidden shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+        <div className="px-4 sm:px-5 py-3 sm:py-3.5 border-b border-slate-800 bg-slate-950/70 flex items-center justify-between gap-2.5 print:hidden shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
               <FileText className="w-5 h-5" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-bold text-white">
-                  Tabela Nutricional Oficial ANVISA
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <h2 className="text-sm sm:text-base md:text-lg font-bold text-white truncate">
+                  Tabela Nutricional ANVISA
                 </h2>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold uppercase tracking-wider">
-                  RDC 429/2020
+                <span className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold uppercase tracking-wider">
+                  RDC 429
                 </span>
               </div>
-              <p className="text-xs text-slate-400 truncate max-w-[280px] sm:max-w-md">
+              <p className="text-[11px] sm:text-xs text-slate-400 truncate max-w-[200px] sm:max-w-md">
                 Receita: <span className="text-slate-200 font-semibold">{recipe.name}</span>
               </p>
             </div>
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-            title="Fechar"
+            className="w-10 h-10 sm:w-9 sm:h-9 rounded-xl text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 flex items-center justify-center transition-colors shrink-0 cursor-pointer active:scale-95"
+            title="Fechar (ESC)"
+            aria-label="Fechar Tabela Nutricional"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Toolbar de Parâmetros e Personalização (Ocultado na impressão) */}
-        <div className="p-3.5 sm:p-4 border-b border-slate-800 bg-slate-900/95 flex flex-col gap-3 text-xs print:hidden shrink-0">
+        {/* Barra de Acesso Rápido aos Parâmetros no Mobile (sm:hidden) */}
+        <div className="sm:hidden px-3.5 py-2 bg-slate-950/95 border-b border-slate-800 flex items-center justify-between text-xs print:hidden shrink-0">
+          <button
+            type="button"
+            onClick={() => setIsToolbarExpanded(!isToolbarExpanded)}
+            className="flex items-center gap-2 text-slate-200 font-bold hover:text-white cursor-pointer active:scale-95 py-0.5"
+          >
+            <Settings2 className="w-4 h-4 text-amber-400" />
+            <span className="text-[11px]">
+              {isToolbarExpanded ? 'Ocultar Parâmetros' : `Ajustar (${portionGrams}g • ${containerUnit === 'ml' ? `${containerValue}ml` : `${containerValue}g`})`}
+            </span>
+            {isToolbarExpanded ? <ChevronUp className="w-3.5 h-3.5 text-amber-400" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-400" />}
+          </button>
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+            showFOP && nutrition.frontOfPack.hasAny ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-slate-800 text-slate-400 border-slate-700'
+          }`}>
+            {showFOP ? (nutrition.frontOfPack.hasAny ? `${nutrition.frontOfPack.count} selos` : 'Isenta') : 'Sem Lupa'}
+          </span>
+        </div>
+
+        {/* Toolbar de Parâmetros e Personalização (Ocultado na impressão; retrátil no mobile) */}
+        <div className={`${isToolbarExpanded ? 'flex' : 'hidden sm:flex'} p-3.5 sm:p-4 border-b border-slate-800 bg-slate-900/95 flex-col gap-3 text-xs print:hidden shrink-0 max-h-[55vh] sm:max-h-none overflow-y-auto sm:overflow-visible transition-all`}>
           
           {/* Linha 1: Controles da Lupa Frontal e Limites */}
           <div className="flex flex-wrap items-center justify-between gap-2.5">
@@ -779,35 +812,44 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
         </div>
 
         {/* Footer (Ocultado na impressão) */}
-        <div className="px-5 py-3.5 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between gap-3 print:hidden shrink-0">
+        <div className="px-3.5 sm:px-5 py-3 sm:py-3.5 border-t border-slate-800 bg-slate-950/90 flex flex-wrap items-center justify-between gap-2.5 print:hidden shrink-0 pb-safe">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-800/90 hover:bg-slate-750 border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer active:scale-95"
+            title="Fechar (ESC)"
+          >
+            <X className="w-4 h-4 text-slate-400" />
+            <span>Fechar</span>
+          </button>
+
           <div className="flex items-center gap-2">
             {copied && (
-              <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold animate-in fade-in">
-                <Check className="w-4 h-4 text-emerald-400" />
-                Texto copiado para a área de transferência!
+              <span className="hidden sm:flex items-center gap-1 text-xs text-emerald-400 font-semibold animate-in fade-in">
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                Copiado!
               </span>
             )}
-          </div>
 
-          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={handleCopyText}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5 transition-colors"
+              className="px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-800/90 hover:bg-slate-750 border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer active:scale-95"
               title="Copiar texto formatado da tabela para ficha técnica ou e-commerce"
             >
               <Copy className="w-3.5 h-3.5" />
-              <span>Copiar Texto</span>
+              <span className="hidden sm:inline">Copiar Texto</span>
+              <span className="sm:hidden">Copiar</span>
             </button>
 
             <button
               type="button"
               onClick={handlePrint}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all active:scale-95"
+              className="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
               title="Imprimir rótulo nutricional em folha ou impressora de etiquetas"
             >
               <Printer className="w-4 h-4" />
-              <span>Imprimir Rótulo</span>
+              <span>Imprimir</span>
             </button>
           </div>
         </div>

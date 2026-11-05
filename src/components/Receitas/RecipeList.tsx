@@ -737,34 +737,37 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 
                     {/* Botões de Ações Rápidas: Tabela Nutricional, Copiar e Excluir */}
                     <div
-                      className="flex items-center gap-1 shrink-0"
+                      className="flex items-center gap-1.5 shrink-0"
                       onClick={e => e.stopPropagation()}
                     >
                       <button
                         type="button"
                         onClick={() => setNutritionalRecipe(recipe)}
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/15 border border-slate-700/80 hover:border-emerald-500/30 flex items-center justify-center transition-colors active:scale-95"
+                        className="w-9 h-9 sm:w-8 sm:h-8 rounded-xl text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/15 border border-slate-700/80 hover:border-emerald-500/30 flex items-center justify-center transition-colors active:scale-95"
                         title={`Tabela Nutricional ANVISA de "${recipe.name}"`}
+                        aria-label={`Tabela Nutricional de ${recipe.name}`}
                       >
-                        <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <FileText className="w-4 h-4" />
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleDuplicateRecipe(recipe)}
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-amber-300 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-500/30 flex items-center justify-center transition-colors active:scale-95"
+                        className="w-9 h-9 sm:w-8 sm:h-8 rounded-xl text-slate-400 hover:text-amber-300 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-500/30 flex items-center justify-center transition-colors active:scale-95"
                         title={`Duplicar receita "${recipe.name}"`}
+                        aria-label={`Duplicar receita ${recipe.name}`}
                       >
-                        <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <Copy className="w-4 h-4" />
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 flex items-center justify-center transition-colors active:scale-95"
+                        className="w-9 h-9 sm:w-8 sm:h-8 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 border border-slate-700/80 hover:border-rose-500/30 flex items-center justify-center transition-colors active:scale-95"
                         title="Excluir esta receita do catálogo"
+                        aria-label={`Excluir receita ${recipe.name}`}
                       >
-                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Recipe, PreparationStep, PreparationStepCategory } from '../../types/gelato';
+import { useModalDismiss } from '../../core/useModalDismiss';
 import {
   PREPARATION_TEMPLATES,
   STEP_CATEGORIES_META,
   PreparationTemplate,
+  VARIEGATO_STEP_TEMPLATE,
   instantiateTemplateSteps,
   suggestPreparationTemplate
 } from '../../core/preparationTemplates';
@@ -43,6 +45,9 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
+  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
+  useModalDismiss(isOpen, onClose);
+
   const [steps, setSteps] = useState<PreparationStep[]>(() => {
     return recipe.preparationSteps && recipe.preparationSteps.length > 0
       ? JSON.parse(JSON.stringify(recipe.preparationSteps))
@@ -58,6 +63,13 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [confirmTemplate, setConfirmTemplate] = useState<PreparationTemplate | null>(null);
 
+  // Toggle universal para mesclagem/variegato pós-produção
+  const [includeVariegato, setIncludeVariegato] = useState<boolean>(() => {
+    const hasExistingVariegatoStep = (recipe.preparationSteps || []).some(s => s.category === 'mesclagem');
+    const hasRecipeVariegatos = Boolean(recipe.variegatos && recipe.variegatos.length > 0);
+    return hasExistingVariegatoStep || hasRecipeVariegatos;
+  });
+
   // Sincroniza passos quando a receita mudar
   useEffect(() => {
     const initialSteps = recipe.preparationSteps && recipe.preparationSteps.length > 0
@@ -67,6 +79,10 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
     setMode(initialSteps.length > 0 ? 'view' : 'edit');
     setCheckedSteps({});
     setSaveSuccess(false);
+
+    const hasExistingVariegatoStep = initialSteps.some((s: PreparationStep) => s.category === 'mesclagem');
+    const hasRecipeVariegatos = Boolean(recipe.variegatos && recipe.variegatos.length > 0);
+    setIncludeVariegato(hasExistingVariegatoStep || hasRecipeVariegatos);
   }, [recipe]);
 
   const handleToggleCheck = (stepId: string) => {
@@ -80,18 +96,40 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
     setCheckedSteps({});
   };
 
+  const handleToggleVariegato = () => {
+    const nextVal = !includeVariegato;
+    setIncludeVariegato(nextVal);
+    if (nextVal) {
+      // Adiciona o passo de mesclagem ao final se já não existir
+      const alreadyHas = steps.some(s => s.category === 'mesclagem');
+      if (!alreadyHas) {
+        const newStep: PreparationStep = {
+          ...VARIEGATO_STEP_TEMPLATE,
+          id: `step_${Date.now()}_${steps.length + 1}`,
+          order: steps.length + 1
+        };
+        setSteps([...steps, newStep]);
+      }
+    } else {
+      // Remove o passo de mesclagem e renumera a ordem dos passos restantes
+      const filtered = steps.filter(s => s.category !== 'mesclagem');
+      const reordered = filtered.map((s, idx) => ({ ...s, order: idx + 1 }));
+      setSteps(reordered);
+    }
+  };
+
   const handleLoadTemplate = (template: PreparationTemplate) => {
     if (steps.length > 0) {
       setConfirmTemplate(template);
     } else {
-      const newSteps = instantiateTemplateSteps(template);
+      const newSteps = instantiateTemplateSteps(template, includeVariegato);
       setSteps(newSteps);
     }
   };
 
   const handleConfirmTemplate = () => {
     if (!confirmTemplate) return;
-    const newSteps = instantiateTemplateSteps(confirmTemplate);
+    const newSteps = instantiateTemplateSteps(confirmTemplate, includeVariegato);
     setSteps(newSteps);
     setConfirmTemplate(null);
   };
@@ -161,8 +199,14 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
   const suggested = suggestPreparationTemplate(recipe);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-slate-100">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-5 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 cursor-pointer"
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[94vh] flex flex-col overflow-hidden text-slate-100 cursor-default"
+      >
         
         {/* Cabeçalho do Modal */}
         <div className="p-4 sm:p-5 border-b border-slate-800 bg-slate-950/70 flex items-center justify-between gap-3 shrink-0">
@@ -248,7 +292,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
                     <button
                       type="button"
                       onClick={() => {
-                        const newSteps = instantiateTemplateSteps(suggested);
+                        const newSteps = instantiateTemplateSteps(suggested, includeVariegato);
                         setSteps(newSteps);
                         setMode('edit');
                       }}
@@ -379,47 +423,132 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
           {mode === 'edit' && (
             <div className="space-y-5">
               {/* Barra de Templates Prontos */}
-              <div className="bg-slate-950/80 p-3.5 rounded-2xl border border-slate-800 space-y-2">
+              <div className="bg-slate-950/80 p-3.5 sm:p-4 rounded-2xl border border-slate-800 space-y-3.5">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    Carregar Modelo Canônico Italiano:
+                    Carregar Modelo de Preparo Canônico:
                   </span>
                   <span className="text-[11px] text-slate-400 hidden sm:inline">
-                    Substitui ou preenche a sequência
+                    6 estilos canônicos (Profissional & Caseiro)
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1">
-                  {PREPARATION_TEMPLATES.map(tpl => {
-                    const isRecSuggested = tpl.id === suggested.id;
-                    return (
-                      <button
-                        key={tpl.id}
-                        type="button"
-                        onClick={() => handleLoadTemplate(tpl)}
-                        className={`p-2.5 rounded-xl border text-left transition-all text-xs font-semibold flex flex-col justify-between group relative ${
-                          isRecSuggested
-                            ? 'bg-amber-500/15 border-amber-500/50 text-amber-200 hover:bg-amber-500/25'
-                            : 'bg-slate-900 border-slate-700/80 text-slate-300 hover:text-white hover:border-slate-600'
-                        }`}
-                      >
-                        <div>
-                          <div className="font-bold flex items-center gap-1 text-slate-200 group-hover:text-amber-300">
-                            <span>{tpl.badge}</span>
+                {/* Sub-bloco 1: Linha Profissional */}
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Linha Profissional (Produtora & Ultracongelador):
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {PREPARATION_TEMPLATES.filter(t => !t.id.includes('caseiro')).map(tpl => {
+                      const isRecSuggested = tpl.id === suggested.id;
+                      return (
+                        <button
+                          key={tpl.id}
+                          type="button"
+                          onClick={() => handleLoadTemplate(tpl)}
+                          className={`p-2.5 rounded-xl border text-left transition-all text-xs font-semibold flex flex-col justify-between group relative cursor-pointer ${
+                            isRecSuggested
+                              ? 'bg-amber-500/15 border-amber-500/50 text-amber-200 hover:bg-amber-500/25'
+                              : 'bg-slate-900 border-slate-700/80 text-slate-300 hover:text-white hover:border-slate-600'
+                          }`}
+                        >
+                          <div>
+                            <div className="font-bold flex items-center gap-1 text-slate-200 group-hover:text-amber-300">
+                              <span>{tpl.badge}</span>
+                            </div>
+                            <span className="text-[11px] text-slate-400 block mt-1 line-clamp-2">
+                              {tpl.name}
+                            </span>
                           </div>
-                          <span className="text-[11px] text-slate-400 block mt-1 line-clamp-2">
-                            {tpl.name}
-                          </span>
+                          {isRecSuggested && (
+                            <span className="mt-1.5 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
+                              ★ Recomendado
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Sub-bloco 2: Linha Caseira (Sorveteira Doméstica ex: EOS003) */}
+                <div className="space-y-1.5 pt-1">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-purple-300 block">
+                    Linha Caseira (Sorveteira Doméstica ex: EOS003):
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {PREPARATION_TEMPLATES.filter(t => t.id.includes('caseiro')).map(tpl => {
+                      const isRecSuggested = tpl.id === suggested.id;
+                      return (
+                        <button
+                          key={tpl.id}
+                          type="button"
+                          onClick={() => handleLoadTemplate(tpl)}
+                          className={`p-2.5 rounded-xl border text-left transition-all text-xs font-semibold flex flex-col justify-between group relative cursor-pointer ${
+                            isRecSuggested
+                              ? 'bg-purple-500/20 border-purple-500/50 text-purple-200 hover:bg-purple-500/30'
+                              : 'bg-slate-900 border-slate-700/80 text-slate-300 hover:text-white hover:border-purple-500/40'
+                          }`}
+                        >
+                          <div>
+                            <div className="font-bold flex items-center gap-1 text-slate-200 group-hover:text-purple-300">
+                              <span>{tpl.badge}</span>
+                            </div>
+                            <span className="text-[11px] text-slate-400 block mt-1 line-clamp-2">
+                              {tpl.name}
+                            </span>
+                          </div>
+                          {isRecSuggested && (
+                            <span className="mt-1.5 text-[10px] font-bold text-purple-400 uppercase tracking-wider">
+                              ★ Recomendado
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Toggle Switch Universal: Mesclagem / Variegato */}
+                <div className="pt-2 border-t border-slate-800">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/90 border border-slate-700/80 transition-all hover:border-amber-500/40">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-yellow-500/15 text-yellow-300 border border-yellow-500/30 flex items-center justify-center shrink-0 text-base">
+                        🍯
+                      </div>
+                      <div>
+                        <div className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                          <span>Incluir Etapa de Mesclagem / Variegato</span>
+                          {recipe.variegatos && recipe.variegatos.length > 0 && (
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono">
+                              {recipe.variegatos.length} mescla(s) na receita
+                            </span>
+                          )}
                         </div>
-                        {isRecSuggested && (
-                          <span className="mt-1.5 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
-                            ★ Recomendado p/ esta receita
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
+                        <p className="text-[11px] text-slate-400">
+                          Insere automaticamente ao final o passo de marmorização e intercalação da calda/pasta em camadas na extração
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={includeVariegato}
+                      onClick={handleToggleVariegato}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        includeVariegato ? 'bg-amber-500' : 'bg-slate-700'
+                      }`}
+                      title={includeVariegato ? 'Desativar etapa de mesclagem' : 'Ativar etapa de mesclagem'}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full shadow-md ring-0 transition duration-200 ease-in-out ${
+                          includeVariegato ? 'translate-x-5 bg-slate-950' : 'translate-x-0 bg-slate-300'
+                        }`}
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -555,7 +684,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
         </div>
 
         {/* Rodapé Fixo */}
-        <div className="p-4 sm:p-5 bg-slate-950 border-t border-slate-800 flex items-center justify-between gap-3 shrink-0 flex-wrap">
+        <div className="p-3.5 sm:p-5 bg-slate-950 border-t border-slate-800 flex items-center justify-between gap-3 shrink-0 flex-wrap pb-safe">
           <div className="text-xs text-slate-400">
             {steps.length === 0 ? (
               <span>Nenhum passo cadastrado.</span>
@@ -572,7 +701,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setMode('view')}
-                  className="px-3.5 py-2 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 text-xs font-bold transition-colors"
+                  className="px-3.5 py-2 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 text-xs font-bold transition-colors cursor-pointer"
                 >
                   Cancelar Edição
                 </button>
@@ -581,7 +710,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
                   type="button"
                   onClick={handleSave}
                   disabled={isSaving}
-                  className={`px-5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 shadow-lg active:scale-95 ${
+                  className={`px-5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer ${
                     saveSuccess
                       ? 'bg-emerald-500 text-slate-950 shadow-emerald-500/25'
                       : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/25'
@@ -604,9 +733,10 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-bold rounded-xl border border-slate-700 transition-colors"
+                className="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-bold rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95"
               >
-                Concluir Visualização
+                <X className="w-4 h-4 text-slate-400" />
+                <span>Fechar</span>
               </button>
             )}
           </div>
@@ -621,7 +751,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
                 <h4 className="text-base font-bold text-white">Substituir passos existentes?</h4>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Carregar o modelo <strong>"{confirmTemplate.name}"</strong> substituirá os {steps.length} passos atuais por {confirmTemplate.steps.length} passos do novo modelo. Deseja continuar?
+                Carregar o modelo <strong>"{confirmTemplate.name}"</strong> substituirá os {steps.length} passos atuais por {confirmTemplate.steps.length + (includeVariegato ? 1 : 0)} passos do novo modelo{includeVariegato ? ' (incluindo mesclagem)' : ''}. Deseja continuar?
               </p>
               <div className="flex items-center justify-end gap-2 pt-2">
                 <button

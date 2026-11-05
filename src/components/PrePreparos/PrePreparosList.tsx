@@ -23,6 +23,7 @@ import {
   syncAllPreparationsToIngredients,
   removeLinkedIngredientForPreparation,
 } from '../../core/preparationSync';
+import { useModalDismiss } from '../../core/useModalDismiss';
 
 interface PrePreparosListProps {
   preparations: Preparation[];
@@ -56,6 +57,13 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
   const [items, setItems] = useState<PreparationFormItem[]>([
     { name: '', grams: '' },
   ]);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingPrep(null);
+  };
+
+  useModalDismiss(isModalOpen, handleCloseModal);
 
   // Modo de Preparo: controle de expansão individual por card
   const [expandedInstructions, setExpandedInstructions] = useState<Record<string, boolean>>({});
@@ -435,8 +443,16 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
 
       {/* Modal: Cadastrar / Editar Pré-preparo ou Variegato */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-xl sm:max-w-2xl p-5 sm:p-7 shadow-2xl space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+        <div
+          onClick={handleCloseModal}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={e => e.stopPropagation()}
+            className="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-xl sm:max-w-2xl p-5 sm:p-7 shadow-2xl space-y-5 my-6 max-h-[92vh] overflow-y-auto"
+          >
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-slate-800 pb-4">
               <div className="flex items-center gap-3">
@@ -459,12 +475,10 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
               </div>
               <button
                 type="button"
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setEditingPrep(null);
-                }}
-                className="p-1.5 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors shrink-0"
+                onClick={handleCloseModal}
+                className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors shrink-0"
                 title="Fechar"
+                aria-label="Fechar"
               >
                 <X className="w-5 h-5" />
               </button>

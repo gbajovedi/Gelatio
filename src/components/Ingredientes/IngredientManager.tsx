@@ -17,6 +17,7 @@ import {
   Scale,
   Sparkles,
 } from 'lucide-react';
+import { useModalDismiss } from '../../core/useModalDismiss';
 
 interface IngredientManagerProps {
   ingredients: Ingredient[];
@@ -67,6 +68,12 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
   const [calculatorModalIng, setCalculatorModalIng] = useState<Ingredient | null>(null);
   const [calcModalPrice, setCalcModalPrice] = useState<number | ''>('');
   const [calcModalWeightGrams, setCalcModalWeightGrams] = useState<number | ''>('');
+
+  useModalDismiss(isAddModalOpen, () => {
+    setIsAddModalOpen(false);
+    setEditingIngredient(null);
+  });
+  useModalDismiss(!!calculatorModalIng, () => setCalculatorModalIng(null));
 
   // New ingredient form state
   const [newName, setNewName] = useState('');
@@ -516,8 +523,19 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
 
       {/* Modal: Cadastrar ou Editar Insumo */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-xl sm:max-w-2xl p-5 sm:p-7 shadow-2xl space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+        <div
+          onClick={() => {
+            setIsAddModalOpen(false);
+            setEditingIngredient(null);
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={e => e.stopPropagation()}
+            className="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-xl sm:max-w-2xl p-5 sm:p-7 shadow-2xl space-y-5 my-6 max-h-[92vh] overflow-y-auto"
+          >
             {/* Cabeçalho do Modal */}
             <div className="flex items-start justify-between border-b border-slate-800 pb-4">
               <div className="flex items-center gap-3">
@@ -542,8 +560,9 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
                   setIsAddModalOpen(false);
                   setEditingIngredient(null);
                 }}
-                className="p-1.5 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors shrink-0"
+                className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors shrink-0"
                 title="Fechar"
+                aria-label="Fechar"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1166,8 +1185,16 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
 
       {/* Modal Rápido: Recalcular Custo de Insumo Existente por Peso em Gramas */}
       {calculatorModalIng && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl space-y-4">
+        <div
+          onClick={() => setCalculatorModalIng(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={e => e.stopPropagation()}
+            className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl space-y-4"
+          >
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shadow-inner border border-emerald-500/30">
@@ -1181,7 +1208,9 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
               <button
                 type="button"
                 onClick={() => setCalculatorModalIng(null)}
-                className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
+                className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
+                title="Fechar"
+                aria-label="Fechar"
               >
                 <X className="w-4 h-4" />
               </button>

@@ -3,6 +3,7 @@ import { X, Plus, Trash2, Save, Sparkles, Scale, DollarSign } from 'lucide-react
 import { Recipe, VariegatoItem, Ingredient } from '../../types/gelato';
 import { db } from '../../db/database';
 import { resolveVariegatoDensity } from '../../core/calculator';
+import { useModalDismiss } from '../../core/useModalDismiss';
 
 interface VariegatoQuickModalProps {
   recipe: Recipe | null;
@@ -50,6 +51,9 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
   }, [availableIngredients]);
 
   if (!isOpen || !recipe) return null;
+
+  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
+  useModalDismiss(isOpen, onClose);
 
   const handleAdd = () => {
     setItems(prev => [...prev, { name: '', grams: 100, costKg: 0 }]);
@@ -165,8 +169,14 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-2xl p-6 shadow-2xl relative space-y-5 max-h-[90vh] flex flex-col">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in cursor-pointer"
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="bg-slate-900 border border-slate-700/80 rounded-2xl sm:rounded-3xl w-full max-w-2xl p-4 sm:p-6 shadow-2xl relative space-y-4 sm:space-y-5 max-h-[92vh] flex flex-col cursor-default pb-safe"
+      >
         {/* Header */}
         <div className="flex items-start justify-between border-b border-slate-800 pb-4 shrink-0">
           <div>

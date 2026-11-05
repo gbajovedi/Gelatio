@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { X, Save, BookmarkPlus, CheckCircle2 } from 'lucide-react';
 import { getStoredStyles } from '../../core/stylesStorage';
+import { useModalDismiss } from '../../core/useModalDismiss';
 
 interface SaveRecipeModalProps {
   isOpen: boolean;
@@ -47,6 +48,9 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
 
   if (!isOpen) return null;
 
+  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
+  useModalDismiss(isOpen, onClose);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -65,12 +69,16 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in cursor-pointer"
+    >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="save-recipe-title"
-        className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-md p-6 shadow-2xl relative space-y-4"
+        onClick={e => e.stopPropagation()}
+        className="bg-slate-900 border border-slate-700/80 rounded-2xl sm:rounded-3xl w-full max-w-md p-5 sm:p-6 shadow-2xl relative space-y-4 cursor-default pb-safe"
       >
         <button
           onClick={onClose}

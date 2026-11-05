@@ -19,6 +19,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { shareOrDownloadBackup, downloadBlob } from '../../core/backupShare';
+import { useModalDismiss } from '../../core/useModalDismiss';
 
 interface ImportExportModalProps {
   isOpen: boolean;
@@ -31,6 +32,8 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
   onClose,
   onDataChanged
 }) => {
+  useModalDismiss(isOpen, onClose);
+
   const [activeTab, setActiveTab] = useState<'export' | 'import'>('export');
   const [importMode, setImportMode] = useState<'merge' | 'replace'>('merge');
   const [statusMessage, setStatusMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
@@ -199,11 +202,15 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md"
+    >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="backup-modal-title"
+        onClick={e => e.stopPropagation()}
         className="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-2xl p-5 sm:p-7 shadow-2xl relative space-y-4 max-h-[92vh] overflow-y-auto"
       >
         {/* Botão de Fechar */}
@@ -213,7 +220,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
             setStatusMessage(null);
             onClose();
           }}
-          className="absolute top-5 right-5 text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 text-slate-400 hover:text-white p-2.5 rounded-xl hover:bg-slate-800 transition-colors cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
           title="Fechar"
           aria-label="Fechar diálogo de backup"
         >

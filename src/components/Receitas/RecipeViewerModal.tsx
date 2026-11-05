@@ -3,6 +3,7 @@ import { Recipe, VariegatoItem, Ingredient, PreparationStep } from '../../types/
 import { CategoryBadge } from '../../core/categoryThemes';
 import { db } from '../../db/database';
 import { resolveVariegatoDensity, isNeutroIngredient, roundIngredientGrams, STORAGE_KEY_SHOW_ROUNDED } from '../../core/calculator';
+import { useModalDismiss } from '../../core/useModalDismiss';
 import { PreparationStepsModal } from './PreparationStepsModal';
 import {
   X,
@@ -46,6 +47,9 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
 
   const [targetBatchGrams, setTargetBatchGrams] = useState<number>(Math.round(baseWeight));
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+
+  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
+  useModalDismiss(isOpen, onClose);
 
   // Preferência de valores arredondados sincronizada com BalancingScreen
   const [showRoundedValues, setShowRoundedValues] = useState<boolean>(() => {
@@ -204,13 +208,17 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   };
 
   return (
-    <div className="print-modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-0 sm:p-4">
+    <div
+      onClick={onClose}
+      className="print-modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-0 sm:p-4 cursor-pointer"
+    >
       {/* Full screen on mobile (w-full h-full), elegant rounded modal on desktop */}
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="recipe-viewer-title"
-        className="print-recipe-card bg-slate-900 border border-slate-700/80 w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+        onClick={e => e.stopPropagation()}
+        className="print-recipe-card bg-slate-900 border border-slate-700/80 w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden cursor-default"
       >
         {/* Sticky Header */}
         <div className="p-4 sm:p-5 bg-slate-800 border-b border-slate-700/80 flex items-start justify-between gap-3 shrink-0">
@@ -630,27 +638,39 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
         </div>
 
         {/* Sticky Footer Actions */}
-        <div className="p-4 sm:p-5 bg-slate-800 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3 shrink-0">
-          <div className="text-xs sm:text-sm text-slate-300 font-mono font-bold">
-            Total Calda Base:{' '}
-            <strong className="text-emerald-400 text-base sm:text-lg">
-              {targetBatchGrams} g
-            </strong>
-            {variegatos.length > 0 && (
-              <span className="text-amber-300 text-xs font-normal ml-1.5">
-                (+{Math.round(variegatos.reduce((acc, v) => acc + (v.grams * scaleRatio), 0))}g mesclas)
-              </span>
-            )}
+        <div className="p-3.5 sm:p-5 bg-slate-800 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 shrink-0 pb-safe">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="no-print px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl border border-slate-700 bg-slate-900/90 text-slate-300 hover:text-white text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 cursor-pointer active:scale-95"
+              title="Fechar Ficha Técnica (ESC)"
+            >
+              <X className="w-4 h-4 text-slate-400" />
+              <span>Fechar</span>
+            </button>
+
+            <div className="text-xs sm:text-sm text-slate-300 font-mono font-bold">
+              Total Calda:{' '}
+              <strong className="text-emerald-400 text-sm sm:text-base md:text-lg">
+                {targetBatchGrams} g
+              </strong>
+              {variegatos.length > 0 && (
+                <span className="text-amber-300 text-[11px] sm:text-xs font-normal ml-1">
+                  (+{Math.round(variegatos.reduce((acc, v) => acc + (v.grams * scaleRatio), 0))}g)
+                </span>
+              )}
+            </div>
           </div>
 
-          <div className="no-print flex items-center gap-2">
+          <div className="no-print flex items-center gap-1.5 sm:gap-2 flex-wrap">
             <button
               type="button"
               onClick={() => window.print()}
-              className="px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5"
+              className="px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Printer className="w-4 h-4" />
-              <span className="hidden sm:inline">Imprimir</span>
+              <span className="hidden md:inline">Imprimir</span>
             </button>
 
             {/* Novo Botão Modo de Preparo posicionado entre Imprimir e Balancear */}

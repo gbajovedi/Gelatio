@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StyleStandard, NutrientValues } from '../../types/gelato';
+import { useModalDismiss } from '../../core/useModalDismiss';
 import {
   X,
   Check,
@@ -92,6 +93,8 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
   onStyleUpdated,
   initialCreateMode = false
 }) => {
+  useModalDismiss(isOpen, onClose);
+
   const [stylesMap, setStylesMap] = useState<Record<string, StyleStandard>>(() => getStoredStyles());
   const [selectedStyleName, setSelectedStyleName] = useState<string>(initialStyleName);
   const [presetId, setPresetId] = useState<StylePresetId>(() => getActivePresetId());
@@ -412,11 +415,15 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
     .sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+    >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="style-settings-title"
+        onClick={e => e.stopPropagation()}
         className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden"
       >
         

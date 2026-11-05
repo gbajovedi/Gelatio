@@ -33,6 +33,8 @@ import {
   Scale,
   Printer,
   ChevronDown,
+  ChevronUp,
+  ArrowUp,
   Sparkles,
   DollarSign,
   Layers,
@@ -196,6 +198,21 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     const totalG = initialRecipe?.ingredients ? initialRecipe.ingredients.reduce((acc, i) => acc + i.grams, 0) : 1000;
     return String(Math.round(totalG));
   });
+
+  // Mobile Usability: Sticky Vital Signs, Scroll to top & Collapsible profit simulator
+  const [isScrolledPastBars, setIsScrolledPastBars] = useState<boolean>(false);
+  const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
+  const [isProfitSimulatorExpanded, setIsProfitSimulatorExpanded] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      setIsScrolledPastBars(scrollY > 550);
+      setShowScrollTop(scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Protection against accidental page close or reload when there are unsaved edits
   useEffect(() => {
@@ -769,12 +786,63 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
         </div>
       </div>
 
+      {/* Sticky Mini-Bar de Sinais Vitais no Topo (Exclusivo Mobile ao rolar a página) */}
+      {isScrolledPastBars && (
+        <div
+          role="region"
+          aria-label="Sinais vitais do gelato"
+          onClick={() => {
+            document.getElementById('nutrient-bars-section')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="fixed top-16 left-0 right-0 z-30 lg:hidden bg-slate-900/95 backdrop-blur-md border-b border-amber-500/30 px-3 py-1.5 shadow-xl animate-in slide-in-from-top-2 duration-200 cursor-pointer active:bg-slate-850"
+        >
+          <div className="max-w-md mx-auto flex items-center justify-between text-xs font-mono font-bold">
+            <span className="text-slate-200 flex items-center gap-1" title="Peso Total">
+              <span className="text-amber-400">⚖️</span>
+              <span>{Math.round(analysis.caldaWeight)}g</span>
+            </span>
+
+            <span className="text-slate-500">|</span>
+
+            <span className="text-cyan-300 flex items-center gap-1" title="Poder Anticongelante">
+              <span>❄️ PAC</span>
+              <span className="text-white">{analysis.validations.pac?.val?.toFixed(1) ?? '0'}</span>
+            </span>
+
+            <span className="text-slate-500">|</span>
+
+            <span className="text-rose-300 flex items-center gap-1" title="Poder Adoçante">
+              <span>🍬 POD</span>
+              <span className="text-white">{analysis.validations.pod?.val?.toFixed(1) ?? '0'}</span>
+            </span>
+
+            <span className="text-slate-500">|</span>
+
+            <span className="text-emerald-400" title="Custo por Quilo">
+              R${analysis.costing.finalCostKg.toFixed(2)}/kg
+            </span>
+
+            <span
+              className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-black tracking-wider ${
+                analysis.isBalanced
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                  : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+              }`}
+            >
+              {analysis.isBalanced ? '✓ OK' : '⚠ AJUSTAR'}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Real-time Nutrient Gauges & Top Intelligence Grid (Térmico + Custos) */}
-      <NutrientBars
-        analysis={analysis}
-        categoryCostBreakdown={categoryCostBreakdown}
-        hasVariegatos={variegatos.length > 0}
-      />
+      <div id="nutrient-bars-section">
+        <NutrientBars
+          analysis={analysis}
+          categoryCostBreakdown={categoryCostBreakdown}
+          hasVariegatos={variegatos.length > 0}
+        />
+      </div>
 
       {/* Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1067,18 +1135,57 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
       </div>
 
       {/* Módulo Executivo de Precificação Comercial & Rendimento com Overrun (Largura Total) */}
-      <ProfitSimulator
-        finalCostKg={analysis.costing.finalCostKg}
-        batchWeightGrams={analysis.costing.finalWeightGrams || analysis.caldaWeight}
-        caldaWeightGrams={analysis.caldaWeight}
-        totalVariegatoGrams={analysis.costing.totalVariegatoGrams || 0}
-        densityAndVolume={analysis.densityAndVolume}
-        pricingParams={pricingParams}
-        pricingSettings={pricingSettings}
-        onMarginSaved={(newMargin) => {
-          setPricingParams(prev => ({ ...prev, targetMargin: newMargin }));
-        }}
-      />
+      <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 overflow-hidden shadow-xl">
+        {/* Mobile Accordion Header Toggle */}
+        <button
+          type="button"
+          onClick={() => setIsProfitSimulatorExpanded(prev => !prev)}
+          className="w-full lg:hidden px-4 py-3 bg-slate-800/90 hover:bg-slate-800 flex items-center justify-between transition-colors border-b border-slate-700/60 cursor-pointer"
+          aria-expanded={isProfitSimulatorExpanded}
+        >
+          <div className="flex items-center gap-2.5 text-left">
+            <span className="text-xl">📊</span>
+            <div>
+              <div className="text-sm font-bold text-white flex items-center gap-2">
+                <span>Simulador de Lucro & Rendimento</span>
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 font-mono">
+                  {pricingParams.targetMargin}% Margem
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400">Potes, Overrun, CMV, Taxas e Lucro Líquido</p>
+            </div>
+          </div>
+          <span className="text-xs font-semibold text-amber-400 flex items-center gap-1 bg-amber-500/10 px-2.5 py-1 rounded-lg">
+            {isProfitSimulatorExpanded ? (
+              <>
+                <span>Recolher</span>
+                <ChevronUp className="w-3.5 h-3.5" />
+              </>
+            ) : (
+              <>
+                <span>Expandir</span>
+                <ChevronDown className="w-3.5 h-3.5" />
+              </>
+            )}
+          </span>
+        </button>
+
+        {/* Content: always visible on desktop, toggleable on mobile */}
+        <div className={isProfitSimulatorExpanded ? 'block' : 'hidden lg:block'}>
+          <ProfitSimulator
+            finalCostKg={analysis.costing.finalCostKg}
+            batchWeightGrams={analysis.costing.finalWeightGrams || analysis.caldaWeight}
+            caldaWeightGrams={analysis.caldaWeight}
+            totalVariegatoGrams={analysis.costing.totalVariegatoGrams || 0}
+            densityAndVolume={analysis.densityAndVolume}
+            pricingParams={pricingParams}
+            pricingSettings={pricingSettings}
+            onMarginSaved={(newMargin) => {
+              setPricingParams(prev => ({ ...prev, targetMargin: newMargin }));
+            }}
+          />
+        </div>
+      </div>
 
       {/* Datalist for fast ingredient autocompletion */}
       <datalist id="ingredients-datalist">
@@ -1120,6 +1227,19 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           }
         }}
       />
+
+      {/* Botão Flutuante: Voltar ao Topo (Mobile & Desktop com scroll > 400px) */}
+      {showScrollTop && (
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-6 right-5 z-40 p-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-2xl shadow-amber-500/30 border border-amber-300/40 flex items-center justify-center transition-all hover:scale-110 active:scale-95 animate-in fade-in zoom-in-75 duration-200 cursor-pointer"
+          title="Voltar ao topo da receita"
+          aria-label="Voltar ao topo"
+        >
+          <ArrowUp className="w-5 h-5 stroke-[2.5]" />
+        </button>
+      )}
     </div>
   );
 };

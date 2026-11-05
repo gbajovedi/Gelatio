@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StockItem, AdjustmentType } from '../../types/stock';
 import { recordStockAdjustment } from '../../core/stockService';
 import { AlertTriangle, X, Check, Scale } from 'lucide-react';
+import { useModalDismiss } from '../../core/useModalDismiss';
 
 interface StockAdjustmentModalProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
   onClose,
   onSuccess
 }) => {
+  useModalDismiss(isOpen && !!stockItem, onClose);
+
   if (!isOpen || !stockItem) return null;
 
   const [type, setType] = useState<AdjustmentType>('loss');
@@ -58,8 +61,16 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn"
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        onClick={e => e.stopPropagation()}
+        className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden"
+      >
         <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-850">
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-amber-400" />
@@ -68,7 +79,9 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            title="Fechar"
+            aria-label="Fechar"
           >
             <X className="w-5 h-5" />
           </button>
