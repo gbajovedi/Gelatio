@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Preparation, Ingredient } from '../../types/gelato';
+import { Preparation, Ingredient, PreparationStep, PreparationStepCategory } from '../../types/gelato';
 import { db } from '../../db/database';
 import {
   Search,
@@ -16,6 +16,13 @@ import {
   RefreshCw,
   ChevronDown,
   ChevronUp,
+  Thermometer,
+  Clock,
+  ArrowUp,
+  ArrowDown,
+  ListChecks,
+  Check,
+  FileText,
 } from 'lucide-react';
 import {
   calculatePreparationNutrients,
@@ -24,6 +31,12 @@ import {
   removeLinkedIngredientForPreparation,
 } from '../../core/preparationSync';
 import { useModalDismiss } from '../../core/useModalDismiss';
+import {
+  parseInstructionsToSteps,
+  stepsToInstructions,
+  getInitialPreparationSteps
+} from '../../core/preparationStepMigration';
+import { STEP_CATEGORIES_META } from '../../core/preparationTemplates';
 
 interface PrePreparosListProps {
   preparations: Preparation[];
@@ -50,6 +63,8 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
   const [name, setName] = useState('');
   const [category, setCategory] = useState<'Pré-preparo' | 'Variegato'>('Pré-preparo');
   const [instructions, setInstructions] = useState('');
+  const [steps, setSteps] = useState<PreparationStep[]>([]);
+  const [prepInputMode, setPrepInputMode] = useState<'steps' | 'text'>('steps');
   const [modalError, setModalError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [isSyncingAll, setIsSyncingAll] = useState(false);
@@ -65,13 +80,22 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
 
   useModalDismiss(isModalOpen, handleCloseModal);
 
-  // Modo de Preparo: controle de expansão individual por card
+  // Modo de Preparo: controle de expansão e checklist individual por card
   const [expandedInstructions, setExpandedInstructions] = useState<Record<string, boolean>>({});
+  const [checkedCardSteps, setCheckedCardSteps] = useState<Record<string, boolean>>({});
 
   const toggleInstructions = (prepId: string) => {
     setExpandedInstructions(prev => ({
       ...prev,
       [prepId]: !prev[prepId]
+    }));
+  };
+
+  const toggleCardStepCheck = (prepId: string, stepId: string) => {
+    const key = `${prepId}_${stepId}`;
+    setCheckedCardSteps(prev => ({
+      ...prev,
+      [key]: !prev[key]
     }));
   };
 
@@ -91,6 +115,8 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
     setName('');
     setCategory('Pré-preparo');
     setInstructions('');
+    setSteps([]);
+    setPrepInputMode('steps');
     setItems([
       { name: '', grams: '' },
       { name: '', grams: '' },
@@ -104,13 +130,64 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
     setEditingPrep(prep);
     setName(prep.name);
     setCategory(prep.category);
-    setInstructions(prep.instructions || '');
+    const initialSteps = getInitialPreparationSteps(prep);
+    setSteps(initialSteps);
+    setInstructions(prep.instructions || stepsToInstructions(initialSteps));
+    setPrepInputMode(initialSteps.length > 0 ? 'steps' : 'text');
     setItems(
       prep.ingredients.length > 0
         ? prep.ingredients.map(i => ({ name: i.name, grams: i.grams }))
         : [{ name: '', grams: '' }]
     );
     setIsModalOpen(true);
+  };
+
+  const handleAddModalStep = () => {
+    const nextOrder = steps.length + 1;
+    const newStep: PreparationStep = {
+      id: `step_${Date.now()}_${nextOrder}`,
+      order: nextOrder,
+      title: `Passo ${nextOrder}`,
+      description: '',
+      temperature: '',
+      duration: '',
+      category: 'aquecimento'
+    };
+    setSteps([...steps, newStep]);
+  };
+
+  const handleUpdateModalStep = (index: number, updates: Partial<PreparationStep>) => {
+    const updated = [...steps];
+    updated[index] = { ...updated[index], ...updates };
+    setSteps(updated);
+  };
+
+  const handleDeleteModalStep = (index: number) => {
+    const updated = [...steps];
+    updated.splice(index, 1);
+    const reordered = updated.map((s, idx) => ({ ...s, order: idx + 1 }));
+    setSteps(reordered);
+  };
+
+  const handleMoveModalStep = (index: number, direction: 'up' | 'down') => {
+    if ((direction === 'up' && index === 0) || (direction === 'down' && index === steps.length - 1)) {
+      return;
+    }
+    const updated = [...steps];
+    const targetIdx = direction === 'up' ? index - 1 : index + 1;
+    const temp = updated[index];
+    updated[index] = updated[targetIdx];
+    updated[targetIdx] = temp;
+    const reordered = updated.map((s, idx) => ({ ...s, order: idx + 1 }));
+    setSteps(reordered);
+  };
+
+  const handleConvertTextToStructuredSteps = () => {
+    const parsed = parseInstructionsToSteps(instructions);
+    if (parsed.length > 0) {
+      setSteps(parsed);
+      setPrepInputMode('steps');
+    }
   };
 
   const handleDelete = async (prep: Preparation) => {
@@ -178,12 +255,14 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
     setIsSaving(true);
     try {
       const prepId = editingPrep ? editingPrep.id : `prep_${Date.now()}`;
+      const consolidatedInstructions = steps.length > 0 ? stepsToInstructions(steps) : instructions.trim();
 
       const prepToSave: Preparation = {
         id: prepId,
         name: name.trim(),
         category,
-        instructions: instructions.trim(),
+        instructions: consolidatedInstructions,
+        preparationSteps: steps.length > 0 ? steps : undefined,
         ingredients: validIngredients,
         isCustom: editingPrep ? editingPrep.isCustom : true,
       };
@@ -402,39 +481,125 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                 </div>
 
                 {/* Modo de Preparo (Oculto por padrão, expansível ao clicar) */}
-                {prep.instructions && prep.instructions.trim().length > 0 && (
-                  <div className="rounded-xl border border-slate-700/70 bg-slate-950/40 overflow-hidden transition-all">
-                    <button
-                      type="button"
-                      onClick={() => toggleInstructions(prep.id)}
-                      className="w-full px-3 py-2 flex items-center justify-between text-left hover:bg-slate-800/50 transition-colors group cursor-pointer"
-                      aria-expanded={!!expandedInstructions[prep.id]}
-                    >
-                      <span className="text-xs uppercase font-bold text-amber-400/90 flex items-center gap-1.5 tracking-wider">
-                        <ChefHat className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Modo de Preparo</span>
-                      </span>
-                      <span className="flex items-center gap-1 text-xs font-semibold text-slate-400 group-hover:text-amber-300 transition-colors">
-                        {expandedInstructions[prep.id] ? (
-                          <>
-                            <span>Recolher</span>
-                            <ChevronUp className="w-3.5 h-3.5 text-amber-400" />
-                          </>
-                        ) : (
-                          <>
-                            <span>Expandir</span>
-                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-300" />
-                          </>
-                        )}
-                      </span>
-                    </button>
-                    {expandedInstructions[prep.id] && (
-                      <div className="px-3 pb-3 pt-1 border-t border-slate-800/70 text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line break-words animate-in fade-in duration-150">
-                        <p>{prep.instructions}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
+                {(() => {
+                  const cardSteps = getInitialPreparationSteps(prep);
+                  const hasContent = cardSteps.length > 0 || (prep.instructions && prep.instructions.trim().length > 0);
+                  if (!hasContent) return null;
+
+                  const isExpanded = !!expandedInstructions[prep.id];
+
+                  return (
+                    <div className="rounded-xl border border-slate-700/70 bg-slate-950/40 overflow-hidden transition-all">
+                      <button
+                        type="button"
+                        onClick={() => toggleInstructions(prep.id)}
+                        className="w-full px-3 py-2 flex items-center justify-between text-left hover:bg-slate-800/50 transition-colors group cursor-pointer"
+                        aria-expanded={isExpanded}
+                      >
+                        <span className="text-xs uppercase font-bold text-amber-400/90 flex items-center gap-1.5 tracking-wider">
+                          <ChefHat className="w-3.5 h-3.5 text-amber-400" />
+                          <span>Modo de Preparo</span>
+                          {cardSteps.length > 0 && (
+                            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/15 text-amber-300 font-mono font-bold">
+                              {cardSteps.length} passos
+                            </span>
+                          )}
+                        </span>
+                        <span className="flex items-center gap-1 text-xs font-semibold text-slate-400 group-hover:text-amber-300 transition-colors">
+                          {isExpanded ? (
+                            <>
+                              <span>Recolher</span>
+                              <ChevronUp className="w-3.5 h-3.5 text-amber-400" />
+                            </>
+                          ) : (
+                            <>
+                              <span>Expandir</span>
+                              <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-300" />
+                            </>
+                          )}
+                        </span>
+                      </button>
+
+                      {isExpanded && (
+                        <div className="px-3 pb-3 pt-1 border-t border-slate-800/70 space-y-2 animate-in fade-in duration-150">
+                          {cardSteps.length > 0 ? (
+                            <div className="space-y-2">
+                              {cardSteps.map((step, idx) => {
+                                const stepKey = `${prep.id}_${step.id || idx}`;
+                                const isChecked = !!checkedCardSteps[stepKey];
+                                const catMeta = STEP_CATEGORIES_META[step.category || 'outro'] || STEP_CATEGORIES_META.outro;
+
+                                return (
+                                  <div
+                                    key={step.id || idx}
+                                    onClick={() => toggleCardStepCheck(prep.id, step.id || String(idx))}
+                                    className={`p-2.5 rounded-xl border transition-all text-xs space-y-1 cursor-pointer select-none ${
+                                      isChecked
+                                        ? 'bg-slate-950/70 border-slate-800 opacity-60'
+                                        : 'bg-slate-900/90 border-slate-700/70 hover:border-slate-600'
+                                    }`}
+                                  >
+                                    <div className="flex items-center justify-between gap-1.5 flex-wrap">
+                                      <div className="flex items-center gap-2">
+                                        <div
+                                          className={`w-4 h-4 rounded-md flex items-center justify-center transition-colors ${
+                                            isChecked
+                                              ? 'bg-emerald-500 text-slate-950'
+                                              : 'border border-slate-600 hover:border-amber-400'
+                                          }`}
+                                        >
+                                          {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
+                                        </div>
+                                        <span className={`font-bold ${isChecked ? 'text-slate-400 line-through' : 'text-white'}`}>
+                                          {idx + 1}. {step.title}
+                                        </span>
+                                      </div>
+
+                                      <div className="flex items-center gap-1.5 shrink-0">
+                                        <span className={`text-[10px] px-1.5 py-0.2 rounded-md border font-semibold flex items-center gap-1 ${catMeta.badgeClass}`}>
+                                          <span>{catMeta.emoji}</span>
+                                          <span className="hidden sm:inline">{catMeta.label}</span>
+                                        </span>
+                                        {step.temperature && (
+                                          <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono font-bold flex items-center gap-1">
+                                            <Thermometer className="w-2.5 h-2.5" />
+                                            <span>{step.temperature}</span>
+                                          </span>
+                                        )}
+                                        {step.duration && (
+                                          <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-sky-500/15 text-sky-300 border border-sky-500/30 font-mono font-bold flex items-center gap-1">
+                                            <Clock className="w-2.5 h-2.5" />
+                                            <span>{step.duration}</span>
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+
+                                    <p className={`text-xs leading-relaxed whitespace-pre-line pl-6 ${isChecked ? 'text-slate-500 line-through' : 'text-slate-300'}`}>
+                                      {step.description}
+                                    </p>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <div className="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line break-words space-y-2">
+                              <p>{prep.instructions}</p>
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEdit(prep)}
+                                className="text-xs text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 pt-1 cursor-pointer"
+                              >
+                                <Sparkles className="w-3.5 h-3.5" />
+                                <span>Converter em Passos Estruturados</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           );
@@ -658,18 +823,218 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                 </p>
               </div>
 
-              {/* Modo de Preparo */}
-              <div>
-                <label className="block text-xs font-bold text-slate-200 mb-1.5">
-                  Procedimento de Preparo & Orientações Técnicas:
-                </label>
-                <textarea
-                  rows={4}
-                  placeholder="Ex: Aquecer a água e a polpa a 45°C. Adicionar os açúcares previamente misturados com a pectina. Levar a fervura por 2 minutos..."
-                  value={instructions}
-                  onChange={e => setInstructions(e.target.value)}
-                  className="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none transition-colors leading-relaxed"
-                />
+              {/* Modo de Preparo com Abas: Passos Estruturados vs Texto Livre */}
+              <div className="space-y-3 pt-1">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2 flex-wrap gap-2">
+                  <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                    <ChefHat className="w-4 h-4 text-amber-400" />
+                    <span>Modo de Preparo & Orientações Técnicas:</span>
+                  </label>
+
+                  <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setPrepInputMode('steps')}
+                      className={`px-3 py-1 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                        prepInputMode === 'steps'
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <ListChecks className="w-3.5 h-3.5" />
+                      <span>Passos Estruturados ({steps.length})</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrepInputMode('text')}
+                      className={`px-3 py-1 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                        prepInputMode === 'text'
+                          ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
+                          : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>Texto Livre</span>
+                    </button>
+                  </div>
+                </div>
+
+                {prepInputMode === 'steps' ? (
+                  <div className="space-y-3">
+                    {steps.length === 0 ? (
+                      <div className="text-center py-6 border-2 border-dashed border-slate-800 rounded-2xl p-4 space-y-3 bg-slate-950/40">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+                          <ChefHat className="w-5 h-5" />
+                        </div>
+                        <div className="text-xs text-slate-400 max-w-sm mx-auto">
+                          Nenhum passo estruturado adicionado ainda. Adicione passos individuais ou converta a partir de anotações em texto.
+                        </div>
+                        <div className="flex items-center justify-center gap-2 flex-wrap">
+                          <button
+                            type="button"
+                            onClick={handleAddModalStep}
+                            className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl shadow transition-all flex items-center gap-1.5 cursor-pointer"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Adicionar Primeiro Passo</span>
+                          </button>
+                          {instructions.trim().length > 0 && (
+                            <button
+                              type="button"
+                              onClick={handleConvertTextToStructuredSteps}
+                              className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-750 text-amber-300 border border-amber-500/30 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                              <span>Converter do Texto Existente</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {steps.map((step, sIdx) => {
+                          return (
+                            <div
+                              key={step.id || sIdx}
+                              className="bg-slate-950/80 border border-slate-800 rounded-2xl p-3.5 space-y-2.5 shadow-sm"
+                            >
+                              {/* Linha 1: Ordem, Título, Mover e Excluir */}
+                              <div className="flex items-center justify-between gap-2 flex-wrap">
+                                <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                                  <span className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 font-black text-xs flex items-center justify-center shrink-0">
+                                    {sIdx + 1}
+                                  </span>
+                                  <input
+                                    type="text"
+                                    value={step.title}
+                                    onChange={e => handleUpdateModalStep(sIdx, { title: e.target.value })}
+                                    placeholder="Título do passo (ex: Caramelização, Forno em Banho-Maria)..."
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs sm:text-sm font-bold text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                                  />
+                                </div>
+
+                                <div className="flex items-center gap-1 shrink-0">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveModalStep(sIdx, 'up')}
+                                    disabled={sIdx === 0}
+                                    className="p-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                    title="Mover para cima"
+                                  >
+                                    <ArrowUp className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveModalStep(sIdx, 'down')}
+                                    disabled={sIdx === steps.length - 1}
+                                    className="p-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                    title="Mover para baixo"
+                                  >
+                                    <ArrowDown className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteModalStep(sIdx)}
+                                    className="p-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 hover:border-rose-500/40 transition-colors ml-1"
+                                    title="Excluir este passo"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Linha 2: Categoria, Temperatura e Duração */}
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                                    Operação:
+                                  </label>
+                                  <select
+                                    value={step.category || 'outro'}
+                                    onChange={e => handleUpdateModalStep(sIdx, { category: e.target.value as PreparationStepCategory })}
+                                    className="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs font-semibold rounded-xl px-2 py-1.5 focus:outline-none focus:border-amber-500"
+                                  >
+                                    {Object.entries(STEP_CATEGORIES_META).map(([k, m]) => (
+                                      <option key={k} value={k}>
+                                        {m.emoji} {m.label}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                                    Temperatura:
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={step.temperature || ''}
+                                    onChange={e => handleUpdateModalStep(sIdx, { temperature: e.target.value })}
+                                    placeholder="Ex: 180°C, 85°C, 4°C, Ambiente..."
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-mono font-semibold text-amber-300 focus:outline-none focus:border-amber-500 placeholder-slate-500"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                                    Tempo / Duração:
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={step.duration || ''}
+                                    onChange={e => handleUpdateModalStep(sIdx, { duration: e.target.value })}
+                                    placeholder="Ex: 1h50m, 15 min, 6h a 12h..."
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-mono font-semibold text-sky-300 focus:outline-none focus:border-amber-500 placeholder-slate-500"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Linha 3: Descrição */}
+                              <div>
+                                <textarea
+                                  rows={2}
+                                  value={step.description}
+                                  onChange={e => handleUpdateModalStep(sIdx, { description: e.target.value })}
+                                  placeholder="Descreva o procedimento operacional, técnicas de cocção, ponto ou cuidados..."
+                                  className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors resize-y leading-relaxed"
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                        <button
+                          type="button"
+                          onClick={handleAddModalStep}
+                          className="w-full py-2.5 border-2 border-dashed border-slate-800 hover:border-amber-500/60 rounded-xl text-xs font-bold text-slate-400 hover:text-amber-300 transition-colors flex items-center justify-center gap-2 group bg-slate-950/40 hover:bg-amber-500/5 cursor-pointer"
+                        >
+                          <Plus className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                          <span>Adicionar Outro Passo Operacional</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <textarea
+                      rows={5}
+                      placeholder="Ex: Assar por 1h50m a 180 graus. Cobrir com papel alumínio e colocar assadeira com água embaixo..."
+                      value={instructions}
+                      onChange={e => setInstructions(e.target.value)}
+                      className="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none transition-colors leading-relaxed"
+                    />
+                    {instructions.trim().length > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleConvertTextToStructuredSteps}
+                        className="px-3.5 py-2 bg-slate-800 hover:bg-slate-750 text-amber-300 border border-amber-500/30 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Converter este Texto em Passos Estruturados</span>
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Alerta de Validação ou Erro */}

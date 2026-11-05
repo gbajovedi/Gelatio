@@ -4,6 +4,44 @@
     "name": "Pudim",
     "category": "Pré-preparo",
     "instructions": "Assar por 1h50m a 180 graus. Cobrir com papel alumínio e colocar uma assadeira com água embaixo. Usar açúcar cristal para fazer o caramelo.",
+    "preparationSteps": [
+      {
+        "id": "step_pudim_1",
+        "order": 1,
+        "title": "Caramelo na Forma",
+        "category": "aquecimento",
+        "temperature": "165°C",
+        "duration": "10 min",
+        "description": "Em fogo brando, derreter o açúcar cristal diretamente na forma com furo central (ou em panela) até formar um caramelo dourado homogêneo. Espalhar cuidadosamente pelas paredes e pelo cone central da forma. Deixar esfriar até endurecer."
+      },
+      {
+        "id": "step_pudim_2",
+        "order": 2,
+        "title": "Homogeneização da Mistura",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Peneirar as gemas e ovos para retirar a película. Juntar o leite condensado e o leite integral. Misturar delicadamente com fuê ou pulsar brevemente no liquidificador em baixa rotação para não incorporar ar excessivo. Verter com cuidado na forma caramelizada."
+      },
+      {
+        "id": "step_pudim_3",
+        "order": 3,
+        "title": "Cocção no Forno em Banho-Maria",
+        "category": "aquecimento",
+        "temperature": "180°C",
+        "duration": "1h 50 min",
+        "description": "Cobrir a forma hermeticamente com papel alumínio (face brilhante voltada para dentro). Posicionar dentro de uma assadeira com água fervente (banho-maria). Assar em forno pré-aquecido a 180°C por cerca de 1 hora e 50 minutos até que o centro esteja firme com leve balanço gelatinoso."
+      },
+      {
+        "id": "step_pudim_4",
+        "order": 4,
+        "title": "Resfriamento e Desenforme Seguro",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "6h a 12h",
+        "description": "Retirar do forno e deixar amornar em temperatura ambiente por 1 hora. Levar à geladeira por no mínimo 6 horas (idealmente pernoite). Antes de desenformar, aquecer o fundo da forma rapidamente na chama do fogão por 15 segundos para soltar o caramelo. Desenformar sobre prato de bordas altas."
+      }
+    ],
     "ingredients": [
       {
         "name": "Ovo Galinha",
@@ -416,6 +454,44 @@
     "name": "Variegato de Cocada",
     "category": "Variegato",
     "instructions": "Caramelizar o açúcar. Após, adicionar o coco ralado e misturar. Adicionar o resto dos ingredientes e reduzir em fogo baixo. Somente adicionar o coco em tiras próximo do final.",
+    "preparationSteps": [
+      {
+        "id": "step_cocada_1",
+        "order": 1,
+        "title": "Caramelização Seca do Açúcar",
+        "category": "aquecimento",
+        "temperature": "165°C",
+        "duration": "8 min",
+        "description": "Colocar o açúcar em panela de fundo grosso e derreter em fogo médio-baixo até formar um caramelo dourado brilhante uniforme, sem queimar."
+      },
+      {
+        "id": "step_cocada_2",
+        "order": 2,
+        "title": "Tostagem do Coco Ralado no Caramelo",
+        "category": "aquecimento",
+        "temperature": "120°C",
+        "duration": "3 min",
+        "description": "Adicionar o coco ralado fino ao caramelo ainda quente, mexendo rapidamente com colher de silicone para tostar levemente e impregnar o aroma amanteigado do coco."
+      },
+      {
+        "id": "step_cocada_3",
+        "order": 3,
+        "title": "Adição de Líquidos e Redução em Fogo Baixo",
+        "category": "aquecimento",
+        "temperature": "95°C",
+        "duration": "15 min",
+        "description": "Adicionar com cuidado os líquidos restantes (leite/água) e cozinhar em fogo baixo, mexendo sempre, até que o caramelo dissolva e a cocada engrosse em ponto de doce cremoso de colher."
+      },
+      {
+        "id": "step_cocada_4",
+        "order": 4,
+        "title": "Finalização com Fitas de Coco & Resfriamento",
+        "category": "mesclagem",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Nos últimos minutos de cozimento, adicionar o coco em fitas/tiras para conferir textura mastigável e contraste visual no gelato. Desligar o fogo e deixar esfriar antes de utilizar na mesclagem."
+      }
+    ],
     "ingredients": [
       {
         "name": "Coco",
@@ -464,6 +540,53 @@
     "name": "Variegato de Nutella",
     "category": "Variegato",
     "instructions": "1. Aqueça o creme de leite junto com a glucose, o sal (e o cacau, se usar) em uma panela até atingir cerca de 80°C (início de fervura).\n2. Despeje a mistura quente sobre a Nutella em um recipiente.\n3. Deixe descansar por 1 minuto para o calor amolecer a Nutella.\n4. Utilize um mixer de imersão por alguns minutos até obter uma emulsão lisa, brilhante e homogênea.\n5. Deixe esfriar completamente antes de utilizar para mesclar no gelato.",
+    "preparationSteps": [
+      {
+        "id": "step_nutella_1",
+        "order": 1,
+        "title": "Aquecimento dos Líquidos",
+        "category": "aquecimento",
+        "temperature": "80°C",
+        "duration": "5 min",
+        "description": "Aqueça o creme de leite junto com a glucose e o sal (e o cacau, se usar) em uma panela até atingir cerca de 80°C (início de fervura leve), dissolvendo a glucose por completo."
+      },
+      {
+        "id": "step_nutella_2",
+        "order": 2,
+        "title": "Fusão Térmica sobre a Nutella",
+        "category": "outro",
+        "temperature": "80°C",
+        "duration": "1 min",
+        "description": "Despeje a mistura quente diretamente sobre a Nutella em um bowl de inox ou vidro temperado. Deixe descansar por 1 minuto sem mexer para o calor amolecer a massa de avelãs e cacau."
+      },
+      {
+        "id": "step_nutella_3",
+        "order": 3,
+        "title": "Emulsão com Mixer de Imersão",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "3 min",
+        "description": "Posicione o mixer de imersão no fundo do recipiente sem levantar a lâmina para não incorporar bolhas de ar. Processe por cerca de 2 a 3 minutos até obter uma ganache/emulsão lisa, brilhante e sedosa."
+      },
+      {
+        "id": "step_nutella_4",
+        "order": 4,
+        "title": "Resfriamento e Estabilização da Textura",
+        "category": "maturacao",
+        "temperature": "20°C",
+        "duration": "1h",
+        "description": "Deixe a mescla esfriar completamente em temperatura ambiente fresca até atingir cerca de 20°C e viscosidade elástica própria para intercalar no gelato."
+      },
+      {
+        "id": "step_nutella_5",
+        "order": 5,
+        "title": "Armazenamento e Aplicação no Gelato",
+        "category": "mesclagem",
+        "temperature": "20°C",
+        "duration": "Uso imediato",
+        "description": "Armazenar em bisnaga ou pote hermético em temperatura ambiente. Aplicar em fios e colheradas durante a extração do gelato na cuba ou pote."
+      }
+    ],
     "ingredients": [
       {
         "name": "Nutella",

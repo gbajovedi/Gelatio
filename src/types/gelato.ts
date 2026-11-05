@@ -112,6 +112,7 @@ export interface Preparation {
   name: string;
   category: 'Pré-preparo' | 'Variegato';
   instructions: string;
+  preparationSteps?: PreparationStep[];
   ingredients: { name: string; grams: number }[];
   isCustom?: boolean;
   costKg?: number;
