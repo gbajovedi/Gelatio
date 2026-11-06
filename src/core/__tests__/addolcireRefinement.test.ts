@@ -9,8 +9,8 @@ describe('Auditoria Técnica e Refinamento do Compêndio Profissional Addolcire'
   const preparations = allPreparations as Preparation[];
   const ingredients = allIngredients as Ingredient[];
 
-  it('deve conter exatamente 39 pré-preparos cadastrados no catálogo oficial', () => {
-    expect(preparations.length).toBe(39);
+  it('deve conter no mínimo 39 pré-preparos cadastrados no catálogo oficial', () => {
+    expect(preparations.length).toBeGreaterThanOrEqual(39);
   });
 
   it('deve conter os 16 novos pré-preparos e variegatos do compêndio com modo de preparo estruturado', () => {

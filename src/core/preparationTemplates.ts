@@ -83,6 +83,9 @@ export const VARIEGATO_STEP_TEMPLATE: Omit<PreparationStep, 'id'> = {
 };
 
 export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
+  // ═══════════════════════════════════════════════════════════════
+  // PROFISSIONAIS
+  // ═══════════════════════════════════════════════════════════════
   {
     id: 'processo_quente_tradicional',
     name: 'Processo a Quente Profissional (Pasteurização 85°C)',
@@ -198,13 +201,13 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
   {
     id: 'processo_frio_sorbet',
     name: 'Processo a Frio Profissional (Sorbets & Base Água)',
-    description: 'Processo 100% a frio com turboliquidificador industrial, produtora comercial e ultracongelador.',
-    badge: '❄️ Profissional Processo a Frio',
+    description: 'Processo 100% a frio com Neutro Específico de Sorbets (Neutro Frutta: Goma Guar + CMC + Pectina, 100% hidrossolúvel a frio). Turboliquidificador industrial, produtora comercial e ultracongelador. NOTA TÉCNICA: Se utilizar neutro universal à base de Garrofim/Alfarroba (LBG), adotar pasteurização da calda de água a 75°C–80°C antes de incorporar a fruta a frio.',
+    badge: '❄️ Profissional Sorbet a Frio (Neutro Frutta)',
     steps: [
       {
         order: 1,
         title: 'Pesagem e Mistura de Pós Secos',
-        description: 'Pesar água, açúcares (sacarose, dextrose, maltodextrina) e o neutro para sorbet (estabilizante à base de alfarroba, guar e carboximetilcelulose). Misturar secos homogeneamente.',
+        description: 'Pesar água, açúcares (sacarose, dextrose, maltodextrina) e o Neutro Específico para Sorbets (Neutro Frutta: à base de Goma Guar, CMC e pectinas de dissolução rápida, 100% hidrossolúvel a frio). Misturar os pós secos homogeneamente para dispersão prévia e prevenção de grumos.',
         temperature: 'Ambiente',
         duration: '5 min',
         category: 'pesagem'
@@ -212,7 +215,7 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
       {
         order: 2,
         title: 'Dissolução a Frio e Homogeneização com Mixer',
-        description: 'Despejar os pós na água sob agitação de alta rotação (turboliquidificador) por 2 a 3 minutos para hidratação mecânica a frio dos hidrocoloides, formando um xarope base límpido e sem grumos.',
+        description: 'Despejar os pós na água sob agitação de alta rotação (turboliquidificador) por 2 a 3 minutos. O Neutro Frutta (Guar + CMC + Pectina) atinge viscosidade plena por pura hidratação mecânica a frio, dispensando calor. Formar um xarope base límpido, viscoso e sem grumos.',
         temperature: 'Ambiente',
         duration: '3 min',
         category: 'emulsao'
@@ -309,60 +312,191 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
   },
   {
     id: 'gelato_proteico_profissional',
-    name: 'Gelato Proteico Profissional (Pasteurização Suave 70°C)',
-    description: 'Para gelatos enriquecidos com Whey Protein isolado ou concentrado. Pasteurização a 70°C para hidratação das proteínas sem coagulação ou arenosidade.',
-    badge: '💪 Profissional Proteico',
+    name: 'Gelato Proteico Profissional (Base 85°C + Whey Off-Heat)',
+    description: 'Para gelatos enriquecidos com Whey Protein 80%. Pasteurização da calda base (leite, fibras, neutro) a 85°C. O Whey Protein é adicionado FORA DO CALOR (off-heat) com emulsão vigorosa em mixer de alta rotação para evitar desnaturação da beta-lactoglobulina. Serviço a -12°C.',
+    badge: '💪 Profissional Proteico (Whey Off-Heat)',
     steps: [
       {
         order: 1,
-        title: 'Pesagem e Pré-Mistura Seca de Alta Dispersão',
-        description: 'Pesar o Whey Protein, neutro, fibras e edulcorantes/açúcares. Misturar previamente os pós secos para evitar que o Whey aglomere e forme grumos insolúveis ao contato com líquidos.',
+        title: 'Pesagem Separada: Calda Base e Whey Protein',
+        description: 'Pesar os ingredientes da calda base (leite, edulcorantes/polióis, leite em pó, fibras solúveis, neutro) separadamente do Whey Protein 80%. Misturar os pós da calda base em tigela seca. Reservar o Whey Protein à parte, SEM misturá-lo aos demais pós.',
         temperature: 'Ambiente',
         duration: '5 min',
         category: 'pesagem'
       },
       {
         order: 2,
-        title: 'Aquecimento Brando Controlado a 70°C',
-        description: 'Aquecer a calda sob agitação no pasteurizador até atingir rigorosamente 70°C por 1 minuto. Não permitir que ultrapasse 72°C para evitar desnaturação excessiva da beta-lactoglobulina do soro, prevenindo textura arenosa.',
-        temperature: '70°C',
-        duration: '10 min',
+        title: 'Pasteurização Alta da Calda Base a 85°C (SEM Whey)',
+        description: 'Aquecer os líquidos no pasteurizador até 45°C, incorporar os pós da calda base sob agitação mecânica. Elevar a 85°C e manter por 2 minutos para hidratação completa das proteínas lácteas estruturais, dissolução total das fibras e ativação do neutro. ATENÇÃO: O Whey Protein NÃO deve ir ao calor nesta etapa.',
+        temperature: '85°C',
+        duration: '15 min',
         category: 'aquecimento'
       },
       {
         order: 3,
-        title: 'Homogeneização / Turboliquidificador',
-        description: 'Passar a calda aquecida pelo turboliquidificador ou homogeneizador a 120 bar para micronizar as partículas proteicas e dispersar as micelas de proteína na fase aquosa.',
-        temperature: '65°C',
+        title: 'Resfriamento da Calda Base a ≤45°C',
+        description: 'Resfriar a calda no pasteurizador até atingir no máximo 45°C (idealmente 4°C). Esta é a faixa segura para incorporação do Whey sem desnaturação térmica precoce.',
+        temperature: '≤45°C',
+        duration: '15 min',
+        category: 'maturacao'
+      },
+      {
+        order: 4,
+        title: 'Incorporação do Whey Protein Off-Heat com Turbomixer',
+        description: 'Com a calda base a ≤45°C (ou já a 4°C), adicionar o Whey Protein 80% reservado. Emulsionar vigorosamente com turboliquidificador ou homogeneizador a 120 bar por 2 a 3 minutos para dispersão coloidal uniforme das micelas de proteína do soro, sem aquecer. Garantir calda completamente lisa e sem grumos.',
+        temperature: '≤45°C ou 4°C',
         duration: '3 min',
         category: 'emulsao'
       },
       {
-        order: 4,
-        title: 'Resfriamento Rápido e Maturação Estendida a 4°C',
-        description: 'Resfriar imediatamente até 4°C. Manter na tina de maturação por 6 a 12 horas sob agitação intermitente para completa hidratação das fibras alimentares e estabilização de água livre.',
+        order: 5,
+        title: 'Maturação Estendida a 4°C',
+        description: 'Transferir para a tina de maturação. Manter entre 4°C e 5°C sob agitação lenta intermitente por 6 a 12 horas para completa hidratação das fibras alimentares, estabilização de água livre e integração molecular do Whey à fase aquosa.',
         temperature: '4°C',
         duration: '6h a 12h',
         category: 'maturacao'
       },
       {
-        order: 5,
+        order: 6,
         title: 'Mantecação com Overrun Moderado',
-        description: 'Mantecar na produtora industrial. Monitorar a aeração (overrun de 25% a 30%) para garantir textura aveludada e cremosa, compensando o teor elevado de sólidos proteicos.',
+        description: 'Mantecar na produtora industrial. Monitorar a aeração (overrun de 25% a 30%) para garantir textura aveludada e cremosa, compensando o teor elevado de sólidos proteicos. Temperatura de extração entre -7°C e -9°C.',
         temperature: '-8°C',
         duration: '8 a 10 min',
         category: 'batimento'
       },
       {
-        order: 6,
-        title: 'Abatimento Térmico e Vitrine',
-        description: 'Abater a -35°C por 10 minutos para selar a textura superficial. Expor na vitrine de gelato a -12°C.',
+        order: 7,
+        title: 'Abatimento Térmico e Vitrine a -12°C',
+        description: 'Abater a -35°C por 10 minutos para selar a textura superficial. Expor na vitrine de gelato calibrada a -12°C, temperatura ideal para a espatulabilidade de gelatos proteicos com alto teor de sólidos.',
         temperature: '-12°C',
         duration: '10 min abat.',
         category: 'abatimento'
       }
     ]
   },
+  {
+    id: 'gelato_chocolate_cacau_profissional',
+    name: 'Gelato de Chocolate/Cacau Profissional (Cacau 90°C + Chocolate Off-Heat 65°C)',
+    description: 'Para gelatos com cacau em pó 100% e/ou chocolate em barra/gotas. O cacau é cozido na calda a 90°C para gelatinizar os amidos vegetais e eliminar a textura farinácea. O chocolate em barra é incorporado fora do fogo a 65°C.',
+    badge: '🍫 Profissional Chocolate/Cacau',
+    steps: [
+      {
+        order: 1,
+        title: 'Pesagem e Mistura dos Secos (Cacau Incluído)',
+        description: 'Pesar com precisão todos os ingredientes. Misturar os açúcares sólidos, neutro, leite em pó e o cacau em pó 100% em recipiente seco. Se a receita leva chocolate em barra/gotas, reservá-lo picado finamente à parte (NÃO misturar aos pós).',
+        temperature: 'Ambiente',
+        duration: '5 min',
+        category: 'pesagem'
+      },
+      {
+        order: 2,
+        title: 'Pasteurização Alta a 90°C (Gelatinização do Cacau)',
+        description: 'Aquecer os líquidos no pasteurizador até 45°C, incorporar os pós (incluindo o cacau em pó) sob agitação mecânica rápida. Elevar a temperatura até 90°C e manter por 2 minutos. O cacau em pó 100% contém ~10-15% de amidos vegetais que necessitam de 90°C para gelatinizar completamente, eliminando a textura farinácea/áspera (chalky mouthfeel) e abrindo o potencial aromático pleno.',
+        temperature: '90°C',
+        duration: '15 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 3,
+        title: 'Incorporação do Chocolate Off-Heat a 65°C',
+        description: 'Desligar o fogo/pasteurizador. Quando a calda atingir 65°C, adicionar o chocolate picado (branco, ao leite ou amargo). Aguardar 1 minuto sem mexer para que o calor latente funda a manteiga de cacau uniformemente. Em seguida, emulsionar com mixer/turboliquidificador até obter calda perfeitamente lisa e aveludada. ATENÇÃO: Não adicionar acima de 70°C (quebra emulsão e queima os sólidos) nem abaixo de 50°C (cristaliza sem fundir).',
+        temperature: '65°C',
+        duration: '5 min',
+        category: 'emulsao'
+      },
+      {
+        order: 4,
+        title: 'Resfriamento Rápido e Maturação a 4°C',
+        description: 'Resfriar a calda imediatamente até 4°C no ciclo de pasteurização. Maturar na tina por 4 a 12 horas para cristalização estável da manteiga de cacau e hidratação completa dos hidrocoloides.',
+        temperature: '4°C',
+        duration: '4h a 12h',
+        category: 'maturacao'
+      },
+      {
+        order: 5,
+        title: 'Mantecação na Produtora',
+        description: 'Verter a calda maturada na produtora. Bater até ponto de firmeza com temperatura de saída entre -7°C e -9°C. Gelatos de chocolate tendem a ser mais densos e podem exigir tempo de batimento ligeiramente maior.',
+        temperature: '-8°C',
+        duration: '8 a 12 min',
+        category: 'batimento'
+      },
+      {
+        order: 6,
+        title: 'Abatimento e Estabilização na Vitrine',
+        description: 'Extrair na cuba pré-resfriada e abater no ultracongelador a -35°C por 10 a 15 minutos. Expor na vitrine a -12°C.',
+        temperature: '-12°C',
+        duration: '15 min abat.',
+        category: 'abatimento'
+      }
+    ]
+  },
+  {
+    id: 'gelato_crema_gemas_profissional',
+    name: 'Gelato Crema com Gemas Profissional (Pasteurização Média 80°C–82°C)',
+    description: 'Para gelatos clássicos com gemas de ovo (Crema, Zabaione, Creme Inglês, Tiramisù). Pasteurização média controlada a 80°C–82°C sob agitação constante para prevenir coagulação das proteínas do ovo.',
+    badge: '🥚 Profissional Crema com Gemas',
+    steps: [
+      {
+        order: 1,
+        title: 'Pesagem e Branqueamento das Gemas',
+        description: 'Pesar todos os ingredientes. Em uma tigela, misturar as gemas com parte dos açúcares (sacarose/dextrose) e bater com fuê até obter uma massa clara e aerada (branqueamento). Este passo protege as gemas do choque térmico ao entrar na calda quente.',
+        temperature: 'Ambiente',
+        duration: '5 min',
+        category: 'pesagem'
+      },
+      {
+        order: 2,
+        title: 'Aquecimento dos Líquidos e Secos a 50°C',
+        description: 'No pasteurizador, aquecer o leite e o creme de leite com os demais pós (neutro, leite em pó, açúcares restantes) até atingir 50°C sob agitação.',
+        temperature: '50°C',
+        duration: '10 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 3,
+        title: 'Temperagem das Gemas e Cozimento Controlado a 80°C–82°C',
+        description: 'Verter uma concha do líquido quente (50°C) sobre as gemas branqueadas, mexendo rapidamente com fuê (temperagem). Incorporar as gemas temperadas na panela/pasteurizador e cozinhar mexendo ininterruptamente em formato de oito. Elevar até RIGOROSAMENTE 80°C–82°C. ATENÇÃO CRÍTICA: NÃO ultrapassar 82°C sob nenhuma hipótese — acima desse ponto as proteínas do ovo coagulam irreversivelmente, talhando a calda com pedaços sólidos de "omelete doce".',
+        temperature: '80°C a 82°C',
+        duration: '8 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 4,
+        title: 'Resfriamento Imediato (Choque Térmico)',
+        description: 'Resfriar imediatamente no ciclo de pasteurização ou em banho de gelo industrial para interromper a ação do calor residual sobre as gemas. Atingir 4°C o mais rápido possível.',
+        temperature: '4°C',
+        duration: '15 min',
+        category: 'maturacao'
+      },
+      {
+        order: 5,
+        title: 'Maturação Obrigatória a 4°C',
+        description: 'Maturar na tina por 6 a 12 horas a 4°C para ganho de viscosidade, integração dos aromas lácteos com a lecitina da gema e cristalização lenta das gorduras.',
+        temperature: '4°C',
+        duration: '6h a 12h',
+        category: 'maturacao'
+      },
+      {
+        order: 6,
+        title: 'Mantecação na Produtora',
+        description: 'Verter a calda maturada na produtora. Bater até ponto de firmeza amanteigada com temperatura de saída entre -7°C e -9°C.',
+        temperature: '-8°C',
+        duration: '8 a 12 min',
+        category: 'batimento'
+      },
+      {
+        order: 7,
+        title: 'Abatimento e Vitrine',
+        description: 'Extrair na cuba pré-resfriada e abater a -35°C por 10 a 15 minutos. Expor na vitrine a -12°C.',
+        temperature: '-12°C',
+        duration: '15 min abat.',
+        category: 'abatimento'
+      }
+    ]
+  },
+  // ═══════════════════════════════════════════════════════════════
+  // CASEIROS
+  // ═══════════════════════════════════════════════════════════════
   {
     id: 'gelato_caseiro_tradicional',
     name: 'Gelato Caseiro Tradicional (Sorveteira Doméstica)',
@@ -478,13 +612,13 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
   {
     id: 'processo_frio_caseiro',
     name: 'Processo a Frio Caseiro (Sorbets & Base Água)',
-    description: 'Roteiro 100% a frio sem fogão para sorbets de frutas frescas e cítricos em sorveteiras domésticas.',
-    badge: '❄️ Caseiro Sorbet a Frio (ex: EOS003)',
+    description: 'Roteiro 100% a frio sem fogão para sorbets de frutas frescas e cítricos em sorveteiras domésticas. Utiliza Neutro Específico de Sorbets (Neutro Frutta), 100% hidrossolúvel a frio no liquidificador. NOTA: Se utilizar neutro universal à base de Garrofim, aquecer a calda de água + secos a 75°C–80°C antes de resfriar e adicionar a fruta.',
+    badge: '❄️ Caseiro Sorbet a Frio / Neutro Frutta (ex: EOS003)',
     steps: [
       {
         order: 1,
         title: 'Pesagem e Mistura dos Secos a Frio',
-        description: 'Pesar água filtrada gelada, açúcares (sacarose, dextrose) e o neutro para sorbet / liga neutra. Misturar os pós secos em tigela.',
+        description: 'Pesar água filtrada gelada, açúcares (sacarose, dextrose) e o Neutro Específico para Sorbets (Neutro Frutta: Goma Guar + CMC + Pectina, hidrossolúvel a frio). Misturar os pós secos em tigela para dispersão prévia.',
         temperature: 'Ambiente',
         duration: '5 min',
         category: 'pesagem'
@@ -492,7 +626,7 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
       {
         order: 2,
         title: 'Dissolução no Liquidificador Doméstico',
-        description: 'Colocar a água no copo do liquidificador e despejar a mistura de secos. Bater na velocidade média/alta por 1 a 2 minutos para dissolução total dos açúcares e hidratação mecânica a frio das gomas, sem grumos.',
+        description: 'Colocar a água no copo do liquidificador e despejar a mistura de secos. Bater na velocidade média/alta por 1 a 2 minutos. O Neutro Frutta atinge viscosidade plena por hidratação mecânica a frio, sem necessidade de fogão. Dissolver totalmente os açúcares e formar xarope límpido sem grumos.',
         temperature: 'Ambiente',
         duration: '2 min',
         category: 'emulsao'
@@ -589,44 +723,52 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
   },
   {
     id: 'gelato_caseiro_proteico',
-    name: 'Gelato Caseiro Proteico (Sorveteira Doméstica + Calor Brando 70°C)',
-    description: 'Para receitas enriquecidas com Whey Protein na sorveteira doméstica. Aquecimento a 70°C para não talhar o soro de leite.',
-    badge: '💪 Caseiro Proteico (ex: EOS003)',
+    name: 'Gelato Caseiro Proteico (Base 85°C no Fogão + Whey Off-Heat)',
+    description: 'Para receitas enriquecidas com Whey Protein na sorveteira doméstica. Calda base pasteurizada a 85°C no fogão. Whey Protein adicionado FORA DO CALOR (off-heat) após resfriamento, com mixer de mão para dispersão sem desnaturação.',
+    badge: '💪 Caseiro Proteico / Whey Off-Heat (ex: EOS003)',
     steps: [
       {
         order: 1,
-        title: 'Pesagem e Mistura Seca dos Pós',
-        description: 'Pesar na balança digital o Whey Protein, os edulcorantes/açúcares e o neutro. Misturar bem os pós secos em uma tigela antes do contato com o leite para evitar a formação de grumos insolúveis.',
+        title: 'Pesagem Separada: Calda Base e Whey Protein',
+        description: 'Pesar na balança digital os ingredientes da calda base (leite, edulcorantes/polióis, leite em pó, fibras solúveis, neutro) separadamente do Whey Protein 80%. Misturar os pós da calda base em tigela seca. Reservar o Whey Protein à parte, SEM misturá-lo aos demais pós.',
         temperature: 'Ambiente',
         duration: '5 min',
         category: 'pesagem'
       },
       {
         order: 2,
-        title: 'Aquecimento Brando no Fogão a no Máximo 70°C',
-        description: 'Aquecer a mistura em panela de fundo grosso em fogo baixo/médio, mexendo constantemente com fuê. Use um termômetro culinário: aqueça até 68°C-70°C e desligue imediatamente. NÃO permita ferver (passar de 72°C) para não talhar as proteínas do soro.',
-        temperature: '70°C',
-        duration: '10 min',
+        title: 'Pasteurização da Calda Base no Fogão a 85°C (SEM Whey)',
+        description: 'Em panela de fundo grosso, aquecer o leite e derivados líquidos em fogo médio com fuê. Aos 40°C-45°C, adicionar os pós da calda base em chuva. Elevar até 85°C (termômetro culinário) e manter por 1 a 2 minutos. ATENÇÃO: O Whey Protein NÃO deve estar na panela nesta etapa para evitar desnaturação térmica e textura arenosa.',
+        temperature: '85°C',
+        duration: '12 min',
         category: 'aquecimento'
       },
       {
         order: 3,
-        title: 'Emulsão com Mixer de Mão',
-        description: 'Bater a calda quente com mixer de mão por 2 minutos para micronizar os pós e garantir uma calda completamente homogênea, lisa e sedosa.',
-        temperature: '65°C',
-        duration: '2 min',
-        category: 'emulsao'
+        title: 'Resfriamento em Banho-Maria Invertido',
+        description: 'Retirar do fogo e apoiar o bowl/panela sobre bacia com água fria, gelo e sal grosso (banho-maria invertido). Mexer com fuê até atingir menos de 45°C.',
+        temperature: '<45°C',
+        duration: '15 min',
+        category: 'maturacao'
       },
       {
         order: 4,
-        title: 'Resfriamento em Banho-Maria Invertido e Maturação',
-        description: 'Esfriar o bowl sobre bacia com gelo (banho-maria invertido) e levar à geladeira a 4°C por no mínimo 6 horas (idealmente 8h a 12h) para completa hidratação das proteínas lácteas.',
+        title: 'Incorporação do Whey Protein Off-Heat com Mixer de Mão',
+        description: 'Com a calda base resfriada a ≤45°C (ou já a 4°C da geladeira), adicionar o Whey Protein 80% reservado. Bater com mixer de mão por 2 a 3 minutos em alta rotação para dispersão coloidal completa e calda perfeitamente lisa, sem grumos e sem aquecer.',
+        temperature: '≤45°C ou 4°C',
+        duration: '3 min',
+        category: 'emulsao'
+      },
+      {
+        order: 5,
+        title: 'Maturação Estendida na Geladeira Doméstica',
+        description: 'Cobrir com plástico filme em contato e guardar na geladeira a 4°C por no mínimo 6 horas (idealmente 8h a 12h) para completa hidratação das proteínas e fibras alimentares.',
         temperature: '4°C',
         duration: '6h a 12h',
         category: 'maturacao'
       },
       {
-        order: 5,
+        order: 6,
         title: 'Mantecação na Sorveteira Doméstica (ex: EOS003)',
         description: 'Despejar a calda gelada na sorveteira pré-resfriada. Bater no ciclo de 30 a 40 minutos até adquirir corpo estruturado e consistência macia.',
         temperature: '-7°C',
@@ -634,11 +776,139 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
         category: 'batimento'
       },
       {
-        order: 6,
-        title: 'Estabilização no Freezer Doméstico',
-        description: 'Armazenar em pote hermético no freezer (-18°C) por 2 a 3 horas antes de servir.',
-        temperature: '-18°C',
+        order: 7,
+        title: 'Estabilização no Freezer Doméstico a -18°C (Serviço a -12°C)',
+        description: 'Armazenar em pote hermético no freezer (-18°C) por 2 a 3 horas. Para servir, retirar e temperar na geladeira por 10 a 15 minutos até atingir a temperatura ideal de serviço de -12°C para espatulabilidade ideal de gelatos proteicos.',
+        temperature: '-18°C / -12°C serviço',
         duration: '2h a 3h',
+        category: 'abatimento'
+      }
+    ]
+  },
+  {
+    id: 'gelato_chocolate_cacau_caseiro',
+    name: 'Gelato de Chocolate/Cacau Caseiro (Cacau 90°C + Chocolate Off-Heat 65°C)',
+    description: 'Para receitas caseiras com cacau em pó 100% e/ou chocolate em barra. Cocção da calda com cacau até 90°C no fogão. Chocolate incorporado fora do fogo a 65°C.',
+    badge: '🍫 Caseiro Chocolate/Cacau (ex: EOS003)',
+    steps: [
+      {
+        order: 1,
+        title: 'Pesagem e Mistura dos Secos (Cacau Incluído)',
+        description: 'Pesar os ingredientes na balança digital. Em um bowl seco, misturar o açúcar, dextrose, neutro, leite em pó e o cacau em pó 100%. Se a receita leva chocolate em barra/gotas, picar finamente e reservar à parte.',
+        temperature: 'Ambiente',
+        duration: '5 min',
+        category: 'pesagem'
+      },
+      {
+        order: 2,
+        title: 'Pasteurização no Fogão a 90°C (Gelatinização do Cacau)',
+        description: 'Em panela de fundo grosso, aquecer o leite em fogo médio com fuê. Aos 40°C-45°C, adicionar os pós (com cacau) em chuva. Adicionar creme de leite e elevar até 90°C (termômetro culinário), mantendo por 1 a 2 minutos sem ferver. A temperatura de 90°C é essencial para gelatinizar os amidos do cacau e eliminar a textura farinácea.',
+        temperature: '90°C',
+        duration: '15 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 3,
+        title: 'Incorporação do Chocolate Off-Heat a 65°C',
+        description: 'Desligar o fogo imediatamente. Monitorar o termômetro: quando a calda atingir 65°C, adicionar o chocolate picado. Aguardar 1 minuto sem mexer para fusão pela inércia térmica da calda. Misturar com espátula e bater com mixer de mão até calda lisa e brilhante. ATENÇÃO: Não adicionar acima de 70°C nem abaixo de 50°C.',
+        temperature: '65°C',
+        duration: '5 min',
+        category: 'emulsao'
+      },
+      {
+        order: 4,
+        title: 'Resfriamento em Banho-Maria Invertido',
+        description: 'Apoiar o bowl sobre bacia com água fria, gelo e sal grosso (banho-maria invertido). Mexer com fuê até menos de 10°C.',
+        temperature: '<10°C',
+        duration: '15 min',
+        category: 'maturacao'
+      },
+      {
+        order: 5,
+        title: 'Maturação na Geladeira Doméstica',
+        description: 'Cobrir com plástico filme em contato e guardar na geladeira a 4°C por 4 a 12 horas para cristalização estável da manteiga de cacau e hidratação completa dos estabilizantes.',
+        temperature: '4°C',
+        duration: '4h a 12h',
+        category: 'maturacao'
+      },
+      {
+        order: 6,
+        title: 'Mantecação na Sorveteira Doméstica (ex: EOS003)',
+        description: 'Despejar a calda gelada na sorveteira pré-resfriada. Bater por 30 a 45 minutos até consistência firme e aveludada.',
+        temperature: '-7°C',
+        duration: '30 a 45 min',
+        category: 'batimento'
+      },
+      {
+        order: 7,
+        title: 'Endurecimento no Freezer Doméstico',
+        description: 'Transferir para pote hermético pré-resfriado e levar ao freezer (-18°C) por 2 a 4 horas.',
+        temperature: '-18°C',
+        duration: '2h a 4h',
+        category: 'abatimento'
+      }
+    ]
+  },
+  {
+    id: 'gelato_crema_gemas_caseiro',
+    name: 'Gelato Crema com Gemas Caseiro (Pasteurização Média 80°C–82°C no Fogão)',
+    description: 'Para receitas caseiras com gemas de ovo (Crema, Zabaione, Creme Inglês). Cozimento controlado a no máximo 80°C–82°C no fogão com fuê para evitar coagulação das proteínas do ovo.',
+    badge: '🥚 Caseiro Crema com Gemas (ex: EOS003)',
+    steps: [
+      {
+        order: 1,
+        title: 'Pesagem e Branqueamento das Gemas',
+        description: 'Pesar todos os ingredientes na balança digital. Em uma tigela, bater as gemas com parte do açúcar usando fuê até obter mistura clara e levemente aerada (branqueamento). Reservar.',
+        temperature: 'Ambiente',
+        duration: '5 min',
+        category: 'pesagem'
+      },
+      {
+        order: 2,
+        title: 'Aquecimento do Leite e Secos no Fogão a 50°C',
+        description: 'Em panela de fundo grosso, aquecer o leite, creme de leite e demais pós (neutro, leite em pó, açúcares restantes) em fogo médio com fuê até 50°C.',
+        temperature: '50°C',
+        duration: '8 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 3,
+        title: 'Temperagem das Gemas e Cozimento a 80°C–82°C',
+        description: 'Verter uma concha do leite morno sobre as gemas branqueadas, mexendo rapidamente (temperagem). Devolver à panela e cozinhar em fogo baixo, mexendo sem parar com fuê em formato de oito. Usar termômetro culinário: elevar até EXATAMENTE 80°C–82°C. NUNCA ultrapassar 82°C para não talhar as gemas. Desligar o fogo imediatamente ao atingir a temperatura.',
+        temperature: '80°C a 82°C',
+        duration: '10 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 4,
+        title: 'Resfriamento Imediato em Banho-Maria Invertido',
+        description: 'Retirar do fogo e apoiar imediatamente sobre bacia com água fria, gelo e sal grosso (banho-maria invertido) para interromper a cocção residual sobre as gemas. Mexer com fuê até menos de 10°C.',
+        temperature: '<10°C',
+        duration: '15 min',
+        category: 'maturacao'
+      },
+      {
+        order: 5,
+        title: 'Maturação na Geladeira Doméstica',
+        description: 'Cobrir com plástico filme em contato e guardar na geladeira a 4°C por 6 a 12 horas para ganho de viscosidade e integração dos aromas lácteos com a lecitina da gema.',
+        temperature: '4°C',
+        duration: '6h a 12h',
+        category: 'maturacao'
+      },
+      {
+        order: 6,
+        title: 'Mantecação na Sorveteira Doméstica (ex: EOS003)',
+        description: 'Despejar a calda gelada na sorveteira pré-resfriada. Bater por 30 a 45 minutos até atingir textura amanteigada clássica e corpo cremoso.',
+        temperature: '-7°C',
+        duration: '30 a 45 min',
+        category: 'batimento'
+      },
+      {
+        order: 7,
+        title: 'Endurecimento no Freezer Doméstico',
+        description: 'Transferir para pote hermético pré-resfriado e levar ao freezer (-18°C) por 2 a 4 horas.',
+        temperature: '-18°C',
+        duration: '2h a 4h',
         category: 'abatimento'
       }
     ]
@@ -653,6 +923,9 @@ export function suggestPreparationTemplate(recipe: Recipe): PreparationTemplate 
   const cat = (recipe.category || '').toLowerCase();
   const name = (recipe.name || '').toLowerCase();
   const targetStyle = (recipe.targetStyle || '').toLowerCase();
+
+  // Detecção de ingredientes especiais pela lista de ingredientes
+  const ingredientNames = (recipe.ingredients || []).map(i => (i.name || '').toLowerCase()).join(' ');
 
   const isSorbetBaseAgua =
     cat.includes('sorbet') ||
@@ -679,6 +952,22 @@ export function suggestPreparationTemplate(recipe: Recipe): PreparationTemplate 
     name.includes('proteic') ||
     name.includes('whey');
 
+  const hasChocolateOrCocoa =
+    name.includes('chocolate') ||
+    name.includes('cacau') ||
+    name.includes('gianduia') ||
+    name.includes('brigadeiro') ||
+    ingredientNames.includes('cacau') ||
+    ingredientNames.includes('chocolate');
+
+  const hasEgg =
+    ingredientNames.includes('gema') ||
+    ingredientNames.includes('ovo') ||
+    name.includes('crema') ||
+    name.includes('zabaione') ||
+    name.includes('creme inglês') ||
+    name.includes('creme ingles');
+
   const hasFruit =
     cat.includes('fruta') ||
     targetStyle.includes('fruta') ||
@@ -704,6 +993,12 @@ export function suggestPreparationTemplate(recipe: Recipe): PreparationTemplate 
     if (isProteic) {
       return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_proteico_profissional')!;
     }
+    if (hasEgg && !hasChocolateOrCocoa) {
+      return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_crema_gemas_profissional')!;
+    }
+    if (hasChocolateOrCocoa) {
+      return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_chocolate_cacau_profissional')!;
+    }
     if (isSorbetBaseAgua) {
       return PREPARATION_TEMPLATES.find(t => t.id === 'processo_frio_sorbet')!;
     }
@@ -723,6 +1018,14 @@ export function suggestPreparationTemplate(recipe: Recipe): PreparationTemplate 
 
   if (isProteic) {
     return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_caseiro_proteico')!;
+  }
+
+  if (hasEgg && !hasChocolateOrCocoa) {
+    return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_crema_gemas_caseiro')!;
+  }
+
+  if (hasChocolateOrCocoa) {
+    return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_chocolate_cacau_caseiro')!;
   }
 
   if (isSorbetBaseAgua) {
@@ -760,4 +1063,3 @@ export function instantiateTemplateSteps(
 
   return steps;
 }
-

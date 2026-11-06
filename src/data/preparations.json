@@ -1826,5 +1826,426 @@
         "grams": 1
       }
     ]
+  },
+  {
+    "id": "prep_cookie_proteico_amendoim",
+    "name": "Cookie Proteico Crocante de Amendoim para Gelato",
+    "category": "Variegato",
+    "instructions": "Misturar a farinha de amendoim torrado, o Whey Protein 80%, a farinha de aveia, canela, sal e bicarbonato em um bowl. Adicionar o óleo de coco e o maltitol (ou açúcar mascavo), massageando até formar uma massa modelável de textura areada úmida. Moldar pequenos cookies planos e dispor em assadeira forrada com papel manteiga. Assar em forno pré-aquecido a 160°C por 12 a 15 minutos até secar e dourar levemente. Deixar esfriar completamente na grade para atingir crocância máxima e picar em pedaços de 6mm para mesclagem pós-mantecação.",
+    "preparationSteps": [
+      {
+        "id": "step_cpa_1",
+        "order": 1,
+        "title": "Homogeneização dos Pós Proteicos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Em uma tigela, misturar com fuê a farinha de amendoim, Whey Protein 80%, farinha de aveia, maltitol, canela em pó, sal e bicarbonato até distribuição uniforme."
+      },
+      {
+        "id": "step_cpa_2",
+        "order": 2,
+        "title": "Aglomeração da Massa com Óleo de Coco",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "4 min",
+        "description": "Verter o óleo de coco e misturar com as pontas dos dedos até obter textura de farofa úmida e coesa que se compacta ao ser pressionada."
+      },
+      {
+        "id": "step_cpa_3",
+        "order": 3,
+        "title": "Modelagem e Forneamento a 160°C",
+        "category": "aquecimento",
+        "temperature": "160°C",
+        "duration": "15 min",
+        "description": "Formar pequenos discos achatados sobre papel manteiga e assar a 160°C por 12 a 15 minutos até que as bordas comecem a dourar."
+      },
+      {
+        "id": "step_cpa_4",
+        "order": 4,
+        "title": "Resfriamento, Quebra em Pedacinhos e Vedação",
+        "category": "maturacao",
+        "temperature": "Ambiente",
+        "duration": "15 min",
+        "description": "Deixar esfriar totalmente sobre grade de confeitaria para consolidar a crocância. Picar em cubos rústicos de 6mm e conservar em recipiente hermético seco para mesclagem no gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Amendoim Torrado",
+        "grams": 100
+      },
+      {
+        "name": "Whey protein 80%",
+        "grams": 40
+      },
+      {
+        "name": "Aveia em Flocos",
+        "grams": 40
+      },
+      {
+        "name": "Maltitol",
+        "grams": 45
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 30
+      },
+      {
+        "name": "Canela em pó",
+        "grams": 2
+      },
+      {
+        "name": "Sal",
+        "grams": 1
+      },
+      {
+        "name": "Bicarbonato de sódio",
+        "grams": 2
+      }
+    ]
+  },
+  {
+    "id": "prep_crumble_proteico_aveia",
+    "name": "Crumble Proteico de Aveia para Gelato",
+    "category": "Variegato",
+    "instructions": "Combinar aveia em flocos finos, Whey Protein ou isolado vegetal, farinha de amêndoas, eritritol (ou açúcar demerara) e uma pitada de sal. Esfregar o óleo de coco gelado com as pontas dos dedos até produzir grânulos crocantes irregulares (streusel). Espalhar sobre tapete de silicone e assar a 150°C por 15 minutos até tostar suavemente e perder toda a umidade. Resfriar e vedar para mescla crocante em gelatos funcionais.",
+    "preparationSteps": [
+      {
+        "id": "step_cpo_1",
+        "order": 1,
+        "title": "Pesagem e Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Pesar e misturar os flocos de aveia finos, proteína em pó, farinha de trigo, edulcorante/açúcar e sal fino."
+      },
+      {
+        "id": "step_cpo_2",
+        "order": 2,
+        "title": "Sabotagem / Esfarelamento Granular",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Incorporar o óleo de coco aos secos com a ponta dos dedos em movimentos rápidos, formando pequenos torrões aerados (crumbles)."
+      },
+      {
+        "id": "step_cpo_3",
+        "order": 3,
+        "title": "Secagem e Tostagem Controlada",
+        "category": "aquecimento",
+        "temperature": "150°C",
+        "duration": "15 min",
+        "description": "Espalhar em assadeira sem amontoar. Assar a 150°C por 15 minutos, mexendo suavemente na metade do tempo para douramento uniforme."
+      },
+      {
+        "id": "step_cpo_4",
+        "order": 4,
+        "title": "Estabilização Crocante e Armazenamento",
+        "category": "maturacao",
+        "temperature": "Ambiente",
+        "duration": "20 min",
+        "description": "Esfriar completamente em ambiente seco. Armazenar em pote hermético para utilização na saída da produtora."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Aveia em Flocos",
+        "grams": 80
+      },
+      {
+        "name": "Whey protein 80%",
+        "grams": 40
+      },
+      {
+        "name": "Farinha de Trigo",
+        "grams": 40
+      },
+      {
+        "name": "Eritritol",
+        "grams": 45
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 40
+      },
+      {
+        "name": "Sal",
+        "grams": 2
+      },
+      {
+        "name": "Extrato De Baunilha",
+        "grams": 3
+      }
+    ]
+  },
+  {
+    "id": "prep_pure_frutas_vermelhas_inativado",
+    "name": "Purê de Frutas Inativadas para Gelato Proteico",
+    "category": "Pré-preparo",
+    "instructions": "Colocar morangos frescos ou frutas vermelhas higienizadas em panela de inox com o suco de limão e a inulina/açúcar. Aquecer em fogo médio até fervura mansa e manter por 3 minutos cronometrados entre 88°C e 92°C, mexendo delicadamente. Esta breve cocção inativa termicamente as enzimas proteolíticas da fruta, concentrando o sabor e prevenindo a desnaturação e sinérise (separação da água do leite) ao ser mesclada na base proteica. Bater com mixer e resfriar a 4°C antes do uso.",
+    "preparationSteps": [
+      {
+        "id": "step_pfi_1",
+        "order": 1,
+        "title": "Seleção, Pesagem e Maceração Inicial",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar as frutas selecionadas, adicionar o suco de limão fresco e a inulina/açúcar em panela de fundo espesso."
+      },
+      {
+        "id": "step_pfi_2",
+        "order": 2,
+        "title": "Cocção Cronometrada de Inativação Enzimática",
+        "category": "aquecimento",
+        "temperature": "90°C",
+        "duration": "3 min",
+        "description": "Aquecer sob fogo médio até atingir fervura branda (88°C a 92°C). Manter cocção ativa por exatamente 3 minutos cronometrados para desnaturar enzimas que atacam a caseína e o soro lácteo."
+      },
+      {
+        "id": "step_pfi_3",
+        "order": 3,
+        "title": "Refinamento e Micronização no Mixer",
+        "category": "emulsao",
+        "temperature": "70°C",
+        "duration": "2 min",
+        "description": "Triturar com mixer de imersão de alta velocidade até obter um purê brilhante, homogêneo e sem pedaços fibrosos."
+      },
+      {
+        "id": "step_pfi_4",
+        "order": 4,
+        "title": "Abatimento Rápido e Maturação a Frio",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "30 min",
+        "description": "Resfriar imediatamente em banho de gelo até <10°C e conservar em refrigeração a 4°C antes de incorporar à calda de leite proteica fria."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Morango",
+        "grams": 450
+      },
+      {
+        "name": "Suco de Limão",
+        "grams": 5
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 25
+      }
+    ]
+  },
+  {
+    "id": "prep_leite_pistache_artesanal",
+    "name": "Leite de Pistache Artesanal para Gelato Vegano",
+    "category": "Pré-preparo",
+    "instructions": "Pesar 50g de pistache cru ou levemente tostado sem sal. Aquecer 600g de água mineral até 80°C. Bater no liquidificador na velocidade máxima por 3 minutos até completa emulsão leitosa. Filtrar em tecido de voal ou chinois fino, espremendo bem o resíduo fibroso com espátula. Rende cerca de 580g de base láctea vegetal aveludada verde-clara para uso em bases veganas zero açúcar.",
+    "preparationSteps": [
+      {
+        "id": "step_lpa_1",
+        "order": 1,
+        "title": "Pesagem e Aquecimento da Água",
+        "category": "pesagem",
+        "temperature": "80°C",
+        "duration": "5 min",
+        "description": "Pesar o pistache cru ou tostado e aquecer a água mineral até 80°C para facilitar o rompimento celular e a extração dos lipídios."
+      },
+      {
+        "id": "step_lpa_2",
+        "order": 2,
+        "title": "Micronização em Alta Rotação",
+        "category": "emulsao",
+        "temperature": "75°C",
+        "duration": "3 min",
+        "description": "Bater no liquidificador por 3 minutos contínuos na potência máxima até formar um líquido leitoso homogêneo."
+      },
+      {
+        "id": "step_lpa_3",
+        "order": 3,
+        "title": "Filtragem Fina em Voal",
+        "category": "preparo",
+        "temperature": "60°C",
+        "duration": "4 min",
+        "description": "Passar por tecido de voal duplo ou filtro de nylon ultrafino, prensando para extrair todo o leite vegetal e reter o bagaço seco."
+      },
+      {
+        "id": "step_lpa_4",
+        "order": 4,
+        "title": "Resfriamento Rápido a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "30 min",
+        "description": "Resfriar em banho de gelo até <10°C e refrigerar a 4°C até a montagem da calda do gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Pistache Torrado s/ Sal",
+        "grams": 50
+      },
+      {
+        "name": "Água",
+        "grams": 600
+      }
+    ]
+  },
+  {
+    "id": "prep_coco_ralado_fresco_variegato",
+    "name": "Coco Ralado Fresco Crocante para Gelato",
+    "category": "Variegato",
+    "instructions": "Espalhar o coco fresco ralado fino em camada uniforme sobre assadeira forrada com papel manteiga. Levar ao forno pré-aquecido a 110°C por 12 a 15 minutos, mexendo delicadamente com espátula a cada 5 minutos, apenas para desidratar e concentrar os óleos aromáticos sem queimar ou escurecer. Deixar esfriar completamente na assadeira em local seco. Reservar em pote vedado para mesclagem ou adição pré-congelamento no gelato.",
+    "preparationSteps": [
+      {
+        "id": "step_crf_1",
+        "order": 1,
+        "title": "Seleção e Espalhamento em Assadeira",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Pesar o coco fresco ralado e distribuir de forma homogênea em assadeira ampla forrada com papel manteiga."
+      },
+      {
+        "id": "step_crf_2",
+        "order": 2,
+        "title": "Desidratação Controlada no Forno a 110°C",
+        "category": "aquecimento",
+        "temperature": "110°C",
+        "duration": "15 min",
+        "description": "Assar a 110°C por 12 a 15 minutos mexendo periodicamente para secagem uniforme sem tostagem excessiva."
+      },
+      {
+        "id": "step_crf_3",
+        "order": 3,
+        "title": "Resfriamento e Conservação Crocante",
+        "category": "maturacao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Esfriar totalmente em ambiente seco para firmar a textura crocante e envasar hermeticamente para uso na finalização do gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Coco Fresco Ralado",
+        "grams": 120
+      }
+    ]
+  },
+  {
+    "id": "prep_polpa_maracuja_reduzida",
+    "name": "Polpa de Maracujá Reduzida Concentrada",
+    "category": "Pré-preparo",
+    "instructions": "Colocar 250g de polpa fresca de maracujá com sementes em panela de aço inox. Cozinhar em fogo baixo mantendo temperatura branda (80°C a 85°C) por cerca de 10 a 15 minutos, mexendo suavemente até que a água evapore e a massa atinja exatamente 150g (redução a 60% do peso inicial). Peneirar parte das sementes conforme preferência estética e resfriar a 4°C. Proporciona sabor cítrico intenso e cremosidade sem diluir a calda láctea do gelato.",
+    "preparationSteps": [
+      {
+        "id": "step_pmr_1",
+        "order": 1,
+        "title": "Pesagem e Início do Aquecimento Brando",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Pesar 250g de polpa fresca de maracujá e transferir para panela de fundo grosso."
+      },
+      {
+        "id": "step_pmr_2",
+        "order": 2,
+        "title": "Redução Térmica Controlada a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "12 min",
+        "description": "Manter sob fervura muito mansa (80°C a 85°C) mexendo com espátula até reduzir o volume para exatamente 150g."
+      },
+      {
+        "id": "step_pmr_3",
+        "order": 3,
+        "title": "Clarificação e Filtragem Parcial",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "3 min",
+        "description": "Peneirar suavemente para separar parte das sementes, retendo 10% para o apelo visual característico da fruta."
+      },
+      {
+        "id": "step_pmr_4",
+        "order": 4,
+        "title": "Abatimento e Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "20 min",
+        "description": "Resfriar em banho de gelo até <10°C e conservar vedado sob refrigeração a 4°C para uso na calda láctea."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Maracujá",
+        "grams": 250
+      }
+    ]
+  },
+  {
+    "id": "prep_caramelo_maracuja",
+    "name": "Caramelo Artesanal de Maracujá para Gelato",
+    "category": "Variegato",
+    "instructions": "Em panela de fundo grosso, aquecer o açúcar a seco em fogo brando até fusão completa e obtenção de cor âmbar dourada brilhante (165°C-170°C). Em outra panela pequena, misturar a água, a glucose e a polpa de maracujá, aquecendo até 75°C. Verter a polpa aquecida aos poucos sobre o caramelo quente, mexendo vigorosamente com fuê para deglaçar sem espirrar. Adicionar o neutro (previamente misturado com 5g de açúcar) e bater com mixer de imersão por 1 minuto até formar uma calda caramelizada translúcida, espessa e aveludada. Resfriar em banho de gelo até 15°C e armazenar em bisnaga sob refrigeração para mesclagem pós-mantecação.",
+    "preparationSteps": [
+      {
+        "id": "step_cpm_1",
+        "order": 1,
+        "title": "Caramelização a Seco do Açúcar",
+        "category": "aquecimento",
+        "temperature": "170°C",
+        "duration": "8 min",
+        "description": "Aquecer o açúcar refinado a seco em panela de inox de fundo espesso em fogo brando até fusão total e caramelização em tom âmbar dourado."
+      },
+      {
+        "id": "step_cpm_2",
+        "order": 2,
+        "title": "Aquecimento da Polpa com Glucose",
+        "category": "aquecimento",
+        "temperature": "75°C",
+        "duration": "5 min",
+        "description": "Em outra panela, aquecer a água com a glucose e a polpa de maracujá até 75°C para evitar choque térmico violento ao verter sobre o caramelo."
+      },
+      {
+        "id": "step_cpm_3",
+        "order": 3,
+        "title": "Deglaçagem e Emulsão do Neutro no Mixer",
+        "category": "emulsao",
+        "temperature": "80°C",
+        "duration": "3 min",
+        "description": "Verter o maracujá aquecido aos poucos sobre o caramelo fervente sob agitação contínua com fuê. Adicionar o neutro estabilizante e processar com mixer de imersão por 1 minuto até obter calda lisa e sem cristais."
+      },
+      {
+        "id": "step_cpm_4",
+        "order": 4,
+        "title": "Resfriamento Rápido e Envasamento",
+        "category": "maturacao",
+        "temperature": "15°C",
+        "duration": "15 min",
+        "description": "Resfriar a panela em banho-maria de gelo até atingir cerca de 15°C e transferir para bisnaga de confeitaria para marmorização no gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Açúcar",
+        "grams": 160
+      },
+      {
+        "name": "Água",
+        "grams": 60
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 30
+      },
+      {
+        "name": "Maracujá",
+        "grams": 200
+      },
+      {
+        "name": "Neutro",
+        "grams": 3
+      }
+    ]
   }
 ]

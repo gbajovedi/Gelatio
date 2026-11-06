@@ -1822,6 +1822,123 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_addolcire_refinement_v3', value: 1 });
       }
 
+      // Sincronizar refinamento de receitas do compêndio Gelatos Proteicos (3 novos pré-preparos/variegatos e 12 receitas com passos refinados)
+      const proteicCompendiumSetting = await this.settings.get('recipes_proteic_compendium_refinement_v4');
+      if (!proteicCompendiumSetting) {
+        console.log('Sincronizando 3 novos pré-preparos proteicos e 12 receitas proteicas refinadas...');
+        // 1. Garantir que os 42 pré-preparos do catálogo estejam no banco
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        // 2. Atualizar as 12 receitas proteicas refinadas
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const proteicTargetIds = [
+          'rec_166', 'rec_167', 'rec_168', 'rec_169', 'rec_170', 'rec_171',
+          'rec_172', 'rec_173', 'rec_174', 'rec_175', 'rec_176', 'rec_177'
+        ];
+
+        for (const id of proteicTargetIds) {
+          const catRec = initialMap.get(id);
+          const dbRec = await this.recipes.get(id);
+          if (catRec && dbRec && !dbRec.isCustom) {
+            await this.recipes.update(id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams,
+              preparationSteps: catRec.preparationSteps
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_proteic_compendium_refinement_v4', value: 1 });
+      }
+
+      // Sincronizar refinamento de receitas do compêndio Gelatos Sem Adição de Açúcar e Redução de Açúcar (3 novos pré-preparos, 22 receitas zero refinadas e 10 novas receitas com Açúcar de Maçã)
+      const sugarFreeSetting = await this.settings.get('recipes_sugar_free_and_reduced_refinement_v5');
+      if (!sugarFreeSetting) {
+        console.log('Sincronizando 3 novos pré-preparos, 22 receitas zero refinadas e 10 novas receitas com açúcar de maçã...');
+        // 1. Garantir que os 45 pré-preparos do catálogo estejam no banco
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        // 2. Inserir as 10 novas receitas com Açúcar de Maçã se ainda não existirem
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const newSugarReducedIds = [
+          'rec_179', 'rec_180', 'rec_181', 'rec_182', 'rec_183',
+          'rec_184', 'rec_185', 'rec_186', 'rec_187', 'rec_188'
+        ];
+        for (const id of newSugarReducedIds) {
+          const catRec = initialMap.get(id);
+          if (catRec) {
+            const dbRec = await this.recipes.get(id);
+            if (!dbRec) {
+              await this.recipes.put(catRec);
+            }
+          }
+        }
+
+        // 3. Atualizar as 22 receitas existentes refinadas (rec_144 a rec_165)
+        for (let num = 144; num <= 165; num++) {
+          const id = `rec_${num}`;
+          const catRec = initialMap.get(id);
+          const dbRec = await this.recipes.get(id);
+          if (catRec && dbRec && !dbRec.isCustom) {
+            await this.recipes.update(id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams,
+              preparationSteps: catRec.preparationSteps,
+              ...(catRec.variegatos ? { variegatos: catRec.variegatos } : {})
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_sugar_free_and_reduced_refinement_v5', value: 1 });
+      }
+
+      // Sincronizar refinamento de receitas do compêndio Sorbetos & Gelatos Veganos (Caramelo de Maracujá e 19 receitas refinadas)
+      const sorbetosSetting = await this.settings.get('recipes_sorbetos_direto_ao_ponto_refinement_v6');
+      if (!sorbetosSetting) {
+        console.log('Sincronizando pré-preparo Caramelo de Maracujá e 19 sorbetos/veganos refinados...');
+        // 1. Garantir que os 46 pré-preparos do catálogo estejam no banco
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        // 2. Atualizar as 19 receitas refinadas
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const sorbetosTargetIds = [
+          'rec_71', 'rec_72', 'rec_73', 'rec_74', 'rec_75', 'rec_76', 'rec_77', 'rec_78', 'rec_79', 'rec_80',
+          'rec_99', 'rec_100', 'rec_101', 'rec_102', 'rec_103', 'rec_104', 'rec_105',
+          'rec_110'
+        ];
+
+        for (const id of sorbetosTargetIds) {
+          const catRec = initialMap.get(id);
+          const dbRec = await this.recipes.get(id);
+          if (catRec && dbRec && !dbRec.isCustom) {
+            await this.recipes.update(id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams,
+              preparationSteps: catRec.preparationSteps,
+              ...(catRec.variegatos ? { variegatos: catRec.variegatos } : { variegatos: [] })
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_sorbetos_direto_ao_ponto_refinement_v6', value: 1 });
+      }
+
+      // Sincronizar calibração físico-química dos modos de preparo (Cacau 90°C, Chocolate 65°C Off-Heat, Gemas 80°C–82°C)
+      const thermalSetting = await this.settings.get('recipes_thermal_calibration_refinement_v7');
+      if (!thermalSetting) {
+        console.log('Sincronizando calibração térmica de modos de preparo nas receitas do catálogo...');
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const allDbRecs = await this.recipes.toArray();
+        for (const dbRec of allDbRecs) {
+          if (!dbRec.isCustom) {
+            const catRec = initialMap.get(dbRec.id);
+            if (catRec && catRec.preparationSteps) {
+              await this.recipes.update(dbRec.id, {
+                preparationSteps: catRec.preparationSteps
+              });
+            }
+          }
+        }
+        await this.settings.put({ key: 'recipes_thermal_calibration_refinement_v7', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {

@@ -9,21 +9,23 @@ import { Recipe } from '../../types/gelato';
 import allRecipes from '../../data/recipes.json';
 
 describe('preparationTemplates', () => {
-  it('deve conter exatamente 10 estilos canônicos (5 profissionais e 5 caseiros)', () => {
-    expect(PREPARATION_TEMPLATES).toHaveLength(10);
+  it('deve conter exatamente 14 estilos canônicos (7 profissionais e 7 caseiros)', () => {
+    expect(PREPARATION_TEMPLATES).toHaveLength(14);
 
     const proTemplates = PREPARATION_TEMPLATES.filter(t => !t.id.includes('caseiro'));
     const homeTemplates = PREPARATION_TEMPLATES.filter(t => t.id.includes('caseiro'));
 
-    expect(proTemplates).toHaveLength(5);
-    expect(homeTemplates).toHaveLength(5);
+    expect(proTemplates).toHaveLength(7);
+    expect(homeTemplates).toHaveLength(7);
 
     expect(proTemplates.map(t => t.id)).toEqual([
       'processo_quente_tradicional',
       'gelato_frutas_pos_pasteurizacao',
       'processo_frio_sorbet',
       'gelato_alcoolico_profissional',
-      'gelato_proteico_profissional'
+      'gelato_proteico_profissional',
+      'gelato_chocolate_cacau_profissional',
+      'gelato_crema_gemas_profissional'
     ]);
 
     expect(homeTemplates.map(t => t.id)).toEqual([
@@ -31,7 +33,9 @@ describe('preparationTemplates', () => {
       'gelato_caseiro_frutas',
       'processo_frio_caseiro',
       'gelato_caseiro_alcoolico',
-      'gelato_caseiro_proteico'
+      'gelato_caseiro_proteico',
+      'gelato_chocolate_cacau_caseiro',
+      'gelato_crema_gemas_caseiro'
     ]);
   });
 
@@ -132,10 +136,50 @@ describe('preparationTemplates', () => {
       totalGrams: 1000
     };
     expect(suggestPreparationTemplate(proProteicRecipe).id).toBe('gelato_proteico_profissional');
+
+    const homeChocoRecipe: Recipe = {
+      id: '8',
+      name: 'Gelato de Chocolate Amargo',
+      category: 'Gelatos de Leite com Chocolate',
+      targetStyle: 'Gelatos de Leite com Chocolate',
+      ingredients: [{ name: 'Chocolate 70%', grams: 150 }],
+      totalGrams: 1000
+    };
+    expect(suggestPreparationTemplate(homeChocoRecipe).id).toBe('gelato_chocolate_cacau_caseiro');
+
+    const homeEggRecipe: Recipe = {
+      id: '9',
+      name: 'Gelato de Crema Tradicional',
+      category: 'Gelatos de Leite',
+      targetStyle: 'Gelatos de Leite',
+      ingredients: [{ name: 'Gema de ovo', grams: 80 }],
+      totalGrams: 1000
+    };
+    expect(suggestPreparationTemplate(homeEggRecipe).id).toBe('gelato_crema_gemas_caseiro');
+
+    const proChocoRecipe: Recipe = {
+      id: '10',
+      name: 'Gelato Profissional de Cacau Intenso',
+      category: 'Gelatos de Leite com Chocolate',
+      targetStyle: 'Gelatos de Leite com Chocolate',
+      ingredients: [{ name: 'Cacau em Pó 100%', grams: 60 }],
+      totalGrams: 1000
+    };
+    expect(suggestPreparationTemplate(proChocoRecipe).id).toBe('gelato_chocolate_cacau_profissional');
+
+    const proEggRecipe: Recipe = {
+      id: '11',
+      name: 'Gelato Profissional Crema Zabaione',
+      category: 'Gelatos de Leite',
+      targetStyle: 'Gelatos de Leite',
+      ingredients: [{ name: 'Gema de ovo', grams: 100 }],
+      totalGrams: 1000
+    };
+    expect(suggestPreparationTemplate(proEggRecipe).id).toBe('gelato_crema_gemas_profissional');
   });
 
-  it('deve garantir que 100% das 149 receitas do catálogo possuem preparationSteps válidos', () => {
-    expect(allRecipes.length).toBe(149);
+  it('deve garantir que 100% das 159 receitas do catálogo possuem preparationSteps válidos', () => {
+    expect(allRecipes.length).toBe(159);
 
     for (const recipe of allRecipes as Recipe[]) {
       expect(recipe.preparationSteps, `Receita ${recipe.id} (${recipe.name}) sem preparationSteps`).toBeDefined();
