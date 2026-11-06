@@ -1734,6 +1734,23 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_proteic_anti_arenosidade_v1', value: 1 });
       }
 
+      // Sincronizar pré-preenchimento dos Modos de Preparo Caseiros (148 receitas)
+      const prepStepsCaseiroSetting = await this.settings.get('recipes_caseiro_steps_v1');
+      if (!prepStepsCaseiroSetting) {
+        console.log('Sincronizando modos de preparo caseiros em todas as receitas do catálogo...');
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const allRecs = await this.recipes.toArray();
+        for (const rec of allRecs) {
+          const catRec = initialMap.get(rec.id);
+          if (catRec && !rec.isCustom && catRec.preparationSteps) {
+            await this.recipes.update(rec.id, {
+              preparationSteps: catRec.preparationSteps
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_caseiro_steps_v1', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {

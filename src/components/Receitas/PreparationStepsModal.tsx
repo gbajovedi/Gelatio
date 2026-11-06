@@ -430,7 +430,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
                     Carregar Modelo de Preparo Canônico:
                   </span>
                   <span className="text-[11px] text-slate-400 hidden sm:inline">
-                    6 estilos canônicos (Profissional & Caseiro)
+                    10 estilos canônicos (5 Profissionais & 5 Caseiros)
                   </span>
                 </div>
 
@@ -439,7 +439,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
                     Linha Profissional (Produtora & Ultracongelador):
                   </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2">
                     {PREPARATION_TEMPLATES.filter(t => !t.id.includes('caseiro')).map(tpl => {
                       const isRecSuggested = tpl.id === suggested.id;
                       return (
@@ -477,7 +477,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
                   <span className="text-[11px] font-bold uppercase tracking-wider text-purple-300 block">
                     Linha Caseira (Sorveteira Doméstica ex: EOS003):
                   </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2">
                     {PREPARATION_TEMPLATES.filter(t => t.id.includes('caseiro')).map(tpl => {
                       const isRecSuggested = tpl.id === suggested.id;
                       return (

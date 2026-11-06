@@ -252,6 +252,118 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
     ]
   },
   {
+    id: 'gelato_alcoolico_profissional',
+    name: 'Gelato Alcoólico Profissional (Pasteurização 85°C + Álcool a Frio)',
+    description: 'Para gelatos com destilados e licores em equipamentos comerciais. Pasteurização da base láctea a 85°C e adição do álcool a frio (4°C) na tina para não evaporar o etanol.',
+    badge: '🍸 Profissional Alcoólico',
+    steps: [
+      {
+        order: 1,
+        title: 'Pesagem e Mistura dos Secos',
+        description: 'Pesar com precisão os açúcares, neutro e pós secos. Pesar separadamente a bebida alcoólica (destilado ou licor) e mantê-la sob refrigeração a 4°C na garrafa ou recipiente fechado.',
+        temperature: 'Ambiente',
+        duration: '5 min',
+        category: 'pesagem'
+      },
+      {
+        order: 2,
+        title: 'Pasteurização Alta da Base Láctea (Sem Álcool)',
+        description: 'Colocar os líquidos lácteos no pasteurizador, adicionar os secos a 45°C e elevar a 85°C por 2 minutos. ATENÇÃO: NUNCA adicionar a bebida alcoólica nesta etapa, pois o etanol entra em ebulição e evapora a 78,3°C.',
+        temperature: '85°C',
+        duration: '15 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 3,
+        title: 'Resfriamento Imediato a 4°C',
+        description: 'Resfriar a calda no pasteurizador rapidamente até 4°C e transferir para a tina de maturação.',
+        temperature: '4°C',
+        duration: '1h a 2h',
+        category: 'maturacao'
+      },
+      {
+        order: 4,
+        title: 'Incorporação do Álcool a Frio na Tina de Maturação',
+        description: 'Com a calda já resfriada e estabilizada a 4°C, verter o destilado ou licor gelado. Homogeneizar com agitador mecânico lento por 5 minutos para integração uniforme da fase alcoólica com a emulsão gordurosa.',
+        temperature: '4°C',
+        duration: '5 min',
+        category: 'emulsao'
+      },
+      {
+        order: 5,
+        title: 'Mantecação com Compensação de Congelamento',
+        description: 'Bater na produtora contínua ou descontínua. Como o álcool possui PAC extremamente alto (~2.5x a 3x maior que a sacarose), a temperatura de extração deve ser mais baixa (-9°C a -10°C) para garantir corpo firme e estruturado.',
+        temperature: '-9.5°C',
+        duration: '9 a 12 min',
+        category: 'batimento'
+      },
+      {
+        order: 6,
+        title: 'Abatimento e Exposição em Vitrine Gelada',
+        description: 'Extrair na cuba pré-resfriada e abater no ultracongelador a -35°C por 12 a 15 minutos. Na vitrine, posicionar na área mais fria (-13°C a -14°C) para manter o ponto ideal de espatulabilidade.',
+        temperature: '-13.5°C',
+        duration: '12 min abat.',
+        category: 'abatimento'
+      }
+    ]
+  },
+  {
+    id: 'gelato_proteico_profissional',
+    name: 'Gelato Proteico Profissional (Pasteurização Suave 70°C)',
+    description: 'Para gelatos enriquecidos com Whey Protein isolado ou concentrado. Pasteurização a 70°C para hidratação das proteínas sem coagulação ou arenosidade.',
+    badge: '💪 Profissional Proteico',
+    steps: [
+      {
+        order: 1,
+        title: 'Pesagem e Pré-Mistura Seca de Alta Dispersão',
+        description: 'Pesar o Whey Protein, neutro, fibras e edulcorantes/açúcares. Misturar previamente os pós secos para evitar que o Whey aglomere e forme grumos insolúveis ao contato com líquidos.',
+        temperature: 'Ambiente',
+        duration: '5 min',
+        category: 'pesagem'
+      },
+      {
+        order: 2,
+        title: 'Aquecimento Brando Controlado a 70°C',
+        description: 'Aquecer a calda sob agitação no pasteurizador até atingir rigorosamente 70°C por 1 minuto. Não permitir que ultrapasse 72°C para evitar desnaturação excessiva da beta-lactoglobulina do soro, prevenindo textura arenosa.',
+        temperature: '70°C',
+        duration: '10 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 3,
+        title: 'Homogeneização / Turboliquidificador',
+        description: 'Passar a calda aquecida pelo turboliquidificador ou homogeneizador a 120 bar para micronizar as partículas proteicas e dispersar as micelas de proteína na fase aquosa.',
+        temperature: '65°C',
+        duration: '3 min',
+        category: 'emulsao'
+      },
+      {
+        order: 4,
+        title: 'Resfriamento Rápido e Maturação Estendida a 4°C',
+        description: 'Resfriar imediatamente até 4°C. Manter na tina de maturação por 6 a 12 horas sob agitação intermitente para completa hidratação das fibras alimentares e estabilização de água livre.',
+        temperature: '4°C',
+        duration: '6h a 12h',
+        category: 'maturacao'
+      },
+      {
+        order: 5,
+        title: 'Mantecação com Overrun Moderado',
+        description: 'Mantecar na produtora industrial. Monitorar a aeração (overrun de 25% a 30%) para garantir textura aveludada e cremosa, compensando o teor elevado de sólidos proteicos.',
+        temperature: '-8°C',
+        duration: '8 a 10 min',
+        category: 'batimento'
+      },
+      {
+        order: 6,
+        title: 'Abatimento Térmico e Vitrine',
+        description: 'Abater a -35°C por 10 minutos para selar a textura superficial. Expor na vitrine de gelato a -12°C.',
+        temperature: '-12°C',
+        duration: '10 min abat.',
+        category: 'abatimento'
+      }
+    ]
+  },
+  {
     id: 'gelato_caseiro_tradicional',
     name: 'Gelato Caseiro Tradicional (Sorveteira Doméstica)',
     description: 'Para cozinhas domésticas e sorveteiras como a EOS003. Pasteurização no fogão e resfriamento em banho-maria invertido.',
@@ -418,6 +530,118 @@ export const PREPARATION_TEMPLATES: PreparationTemplate[] = [
         category: 'abatimento'
       }
     ]
+  },
+  {
+    id: 'gelato_caseiro_alcoolico',
+    name: 'Gelato Caseiro Alcoólico (Sorveteira Doméstica + Bebida a Frio)',
+    description: 'Para receitas com destilados, vinhos ou licores na sorveteira doméstica. O álcool entra a frio para não evaporar no fogão.',
+    badge: '🍸 Caseiro Alcoólico (ex: EOS003)',
+    steps: [
+      {
+        order: 1,
+        title: 'Pesagem Separada da Calda e da Bebida Alcoólica',
+        description: 'Pesar com precisão os pós secos e a base láctea na balança. Pesar o destilado/licor separadamente e mantê-lo bem tampado na geladeira a 4°C.',
+        temperature: 'Ambiente',
+        duration: '5 min',
+        category: 'pesagem'
+      },
+      {
+        order: 2,
+        title: 'Pasteurização Caseira no Fogão (Sem a Bebida)',
+        description: 'Aquecer a calda láctea no fogão a 85°C por 1 a 2 minutos com fuê. ATENÇÃO: NUNCA coloque a bebida alcoólica no fogão! O etanol ferve e evapora a 78,3°C, o que destruiria o sabor e alteraria o ponto de congelamento do gelato.',
+        temperature: '85°C',
+        duration: '12 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 3,
+        title: 'Resfriamento Rápido em Banho-Maria Invertido',
+        description: 'Retirar do fogo e apoiar o bowl/panela em uma bacia com bastante água, gelo e sal grosso (banho-maria invertido). Mexer com fuê até atingir menos de 10°C, e transferir para a geladeira até chegar a 4°C.',
+        temperature: '10°C',
+        duration: '15 min',
+        category: 'maturacao'
+      },
+      {
+        order: 4,
+        title: 'Adição da Bebida Alcoólica a Frio e Maturação',
+        description: 'Com a calda base fria a 4°C, verter o destilado ou licor gelado. Misturar delicadamente com fuê ou mixer por 1 minuto. Cobrir com filme plástico em contato e deixar maturar na geladeira por 4 a 8 horas.',
+        temperature: '4°C',
+        duration: '4h a 8h',
+        category: 'maturacao'
+      },
+      {
+        order: 5,
+        title: 'Mantecação na Sorveteira Doméstica (ex: EOS003)',
+        description: 'Ligar a sorveteira previamente para pré-resfriar. Despejar a calda alcoólica gelada. Como o álcool reduz o ponto de congelamento, o ciclo de batimento pode levar de 35 a 45 minutos até atingir consistência cremosa e densa.',
+        temperature: '-8°C',
+        duration: '35 a 45 min',
+        category: 'batimento'
+      },
+      {
+        order: 6,
+        title: 'Endurecimento no Freezer Doméstico',
+        description: 'Transferir com espátula para pote hermético e manter no ponto mais frio do freezer doméstico (-18°C) por 3 a 5 horas para atingir firmeza ideal de corte e colher.',
+        temperature: '-18°C',
+        duration: '3h a 5h',
+        category: 'abatimento'
+      }
+    ]
+  },
+  {
+    id: 'gelato_caseiro_proteico',
+    name: 'Gelato Caseiro Proteico (Sorveteira Doméstica + Calor Brando 70°C)',
+    description: 'Para receitas enriquecidas com Whey Protein na sorveteira doméstica. Aquecimento a 70°C para não talhar o soro de leite.',
+    badge: '💪 Caseiro Proteico (ex: EOS003)',
+    steps: [
+      {
+        order: 1,
+        title: 'Pesagem e Mistura Seca dos Pós',
+        description: 'Pesar na balança digital o Whey Protein, os edulcorantes/açúcares e o neutro. Misturar bem os pós secos em uma tigela antes do contato com o leite para evitar a formação de grumos insolúveis.',
+        temperature: 'Ambiente',
+        duration: '5 min',
+        category: 'pesagem'
+      },
+      {
+        order: 2,
+        title: 'Aquecimento Brando no Fogão a no Máximo 70°C',
+        description: 'Aquecer a mistura em panela de fundo grosso em fogo baixo/médio, mexendo constantemente com fuê. Use um termômetro culinário: aqueça até 68°C-70°C e desligue imediatamente. NÃO permita ferver (passar de 72°C) para não talhar as proteínas do soro.',
+        temperature: '70°C',
+        duration: '10 min',
+        category: 'aquecimento'
+      },
+      {
+        order: 3,
+        title: 'Emulsão com Mixer de Mão',
+        description: 'Bater a calda quente com mixer de mão por 2 minutos para micronizar os pós e garantir uma calda completamente homogênea, lisa e sedosa.',
+        temperature: '65°C',
+        duration: '2 min',
+        category: 'emulsao'
+      },
+      {
+        order: 4,
+        title: 'Resfriamento em Banho-Maria Invertido e Maturação',
+        description: 'Esfriar o bowl sobre bacia com gelo (banho-maria invertido) e levar à geladeira a 4°C por no mínimo 6 horas (idealmente 8h a 12h) para completa hidratação das proteínas lácteas.',
+        temperature: '4°C',
+        duration: '6h a 12h',
+        category: 'maturacao'
+      },
+      {
+        order: 5,
+        title: 'Mantecação na Sorveteira Doméstica (ex: EOS003)',
+        description: 'Despejar a calda gelada na sorveteira pré-resfriada. Bater no ciclo de 30 a 40 minutos até adquirir corpo estruturado e consistência macia.',
+        temperature: '-7°C',
+        duration: '30 a 40 min',
+        category: 'batimento'
+      },
+      {
+        order: 6,
+        title: 'Estabilização no Freezer Doméstico',
+        description: 'Armazenar em pote hermético no freezer (-18°C) por 2 a 3 horas antes de servir.',
+        temperature: '-18°C',
+        duration: '2h a 3h',
+        category: 'abatimento'
+      }
+    ]
   }
 ];
 
@@ -437,6 +661,24 @@ export function suggestPreparationTemplate(recipe: Recipe): PreparationTemplate 
     targetStyle.includes('sorbet') ||
     name.includes('sorbet');
 
+  const isAlcohol =
+    cat.includes('alcoólico') ||
+    cat.includes('alcoolico') ||
+    targetStyle.includes('alcoólico') ||
+    targetStyle.includes('alcoolico') ||
+    name.includes('caipirinha') ||
+    name.includes('bailey') ||
+    name.includes('whisky') ||
+    name.includes('cachaça') ||
+    name.includes('licor') ||
+    name.includes('clericot');
+
+  const isProteic =
+    cat.includes('proteico') ||
+    targetStyle.includes('proteico') ||
+    name.includes('proteic') ||
+    name.includes('whey');
+
   const hasFruit =
     cat.includes('fruta') ||
     targetStyle.includes('fruta') ||
@@ -450,31 +692,48 @@ export function suggestPreparationTemplate(recipe: Recipe): PreparationTemplate 
     name.includes('abacaxi') ||
     name.includes('açaí');
 
-  const isCaseiro =
-    name.includes('caseir') ||
-    name.includes('doméstic') ||
-    name.includes('eos') ||
-    cat.includes('caseir');
+  const isExplicitProfissional =
+    name.includes('profissional') ||
+    name.includes('industrial') ||
+    cat.includes('profissional');
 
-  if (isCaseiro) {
+  if (isExplicitProfissional) {
+    if (isAlcohol) {
+      return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_alcoolico_profissional')!;
+    }
+    if (isProteic) {
+      return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_proteico_profissional')!;
+    }
+    if (isSorbetBaseAgua) {
+      return PREPARATION_TEMPLATES.find(t => t.id === 'processo_frio_sorbet')!;
+    }
+    if (hasFruit) {
+      return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_frutas_pos_pasteurizacao')!;
+    }
+    return PREPARATION_TEMPLATES.find(t => t.id === 'processo_quente_tradicional')!;
+  }
+
+  // Linha Caseira por padrão (ou quando explicitamente caseiro)
+  if (isAlcohol) {
     if (isSorbetBaseAgua) {
       return PREPARATION_TEMPLATES.find(t => t.id === 'processo_frio_caseiro')!;
     }
-    if (hasFruit) {
-      return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_caseiro_frutas')!;
-    }
-    return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_caseiro_tradicional')!;
+    return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_caseiro_alcoolico')!;
+  }
+
+  if (isProteic) {
+    return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_caseiro_proteico')!;
   }
 
   if (isSorbetBaseAgua) {
-    return PREPARATION_TEMPLATES.find(t => t.id === 'processo_frio_sorbet')!;
+    return PREPARATION_TEMPLATES.find(t => t.id === 'processo_frio_caseiro')!;
   }
 
   if (hasFruit) {
-    return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_frutas_pos_pasteurizacao')!;
+    return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_caseiro_frutas')!;
   }
 
-  return PREPARATION_TEMPLATES[0]; // Processo a quente tradicional
+  return PREPARATION_TEMPLATES.find(t => t.id === 'gelato_caseiro_tradicional')!;
 }
 
 /**

@@ -37,6 +37,9 @@ import {
   getInitialPreparationSteps
 } from '../../core/preparationStepMigration';
 import { STEP_CATEGORIES_META } from '../../core/preparationTemplates';
+import { PrePreparoViewerModal } from './PrePreparoViewerModal';
+
+const STORAGE_EXPANDED_INGREDIENTS = 'gelatio_preparations_expanded_ingredients';
 
 interface PrePreparosListProps {
   preparations: Preparation[];
@@ -80,24 +83,30 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
 
   useModalDismiss(isModalOpen, handleCloseModal);
 
-  // Modo de Preparo: controle de expansão e checklist individual por card
-  const [expandedInstructions, setExpandedInstructions] = useState<Record<string, boolean>>({});
-  const [checkedCardSteps, setCheckedCardSteps] = useState<Record<string, boolean>>({});
+  // Estado de ingredientes: contraído por padrão e persistido no localStorage
+  const [expandedIngredients, setExpandedIngredients] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_EXPANDED_INGREDIENTS);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
 
-  const toggleInstructions = (prepId: string) => {
-    setExpandedInstructions(prev => ({
-      ...prev,
-      [prepId]: !prev[prepId]
-    }));
+  const toggleIngredients = (prepId: string) => {
+    setExpandedIngredients(prev => {
+      const next = { ...prev, [prepId]: !prev[prepId] };
+      try {
+        localStorage.setItem(STORAGE_EXPANDED_INGREDIENTS, JSON.stringify(next));
+      } catch (err) {
+        console.error('Falha ao salvar preferência de expansão de ingredientes:', err);
+      }
+      return next;
+    });
   };
 
-  const toggleCardStepCheck = (prepId: string, stepId: string) => {
-    const key = `${prepId}_${stepId}`;
-    setCheckedCardSteps(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
-  };
+  // Estado do Modal de Visualização de Modo de Preparo
+  const [viewingPrepForSteps, setViewingPrepForSteps] = useState<Preparation | null>(null);
 
   const filtered = preparations.filter(p => {
     const matchCat = catFilter === 'Todas' || p.category === catFilter;
@@ -107,6 +116,27 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
       p.ingredients.some(i => i.name.toLowerCase().includes(search.toLowerCase()));
     return matchCat && matchSearch;
   });
+
+  const allIngredientsExpanded = useMemo(() => {
+    if (filtered.length === 0) return false;
+    return filtered.every(p => !!expandedIngredients[p.id]);
+  }, [filtered, expandedIngredients]);
+
+  const toggleAllIngredients = () => {
+    const nextVal = !allIngredientsExpanded;
+    setExpandedIngredients(prev => {
+      const next = { ...prev };
+      filtered.forEach(p => {
+        next[p.id] = nextVal;
+      });
+      try {
+        localStorage.setItem(STORAGE_EXPANDED_INGREDIENTS, JSON.stringify(next));
+      } catch (err) {
+        console.error('Falha ao salvar preferências de expansão de ingredientes:', err);
+      }
+      return next;
+    });
+  };
 
   const handleOpenCreate = () => {
     setModalError('');
@@ -381,21 +411,44 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {(['Todas', 'Pré-preparo', 'Variegato'] as const).map(cat => (
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {(['Todas', 'Pré-preparo', 'Variegato'] as const).map(cat => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setCatFilter(cat)}
+                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    catFilter === cat
+                      ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                      : 'bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {filtered.length > 0 && (
               <button
-                key={cat}
                 type="button"
-                onClick={() => setCatFilter(cat)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
-                  catFilter === cat
-                    ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
-                    : 'bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600'
-                }`}
+                onClick={toggleAllIngredients}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-slate-900 border border-slate-700 hover:border-amber-500/40 text-slate-300 hover:text-white flex items-center gap-1.5 cursor-pointer"
+                title={allIngredientsExpanded ? 'Recolher ingredientes de todos os cards' : 'Expandir ingredientes de todos os cards'}
               >
-                {cat}
+                {allIngredientsExpanded ? (
+                  <>
+                    <ChevronUp className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Recolher Ingredientes ({filtered.length})</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Expandir Ingredientes ({filtered.length})</span>
+                  </>
+                )}
               </button>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -403,21 +456,24 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
       {/* Grid of preparations */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map(prep => {
-          const totalWeight = prep.ingredients.reduce((a, b) => a + b.grams, 0);
+          const totalWeight = prep.ingredients.reduce((a, b) => a + (Number(b.grams) || 0), 0);
           const cardProfile = calculatePreparationNutrients(prep, availableIngredients);
+          const isIngExpanded = !!expandedIngredients[prep.id];
+          const cardSteps = getInitialPreparationSteps(prep);
 
           return (
             <div
               key={prep.id}
-              className="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 shadow-lg flex flex-col justify-between hover:border-amber-500/50 transition-colors group"
+              className="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-5 shadow-lg flex flex-col justify-between hover:border-amber-500/50 transition-all group"
             >
-              <div className="space-y-3.5">
+              <div className="space-y-3">
+                {/* Cabeçalho do Card */}
                 <div className="flex items-start justify-between gap-2">
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-bold text-base text-white flex items-center gap-2 flex-wrap">
-                      <span>{prep.name}</span>
+                      <span className="truncate">{prep.name}</span>
                       {prep.isCustom && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold shrink-0">
                           Custom
                         </span>
                       )}
@@ -436,7 +492,7 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(prep)}
-                      className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-amber-500/15 rounded-lg transition-all"
+                      className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-amber-500/15 rounded-lg transition-all cursor-pointer"
                       title={`Editar "${prep.name}"`}
                     >
                       <Edit2 className="w-4 h-4" />
@@ -444,7 +500,7 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                     <button
                       type="button"
                       onClick={() => handleDelete(prep)}
-                      className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-all"
+                      className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-all cursor-pointer"
                       title={`Excluir "${prep.name}"`}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -452,154 +508,75 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                   </div>
                 </div>
 
-                {/* Ingredients table preview */}
-                <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-700/70 space-y-1.5">
-                  <span className="text-xs uppercase font-bold text-slate-400 block tracking-wider mb-1">
-                    Composição:
-                  </span>
-                  {prep.ingredients.map((ing, iIdx) => (
-                    <div key={iIdx} className="flex justify-between text-xs sm:text-sm text-slate-200">
-                      <span>{ing.name}</span>
-                      <span className="font-mono text-amber-300 font-bold">{ing.grams} g</span>
+                {/* Ingredientes Colapsáveis com Persistência */}
+                <div className="rounded-xl border border-slate-700/70 bg-slate-900/80 overflow-hidden transition-all">
+                  <button
+                    type="button"
+                    onClick={() => toggleIngredients(prep.id)}
+                    className="w-full px-3 py-2.5 flex items-center justify-between text-left hover:bg-slate-800/60 transition-colors cursor-pointer group/ing"
+                    aria-expanded={isIngExpanded}
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-300 group-hover/ing:text-white transition-colors truncate">
+                      <Utensils className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span>Composição:</span>
+                      <span className="text-slate-400 font-normal truncate">
+                        {prep.ingredients.length} {prep.ingredients.length === 1 ? 'item' : 'itens'} •{' '}
+                        <span className="font-mono font-bold text-amber-300">{Math.round(totalWeight)} g</span>
+                      </span>
                     </div>
-                  ))}
-                  <div className="pt-2 border-t border-slate-700 flex justify-between text-xs sm:text-sm font-black text-white">
-                    <span>Peso Total:</span>
-                    <span className="font-mono text-emerald-400">{Math.round(totalWeight)} g</span>
-                  </div>
-                </div>
-
-                {/* Insumo Sincronizado e Custo por Quilo */}
-                <div className="bg-slate-950/70 rounded-xl px-3 py-2 border border-slate-700/70 flex items-center justify-between">
-                  <span className="font-bold text-xs sm:text-sm text-slate-200 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Insumo Sincronizado</span>
-                  </span>
-                  <span className="font-mono font-bold text-xs sm:text-sm text-emerald-400">
-                    R$ {cardProfile.costKg.toFixed(2)}/kg
-                  </span>
-                </div>
-
-                {/* Modo de Preparo (Oculto por padrão, expansível ao clicar) */}
-                {(() => {
-                  const cardSteps = getInitialPreparationSteps(prep);
-                  const hasContent = cardSteps.length > 0 || (prep.instructions && prep.instructions.trim().length > 0);
-                  if (!hasContent) return null;
-
-                  const isExpanded = !!expandedInstructions[prep.id];
-
-                  return (
-                    <div className="rounded-xl border border-slate-700/70 bg-slate-950/40 overflow-hidden transition-all">
-                      <button
-                        type="button"
-                        onClick={() => toggleInstructions(prep.id)}
-                        className="w-full px-3 py-2 flex items-center justify-between text-left hover:bg-slate-800/50 transition-colors group cursor-pointer"
-                        aria-expanded={isExpanded}
-                      >
-                        <span className="text-xs uppercase font-bold text-amber-400/90 flex items-center gap-1.5 tracking-wider">
-                          <ChefHat className="w-3.5 h-3.5 text-amber-400" />
-                          <span>Modo de Preparo</span>
-                          {cardSteps.length > 0 && (
-                            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/15 text-amber-300 font-mono font-bold">
-                              {cardSteps.length} passos
-                            </span>
-                          )}
-                        </span>
-                        <span className="flex items-center gap-1 text-xs font-semibold text-slate-400 group-hover:text-amber-300 transition-colors">
-                          {isExpanded ? (
-                            <>
-                              <span>Recolher</span>
-                              <ChevronUp className="w-3.5 h-3.5 text-amber-400" />
-                            </>
-                          ) : (
-                            <>
-                              <span>Expandir</span>
-                              <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-300" />
-                            </>
-                          )}
-                        </span>
-                      </button>
-
-                      {isExpanded && (
-                        <div className="px-3 pb-3 pt-1 border-t border-slate-800/70 space-y-2 animate-in fade-in duration-150">
-                          {cardSteps.length > 0 ? (
-                            <div className="space-y-2">
-                              {cardSteps.map((step, idx) => {
-                                const stepKey = `${prep.id}_${step.id || idx}`;
-                                const isChecked = !!checkedCardSteps[stepKey];
-                                const catMeta = STEP_CATEGORIES_META[step.category || 'outro'] || STEP_CATEGORIES_META.outro;
-
-                                return (
-                                  <div
-                                    key={step.id || idx}
-                                    onClick={() => toggleCardStepCheck(prep.id, step.id || String(idx))}
-                                    className={`p-2.5 rounded-xl border transition-all text-xs space-y-1 cursor-pointer select-none ${
-                                      isChecked
-                                        ? 'bg-slate-950/70 border-slate-800 opacity-60'
-                                        : 'bg-slate-900/90 border-slate-700/70 hover:border-slate-600'
-                                    }`}
-                                  >
-                                    <div className="flex items-center justify-between gap-1.5 flex-wrap">
-                                      <div className="flex items-center gap-2">
-                                        <div
-                                          className={`w-4 h-4 rounded-md flex items-center justify-center transition-colors ${
-                                            isChecked
-                                              ? 'bg-emerald-500 text-slate-950'
-                                              : 'border border-slate-600 hover:border-amber-400'
-                                          }`}
-                                        >
-                                          {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
-                                        </div>
-                                        <span className={`font-bold ${isChecked ? 'text-slate-400 line-through' : 'text-white'}`}>
-                                          {idx + 1}. {step.title}
-                                        </span>
-                                      </div>
-
-                                      <div className="flex items-center gap-1.5 shrink-0">
-                                        <span className={`text-[10px] px-1.5 py-0.2 rounded-md border font-semibold flex items-center gap-1 ${catMeta.badgeClass}`}>
-                                          <span>{catMeta.emoji}</span>
-                                          <span className="hidden sm:inline">{catMeta.label}</span>
-                                        </span>
-                                        {step.temperature && (
-                                          <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono font-bold flex items-center gap-1">
-                                            <Thermometer className="w-2.5 h-2.5" />
-                                            <span>{step.temperature}</span>
-                                          </span>
-                                        )}
-                                        {step.duration && (
-                                          <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-sky-500/15 text-sky-300 border border-sky-500/30 font-mono font-bold flex items-center gap-1">
-                                            <Clock className="w-2.5 h-2.5" />
-                                            <span>{step.duration}</span>
-                                          </span>
-                                        )}
-                                      </div>
-                                    </div>
-
-                                    <p className={`text-xs leading-relaxed whitespace-pre-line pl-6 ${isChecked ? 'text-slate-500 line-through' : 'text-slate-300'}`}>
-                                      {step.description}
-                                    </p>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          ) : (
-                            <div className="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line break-words space-y-2">
-                              <p>{prep.instructions}</p>
-                              <button
-                                type="button"
-                                onClick={() => handleOpenEdit(prep)}
-                                className="text-xs text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 pt-1 cursor-pointer"
-                              >
-                                <Sparkles className="w-3.5 h-3.5" />
-                                <span>Converter em Passos Estruturados</span>
-                              </button>
-                            </div>
-                          )}
-                        </div>
+                    <div className="flex items-center gap-1 text-xs font-semibold text-slate-400 group-hover/ing:text-amber-300 transition-colors shrink-0 ml-2">
+                      <span>{isIngExpanded ? 'Ocultar' : 'Ver'}</span>
+                      {isIngExpanded ? (
+                        <ChevronUp className="w-3.5 h-3.5 text-amber-400" />
+                      ) : (
+                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover/ing:text-amber-300" />
                       )}
                     </div>
-                  );
-                })()}
+                  </button>
+
+                  {isIngExpanded && (
+                    <div className="px-3 pb-3 pt-1 border-t border-slate-800/80 space-y-1.5 animate-in fade-in duration-150">
+                      {prep.ingredients.map((ing, iIdx) => (
+                        <div key={iIdx} className="flex justify-between text-xs sm:text-sm text-slate-200">
+                          <span className="truncate pr-2">{ing.name}</span>
+                          <span className="font-mono text-amber-300 font-bold shrink-0">{ing.grams} g</span>
+                        </div>
+                      ))}
+                      <div className="pt-2 border-t border-slate-700 flex justify-between text-xs sm:text-sm font-black text-white">
+                        <span>Peso Total:</span>
+                        <span className="font-mono text-emerald-400">{Math.round(totalWeight)} g</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Rodapé do Card: Custo e Botão Modo de Preparo Lado a Lado (Aviso de Insumo Sincronizado removido) */}
+              <div className="pt-3.5 mt-3.5 border-t border-slate-700/60 flex items-center justify-between gap-3">
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                    Custo Estimado
+                  </span>
+                  <span className="font-mono font-black text-sm sm:text-base text-emerald-400">
+                    R$ {cardProfile.costKg.toFixed(2)}
+                    <span className="text-[11px] font-normal text-emerald-400/80">/kg</span>
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setViewingPrepForSteps(prep)}
+                  className="px-3 sm:px-3.5 py-2 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 hover:border-amber-400 text-amber-300 font-bold text-xs sm:text-sm rounded-xl flex items-center gap-1.5 sm:gap-2 transition-all shadow-sm active:scale-95 cursor-pointer shrink-0"
+                  title={`Visualizar formulação completa e modo de preparo de "${prep.name}"`}
+                >
+                  <ChefHat className="w-4 h-4 text-amber-400" />
+                  <span>Modo de Preparo</span>
+                  {cardSteps.length > 0 && (
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/25 text-amber-200 font-mono font-bold">
+                      {cardSteps.length}
+                    </span>
+                  )}
+                </button>
               </div>
             </div>
           );
@@ -1079,6 +1056,14 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
           </div>
         </div>
       )}
+      {/* Modal Dedicado de Visualização de Ingredientes & Modo de Preparo */}
+      <PrePreparoViewerModal
+        prep={viewingPrepForSteps}
+        isOpen={!!viewingPrepForSteps}
+        onClose={() => setViewingPrepForSteps(null)}
+        onOpenEdit={handleOpenEdit}
+        availableIngredients={availableIngredients}
+      />
     </div>
   );
 };

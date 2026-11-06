@@ -6,27 +6,32 @@ import {
   suggestPreparationTemplate
 } from '../preparationTemplates';
 import { Recipe } from '../../types/gelato';
+import allRecipes from '../../data/recipes.json';
 
 describe('preparationTemplates', () => {
-  it('deve conter exatamente 6 estilos canônicos (3 profissionais e 3 caseiros)', () => {
-    expect(PREPARATION_TEMPLATES).toHaveLength(6);
+  it('deve conter exatamente 10 estilos canônicos (5 profissionais e 5 caseiros)', () => {
+    expect(PREPARATION_TEMPLATES).toHaveLength(10);
 
     const proTemplates = PREPARATION_TEMPLATES.filter(t => !t.id.includes('caseiro'));
     const homeTemplates = PREPARATION_TEMPLATES.filter(t => t.id.includes('caseiro'));
 
-    expect(proTemplates).toHaveLength(3);
-    expect(homeTemplates).toHaveLength(3);
+    expect(proTemplates).toHaveLength(5);
+    expect(homeTemplates).toHaveLength(5);
 
     expect(proTemplates.map(t => t.id)).toEqual([
       'processo_quente_tradicional',
       'gelato_frutas_pos_pasteurizacao',
-      'processo_frio_sorbet'
+      'processo_frio_sorbet',
+      'gelato_alcoolico_profissional',
+      'gelato_proteico_profissional'
     ]);
 
     expect(homeTemplates.map(t => t.id)).toEqual([
       'gelato_caseiro_tradicional',
       'gelato_caseiro_frutas',
-      'processo_frio_caseiro'
+      'processo_frio_caseiro',
+      'gelato_caseiro_alcoolico',
+      'gelato_caseiro_proteico'
     ]);
   });
 
@@ -58,7 +63,7 @@ describe('preparationTemplates', () => {
   });
 
   it('deve sugerir o modelo adequado de acordo com a receita e contexto profissional vs caseiro', () => {
-    const proMilkRecipe: Recipe = {
+    const homeMilkRecipe: Recipe = {
       id: '1',
       name: 'Fior di Latte',
       category: 'Gelatos de Leite',
@@ -66,56 +71,93 @@ describe('preparationTemplates', () => {
       ingredients: [],
       totalGrams: 1000
     };
-    expect(suggestPreparationTemplate(proMilkRecipe).id).toBe('processo_quente_tradicional');
-
-    const proFruitRecipe: Recipe = {
-      id: '2',
-      name: 'Gelato de Morango com Leite',
-      category: 'Gelatos de Fruta',
-      targetStyle: 'Gelatos de Fruta',
-      ingredients: [],
-      totalGrams: 1000
-    };
-    expect(suggestPreparationTemplate(proFruitRecipe).id).toBe('gelato_frutas_pos_pasteurizacao');
-
-    const proSorbetRecipe: Recipe = {
-      id: '3',
-      name: 'Sorbet de Limão Siciliano',
-      category: 'Sorbets Base Água',
-      targetStyle: 'Sorbets',
-      ingredients: [],
-      totalGrams: 1000
-    };
-    expect(suggestPreparationTemplate(proSorbetRecipe).id).toBe('processo_frio_sorbet');
-
-    const homeMilkRecipe: Recipe = {
-      id: '4',
-      name: 'Gelato Caseiro de Baunilha (EOS)',
-      category: 'Gelatos Caseiros',
-      targetStyle: 'Gelatos de Leite',
-      ingredients: [],
-      totalGrams: 1000
-    };
     expect(suggestPreparationTemplate(homeMilkRecipe).id).toBe('gelato_caseiro_tradicional');
 
     const homeFruitRecipe: Recipe = {
-      id: '5',
-      name: 'Gelato Caseiro de Morango',
-      category: 'Gelatos de Fruta',
-      targetStyle: 'Gelatos de Fruta',
+      id: '2',
+      name: 'Gelato de Morango com Leite',
+      category: 'Gelatos de Leite com Fruta',
+      targetStyle: 'Gelatos de Leite com Fruta',
       ingredients: [],
       totalGrams: 1000
     };
     expect(suggestPreparationTemplate(homeFruitRecipe).id).toBe('gelato_caseiro_frutas');
 
     const homeSorbetRecipe: Recipe = {
-      id: '6',
-      name: 'Sorbet Caseiro de Manga (EOS003)',
-      category: 'Sorbets',
+      id: '3',
+      name: 'Sorbet de Limão Siciliano',
+      category: 'Sorbets Cítricos / Frutas Ácidas',
       targetStyle: 'Sorbets',
       ingredients: [],
       totalGrams: 1000
     };
     expect(suggestPreparationTemplate(homeSorbetRecipe).id).toBe('processo_frio_caseiro');
+
+    const homeAlcoholRecipe: Recipe = {
+      id: '4',
+      name: 'Gelato de Licor de Amaretto',
+      category: 'Gelatos Alcoólicos',
+      targetStyle: 'Gelatos Alcoólicos',
+      ingredients: [],
+      totalGrams: 1000
+    };
+    expect(suggestPreparationTemplate(homeAlcoholRecipe).id).toBe('gelato_caseiro_alcoolico');
+
+    const homeProteicRecipe: Recipe = {
+      id: '5',
+      name: 'Gelato de Baunilha Proteico (Whey)',
+      category: 'Gelatos Proteicos',
+      targetStyle: 'Gelatos Proteicos',
+      ingredients: [],
+      totalGrams: 1000
+    };
+    expect(suggestPreparationTemplate(homeProteicRecipe).id).toBe('gelato_caseiro_proteico');
+
+    const proAlcoholRecipe: Recipe = {
+      id: '6',
+      name: 'Gelato Profissional de Whisky',
+      category: 'Gelatos Alcoólicos',
+      targetStyle: 'Gelatos Alcoólicos',
+      ingredients: [],
+      totalGrams: 1000
+    };
+    expect(suggestPreparationTemplate(proAlcoholRecipe).id).toBe('gelato_alcoolico_profissional');
+
+    const proProteicRecipe: Recipe = {
+      id: '7',
+      name: 'Gelato Profissional Proteico',
+      category: 'Gelatos Proteicos',
+      targetStyle: 'Gelatos Proteicos',
+      ingredients: [],
+      totalGrams: 1000
+    };
+    expect(suggestPreparationTemplate(proProteicRecipe).id).toBe('gelato_proteico_profissional');
+  });
+
+  it('deve garantir que 100% das 148 receitas do catálogo possuem preparationSteps válidos', () => {
+    expect(allRecipes.length).toBe(148);
+
+    for (const recipe of allRecipes as Recipe[]) {
+      expect(recipe.preparationSteps, `Receita ${recipe.id} (${recipe.name}) sem preparationSteps`).toBeDefined();
+      expect(recipe.preparationSteps!.length, `Receita ${recipe.id} com lista vazia de passos`).toBeGreaterThanOrEqual(6);
+
+      recipe.preparationSteps!.forEach((step, idx) => {
+        expect(step.order).toBe(idx + 1);
+        expect(step.title.length).toBeGreaterThan(0);
+        expect(step.description.length).toBeGreaterThan(0);
+        expect(step.category).toBeDefined();
+      });
+    }
+
+    // Verificar receitas emblemáticas com mesclagem acoplada (Passo 7)
+    const pudim = (allRecipes as Recipe[]).find(r => r.id === 'rec_60');
+    expect(pudim).toBeDefined();
+    expect(pudim!.preparationSteps!.length).toBe(7);
+    expect(pudim!.preparationSteps![6].category).toBe('mesclagem');
+
+    const amarena = (allRecipes as Recipe[]).find(r => r.id === 'rec_22');
+    expect(amarena).toBeDefined();
+    expect(amarena!.preparationSteps!.length).toBe(7);
+    expect(amarena!.preparationSteps![6].category).toBe('mesclagem');
   });
 });
