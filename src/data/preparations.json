@@ -613,5 +613,1218 @@
         "grams": 5
       }
     ]
+  },
+  {
+    "id": "prep_chocolate_flocagem",
+    "name": "Chocolate para Flocagem / Stracciatella (50% cacau)",
+    "category": "Variegato",
+    "instructions": "Derreter o chocolate 50% com o óleo de coco sem sabor em banho-maria ou micro-ondas até atingir 40°C a 45°C. Manter morno em banho-maria morno (32°C a 35°C). Na finalização do batimento do gelato na sorveteira, verter em fio contínuo e fino diretamente na massa em movimento para formar flocos crocantes característicos.",
+    "preparationSteps": [
+      {
+        "id": "step_floc_1",
+        "order": 1,
+        "title": "Fusão Controlada em Banho-Maria",
+        "category": "aquecimento",
+        "temperature": "42°C",
+        "duration": "10 min",
+        "description": "Em recipiente refratário sobre banho-maria brando (sem encostar na água), fundir o chocolate picado juntamente com o óleo de coco até dissolução completa e textura fluida e brilhante."
+      },
+      {
+        "id": "step_floc_2",
+        "order": 2,
+        "title": "Ajuste Térmico de Trabalho",
+        "category": "pesagem",
+        "temperature": "32°C a 35°C",
+        "duration": "5 min",
+        "description": "Retirar do calor e mexer suavemente até estabilizar entre 32°C e 35°C. Essa temperatura garante fluidez para escorrer em fio sem aquecer nem derreter a massa congelada do gelato."
+      },
+      {
+        "id": "step_floc_3",
+        "order": 3,
+        "title": "Aplicação por Flocagem Contínua",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "1 min",
+        "description": "Nos últimos 30 a 60 segundos de batimento na sorveteira, verter o chocolate morno em fio contínuo bem fino sobre a massa. O choque térmico instantâneo solidifica o chocolate em flocos ultrafinos e crocantes."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Chocolate Meio Amargo 54%",
+        "grams": 850
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 150
+      }
+    ]
+  },
+  {
+    "id": "prep_gostosuras_cookies_brownie",
+    "name": "Gostosuras de Confeitaria (Cookies & Brownies)",
+    "category": "Pré-preparo",
+    "instructions": "Picar os cookies e brownies artesanais em cubos regulares de 8mm a 10mm. Distribuir em assadeira forrada com papel manteiga e levar ao freezer a -18°C por no mínimo 2 horas para enrijecer completamente. Essa etapa é indispensável para que as inclusões permaneçam inteiras e não se desmanchem em migalhas na hora de mesclar.",
+    "preparationSteps": [
+      {
+        "id": "step_gost_1",
+        "order": 1,
+        "title": "Porcionamento em Cubos Regulares",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Com faca de chef bem afiada, cortar os cookies com gotas e os brownies assados e resfriados em cubos uniformes de 8mm a 10mm. Descartar migalhas excessivamente finas."
+      },
+      {
+        "id": "step_gost_2",
+        "order": 2,
+        "title": "Ultracongelamento Prévio",
+        "category": "abatimento",
+        "temperature": "-18°C",
+        "duration": "2h",
+        "description": "Espalhar os cubos em camada única sobre assadeira com papel manteiga. Congelar a -18°C por pelo menos 2 horas até ficarem totalmente rígidos antes do uso."
+      },
+      {
+        "id": "step_gost_3",
+        "order": 3,
+        "title": "Dobra Manual Delicada",
+        "category": "batimento",
+        "temperature": "-8°C",
+        "duration": "3 min",
+        "description": "Após o gelato sair da sorveteira e descansar 15 minutos no freezer para firmar a estrutura, dobrar delicadamente os pedaços congelados com espátula na massa para distribuição homogênea sem amassar."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Biscoito Chocolate",
+        "grams": 500
+      },
+      {
+        "name": "Brownie de Chocolate",
+        "grams": 500
+      }
+    ]
+  },
+  {
+    "id": "prep_chocolate_branco_assado",
+    "name": "Chocolate Branco Caramelizado no Forno",
+    "category": "Pré-preparo",
+    "instructions": "Distribuir chocolate branco picado ou em gotas sobre tapete de silicone (silpat) em assadeira. Assar em forno pré-aquecido a 160°C por cerca de 15 minutos. Mexer e espalhar vigorosamente com espátula a cada 5 minutos para que caramelize por igual até cor âmbar profunda e notas marcantes de toffee/doce de leite.",
+    "preparationSteps": [
+      {
+        "id": "step_cba_1",
+        "order": 1,
+        "title": "Preparação e Pré-aquecimento",
+        "category": "pesagem",
+        "temperature": "160°C",
+        "duration": "5 min",
+        "description": "Pré-aquecer o forno a 160°C. Distribuir o chocolate branco em camada fina e homogênea sobre um tapete de silicone (silpat) em assadeira rasa."
+      },
+      {
+        "id": "step_cba_2",
+        "order": 2,
+        "title": "Caramelização e Mexedura Periódica",
+        "category": "aquecimento",
+        "temperature": "160°C",
+        "duration": "15 min",
+        "description": "Assar no forno por 15 minutos no total. A cada 5 minutos, retirar a assadeira e raspar/misturar toda a superfície com espátula de silicone para evitar queimaduras locais e garantir caramelização uniforme até atingir tom de doce de leite."
+      },
+      {
+        "id": "step_cba_3",
+        "order": 3,
+        "title": "Resfriamento e Homogeneização",
+        "category": "maturacao",
+        "temperature": "Ambiente",
+        "duration": "15 min",
+        "description": "Deixar esfriar em temperatura ambiente até endurecer em blocos. Quebrar ou processar brevemente para incorporar com facilidade na calda morna de gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Chocolate Branco",
+        "grams": 1000
+      }
+    ]
+  },
+  {
+    "id": "prep_suco_maracuja_reduzido",
+    "name": "Suco Concentrado Reduzido de Maracujá",
+    "category": "Pré-preparo",
+    "instructions": "Pulsar a polpa fresca de maracujá no liquidificador por 5 segundos apenas para soltar o suco das sementes sem triturá-las. Coar em peneira média para obter o suco puro. Em fogo brando, reduzir o suco (por exemplo, 200g de suco reduzindo para 175g de concentrado a 87,5% de peso), concentrando aroma, acidez e sólidos naturais. Resfriar a 4°C antes de verter na calda.",
+    "preparationSteps": [
+      {
+        "id": "step_smr_1",
+        "order": 1,
+        "title": "Despolpamento e Peneiração Cuidadosa",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Colocar a polpa fresca no liquidificador e pulsar por 5 segundos em baixa rotação para destacar as sementes sem parti-las. Passar por peneira fina, pressionando levemente com colher para separar todo o suco puro."
+      },
+      {
+        "id": "step_smr_2",
+        "order": 2,
+        "title": "Redução Térmica em Fogo Brando",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "10 min",
+        "description": "Colocar o suco puro em panela pequena sobre fogo brando. Acompanhar a evaporação na balança até que 200g de suco fresco reduzam para exatamente 175g de suco concentrado (proporção de 87,5%). Não deixar ferver vigorosamente para preservar as notas aromáticas frescas."
+      },
+      {
+        "id": "step_smr_3",
+        "order": 3,
+        "title": "Resfriamento Rápido e Estabilização",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "30 min",
+        "description": "Transferir para recipiente limpo e resfriar rapidamente em banho-maria de gelo até atingir 4°C. Manter refrigerado para incorporar à calda resfriada antes do congelamento."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Maracujá",
+        "grams": 1143
+      }
+    ]
+  },
+  {
+    "id": "prep_pure_banana_assada",
+    "name": "Purê de Banana Assada Caramelizada",
+    "category": "Pré-preparo",
+    "instructions": "Dispor bananas maduras bem maduras inteiras com casca em assadeira. Assar em forno a 180°C por cerca de 20 minutos (ou na brasa de churrasqueira) até a casca ficar completamente enegrecida e inflada, e a polpa macia e translúcida. Retirar da casca ainda quente, descartar os fios e bater com mixer de imersão até purê liso e untuoso.",
+    "preparationSteps": [
+      {
+        "id": "step_pba_1",
+        "order": 1,
+        "title": "Cocção e Caramelização com Casca",
+        "category": "aquecimento",
+        "temperature": "180°C",
+        "duration": "20 min",
+        "description": "Higienizar as bananas maduras inteiras com a casca intacta. Dispor em assadeira e assar a 180°C por 20 minutos (ou na grelha) até que a casca fique completamente preta e o açúcar natural da fruta caramelize no interior."
+      },
+      {
+        "id": "step_pba_2",
+        "order": 2,
+        "title": "Descasque e Separação da Polpa",
+        "category": "pesagem",
+        "temperature": "60°C",
+        "duration": "5 min",
+        "description": "Abrir as cascas ainda mornas com o auxílio de garfo ou colher. Retirar a polpa macia translúcida com cuidado, eliminando fios fibrosos externos."
+      },
+      {
+        "id": "step_pba_3",
+        "order": 3,
+        "title": "Emulsão Lisa sob Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Processar a polpa assada ainda morna com mixer de alta rotação por 2 minutos até obter um purê 100% liso, cremoso e homogêneo, pronto para incorporar à calda de leite."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Banana",
+        "grams": 1450
+      }
+    ]
+  },
+  {
+    "id": "prep_leite_coco_fresco_artesanal",
+    "name": "Leite de Coco Fresco Artesanal",
+    "category": "Pré-preparo",
+    "instructions": "Ralar a polpa de coco seco fresco. Juntar com água mineral aquecida a 80°C na proporção de 1:2. Bater na velocidade máxima do liquidificador por 3 minutos. Filtrar em saco de tecido (voal) ou pano de algodão fino, espremendo fortemente com as mãos para extrair todo o leite vegetal emulsificado com a gordura pura do coco. Descartar o bagaço seco.",
+    "preparationSteps": [
+      {
+        "id": "step_lca_1",
+        "order": 1,
+        "title": "Trituração e Hidratação a Quente",
+        "category": "aquecimento",
+        "temperature": "80°C",
+        "duration": "5 min",
+        "description": "Aquecer a água mineral a 80°C. No liquidificador potente, juntar a polpa de coco fresco ralado e a água quente. Bater em rotação máxima por 3 minutos para fragmentar as fibras e soltar as micelas de gordura vegetal."
+      },
+      {
+        "id": "step_lca_2",
+        "order": 2,
+        "title": "Prensagem Manual em Voal",
+        "category": "emulsao",
+        "temperature": "55°C",
+        "duration": "5 min",
+        "description": "Despejar o líquido triturado em um saco de voal (filtro de leite vegetal) apoiado sobre tigela funda. Espremer vigorosamente com luvas térmicas até extrair todo o leite espesso e aveludado, restando apenas o bagaço fibroso seco (que é descartado)."
+      },
+      {
+        "id": "step_lca_3",
+        "order": 3,
+        "title": "Emulsão e Resfriamento",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "20 min",
+        "description": "Passar o mixer brevemente por 30 segundos para padronizar a emulsão e resfriar imediatamente na geladeira a 4°C até o momento de dosar na calda."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Coco",
+        "grams": 350
+      },
+      {
+        "name": "Água",
+        "grams": 700
+      }
+    ]
+  },
+  {
+    "id": "prep_sucrilhos_crocantes_selados",
+    "name": "Cereal Crunch Selado (Anti-Umidade)",
+    "category": "Variegato",
+    "instructions": "Derreter manteiga de cacau ou óleo de coco desodorizado a 45°C. Envolver os flocos de milho tostados suavemente com espátula até que uma fina película lipídica cubra 100% da superfície de cada floco. Polvilhar flor de sal fino. Resfriar em esteira/assadeira para cristalizar a gordura. Cria uma barreira impermeável que mantém a crocância extrema mesmo em contato com a umidade do gelato.",
+    "preparationSteps": [
+      {
+        "id": "step_ccs_1",
+        "order": 1,
+        "title": "Derretimento do Agente Lipídico Selador",
+        "category": "aquecimento",
+        "temperature": "45°C",
+        "duration": "5 min",
+        "description": "Derreter a manteiga de cacau (ou óleo de coco) em banho-maria suave ou micro-ondas até completa translucidez e fluidez."
+      },
+      {
+        "id": "step_ccs_2",
+        "order": 2,
+        "title": "Envelopamento Lipídico e Salgamento",
+        "category": "emulsao",
+        "temperature": "32°C",
+        "duration": "4 min",
+        "description": "Em bowl amplo, despejar a gordura derretida sobre os flocos de milho tostados. Mexer delicadamente com espátula de baixo para cima sem esmagar os flocos, até todos ficarem acetinados e revestidos. Salpicar a flor de sal homogeneamente."
+      },
+      {
+        "id": "step_ccs_3",
+        "order": 3,
+        "title": "Cristalização em Frio",
+        "category": "maturacao",
+        "temperature": "10°C",
+        "duration": "15 min",
+        "description": "Espalhar os cereais selados em assadeira com papel manteiga e levar à geladeira ou câmara fria por 15 minutos até a camada lipídica solidificar, criando uma casca protetora crocante anti-umidade."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Flocos de Milho Tostados",
+        "grams": 800
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 180
+      },
+      {
+        "name": "Sal",
+        "grams": 20
+      }
+    ]
+  },
+  {
+    "id": "prep_geleia_frutas_vermelhas",
+    "name": "Geleia Artesanal de Frutas Vermelhas",
+    "category": "Variegato",
+    "instructions": "Misturar o açúcar com a pectina. Em fogo médio-alto, aquecer as frutas vermelhas e o suco de limão. Ao ferver, adicionar o açúcar com pectina e cozinhar por 10 minutos, escumando a superfície para obter brilho e transparência. Resfriar completamente antes de mesclar.",
+    "preparationSteps": [
+      {
+        "id": "step_gfv_1",
+        "order": 1,
+        "title": "Dispersão da Pectina no Açúcar",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Em um recipiente seco, homogeneizar perfeitamente o açúcar refinado com a pectina em pó para garantir que a pectina hidrate sem formar grumos ao entrar no líquido quente."
+      },
+      {
+        "id": "step_gfv_2",
+        "order": 2,
+        "title": "Cocção e Redução Brilhante",
+        "category": "aquecimento",
+        "temperature": "103°C",
+        "duration": "10 min",
+        "description": "Em panela alta de inox, aquecer as frutas vermelhas frescas ou congeladas com o suco de limão. Ao levantar as primeiras bolhas de fervura, verter a mistura de açúcar e pectina em chuva. Cozinhar por 10 minutos retirando a espuma superficial com escumadeira."
+      },
+      {
+        "id": "step_gfv_3",
+        "order": 3,
+        "title": "Resfriamento e Gelificação",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "2h",
+        "description": "Transferir para pote hermético e resfriar em geladeira a 4°C para ativação da rede de pectina em meio ácido, adquirindo consistência fluida e aveludada ideal para mesclar em fitas."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Frutas Vermelhas",
+        "grams": 500
+      },
+      {
+        "name": "Suco de Limão",
+        "grams": 25
+      },
+      {
+        "name": "Açúcar",
+        "grams": 300
+      },
+      {
+        "name": "Pectina",
+        "grams": 4
+      }
+    ]
+  },
+  {
+    "id": "prep_caramelo_toffee_salgado",
+    "name": "Caramelo Toffee Salgado para Gelato",
+    "category": "Variegato",
+    "instructions": "Amornar o creme de leite com a glucose a 40°C. Na panela, caramelizar a seco o açúcar até dourado intenso sem amargar. Verter o creme morno aos poucos com espátula e cozinhar até atingir entre 98°C e 100°C. Adicionar o açúcar invertido e a flor de sal. Mantém maciez e maleabilidade perfeitas a -15°C.",
+    "preparationSteps": [
+      {
+        "id": "step_cts_1",
+        "order": 1,
+        "title": "Caramelização a Seco da Sacarose",
+        "category": "aquecimento",
+        "temperature": "170°C",
+        "duration": "8 min",
+        "description": "Em panela de fundo espesso, derreter o açúcar em fogo médio-baixo, movimentando a própria panela para que derreta homogeneamente até cor âmbar profunda e aromática."
+      },
+      {
+        "id": "step_cts_2",
+        "order": 2,
+        "title": "Deglaçagem com Creme e Glucose Morno",
+        "category": "aquecimento",
+        "temperature": "100°C",
+        "duration": "5 min",
+        "description": "Aquecer previamente o creme de leite fresco com a glucose a 40°C. Regar aos poucos sobre o caramelo quente mexendo com espátula de silicone com cuidado. Cozinhar em fogo baixo até atingir entre 98°C e 100°C."
+      },
+      {
+        "id": "step_cts_3",
+        "order": 3,
+        "title": "Finalização com Invertido e Flor de Sal",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "3 min",
+        "description": "Retirar do calor e incorporar o açúcar invertido e a flor de sal. O açúcar invertido reduz a cristalização e garante que o caramelo toffee continue puxa e maleável mesmo a -15°C no freezer."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Açúcar",
+        "grams": 140
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 100
+      },
+      {
+        "name": "Açúcar Invertido",
+        "grams": 20
+      },
+      {
+        "name": "Xarope de glucose",
+        "grams": 20
+      },
+      {
+        "name": "Sal",
+        "grams": 5
+      }
+    ]
+  },
+  {
+    "id": "prep_cremino_gianduia",
+    "name": "Cremino de Gianduia",
+    "category": "Variegato",
+    "instructions": "Derreter chocolate ao leite e meio amargo a 40°C. Amornar creme de leite 20%, açúcar invertido e pasta de avelã pura a 40°C. Emulsionar tudo com mixer até obter ganache aveludada e brilhante. Aplicar morno (máximo 30°C) ou à temperatura ambiente.",
+    "preparationSteps": [
+      {
+        "id": "step_cgi_1",
+        "order": 1,
+        "title": "Fusão Suave dos Chocolates",
+        "category": "aquecimento",
+        "temperature": "40°C",
+        "duration": "5 min",
+        "description": "Picar finamente o chocolate ao leite e meio amargo. Levar ao banho-maria ou micro-ondas em potências brandas revolvendo a cada 20 segundos até derretimento completo."
+      },
+      {
+        "id": "step_cgi_2",
+        "order": 2,
+        "title": "Aquecimento da Fase Cremosa e Avelã",
+        "category": "aquecimento",
+        "temperature": "40°C",
+        "duration": "3 min",
+        "description": "Em outro recipiente, juntar o creme de leite de lata (20% gordura), o açúcar invertido e a pasta pura de avelã 100%. Aquecer até cerca de 40°C."
+      },
+      {
+        "id": "step_cgi_3",
+        "order": 3,
+        "title": "Emulsão sob Mixer de Alta Rotação",
+        "category": "emulsao",
+        "temperature": "35°C",
+        "duration": "3 min",
+        "description": "Verter a mistura morna de avelã sobre os chocolates derretidos. Processar com mixer de imersão mantendo a lâmina no fundo para criar emulsão elástica e brilhante sem bolhas de ar."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Chocolate ao Leite 33.7%",
+        "grams": 100
+      },
+      {
+        "name": "Chocolate Meio Amargo 54%",
+        "grams": 25
+      },
+      {
+        "name": "Pasta Pura de Avelã",
+        "grams": 100
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 125
+      },
+      {
+        "name": "Açúcar Invertido",
+        "grams": 15
+      }
+    ]
+  },
+  {
+    "id": "prep_castanha_peca_caramelizada_selada",
+    "name": "Pecã Caramelizada e Selada (Anti-Umidade)",
+    "category": "Variegato",
+    "instructions": "Picar nozes pecãs grosseiramente sem formar farelos. Caramelizar açúcar a seco em frigideira até dourado. Juntar as castanhas mexendo até ficarem caramelizadas. Espalhar em silpat e, ainda mornas, envolver com óleo de coco ou manteiga de cacau derretida para criar película protetora anti-umidade.",
+    "preparationSteps": [
+      {
+        "id": "step_pcs_1",
+        "order": 1,
+        "title": "Corte e Caramelização Rápida",
+        "category": "aquecimento",
+        "temperature": "165°C",
+        "duration": "6 min",
+        "description": "Picar as nozes pecãs em metades ou quartos regulares. Em frigideira, derreter o açúcar até caramelo dourado. Jogar as nozes de uma vez e misturar rapidamente para caramelizar todos os pedaços."
+      },
+      {
+        "id": "step_pcs_2",
+        "order": 2,
+        "title": "Separação Individual em Silpat",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Despejar as nozes caramelizadas sobre tapete de silicone (silpat). Com duas espátulas, separar os pedaços rapidamente para que fiquem soltos antes que o açúcar endureça."
+      },
+      {
+        "id": "step_pcs_3",
+        "order": 3,
+        "title": "Impermeabilização Lipídica",
+        "category": "emulsao",
+        "temperature": "35°C",
+        "duration": "5 min",
+        "description": "Com as nozes mornas ao toque, verter óleo de coco desodorizado ou manteiga de cacau fundida, envolvendo cada pedaço. A gordura cristaliza selando o caramelo contra a água livre do gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Noz Pecã",
+        "grams": 100
+      },
+      {
+        "name": "Açúcar",
+        "grams": 50
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 15
+      }
+    ]
+  },
+  {
+    "id": "prep_crumble_tradicional",
+    "name": "Crumble Crocante Tradicional",
+    "category": "Pré-preparo",
+    "instructions": "Misturar farinha de trigo, açúcar refinado e sal. Adicionar manteiga gelada em cubos e beliscar com as pontas dos dedos até obter uma areia úmida aglutinada. Espalhar em assadeira com silpat e assar a 180°C por 10 minutos até dourar. Esfriar antes de usar.",
+    "preparationSteps": [
+      {
+        "id": "step_ct_1",
+        "order": 1,
+        "title": "Pesagem e Mistura dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Juntar farinha de trigo, açúcar refinado e pitada de sal em tigela ampla."
+      },
+      {
+        "id": "step_ct_2",
+        "order": 2,
+        "title": "Sablagém com Manteiga Gelada",
+        "category": "emulsao",
+        "temperature": "10°C",
+        "duration": "5 min",
+        "description": "Adicionar a manteiga bem gelada cortada em cubinhos de 5mm. Com a ponta dos dedos, beliscar os ingredientes até textura de farofa grossa úmida que esfarela com facilidade."
+      },
+      {
+        "id": "step_ct_3",
+        "order": 3,
+        "title": "Cocção e Douramento no Forno",
+        "category": "aquecimento",
+        "temperature": "180°C",
+        "duration": "10 min",
+        "description": "Espalhar em camada uniforme sobre tapete de silicone e assar em forno pré-aquecido a 180°C por 10 minutos até dourado crocante. Resfriar completamente em câmara fria."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Farinha de Trigo",
+        "grams": 65
+      },
+      {
+        "name": "Açúcar",
+        "grams": 90
+      },
+      {
+        "name": "Manteiga",
+        "grams": 50
+      },
+      {
+        "name": "Sal",
+        "grams": 1
+      }
+    ]
+  },
+  {
+    "id": "prep_crumble_especiarias",
+    "name": "Crumble com Especiarias Finas",
+    "category": "Pré-preparo",
+    "instructions": "Elaborar o crumble tradicional incorporando canela, cravo, noz moscada e gengibre em pó aos secos. Assar a 180°C por 10 minutos. Confere textura crocante e notas aromáticas de pão de especiarias / gingerbread.",
+    "preparationSteps": [
+      {
+        "id": "step_ce_1",
+        "order": 1,
+        "title": "Homogeneização dos Secos com Especiarias",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Misturar a farinha de trigo, açúcar refinado, sal, canela em pó, cravo moído, gengibre e noz moscada ralada na hora."
+      },
+      {
+        "id": "step_ce_2",
+        "order": 2,
+        "title": "Pellotagem Rápida com Manteiga Fria",
+        "category": "emulsao",
+        "temperature": "10°C",
+        "duration": "5 min",
+        "description": "Incorporar a manteiga gelada em cubos até formar pequenos grumos crocantes aromáticos."
+      },
+      {
+        "id": "step_ce_3",
+        "order": 3,
+        "title": "Cocção Aromática no Forno",
+        "category": "aquecimento",
+        "temperature": "180°C",
+        "duration": "10 min",
+        "description": "Assar a 180°C por 10 minutos até tostar levemente, perfumando a cozinha com notas de gingerbread."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Farinha de Trigo",
+        "grams": 65
+      },
+      {
+        "name": "Açúcar",
+        "grams": 90
+      },
+      {
+        "name": "Manteiga",
+        "grams": 50
+      },
+      {
+        "name": "Canela em pó",
+        "grams": 2
+      },
+      {
+        "name": "Gengibre em pó",
+        "grams": 2
+      },
+      {
+        "name": "Cravo em pó",
+        "grams": 1
+      },
+      {
+        "name": "Sal",
+        "grams": 1
+      }
+    ]
+  },
+  {
+    "id": "prep_cremino_pistache",
+    "name": "Cremino de Pistache",
+    "category": "Variegato",
+    "instructions": "Amornar pasta pura de pistache 100%, creme de leite 20%, açúcar líquido invertido, xarope de glucose e óleo vegetal a 40°C. Bater com mixer até emulsão perfeitamente lisa e acetinada. Aplicar fluido a no máximo 30°C.",
+    "preparationSteps": [
+      {
+        "id": "step_cp_1",
+        "order": 1,
+        "title": "Pesagem e Aquecimento Suave",
+        "category": "aquecimento",
+        "temperature": "40°C",
+        "duration": "4 min",
+        "description": "Juntar em recipiente refratário a pasta pura de pistache, o creme de leite de lata 20%, açúcar invertido, xarope de glucose e óleo vegetal. Aquecer até 40°C."
+      },
+      {
+        "id": "step_cp_2",
+        "order": 2,
+        "title": "Micro-Emulsão com Mixer",
+        "category": "emulsao",
+        "temperature": "35°C",
+        "duration": "3 min",
+        "description": "Processar com mixer de alta rotação por 2 minutos até que os lipídios e açúcares formem uma pasta untuosa, brilhante e verde intensa."
+      },
+      {
+        "id": "step_cp_3",
+        "order": 3,
+        "title": "Estabilização Térmica para Aplicação",
+        "category": "maturacao",
+        "temperature": "25°C",
+        "duration": "10 min",
+        "description": "Deixar estabilizar em temperatura ambiente (20°C a 25°C). Não aplicar acima de 30°C para não derreter a estrutura congelada do gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Pasta Pura de Pistache",
+        "grams": 50
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 50
+      },
+      {
+        "name": "Açúcar Invertido",
+        "grams": 20
+      },
+      {
+        "name": "Xarope de glucose",
+        "grams": 10
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 10
+      },
+      {
+        "name": "Sal",
+        "grams": 1
+      }
+    ]
+  },
+  {
+    "id": "prep_cremino_chocolate",
+    "name": "Cremino de Chocolate Nobre",
+    "category": "Variegato",
+    "instructions": "Fundir chocolate amargo e chocolate ao leite a 40°C. Amornar creme de leite de lata e açúcar invertido a 40°C. Emulsionar ambas as partes com mixer de imersão até textura brilhante e sedosa que mantém maleabilidade a -15°C.",
+    "preparationSteps": [
+      {
+        "id": "step_cch_1",
+        "order": 1,
+        "title": "Fusão Térmica dos Chocolates",
+        "category": "aquecimento",
+        "temperature": "42°C",
+        "duration": "5 min",
+        "description": "Fundir suavemente o chocolate meio amargo e o chocolate ao leite picados em banho-maria."
+      },
+      {
+        "id": "step_cch_2",
+        "order": 2,
+        "title": "Emulsão com Creme e Invertido",
+        "category": "emulsao",
+        "temperature": "38°C",
+        "duration": "3 min",
+        "description": "Adicionar o creme de leite e o açúcar invertido mornos e bater intensamente com mixer até ganache acetinada."
+      },
+      {
+        "id": "step_cch_3",
+        "order": 3,
+        "title": "Aplicação Marmorizada",
+        "category": "maturacao",
+        "temperature": "25°C",
+        "duration": "5 min",
+        "description": "Manter à temperatura ambiente para verter em fios espessos e marmorizar na cuba ao extrair da máquina."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Chocolate Meio Amargo 54%",
+        "grams": 100
+      },
+      {
+        "name": "Chocolate ao Leite 33.7%",
+        "grams": 100
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 125
+      },
+      {
+        "name": "Açúcar Invertido",
+        "grams": 15
+      }
+    ]
+  },
+  {
+    "id": "prep_variegato_nutella_fluido",
+    "name": "Variegato de Nutella Fluido",
+    "category": "Variegato",
+    "instructions": "Misturar Nutella com açúcar líquido invertido e óleo vegetal desodorizado em banho-maria morno (35°C a 40°C). O óleo vegetal e o invertido evitam que a pasta de avelã enrijeça como pedra no congelador, permitindo espalhar em fitas macias.",
+    "preparationSteps": [
+      {
+        "id": "step_vnf_1",
+        "order": 1,
+        "title": "Aquecimento Suave e Quebra de Tensão",
+        "category": "aquecimento",
+        "temperature": "38°C",
+        "duration": "4 min",
+        "description": "Colocar a pasta de avelã com cacau (Nutella) em tigela sobre banho-maria morno para fluidificar."
+      },
+      {
+        "id": "step_vnf_2",
+        "order": 2,
+        "title": "Emulsão com Invertido e Óleo Vegetal",
+        "category": "emulsao",
+        "temperature": "32°C",
+        "duration": "3 min",
+        "description": "Adicionar o açúcar invertido e o óleo vegetal em fio contínuo mexendo com fouet ou mixer até completa incorporação brilhante."
+      },
+      {
+        "id": "step_vnf_3",
+        "order": 3,
+        "title": "Conservação em Bisnaga ou Cuba",
+        "category": "maturacao",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Guardar em bisnaga dosadora à temperatura ambiente (20°C). Permanece perfeitamente fluida ao contato com o gelato congelado."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Nutella",
+        "grams": 150
+      },
+      {
+        "name": "Açúcar Invertido",
+        "grams": 30
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 35
+      }
+    ]
+  },
+  {
+    "id": "prep_variegato_ovomaltine_crocante",
+    "name": "Variegato de Ovomaltine Crocante",
+    "category": "Variegato",
+    "instructions": "Dissolver o açúcar líquido invertido no óleo vegetal morno a 35°C. Verter sobre o Ovomaltine em pó mexendo suavemente com espátula para envolver os flocos crocantes sem dissolvê-los. A gordura protege a crocância do malte em temperaturas negativas.",
+    "preparationSteps": [
+      {
+        "id": "step_voc_1",
+        "order": 1,
+        "title": "Preparo da Matriz Lipídica Líquida",
+        "category": "aquecimento",
+        "temperature": "35°C",
+        "duration": "3 min",
+        "description": "Misturar previamente o óleo vegetal com o açúcar líquido invertido até emulsão homogênea translúcida."
+      },
+      {
+        "id": "step_voc_2",
+        "order": 2,
+        "title": "Incorporação Delicada do Malte Crocante",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Adicionar o Ovomaltine em pó e envolver com espátula de silicone com movimentos suaves para não quebrar os flocos nem dissolver o açúcar maltado."
+      },
+      {
+        "id": "step_voc_3",
+        "order": 3,
+        "title": "Descanso e Estabilização",
+        "category": "maturacao",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Deixar estabilizar por 10 minutos. O variegato fica espesso, brilhante e mantém extrema crocância no gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Ovomaltine",
+        "grams": 150
+      },
+      {
+        "name": "Açúcar Invertido",
+        "grams": 40
+      },
+      {
+        "name": "Óleo de coco",
+        "grams": 40
+      }
+    ]
+  },
+  {
+    "id": "prep_variegato_tiramisu_biscoito",
+    "name": "Variegato de Biscoito Champagne ao Café e Licor",
+    "category": "Variegato",
+    "instructions": "Cortar biscoitos champagne em pedaços de 1cm com ponta de faca afiada. Dissolver café solúvel em água morna e regar com licor de café. Umedecer os pedaços de biscoito na calda aromática e polvilhar generosamente com cacau em pó 22%. Intercalar com o gelato de tiramisù.",
+    "preparationSteps": [
+      {
+        "id": "step_vtb_1",
+        "order": 1,
+        "title": "Corte Preciso dos Biscoitos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Cortar os biscoitos champagne em cubinhos de aproximadamente 1cm, pressionando a ponta de uma faca de chef no verso do biscoito para evitar esfarelamento excessivo."
+      },
+      {
+        "id": "step_vtb_2",
+        "order": 2,
+        "title": "Elaboração da Calda de Café e Licor",
+        "category": "aquecimento",
+        "temperature": "40°C",
+        "duration": "3 min",
+        "description": "Amornar a água filtrada no micro-ondas, dissolver o café solúvel de boa qualidade e regar o licor de café (ou rum/amaretto), misturando com colher."
+      },
+      {
+        "id": "step_vtb_3",
+        "order": 3,
+        "title": "Hidratação Controlada e Polvilhamento com Cacau",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Espalhar os cubos de biscoito em travessa. Regar a calda aromática de café e misturar delicadamente com as mãos para absorver todo o líquido sem desmanchar. Polvilhar cacau em pó puro peneirado generosamente sobre todos os pedaços."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Biscoito Champanhe",
+        "grams": 70
+      },
+      {
+        "name": "Água",
+        "grams": 45
+      },
+      {
+        "name": "Café Solúvel",
+        "grams": 4
+      },
+      {
+        "name": "Licor de Café",
+        "grams": 17
+      },
+      {
+        "name": "Cacau em pó 22-24%",
+        "grams": 10
+      }
+    ]
+  },
+  {
+    "id": "prep_brownie_funcional",
+    "name": "Brownie Funcional para Gelato",
+    "category": "Pré-preparo",
+    "instructions": "Misturar pasta pura de amendoim, melado de cana, ovo e água. Peneirar cacau em pó, café solúvel e bicarbonato. Envolver com gotas de chocolate 70%. Assar a 180°C por 15 minutos em forma untada até bordas firmes e centro cremoso. Refrigerar por 6 horas, cortar em cubinhos de 1cm e congelar para mesclagem.",
+    "preparationSteps": [
+      {
+        "id": "step_bf_1",
+        "order": 1,
+        "title": "Emulsão dos Ingredientes Úmidos",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "4 min",
+        "description": "Em bowl médio, misturar vigorosamente com espátula de silicone a pasta de amendoim pura, o melado de cana, o ovo peneirado e a água filtrada até massa homogênea."
+      },
+      {
+        "id": "step_bf_2",
+        "order": 2,
+        "title": "Peneiração dos Secos e Adição de Chocolate",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "4 min",
+        "description": "Peneirar o cacau em pó, o café solúvel e o bicarbonato sobre a mistura úmida. Incorporar sem bater em excesso. Adicionar as gotas de chocolate 70% cacau."
+      },
+      {
+        "id": "step_bf_3",
+        "order": 3,
+        "title": "Cocção Rápida e Fundo Cremoso",
+        "category": "aquecimento",
+        "temperature": "180°C",
+        "duration": "15 min",
+        "description": "Despejar em assadeira de 15cm com fundo falso untada. Assar a 180°C por exatos 15 minutos até que as laterais firmem e o centro permaneça úmido e untuoso."
+      },
+      {
+        "id": "step_bf_4",
+        "order": 4,
+        "title": "Resfriamento e Corte em Cubos Congelados",
+        "category": "abatimento",
+        "temperature": "-18°C",
+        "duration": "6h",
+        "description": "Deixar firmar em geladeira por 6 horas. Desenformar sobre tábua e cortar em cubinhos regulares de 1cm. Espalhar em assadeira e ultracongelar a -18°C antes de mesclar na massa de gelato."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Pasta de Amendoim Integral",
+        "grams": 150
+      },
+      {
+        "name": "Melado de Cana",
+        "grams": 80
+      },
+      {
+        "name": "Ovo Galinha",
+        "grams": 35
+      },
+      {
+        "name": "Água",
+        "grams": 30
+      },
+      {
+        "name": "Cacau em pó 22-24%",
+        "grams": 12
+      },
+      {
+        "name": "Café Solúvel",
+        "grams": 3
+      },
+      {
+        "name": "Bicarbonato de Sódio",
+        "grams": 1.5
+      },
+      {
+        "name": "Chocolate Amargo 70%",
+        "grams": 100
+      }
+    ]
+  },
+  {
+    "id": "prep_geleia_damasco_seco",
+    "name": "Geleia Artesanal de Damasco Seco",
+    "category": "Variegato",
+    "instructions": "Hidratar damascos secos picados em água fervente por 30 minutos. Bater no processador com parte da água até purê com pedacinhos. Levar ao fogo com o açúcar e suco de limão e cozinhar por 10 minutos até consistência brilhante e untuosa. Resfriar antes de marmorizar o gelato de brie.",
+    "preparationSteps": [
+      {
+        "id": "step_gds_1",
+        "order": 1,
+        "title": "Hidratação Térmica dos Damascos",
+        "category": "aquecimento",
+        "temperature": "90°C",
+        "duration": "30 min",
+        "description": "Picar os damascos secos e submergir em água mineral fervente por 30 minutos em panela tampada até amolecerem completamente e reidratarem os açúcares naturais."
+      },
+      {
+        "id": "step_gds_2",
+        "order": 2,
+        "title": "Trituração Parcial e Cocção com Açúcar",
+        "category": "aquecimento",
+        "temperature": "102°C",
+        "duration": "10 min",
+        "description": "Processar os damascos com o líquido no liquidificador ou mixer em modo pulsar, mantendo pequenos pedacinhos texturais. Juntar o açúcar e o suco de limão e cozinhar em fogo médio por 10 minutos até adquirir brilho âmbar e ponto de geleia espessa."
+      },
+      {
+        "id": "step_gds_3",
+        "order": 3,
+        "title": "Resfriamento e Maturação Refrigerada",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "2h",
+        "description": "Resfriar em geladeira a 4°C. Adquire consistência acetinada que desliza facilmente sobre o gelato cremoso de queijo brie."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Damasco Seco",
+        "grams": 250
+      },
+      {
+        "name": "Água",
+        "grams": 300
+      },
+      {
+        "name": "Açúcar",
+        "grams": 100
+      },
+      {
+        "name": "Suco de Limão",
+        "grams": 15
+      }
+    ]
+  },
+  {
+    "id": "prep_geleia_laranja",
+    "name": "Geleia Artesanal de Laranja",
+    "category": "Variegato",
+    "instructions": "Homogeneizar o açúcar com a pectina. Em panela média, aquecer o suco fresco de laranja com as raspas finas da casca. Ao levantar fervura, verter o açúcar com pectina em chuva e cozinhar por 10 minutos até ponto de geleia brilhante. Resfriar antes de mesclar.",
+    "preparationSteps": [
+      {
+        "id": "step_gla_1",
+        "order": 1,
+        "title": "Extração Cítrica e Dispersão de Pectina",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Extrair 400g de suco de laranja baía fresca e retirar raspas bem finas de 1 laranja (sem a parte branca amarga). Misturar o açúcar com a pectina em pó em tigela seca."
+      },
+      {
+        "id": "step_gla_2",
+        "order": 2,
+        "title": "Cocção e Gelificação Rápida",
+        "category": "aquecimento",
+        "temperature": "103°C",
+        "duration": "10 min",
+        "description": "Aquecer o suco com as raspas até fervura. Adicionar os secos em chuva, mexendo com espátula. Cozinhar por 10 minutos retirando eventuais espumas superficiais para acabamento cristalino."
+      },
+      {
+        "id": "step_gla_3",
+        "order": 3,
+        "title": "Resfriamento em Geladeira",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "2h",
+        "description": "Refrigerar a 4°C até consistência gelatinosa macia perfeita para riscar o topo e o interior do gelato de cheesecake de laranja."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Suco de Laranja",
+        "grams": 400
+      },
+      {
+        "name": "Açúcar",
+        "grams": 150
+      },
+      {
+        "name": "Pectina",
+        "grams": 3
+      },
+      {
+        "name": "Laranja",
+        "grams": 2
+      }
+    ]
+  },
+  {
+    "id": "prep_leite_aveia_artesanal",
+    "name": "Leite de Aveia Artesanal Fresco",
+    "category": "Pré-preparo",
+    "instructions": "Bater 200g de flocos de aveia integral com 1kg de água filtrada fria ou à temperatura ambiente no liquidificador por 1 minuto. Não usar água morna para não gelatinizar o amido em mingau elástico. Filtrar em chinois fino ou saco de voal, espremendo bem com espátula. Rende cerca de 880g de base láctea vegetal elástica e neutra.",
+    "preparationSteps": [
+      {
+        "id": "step_laa_1",
+        "order": 1,
+        "title": "Batimento a Frio da Aveia",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "No liquidificador, colocar 200g de aveia em flocos integrais e 1000g de água filtrada fria em temperatura ambiente. Bater na velocidade máxima por 60 segundos. Não deixar de molho prévio nem usar água morna para evitar que a aveia solte viscosidade gomosa indesejada."
+      },
+      {
+        "id": "step_laa_2",
+        "order": 2,
+        "title": "Filtragem Fina em Chinois ou Voal",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Passar o líquido batido por uma peneira chinois cônica ou saco de voal limpo, pressionando com espátula para extrair o leite vegetal fluido e límpido (cerca de 880g de rendimento), descartando as fibras sólidas residuais."
+      },
+      {
+        "id": "step_laa_3",
+        "order": 3,
+        "title": "Armazenamento Refrigerado",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "10 min",
+        "description": "Armazenar em garrafa hermética sob refrigeração a 4°C por até 3 dias para uso imediato em caldas de gelato vegano."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Aveia em Flocos",
+        "grams": 200
+      },
+      {
+        "name": "Água",
+        "grams": 1000
+      }
+    ]
+  },
+  {
+    "id": "prep_casquinha_artesanal_gelato",
+    "name": "Casquinha Artesanal para Gelato (Cone/Cestinha)",
+    "category": "Pré-preparo",
+    "instructions": "Misturar clara, açúcar refinado e baunilha com fouet sem bater ar. Adicionar manteiga derretida morna e creme de leite 35%. Juntar farinha de trigo, sal e canela em pó. Espalhar discos finos em frigideira antiaderente untada, dourar por 2 a 4 minutos de cada lado e modelar imediatamente em cones ou cestinhas com luvas térmicas antes de endurecer.",
+    "preparationSteps": [
+      {
+        "id": "step_cag_1",
+        "order": 1,
+        "title": "Dispersão da Clara com Açúcar e Baunilha",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Em tigela, misturar com fouet a clara fresca com o açúcar refinado e o extrato de baunilha até dissolver sem incorporar espuma de ar."
+      },
+      {
+        "id": "step_cag_2",
+        "order": 2,
+        "title": "Emulsão dos Líquidos e Secos",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "4 min",
+        "description": "Adicionar a manteiga derretida morna e o creme de leite 35%. Acrescentar a farinha de trigo, o sal e a canela em pó, mexendo apenas até obter massa lisa e fluida."
+      },
+      {
+        "id": "step_cag_3",
+        "order": 3,
+        "title": "Cocção em Frigideira Antiaderente",
+        "category": "aquecimento",
+        "temperature": "160°C",
+        "duration": "8 min",
+        "description": "Untar levemente uma frigideira antiaderente em fogo médio. Espalhar uma concha de massa com espátula criando um disco ultrafino. Dourar por 2 a 3 minutos, virar para dourar o outro lado por 1 minuto."
+      },
+      {
+        "id": "step_cag_4",
+        "order": 4,
+        "title": "Modelagem Imediata em Cone ou Cesta",
+        "category": "maturacao",
+        "temperature": "60°C",
+        "duration": "2 min",
+        "description": "Com luvas térmicas protetoras, retirar o disco quente da frigideira e imediatamente enrolar sobre cone modelador ou sobre o fundo de um copo para formar cestinha. Segurar por 15 segundos até endurecer e ficar crocante. Guardar em lata hermética."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Clara de Ovo",
+        "grams": 32
+      },
+      {
+        "name": "Açúcar",
+        "grams": 90
+      },
+      {
+        "name": "Manteiga",
+        "grams": 30
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 27
+      },
+      {
+        "name": "Farinha de Trigo",
+        "grams": 70
+      },
+      {
+        "name": "Canela em pó",
+        "grams": 1
+      },
+      {
+        "name": "Sal",
+        "grams": 1
+      }
+    ]
   }
 ]

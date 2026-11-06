@@ -3389,5 +3389,21 @@
     "pac": 0.67,
     "protein": 0.04,
     "hasAllergen": true
+  },
+  {
+    "id": "ing_218",
+    "name": "Manjericão Fresco",
+    "category": "Outros",
+    "costKg": 0,
+    "sugars": 0.003,
+    "fat": 0,
+    "msnf": 0,
+    "otherSolids": 0.077,
+    "totalSolids": 0.08,
+    "water": 0.92,
+    "pod": 0,
+    "pac": 0,
+    "protein": 0.032,
+    "hasAllergen": false
   }
 ]

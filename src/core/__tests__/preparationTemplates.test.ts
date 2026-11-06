@@ -134,8 +134,8 @@ describe('preparationTemplates', () => {
     expect(suggestPreparationTemplate(proProteicRecipe).id).toBe('gelato_proteico_profissional');
   });
 
-  it('deve garantir que 100% das 148 receitas do catálogo possuem preparationSteps válidos', () => {
-    expect(allRecipes.length).toBe(148);
+  it('deve garantir que 100% das 149 receitas do catálogo possuem preparationSteps válidos', () => {
+    expect(allRecipes.length).toBe(149);
 
     for (const recipe of allRecipes as Recipe[]) {
       expect(recipe.preparationSteps, `Receita ${recipe.id} (${recipe.name}) sem preparationSteps`).toBeDefined();

@@ -1751,6 +1751,77 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_caseiro_steps_v1', value: 1 });
       }
 
+      // Sincronizar refinamento de receitas do compêndio Base de Leite (Passos artesanais específicos, novos pré-preparos/variegatos e correções de calda)
+      const diretoAoPontoSetting = await this.settings.get('recipes_direto_ao_ponto_refinement_v2');
+      if (!diretoAoPontoSetting) {
+        console.log('Sincronizando novos pré-preparos, variegatos e passos refinados de receitas...');
+        // 1. Garantir que os 23 pré-preparos do catálogo estejam no banco
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        // 2. Atualizar as 23 receitas refinadas do compêndio
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const targetIds = [
+          'rec_1', 'rec_2', 'rec_3', 'rec_4', 'rec_5', 'rec_6', 'rec_7', 'rec_8',
+          'rec_9', 'rec_10', 'rec_11', 'rec_12', 'rec_13', 'rec_14', 'rec_15',
+          'rec_17', 'rec_18', 'rec_19', 'rec_60', 'rec_61', 'rec_62', 'rec_63', 'rec_109'
+        ];
+
+        for (const id of targetIds) {
+          const catRec = initialMap.get(id);
+          const dbRec = await this.recipes.get(id);
+          if (catRec && dbRec && !dbRec.isCustom) {
+            await this.recipes.update(id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams,
+              preparationSteps: catRec.preparationSteps,
+              ...(catRec.variegatos ? { variegatos: catRec.variegatos } : {})
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_direto_ao_ponto_refinement_v2', value: 1 });
+      }
+
+      // Sincronizar refinamento de receitas do compêndio Profissional Addolcire (16 novos pré-preparos/variegatos, rec_178, rec_142 manjericão e passos artesanais refinados)
+      const addolcireSetting = await this.settings.get('recipes_addolcire_refinement_v3');
+      if (!addolcireSetting) {
+        console.log('Sincronizando 16 novos pré-preparos e 74 receitas Addolcire refinadas...');
+        // 1. Garantir que todos os pré-preparos do catálogo estejam no banco
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        // 2. Garantir que o insumo Manjericão Fresco esteja no banco
+        const manjericao = (initialIngredients as Ingredient[]).find(i => i.id === 'ing_218' || i.name === 'Manjericão Fresco');
+        if (manjericao) {
+          await this.ingredients.put(manjericao);
+        }
+
+        // 3. Atualizar/inserir receitas do compêndio
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+
+        // Inserir rec_178 se ainda não existir
+        const rec178 = initialMap.get('rec_178');
+        if (rec178) {
+          const dbRec178 = await this.recipes.get('rec_178');
+          if (!dbRec178) {
+            await this.recipes.put(rec178);
+          }
+        }
+
+        // Atualizar receitas Addolcire
+        const addolcireRecipes = (initialRecipes as Recipe[]).filter(r => r.name.includes('(Addolcire)'));
+        for (const catRec of addolcireRecipes) {
+          const dbRec = await this.recipes.get(catRec.id);
+          if (dbRec && !dbRec.isCustom) {
+            await this.recipes.update(catRec.id, {
+              ingredients: catRec.ingredients,
+              totalGrams: catRec.totalGrams,
+              preparationSteps: catRec.preparationSteps,
+              ...(catRec.variegatos ? { variegatos: catRec.variegatos } : { variegatos: [] })
+            });
+          }
+        }
+        await this.settings.put({ key: 'recipes_addolcire_refinement_v3', value: 1 });
+      }
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {
