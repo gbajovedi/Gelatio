@@ -63,6 +63,7 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
 }) => {
   const [search, setSearch] = useState('');
   const [catFilter, setCatFilter] = useState<'Todas' | 'Pré-preparo' | 'Variegato'>('Todas');
+  const [methodFilter, setMethodFilter] = useState<'todos' | 'com_preparo' | 'sem_preparo'>('todos');
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -142,7 +143,18 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
       search === '' ||
       p.name.toLowerCase().includes(search.toLowerCase()) ||
       p.ingredients.some(i => i.name.toLowerCase().includes(search.toLowerCase()));
-    return matchCat && matchSearch;
+
+    const cardSteps = getInitialPreparationSteps(p);
+    const hasStructuredSteps = cardSteps.length > 0;
+    const hasTextOnly = !hasStructuredSteps && !!p.instructions && p.instructions.trim().length > 0;
+    const hasMethod = hasStructuredSteps || hasTextOnly;
+
+    const matchMethod =
+      methodFilter === 'todos' ||
+      (methodFilter === 'com_preparo' && hasMethod) ||
+      (methodFilter === 'sem_preparo' && !hasMethod);
+
+    return matchCat && matchSearch && matchMethod;
   });
 
   const allIngredientsExpanded = useMemo(() => {
@@ -474,8 +486,9 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
             )}
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
+              {/* Filtro de Categoria */}
               {(['Todas', 'Pré-preparo', 'Variegato'] as const).map(cat => (
                 <button
                   key={cat}
@@ -490,13 +503,44 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                   {cat}
                 </button>
               ))}
+
+              {/* Separador Visual entre Categoria e Modo de Preparo */}
+              <div className="hidden sm:block h-6 w-px bg-slate-700/80 mx-1" />
+
+              {/* Filtro de Modo de Preparo (Ativado Conjuntamente) */}
+              {(
+                [
+                  { id: 'todos', label: 'Todos os Status de Preparo', shortLabel: 'Todos', icon: undefined },
+                  { id: 'com_preparo', label: 'Com Modo de Preparo cadastrado', shortLabel: 'Com Preparo', icon: ChefHat },
+                  { id: 'sem_preparo', label: 'Sem Modo de Preparo (Pendentes)', shortLabel: 'Sem Preparo', icon: Clock },
+                ] as const
+              ).map(opt => {
+                const Icon = opt.icon;
+                const isActive = methodFilter === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setMethodFilter(opt.id)}
+                    className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                        : 'bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600'
+                    }`}
+                    title={opt.label}
+                  >
+                    {Icon && <Icon className="w-3.5 h-3.5" />}
+                    <span>{opt.shortLabel}</span>
+                  </button>
+                );
+              })}
             </div>
 
             {filtered.length > 0 && (
               <button
                 type="button"
                 onClick={toggleAllIngredients}
-                className="px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-slate-900 border border-slate-700 hover:border-amber-500/40 text-slate-300 hover:text-white flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-slate-900 border border-slate-700 hover:border-amber-500/40 text-slate-300 hover:text-white flex items-center gap-1.5 cursor-pointer ml-auto sm:ml-0"
                 title={allIngredientsExpanded ? 'Recolher ingredientes de todos os cards' : 'Expandir ingredientes de todos os cards'}
               >
                 {allIngredientsExpanded ? (
@@ -718,6 +762,33 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
           );
         })}
       </div>
+
+      {/* Estado Vazio de Busca / Filtros Combinados */}
+      {filtered.length === 0 && (
+        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 sm:p-12 text-center space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
+            <ChefHat className="w-6 h-6" />
+          </div>
+          <h3 className="text-base font-bold text-white">Nenhum item encontrado</h3>
+          <p className="text-xs text-slate-400 max-w-sm mx-auto">
+            Nenhum pré-preparo ou variegato corresponde à combinação de filtros selecionados.
+          </p>
+          {(search || catFilter !== 'Todas' || methodFilter !== 'todos') && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                setCatFilter('Todas');
+                setMethodFilter('todos');
+              }}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Limpar Filtros</span>
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Modal: Cadastrar / Editar Pré-preparo ou Variegato */}
       {isModalOpen && (

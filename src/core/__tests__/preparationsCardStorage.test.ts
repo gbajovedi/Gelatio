@@ -159,4 +159,62 @@ describe('Pré-preparos: Persistência de Expansão de Ingredientes & Métricas'
     expect(matched.length).toBe(2);
     expect(matched.map(m => m.name)).toEqual(['Gelato Cheesecake', 'Gelato Iogurte com Frutas']);
   });
+
+  it('deve filtrar conjuntamente por categoria e status de modo de preparo', () => {
+    const list: Preparation[] = [
+      {
+        id: 'p1',
+        name: 'Base de Água',
+        category: 'Pré-preparo',
+        instructions: '',
+        ingredients: []
+      },
+      {
+        id: 'p2',
+        name: 'Brownie Funcional',
+        category: 'Pré-preparo',
+        instructions: 'Assar a 180°C',
+        ingredients: []
+      },
+      {
+        id: 'p3',
+        name: 'Variegato Morango',
+        category: 'Variegato',
+        instructions: 'Ferver e reduzir',
+        ingredients: []
+      },
+      {
+        id: 'p4',
+        name: 'Variegato Sem Modo',
+        category: 'Variegato',
+        instructions: '',
+        ingredients: []
+      }
+    ];
+
+    const filterFn = (cat: 'Todas' | 'Pré-preparo' | 'Variegato', method: 'todos' | 'com_preparo' | 'sem_preparo') => {
+      return list.filter(p => {
+        const matchCat = cat === 'Todas' || p.category === cat;
+        const steps = getInitialPreparationSteps(p);
+        const hasMethod = steps.length > 0 || (!!p.instructions && p.instructions.trim().length > 0);
+        const matchMethod =
+          method === 'todos' ||
+          (method === 'com_preparo' && hasMethod) ||
+          (method === 'sem_preparo' && !hasMethod);
+        return matchCat && matchMethod;
+      });
+    };
+
+    // Pré-preparo + Sem Preparo
+    const pendingBases = filterFn('Pré-preparo', 'sem_preparo');
+    expect(pendingBases.map(p => p.id)).toEqual(['p1']);
+
+    // Variegato + Com Preparo
+    const readyVariegatos = filterFn('Variegato', 'com_preparo');
+    expect(readyVariegatos.map(p => p.id)).toEqual(['p3']);
+
+    // Todas + Sem Preparo
+    const allPending = filterFn('Todas', 'sem_preparo');
+    expect(allPending.map(p => p.id)).toEqual(['p1', 'p4']);
+  });
 });
