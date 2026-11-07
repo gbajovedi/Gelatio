@@ -302,6 +302,7 @@ export function App() {
               <PrePreparosList
                 preparations={preparations}
                 availableIngredients={ingredients}
+                recipes={recipes}
                 onRefresh={refreshData}
               />
             </Suspense>

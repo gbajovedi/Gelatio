@@ -401,7 +401,7 @@
   },
   {
     "id": "ing_24",
-    "name": "Base de água",
+    "name": "Base de Água",
     "category": "Bases & Pré-preparos",
     "costKg": 9.8305,
     "sugars": 0.4747,
@@ -418,7 +418,7 @@
   },
   {
     "id": "ing_25",
-    "name": "Base de leite",
+    "name": "Base de Leite",
     "category": "Bases & Pré-preparos",
     "costKg": 14.8383,
     "sugars": 0.1704,
@@ -452,7 +452,7 @@
   },
   {
     "id": "ing_27",
-    "name": "Base de leite(Fior di latte)",
+    "name": "Base de Leite (Fior di Latte)",
     "category": "Bases & Pré-preparos",
     "costKg": 11.7038,
     "sugars": 0.1759,

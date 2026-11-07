@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Preparation, Ingredient, PreparationStep, PreparationStepCategory } from '../../types/gelato';
+import { Preparation, Ingredient, PreparationStep, PreparationStepCategory, Recipe } from '../../types/gelato';
 import { db } from '../../db/database';
 import {
   Search,
@@ -8,6 +8,8 @@ import {
   Plus,
   Edit2,
   Trash2,
+  Copy,
+  BookOpen,
   Save,
   Sparkles,
   Utensils,
@@ -44,6 +46,7 @@ const STORAGE_EXPANDED_INGREDIENTS = 'gelatio_preparations_expanded_ingredients'
 interface PrePreparosListProps {
   preparations: Preparation[];
   availableIngredients?: Ingredient[];
+  recipes?: Recipe[];
   onRefresh?: () => void;
 }
 
@@ -55,6 +58,7 @@ interface PreparationFormItem {
 export const PrePreparosList: React.FC<PrePreparosListProps> = ({
   preparations,
   availableIngredients = [],
+  recipes = [],
   onRefresh,
 }) => {
   const [search, setSearch] = useState('');
@@ -107,6 +111,30 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
 
   // Estado do Modal de Visualização de Modo de Preparo
   const [viewingPrepForSteps, setViewingPrepForSteps] = useState<Preparation | null>(null);
+
+  // Mapa memoizado de uso de cada pré-preparo nas receitas do catálogo
+  const prepUsageMap = useMemo(() => {
+    const map = new Map<string, { count: number; recipeNames: string[] }>();
+    if (!recipes || recipes.length === 0) return map;
+
+    for (const prep of preparations) {
+      const pNameLower = prep.name.toLowerCase().trim();
+      const matchedNames: string[] = [];
+      for (const recipe of recipes) {
+        const inIngredients = recipe.ingredients.some(
+          i => i.name && i.name.toLowerCase().trim() === pNameLower
+        );
+        const inVariegatos = recipe.variegatos?.some(
+          v => v.name && v.name.toLowerCase().trim() === pNameLower
+        );
+        if (inIngredients || inVariegatos) {
+          matchedNames.push(recipe.name);
+        }
+      }
+      map.set(prep.id, { count: matchedNames.length, recipeNames: matchedNames });
+    }
+    return map;
+  }, [preparations, recipes]);
 
   const filtered = preparations.filter(p => {
     const matchCat = catFilter === 'Todas' || p.category === catFilter;
@@ -220,8 +248,43 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
     }
   };
 
+  const handleDuplicate = async (prep: Preparation) => {
+    try {
+      const newId = `prep_custom_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      const duplicatedPrep: Preparation = {
+        ...prep,
+        id: newId,
+        name: `${prep.name} (Cópia)`,
+        isCustom: true,
+        ingredients: prep.ingredients.map(ing => ({ ...ing })),
+        instructions: prep.instructions || '',
+        preparationSteps: prep.preparationSteps
+          ? prep.preparationSteps.map(s => ({
+              ...s,
+              id: `step_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`
+            }))
+          : undefined
+      };
+
+      await db.preparations.add(duplicatedPrep);
+      await syncPreparationToIngredient(duplicatedPrep, availableIngredients);
+
+      setSyncSuccessMessage(`Pré-preparo "${duplicatedPrep.name}" duplicado com sucesso!`);
+      if (onRefresh) onRefresh();
+    } catch (err) {
+      console.error('Erro ao duplicar pré-preparo:', err);
+      setModalError('Falha ao duplicar pré-preparo.');
+    }
+  };
+
   const handleDelete = async (prep: Preparation) => {
-    if (window.confirm(`Deseja realmente excluir o ${prep.category.toLowerCase()} "${prep.name}"?`)) {
+    const usage = prepUsageMap.get(prep.id);
+    const usageWarning =
+      usage && usage.count > 0
+        ? `\n\nATENÇÃO: Este pré-preparo está em uso em ${usage.count} receita(s) do catálogo:\n• ${usage.recipeNames.slice(0, 3).join('\n• ')}${usage.count > 3 ? `\n...e mais ${usage.count - 3} receita(s)` : ''}\n\nA exclusão poderá desbalancear essas receitas.`
+        : '';
+
+    if (window.confirm(`Deseja realmente excluir o ${prep.category.toLowerCase()} "${prep.name}"?${usageWarning}`)) {
       await db.preparations.delete(prep.id);
       if (prep.isCustom) {
         await removeLinkedIngredientForPreparation(prep);
@@ -460,15 +523,20 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
           const cardProfile = calculatePreparationNutrients(prep, availableIngredients);
           const isIngExpanded = !!expandedIngredients[prep.id];
           const cardSteps = getInitialPreparationSteps(prep);
+          const hasStructuredSteps = cardSteps.length > 0;
+          const hasTextOnly = !hasStructuredSteps && !!prep.instructions && prep.instructions.trim().length > 0;
+          const isPending = !hasStructuredSteps && !hasTextOnly;
+          const usage = prepUsageMap.get(prep.id);
 
           return (
             <div
               key={prep.id}
-              className="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-5 shadow-lg flex flex-col justify-between hover:border-amber-500/50 transition-all group"
+              onClick={() => setViewingPrepForSteps(prep)}
+              className="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-5 shadow-lg flex flex-col justify-between hover:border-amber-500/60 hover:shadow-amber-500/10 transition-all group cursor-pointer"
             >
               <div className="space-y-3">
                 {/* Cabeçalho do Card: Badges à esquerda e Ações à direita */}
-                <div className="flex items-center justify-between gap-2 min-h-[28px]">
+                <div className="flex items-center justify-between gap-2 min-h-[28px]" onClick={e => e.stopPropagation()}>
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span
                       className={`text-xs px-2.5 py-0.5 rounded-full font-bold border ${
@@ -484,12 +552,35 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                         Custom
                       </span>
                     )}
+                    {usage && usage.count > 0 && (
+                      <span
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold flex items-center gap-1 shrink-0"
+                        title={`Utilizado em ${usage.count} receita(s):\n• ${usage.recipeNames.slice(0, 5).join('\n• ')}${usage.count > 5 ? `\n...e mais ${usage.count - 5} receita(s)` : ''}`}
+                      >
+                        <BookOpen className="w-3 h-3 text-emerald-400" />
+                        <span>{usage.count} {usage.count === 1 ? 'receita' : 'receitas'}</span>
+                      </span>
+                    )}
                   </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0">
                     <button
                       type="button"
-                      onClick={() => handleOpenEdit(prep)}
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleDuplicate(prep);
+                      }}
+                      className="p-1.5 text-slate-400 hover:text-amber-300 hover:bg-amber-500/15 rounded-lg transition-all cursor-pointer"
+                      title={`Duplicar "${prep.name}"`}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleOpenEdit(prep);
+                      }}
                       className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-amber-500/15 rounded-lg transition-all cursor-pointer"
                       title={`Editar "${prep.name}"`}
                     >
@@ -497,7 +588,10 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleDelete(prep)}
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleDelete(prep);
+                      }}
                       className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-all cursor-pointer"
                       title={`Excluir "${prep.name}"`}
                     >
@@ -515,7 +609,10 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                 </h3>
 
                 {/* Ingredientes Colapsáveis com Persistência */}
-                <div className="rounded-xl border border-slate-700/70 bg-slate-900/80 overflow-hidden transition-all">
+                <div
+                  className="rounded-xl border border-slate-700/70 bg-slate-900/80 overflow-hidden transition-all"
+                  onClick={e => e.stopPropagation()}
+                >
                   <button
                     type="button"
                     onClick={() => toggleIngredients(prep.id)}
@@ -557,8 +654,11 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                 </div>
               </div>
 
-              {/* Rodapé do Card: Custo e Botão Modo de Preparo Lado a Lado (Aviso de Insumo Sincronizado removido) */}
-              <div className="pt-3.5 mt-3.5 border-t border-slate-700/60 flex items-center justify-between gap-3">
+              {/* Rodapé do Card: Custo e Botão Modo de Preparo com Status */}
+              <div
+                className="pt-3.5 mt-3.5 border-t border-slate-700/60 flex items-center justify-between gap-3"
+                onClick={e => e.stopPropagation()}
+              >
                 <div className="flex flex-col">
                   <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
                     Custo Estimado
@@ -572,14 +672,44 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                 <button
                   type="button"
                   onClick={() => setViewingPrepForSteps(prep)}
-                  className="px-3 sm:px-3.5 py-2 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 hover:border-amber-400 text-amber-300 font-bold text-xs sm:text-sm rounded-xl flex items-center gap-1.5 sm:gap-2 transition-all shadow-sm active:scale-95 cursor-pointer shrink-0"
-                  title={`Visualizar formulação completa e modo de preparo de "${prep.name}"`}
+                  className={`px-3 sm:px-3.5 py-2 border rounded-xl flex items-center gap-1.5 sm:gap-2 transition-all shadow-sm active:scale-95 cursor-pointer shrink-0 font-bold text-xs sm:text-sm ${
+                    hasStructuredSteps
+                      ? 'bg-amber-500/15 hover:bg-amber-500/25 border-amber-500/40 hover:border-amber-400 text-amber-300'
+                      : hasTextOnly
+                      ? 'bg-sky-500/15 hover:bg-sky-500/25 border-sky-500/40 hover:border-sky-400 text-sky-300'
+                      : 'bg-slate-900/60 hover:bg-slate-800/80 border-slate-700/70 hover:border-amber-500/30 text-slate-400 hover:text-slate-200'
+                  }`}
+                  title={
+                    hasStructuredSteps
+                      ? `Visualizar formulação e ${cardSteps.length} passos de preparo de "${prep.name}"`
+                      : hasTextOnly
+                      ? `Visualizar formulação e instruções em texto de "${prep.name}"`
+                      : `Visualizar formulação e cadastrar modo de preparo de "${prep.name}"`
+                  }
                 >
-                  <ChefHat className="w-4 h-4 text-amber-400" />
-                  <span>Modo de Preparo</span>
-                  {cardSteps.length > 0 && (
+                  <ChefHat
+                    className={`w-4 h-4 ${
+                      hasStructuredSteps
+                        ? 'text-amber-400'
+                        : hasTextOnly
+                        ? 'text-sky-400'
+                        : 'text-slate-500'
+                    }`}
+                  />
+                  <span>{hasStructuredSteps ? 'Modo de Preparo' : hasTextOnly ? 'Instruções' : 'Sem Preparo'}</span>
+                  {hasStructuredSteps && (
                     <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-amber-500/25 text-amber-200 font-mono font-bold">
                       {cardSteps.length}
+                    </span>
+                  )}
+                  {hasTextOnly && (
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-sky-500/25 text-sky-200 font-medium">
+                      Texto
+                    </span>
+                  )}
+                  {isPending && (
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-800 border border-slate-700/80 text-slate-400">
+                      Pendente
                     </span>
                   )}
                 </button>

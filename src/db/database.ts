@@ -1964,6 +1964,27 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_gelato_irresistivel_v1', value: 1 });
       }
 
+      // Sincronizar padronização tipográfica de pré-preparos e insumos base v25
+      const prepTypoFlag = await this.settings.get('prep_names_standardized_v25');
+      if (!prepTypoFlag) {
+        const typoMap: Record<string, string> = {
+          'Base de leite(Fior di latte)': 'Base de Leite (Fior di Latte)',
+          'Base de água': 'Base de Água',
+          'Base de leite': 'Base de Leite'
+        };
+        for (const [oldName, newName] of Object.entries(typoMap)) {
+          const ings = await this.ingredients.where('name').equals(oldName).toArray();
+          for (const ing of ings) {
+            await this.ingredients.update(ing.id, { name: newName });
+          }
+          const preps = await this.preparations.where('name').equals(oldName).toArray();
+          for (const prep of preps) {
+            await this.preparations.update(prep.id, { name: newName });
+          }
+        }
+        await this.settings.put({ key: 'prep_names_standardized_v25', value: 1 });
+      }
+
 
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();

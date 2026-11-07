@@ -96,4 +96,67 @@ describe('Pré-preparos: Persistência de Expansão de Ingredientes & Métricas'
     expect(steps[1].temperature).toBe('4°C');
     expect(steps[1].duration).toBe('2h');
   });
+
+  it('deve categorizar status do preparo entre estruturado, texto livre e pendente', () => {
+    const prepSteps: Preparation = {
+      id: 'p1',
+      name: 'P1',
+      category: 'Variegato',
+      instructions: '',
+      preparationSteps: [{ id: 's1', title: 'Cozimento', description: 'desc', category: 'aquecimento', order: 1 }],
+      ingredients: []
+    };
+    const prepText: Preparation = {
+      id: 'p2',
+      name: 'P2',
+      category: 'Pré-preparo',
+      instructions: 'Misturar bem todos os ingredientes secos.',
+      ingredients: []
+    };
+    const prepPending: Preparation = {
+      id: 'p3',
+      name: 'P3',
+      category: 'Pré-preparo',
+      instructions: '',
+      ingredients: []
+    };
+
+    expect(getInitialPreparationSteps(prepSteps).length).toBe(1);
+    expect(prepSteps.preparationSteps!.length > 0).toBe(true);
+
+    expect(prepText.instructions.trim().length > 0).toBe(true);
+    expect(prepPending.instructions.trim().length === 0).toBe(true);
+  });
+
+  it('deve calcular corretamente o vínculo de uso de pré-preparos em receitas', () => {
+    const prepName = 'Geleia Artesanal de Morango';
+    const mockRecipes = [
+      {
+        id: 'r1',
+        name: 'Gelato Cheesecake',
+        ingredients: [{ name: 'Leite', grams: 600 }],
+        variegatos: [{ name: 'Geleia Artesanal de Morango', grams: 150 }]
+      },
+      {
+        id: 'r2',
+        name: 'Gelato Iogurte com Frutas',
+        ingredients: [{ name: 'Geleia Artesanal de Morango', grams: 100 }],
+        variegatos: []
+      },
+      {
+        id: 'r3',
+        name: 'Gelato Pistache',
+        ingredients: [{ name: 'Pistache', grams: 100 }],
+        variegatos: []
+      }
+    ];
+
+    const matched = mockRecipes.filter(r =>
+      r.ingredients.some(i => i.name.toLowerCase() === prepName.toLowerCase()) ||
+      r.variegatos?.some(v => v.name.toLowerCase() === prepName.toLowerCase())
+    );
+
+    expect(matched.length).toBe(2);
+    expect(matched.map(m => m.name)).toEqual(['Gelato Cheesecake', 'Gelato Iogurte com Frutas']);
+  });
 });

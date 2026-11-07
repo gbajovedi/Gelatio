@@ -203,7 +203,7 @@
   },
   {
     "id": "prep_base_de_gua",
-    "name": "Base de água",
+    "name": "Base de Água",
     "category": "Pré-preparo",
     "instructions": "",
     "ingredients": [
@@ -239,7 +239,7 @@
   },
   {
     "id": "prep_base_de_leite",
-    "name": "Base de leite",
+    "name": "Base de Leite",
     "category": "Pré-preparo",
     "instructions": "",
     "ingredients": [
@@ -323,7 +323,7 @@
   },
   {
     "id": "prep_base_de_leite_fior_di_latte_",
-    "name": "Base de leite(Fior di latte)",
+    "name": "Base de Leite (Fior di Latte)",
     "category": "Pré-preparo",
     "instructions": "",
     "ingredients": [
