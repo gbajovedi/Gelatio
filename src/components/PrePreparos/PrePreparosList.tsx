@@ -467,19 +467,9 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
               className="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-4 sm:p-5 shadow-lg flex flex-col justify-between hover:border-amber-500/50 transition-all group"
             >
               <div className="space-y-3">
-                {/* Cabeçalho do Card */}
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <h3 className="font-bold text-base text-white flex items-center gap-2 flex-wrap">
-                      <span className="truncate">{prep.name}</span>
-                      {prep.isCustom && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold shrink-0">
-                          Custom
-                        </span>
-                      )}
-                    </h3>
-                  </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
+                {/* Cabeçalho do Card: Badges à esquerda e Ações à direita */}
+                <div className="flex items-center justify-between gap-2 min-h-[28px]">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <span
                       className={`text-xs px-2.5 py-0.5 rounded-full font-bold border ${
                         prep.category === 'Variegato'
@@ -489,6 +479,14 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                     >
                       {prep.category}
                     </span>
+                    {prep.isCustom && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold shrink-0">
+                        Custom
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(prep)}
@@ -507,6 +505,14 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                     </button>
                   </div>
                 </div>
+
+                {/* Título do Pré-Preparo: Espaço reservado para 2 linhas garantindo visualização completa e alinhamento uniforme */}
+                <h3
+                  className="font-bold text-base text-white group-hover:text-amber-200 transition-colors leading-snug break-words min-h-[2.75rem] flex items-start"
+                  title={prep.name}
+                >
+                  <span className="line-clamp-2">{prep.name}</span>
+                </h3>
 
                 {/* Ingredientes Colapsáveis com Persistência */}
                 <div className="rounded-xl border border-slate-700/70 bg-slate-900/80 overflow-hidden transition-all">
