@@ -1,6 +1,6 @@
 /**
  * Motor Físico-Químico da Curva de Congelamento & Dureza do Gelato
- * Baseado na termodinâmica de soluções de açúcares (Goff & Hartel, Caviezel e Carpigiani University).
+ * Baseado na termodinâmica de soluções de açúcares e crioscopia aplicada à gelateria.
  */
 
 export interface FreezingPointSample {

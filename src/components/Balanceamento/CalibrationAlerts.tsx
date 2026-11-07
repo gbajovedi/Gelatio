@@ -109,12 +109,12 @@ export const CalibrationAlerts: React.FC<CalibrationAlertsProps> = ({ analysis }
         </div>
       )}
 
-      {/* 2. Alerta de Arenosidade (Luca Caviezel) */}
+      {/* 2. Alerta de Arenosidade (SLNG vs Água Livre) */}
       {sandiness?.isAtRisk && (
         <div className="p-4 bg-amber-950/40 rounded-2xl border border-amber-500/50 text-xs text-amber-900 dark:text-amber-200 shadow-md space-y-1.5">
           <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-bold">
             <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-            <span className="text-sm">Alerta de Arenosidade (Caviezel)</span>
+            <span className="text-sm">Alerta de Arenosidade (SLNG vs Água Livre)</span>
           </div>
           <p className="text-amber-950 dark:text-amber-200/90 leading-relaxed text-xs">
             O teor de sólidos do leite (<strong className="text-amber-900 dark:text-amber-300 font-mono font-bold">SLNG: {(sandiness.currentMsnf * 100).toFixed(1)}%</strong>) ultrapassa o limite seguro de saturação da água livre (<strong className="text-amber-900 dark:text-amber-300 font-mono font-bold">máx. {(sandiness.maxSafeMsnf * 100).toFixed(1)}%</strong>).

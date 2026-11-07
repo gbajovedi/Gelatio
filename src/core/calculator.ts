@@ -333,7 +333,7 @@ export function calculateBatchAnalysis(
 
   const isBalanced = Object.values(validations).every(v => v.status === 'Ok');
 
-  // Temperatura de Serviço / Vitrine (°C) - Modelo Crioscópico de Espatulabilidade (Leighton / Corvitto)
+  // Temperatura de Serviço / Vitrine (°C) - Modelo Crioscópico de Espatulabilidade
   // Ponto de equilíbrio térmico onde ~75% a 78% da água está congelada em microcristais e ~22% a 25% permanece líquida para espatulabilidade perfeita.
   let servingTemperature = -12.0;
   if (relPac > 0 && pctWater > 0.15) {
@@ -344,7 +344,7 @@ export function calculateBatchAnalysis(
     servingTemperature = Math.max(-18.0, Math.min(-8.0, calculatedTemp));
   }
 
-  // 1. Risco de Arenosidade Dinâmico (Fórmula de Caviezel)
+  // 1. Risco de Arenosidade Dinâmico (Relação Água Livre : SLNG)
   // SLNG máximo seguro para o volume de água disponível: SLNG_máx = pctWater / 6
   const maxSafeMsnf = pctWater > 0 ? (pctWater / 6) : 0.105;
   const isSandinessAtRisk = pctMsnf > 0.02 && (pctMsnf > (maxSafeMsnf + 0.002));
@@ -355,7 +355,7 @@ export function calculateBatchAnalysis(
     excessPct: Math.max(0, pctMsnf - maxSafeMsnf)
   };
 
-  // 2. Diagnóstico Corvitto de PAC na Água Livre (PAC en agua libre)
+  // 2. Diagnóstico Crioscópico de PAC na Água Livre
   // PAC por kg de água pura = relPac / pctWater
   const pacWater = pctWater > 0.1 ? Math.round(relPac / pctWater) : Math.round(relPac);
 

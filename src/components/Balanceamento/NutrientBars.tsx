@@ -210,7 +210,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
             <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
           </span>
         );
-        tooltipTitle = 'Alerta de Arenosidade (Caviezel)';
+        tooltipTitle = 'Alerta de Arenosidade (SLNG vs Água Livre)';
         tooltipBody = `O teor de SLNG (${displayVal}%) excede o limite seguro de ${(sandiness.maxSafeMsnf * 100).toFixed(1)}% para a água disponível. Sob oscilação térmica na vitrine, a lactose pode precipitar em microcristais.`;
         tooltipExtra = (
           <div className="mt-2 pt-1.5 border-t border-amber-500/30 text-[11px] text-amber-300 font-medium">
@@ -241,11 +241,11 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
       );
     } else if (key === 'pac' && corvitto) {
       icon = (
-        <span className="text-cyan-400/90 hover:text-cyan-300 transition-colors flex items-center" title="PAC na Água Livre (Corvitto)">
+        <span className="text-cyan-400/90 hover:text-cyan-300 transition-colors flex items-center" title="PAC na Água Livre (Crioscopia Padrão)">
           <Snowflake className="w-3.5 h-3.5" />
         </span>
       );
-      tooltipTitle = 'PAC na Água Livre (Corvitto)';
+      tooltipTitle = 'PAC na Água Livre (Crioscopia Padrão)';
       tooltipBody = `Índice de ${corvitto.pacWater} PAC por kg de água pura disponível. Diagnóstico atual: ${corvitto.freezerLabel}.`;
       tooltipExtra = (
         <div className="mt-2 pt-1.5 border-t border-cyan-500/30 text-[11px] text-cyan-300">
@@ -558,7 +558,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                         ? 'bg-amber-500/25 text-amber-200 border border-amber-400/50 shadow-sm'
                         : 'text-slate-300 hover:text-white'
                     }`}
-                    title="Diagnóstico Angelo Corvitto para potes de delivery / freezer doméstico (-18°C)"
+                    title="Diagnóstico Crioscópico para potes de delivery / freezer doméstico (-18°C)"
                   >
                     <Package className="w-3.5 h-3.5" />
                     <span>Pote Freezer (-18°C)</span>
@@ -599,7 +599,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs uppercase font-bold tracking-wider text-slate-300">
-                        PAC Água Livre (Corvitto)
+                        PAC Água Livre (Crioscópico)
                       </span>
                       <span className={`text-xs px-2.5 py-0.5 rounded-full border font-bold ${freezerVerdictBadge}`}>
                         {corvitto?.freezerLabel}

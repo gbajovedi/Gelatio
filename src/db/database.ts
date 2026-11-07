@@ -1009,15 +1009,13 @@ export class GelatoDatabase extends Dexie {
     try {
       await this.open();
     } catch (openErr) {
-      console.warn('Erro ao abrir Dexie diretamente, iniciando auto-reparo do banco:', openErr);
-      try {
-        await Dexie.delete('GelatoBalancerDB');
-        await this.open();
-        console.log('GelatoBalancerDB recriado e aberto com sucesso.');
-      } catch (delErr) {
-        console.error('Erro crítico no IndexedDB:', delErr);
-        throw delErr;
+      console.error('Falha de conexão com IndexedDB ao inicializar GelatoBalancerDB:', openErr);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('gelato_db_open_error', { detail: openErr }));
       }
+      // NUNCA executar Dexie.delete automático: preserva intactos os dados, receitas customizadas
+      // e configurações existentes do usuário para recuperação manual ou exportação de emergência.
+      throw openErr;
     }
 
     try {
@@ -1715,7 +1713,7 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_phase4_final_100pct_v2', value: 1 });
       }
 
-      // Sincronizar calibração anti-arenosidade (Caviezel) nos Gelatos Proteicos (7 receitas)
+      // Sincronizar calibração anti-arenosidade (SLNG vs Água Livre) nos Gelatos Proteicos (7 receitas)
       const proteicAntiSandinessSetting = await this.settings.get('recipes_proteic_anti_arenosidade_v1');
       if (!proteicAntiSandinessSetting) {
         console.log('Sincronizando 7 receitas proteicas calibradas contra arenosidade no banco...');

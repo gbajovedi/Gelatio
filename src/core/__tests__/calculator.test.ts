@@ -126,7 +126,7 @@ describe('Calculator Core Engine', () => {
     expect(analysis.percentages.totalSolids).toBeCloseTo(1 - analysis.percentages.water, 2);
   });
 
-  it('calcula o teto de Caviezel para prevenção de arenosidade', () => {
+  it('calcula o teto de saturação de lactose para prevenção de arenosidade', () => {
     const items: RecipeItem[] = [
       { name: 'Leite Integral Tipo A', grams: 700 },
       { name: 'Açúcar', grams: 200 }

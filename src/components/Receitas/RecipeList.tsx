@@ -199,11 +199,11 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 
         const criticalReasons: string[] = [];
 
-        // 1. Risco crítico de arenosidade (Fórmula de Caviezel: SLNG excede teto seguro em > 0.8%)
+        // 1. Risco crítico de arenosidade (SLNG excede teto seguro em > 0.8%)
         const sandiness = analysis.sandinessRisk;
         if (sandiness && sandiness.isAtRisk && sandiness.excessPct > 0.008) {
           criticalReasons.push(
-            `Arenosidade: SLNG (${(analysis.percentages.msnf * 100).toFixed(1)}%) excede o teto seguro de Caviezel (${(sandiness.maxSafeMsnf * 100).toFixed(1)}%)`
+            `Arenosidade: SLNG (${(analysis.percentages.msnf * 100).toFixed(1)}%) excede o teto seguro (${(sandiness.maxSafeMsnf * 100).toFixed(1)}%)`
           );
         }
 
@@ -449,7 +449,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                         ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20 font-black'
                         : 'text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10'
                     }`}
-                    title="Padrão Ouro Híbrido Protegido (PAC Clássico Italiano + Caviezel Anti-Arenosidade)"
+                    title="Padrão Ouro Híbrido Protegido (PAC Clássico Italiano + Blindagem Anti-Arenosidade)"
                   >
                     <ShieldCheck className="w-3.5 h-3.5 stroke-[2.4]" />
                     <span>Padrão Ouro</span>

@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
+import { AlertTriangle, X } from 'lucide-react';
 import { db } from './db/database';
 import { applyTheme, initThemeListener } from './core/theme';
 import { Recipe, Ingredient, Preparation } from './types/gelato';
@@ -61,6 +62,7 @@ export function App() {
   const [produceRecipeId, setProduceRecipeId] = useState<string | undefined>(undefined);
   const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [dbError, setDbError] = useState<string | null>(null);
 
   // Load data from IndexedDB with bullet-proof fallback
   const refreshData = async () => {
@@ -77,6 +79,7 @@ export function App() {
       setRecipes(finalRecs);
       setIngredients(finalIngs);
       setPreparations(finalPreps);
+      setDbError(null);
 
       // Restaurar receita ativa previamente salva ou a primeira em ordem alfabética do catálogo
       const savedRecId = getInitialRecipeId();
@@ -95,6 +98,9 @@ export function App() {
       }
     } catch (err) {
       console.error('Falha ao carregar do IndexedDB, ativando base de segurança em memória:', err);
+      setDbError(
+        'Instabilidade temporária na conexão com o armazenamento local (IndexedDB). Seus dados existentes foram preservados intactos no navegador. O aplicativo está operando com a base de segurança em memória.'
+      );
       const fallbackRecs = initialRecipes as Recipe[];
       const fallbackIngs = initialIngredients as Ingredient[];
       const fallbackPreps = initialPreparations as Preparation[];
@@ -158,7 +164,18 @@ export function App() {
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+
+    const handleDbOpenError = () => {
+      setDbError(
+        'Instabilidade temporária na conexão com o armazenamento local (IndexedDB). Seus dados existentes foram preservados intactos no navegador. O aplicativo está operando com a base de segurança em memória.'
+      );
+    };
+    window.addEventListener('gelato_db_open_error', handleDbOpenError);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('gelato_db_open_error', handleDbOpenError);
+    };
   }, []);
 
   const handleSelectRecipeFromCatalog = (id: string) => {
@@ -194,7 +211,36 @@ export function App() {
       />
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-full overflow-x-hidden">
-        <div style={{ display: activeTab === 'balanceamento' ? 'block' : 'none' }}>
+        {dbError && (
+          <div
+            role="alert"
+            className="mb-4 p-4 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-200 text-xs sm:text-sm flex items-start justify-between gap-3 shadow-lg"
+          >
+            <div className="flex items-start gap-2.5">
+              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <strong className="font-bold text-amber-300 block mb-0.5">Aviso de Armazenamento Local</strong>
+                <span>{dbError}</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setDbError(null)}
+              className="text-amber-300/80 hover:text-white p-1 rounded-lg hover:bg-amber-500/20 transition-colors"
+              title="Fechar aviso"
+              aria-label="Fechar aviso de armazenamento"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        <div
+          id="panel-balanceamento"
+          role="tabpanel"
+          aria-labelledby="tab-balanceamento"
+          style={{ display: activeTab === 'balanceamento' ? 'block' : 'none' }}
+        >
           {visitedTabs.has('balanceamento') && (
             <BalancingScreen
               recipes={recipes}
@@ -212,7 +258,12 @@ export function App() {
           )}
         </div>
 
-        <div style={{ display: activeTab === 'receitas' ? 'block' : 'none' }}>
+        <div
+          id="panel-receitas"
+          role="tabpanel"
+          aria-labelledby="tab-receitas"
+          style={{ display: activeTab === 'receitas' ? 'block' : 'none' }}
+        >
           {visitedTabs.has('receitas') && (
             <RecipeList
               recipes={recipes}
@@ -224,7 +275,12 @@ export function App() {
           )}
         </div>
 
-        <div style={{ display: activeTab === 'ingredientes' ? 'block' : 'none' }}>
+        <div
+          id="panel-ingredientes"
+          role="tabpanel"
+          aria-labelledby="tab-ingredientes"
+          style={{ display: activeTab === 'ingredientes' ? 'block' : 'none' }}
+        >
           {visitedTabs.has('ingredientes') && (
             <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando catálogo de insumos...</div>}>
               <IngredientManager
@@ -235,7 +291,12 @@ export function App() {
           )}
         </div>
 
-        <div style={{ display: activeTab === 'preparos' ? 'block' : 'none' }}>
+        <div
+          id="panel-preparos"
+          role="tabpanel"
+          aria-labelledby="tab-preparos"
+          style={{ display: activeTab === 'preparos' ? 'block' : 'none' }}
+        >
           {visitedTabs.has('preparos') && (
             <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando pré-preparos...</div>}>
               <PrePreparosList
@@ -247,7 +308,12 @@ export function App() {
           )}
         </div>
 
-        <div style={{ display: activeTab === 'financeiro' ? 'block' : 'none' }}>
+        <div
+          id="panel-financeiro"
+          role="tabpanel"
+          aria-labelledby="tab-financeiro"
+          style={{ display: activeTab === 'financeiro' ? 'block' : 'none' }}
+        >
           {visitedTabs.has('financeiro') && (
             <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando calculadora de custos...</div>}>
               <PricingCalculator />
@@ -255,7 +321,12 @@ export function App() {
           )}
         </div>
 
-        <div style={{ display: activeTab === 'estoque' ? 'block' : 'none' }}>
+        <div
+          id="panel-estoque"
+          role="tabpanel"
+          aria-labelledby="tab-estoque"
+          style={{ display: activeTab === 'estoque' ? 'block' : 'none' }}
+        >
           {visitedTabs.has('estoque') && (
             <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando módulo de estoque...</div>}>
               <StockScreen

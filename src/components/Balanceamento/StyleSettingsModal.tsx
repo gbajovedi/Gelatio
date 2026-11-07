@@ -580,7 +580,7 @@ export const StyleSettingsModal: React.FC<StyleSettingsModalProps> = ({
                         ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm'
                         : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
                     }`}
-                    title="Aplica o Padrão Ouro Híbrido Protegido (Recomendado com proteção de Caviezel e PAC do Padrão Clássico Italiano)"
+                    title="Aplica o Padrão Ouro Híbrido Protegido (Recomendado com proteção anti-arenosidade e PAC do Padrão Clássico Italiano)"
                   >
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Restaurar Padrão Ouro</span>

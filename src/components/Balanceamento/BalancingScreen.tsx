@@ -420,10 +420,16 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
 
   // Handle recipe change from selector
   const handleStartNewRecipe = () => {
+    if (isDirty && selectedRecipeId !== 'new') {
+      const confirmNew = window.confirm(
+        'Você possui alterações não salvas na receita atual. Deseja descartá-las para iniciar uma nova receita?'
+      );
+      if (!confirmNew) return;
+    }
     if (selectedRecipeId !== 'new') {
       setLastActiveRecipeId(selectedRecipeId);
     }
-    handleSelectRecipe('new');
+    handleSelectRecipe('new', true);
   };
 
   const handleCancelNewRecipe = () => {
@@ -442,7 +448,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
     }
   };
 
-  const handleSelectRecipe = (id: string) => {
+  const handleSelectRecipe = (id: string, force = false) => {
+    if (!force && isDirty && id !== selectedRecipeId) {
+      const confirmSwitch = window.confirm(
+        'Você possui alterações não salvas nesta receita. Deseja realmente trocar de receita e descartar as alterações pendentes?'
+      );
+      if (!confirmSwitch) return;
+    }
+
     if (id === 'new') {
       setSelectedRecipeId('new');
       lastLoadedRecipeIdRef.current = 'new';
@@ -725,7 +738,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                         ? 'bg-emerald-500/25 text-emerald-300 shadow-sm border border-emerald-500/40'
                         : 'text-slate-400 hover:text-slate-200'
                     }`}
-                    title="Padrão Ouro Híbrido Protegido (Recomendado: Caviezel + PAC Clássico Italiano)"
+                    title="Padrão Ouro Híbrido Protegido (Recomendado: Padrão Técnico + PAC Clássico Italiano)"
                   >
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Padrão Ouro</span>
@@ -964,8 +977,8 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               </div>
             </div>
 
-            {/* Ingredients Table with readable font sizes */}
-            <div className="overflow-x-auto">
+            {/* Ingredients Table with readable font sizes and smooth horizontal scroll */}
+            <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900 pb-1">
               <table className="w-full text-left">
                 <thead>
                   <tr className="text-slate-400 border-b border-slate-700 text-xs uppercase tracking-wider font-bold">
@@ -1032,8 +1045,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                             <button
                               type="button"
                               onClick={() => handleGramsChange(originalIndex, Math.max(0, item.grams - 5))}
-                              className="w-7 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white hover:border-amber-500/60 hover:bg-slate-800 text-xs font-bold active:scale-95 transition-all"
+                              className="min-w-[32px] h-8 sm:w-7 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white hover:border-amber-500/60 hover:bg-slate-800 text-xs font-bold active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
                               title="Diminuir 5g (-5g)"
+                              aria-label={`Diminuir 5g de ${item.name || 'ingrediente'}`}
                             >
                               -5
                             </button>
@@ -1051,8 +1065,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                             <button
                               type="button"
                               onClick={() => handleGramsChange(originalIndex, item.grams + 5)}
-                              className="w-7 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white hover:border-amber-500/60 hover:bg-slate-800 text-xs font-bold active:scale-95 transition-all"
+                              className="min-w-[32px] h-8 sm:w-7 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white hover:border-amber-500/60 hover:bg-slate-800 text-xs font-bold active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
                               title="Aumentar 5g (+5g)"
+                              aria-label={`Aumentar 5g de ${item.name || 'ingrediente'}`}
                             >
                               +5
                             </button>
@@ -1073,8 +1088,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                           <button
                             type="button"
                             onClick={() => handleRemoveRow(originalIndex)}
-                            className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors"
+                            className="p-2 sm:p-1.5 min-w-[36px] min-h-[36px] sm:min-w-0 sm:min-h-0 flex items-center justify-center text-slate-500 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:outline-none"
                             title="Remover Ingrediente"
+                            aria-label={`Remover ${item.name || 'ingrediente'}`}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

@@ -174,6 +174,9 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in cursor-pointer"
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="variegato-modal-title"
         onClick={e => e.stopPropagation()}
         className="bg-slate-900 border border-slate-700/80 rounded-2xl sm:rounded-3xl w-full max-w-2xl p-4 sm:p-6 shadow-2xl relative space-y-4 sm:space-y-5 max-h-[92vh] flex flex-col cursor-default pb-safe"
       >
@@ -182,7 +185,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl">🍯</span>
-              <h3 className="text-lg font-black text-white">
+              <h3 id="variegato-modal-title" className="text-lg font-black text-white">
                 Mesclas & Variegatos Pós-Calda
               </h3>
             </div>
@@ -193,6 +196,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
           <button
             onClick={onClose}
             className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition-colors"
+            aria-label="Fechar diálogo"
           >
             <X className="w-5 h-5" />
           </button>

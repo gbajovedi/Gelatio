@@ -40,17 +40,24 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
         </button>
 
         {/* Desktop Unified Navigation Bar with Integrated Backup Button */}
-        <nav aria-label="Navegação Principal" className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-800/90 p-1 xl:p-1.5 rounded-2xl border border-slate-700/80 shadow-inner shrink-0">
+        <nav
+          role="tablist"
+          aria-label="Navegação Principal"
+          className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-800/90 p-1 xl:p-1.5 rounded-2xl border border-slate-700/80 shadow-inner shrink-0"
+        >
           {tabs.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                id={`tab-${tab.id}`}
+                role="tab"
                 type="button"
                 onClick={() => onTabChange(tab.id as NavTab)}
-                aria-current={isActive ? 'page' : undefined}
-                className={`h-9 xl:h-10 px-2 lg:px-2.5 xl:px-3.5 2xl:px-4 rounded-xl text-xs xl:text-sm font-bold flex items-center gap-1.5 xl:gap-2 whitespace-nowrap select-none transition-all shrink-0 ${
+                aria-selected={isActive}
+                aria-controls={`panel-${tab.id}`}
+                className={`h-9 xl:h-10 px-2 lg:px-2.5 xl:px-3.5 2xl:px-4 rounded-xl text-xs xl:text-sm font-bold flex items-center gap-1.5 xl:gap-2 whitespace-nowrap select-none transition-all shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                   isActive
                     ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
                     : 'text-slate-300 hover:text-white hover:bg-slate-700/60'
@@ -86,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
           <button
             type="button"
             onClick={onOpenBackup}
-            className="h-9 xl:h-10 px-2 lg:px-2.5 xl:px-3.5 2xl:px-4 rounded-xl text-xs xl:text-sm font-bold flex items-center gap-1.5 xl:gap-2 text-slate-300 hover:text-white hover:bg-slate-700/60 transition-all whitespace-nowrap select-none shrink-0 group"
+            className="h-9 xl:h-10 px-2 lg:px-2.5 xl:px-3.5 2xl:px-4 rounded-xl text-xs xl:text-sm font-bold flex items-center gap-1.5 xl:gap-2 text-slate-300 hover:text-white hover:bg-slate-700/60 transition-all whitespace-nowrap select-none shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             title="Importar ou Exportar Dados (.JSON)"
           >
             <Database className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
@@ -103,7 +110,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
           <button
             type="button"
             onClick={onOpenBackup}
-            className="h-8 sm:h-9 px-2 sm:px-3 bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 text-slate-200 text-xs font-bold rounded-xl transition-all flex lg:hidden items-center gap-1.5 shadow-sm active:scale-95 shrink-0"
+            className="h-8 sm:h-9 px-2 sm:px-3 bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 text-slate-200 text-xs font-bold rounded-xl transition-all flex lg:hidden items-center gap-1.5 shadow-sm active:scale-95 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             title="Importar ou Exportar Dados (.JSON)"
           >
             <Database className="w-4 h-4 text-amber-400 shrink-0" />
@@ -113,17 +120,24 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
       </div>
 
       {/* Mobile/Tablet Horizontal Tabs Bar */}
-      <nav aria-label="Navegação Móvel" className="flex lg:hidden overflow-x-auto px-3 sm:px-4 py-2 bg-slate-900 border-t border-slate-800 gap-1.5">
+      <nav
+        role="tablist"
+        aria-label="Navegação Móvel"
+        className="flex lg:hidden overflow-x-auto px-3 sm:px-4 py-2 bg-slate-900 border-t border-slate-800 gap-1.5 scrollbar-none"
+      >
         {tabs.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
+              id={`mob-tab-${tab.id}`}
+              role="tab"
               type="button"
               onClick={() => onTabChange(tab.id as NavTab)}
-              aria-current={isActive ? 'page' : undefined}
-              className={`h-9 px-3 sm:px-3.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all shrink-0 select-none ${
+              aria-selected={isActive}
+              aria-controls={`panel-${tab.id}`}
+              className={`h-9 px-3 sm:px-3.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all shrink-0 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                 isActive
                   ? 'bg-amber-500 text-slate-950 font-black shadow-md'
                   : 'text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-750'

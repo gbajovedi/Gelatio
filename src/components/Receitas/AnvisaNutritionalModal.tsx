@@ -223,6 +223,9 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-5 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 print:p-0 print:bg-white print:static cursor-pointer"
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="anvisa-modal-title"
         onClick={e => e.stopPropagation()}
         className="bg-slate-900 border border-slate-700/80 rounded-2xl sm:rounded-3xl w-full max-w-2xl max-h-[94vh] flex flex-col shadow-2xl overflow-hidden print:border-none print:shadow-none print:max-w-none print:max-h-none print:bg-white cursor-default"
       >
@@ -235,7 +238,7 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                <h2 className="text-sm sm:text-base md:text-lg font-bold text-white truncate">
+                <h2 id="anvisa-modal-title" className="text-sm sm:text-base md:text-lg font-bold text-white truncate">
                   Tabela Nutricional ANVISA
                 </h2>
                 <span className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-bold uppercase tracking-wider">

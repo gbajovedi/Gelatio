@@ -204,6 +204,9 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-5 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 cursor-pointer"
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="prep-steps-title"
         onClick={e => e.stopPropagation()}
         className="bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[94vh] flex flex-col overflow-hidden text-slate-100 cursor-default"
       >
@@ -216,7 +219,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-base sm:text-lg font-black text-white truncate" title={recipe.name}>
+                <h3 id="prep-steps-title" className="text-base sm:text-lg font-black text-white truncate" title={recipe.name}>
                   {recipe.name}
                 </h3>
                 <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-slate-800 text-slate-300 border border-slate-700">

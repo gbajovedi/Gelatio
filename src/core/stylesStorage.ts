@@ -31,7 +31,7 @@ export function hasCarpigianiData(styleName: string): boolean {
 /**
  * Padrão Ouro Híbrido Protegido (Opção 2 - Recomendado)
  * - PAC Carpigiani (220-260 para nozes, 280-330 para sorbets)
- * - Blindagem de Caviezel contra arenosidade (SLNG máx 10.5%)
+ * - Blindagem técnica contra arenosidade (SLNG máx 10.5%)
  * - Açúcares moderados para valorizar frutas tropicais maduras brasileiras
  */
 export const GOLD_STANDARD_STYLES: Record<string, StyleStandard> = initialStyles as Record<string, StyleStandard>;
