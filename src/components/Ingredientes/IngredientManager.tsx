@@ -292,6 +292,10 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
         hasAllergen: newHasAllergen,
         allergenDetails: newHasAllergen && selectedAllergens.length > 0 ? selectedAllergens : undefined,
         isCustom: editingIngredient ? editingIngredient.isCustom : true,
+        saturatedFatRatio: editingIngredient?.saturatedFatRatio,
+        fiberRatio: editingIngredient?.fiberRatio,
+        sodiumMgPer100g: editingIngredient?.sodiumMgPer100g,
+        transFatRatio: editingIngredient?.transFatRatio,
       };
 
       await db.ingredients.put(ingToSave);

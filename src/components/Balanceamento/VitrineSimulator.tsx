@@ -245,12 +245,10 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           </div>
 
           <div
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none"
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none z-10"
             style={{ left: `${markerPosition}%` }}
           >
-            <div className="vitrine-marker-ring w-4.5 h-4.5 rounded-full bg-amber-400 border-2 border-slate-950 shadow-md shadow-amber-500/50 flex items-center justify-center">
-              <div className="vitrine-marker-dot w-1.5 h-1.5 rounded-full bg-slate-950" />
-            </div>
+            <div className="vitrine-marker-ring w-5 h-5 rounded-full bg-gradient-to-b from-amber-300 via-yellow-400 to-amber-500 border-2 border-white shadow-[0_0_12px_rgba(250,204,21,0.95)] ring-2 ring-amber-400/70" />
           </div>
         </div>
 

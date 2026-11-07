@@ -85,6 +85,10 @@ export const DUPLICATE_IDS_TO_REMOVE = ['ing_111', 'ing_215', 'ing_216', 'ing_19
 export interface BackupResult {
   recipesCount: number;
   ingredientsCount: number;
+  preparationsCount?: number;
+  stockItemsCount?: number;
+  batchesCount?: number;
+  salesCount?: number;
   pricingImported: boolean;
   themeImported: boolean;
   customStylesImported: boolean;
@@ -1937,6 +1941,30 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'recipes_thermal_calibration_refinement_v7', value: 1 });
       }
 
+      // Sincronizar catálogo do compêndio Gelato Irresistível (15 novos insumos, 13 novos pré-preparos/variegatos e 40 novas receitas rec_189 a rec_228)
+      const gelatoIrresistivelSetting = await this.settings.get('recipes_gelato_irresistivel_v1');
+      if (!gelatoIrresistivelSetting) {
+        console.log('Sincronizando novos insumos, 13 pré-preparos e 40 novas receitas do compêndio Gelato Irresistível...');
+        // 1. Garantir que todos os insumos e pré-preparos estejam no banco
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        // 2. Inserir as 40 novas receitas (rec_189 a rec_228)
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        for (let num = 189; num <= 228; num++) {
+          const id = `rec_${num}`;
+          const catRec = initialMap.get(id);
+          if (catRec) {
+            const dbRec = await this.recipes.get(id);
+            if (!dbRec) {
+              await this.recipes.put(catRec);
+            }
+          }
+        }
+        await this.settings.put({ key: 'recipes_gelato_irresistivel_v1', value: 1 });
+      }
+
+
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
       if (settingsCount === 0) {
@@ -1952,6 +1980,10 @@ export class GelatoDatabase extends Dexie {
     const recipes = await this.recipes.toArray();
     const preparations = await this.preparations.toArray();
     const settings = await this.settings.toArray();
+    const productionBatches = await this.productionBatches.toArray();
+    const stockItems = await this.stockItems.toArray();
+    const salesTransactions = await this.salesTransactions.toArray();
+    const stockAdjustments = await this.stockAdjustments.toArray();
 
     // Capturar também parâmetros de precificação do usuário (localStorage)
     let pricingParams = null;
@@ -1983,12 +2015,16 @@ export class GelatoDatabase extends Dexie {
     }
 
     const backup = {
-      version: 4,
+      version: 5,
       exportedAt: new Date().toISOString(),
       ingredients,
       recipes,
       preparations,
       settings,
+      productionBatches,
+      stockItems,
+      salesTransactions,
+      stockAdjustments,
       pricingParams,
       themeMode,
       customStyles,
@@ -2005,11 +2041,22 @@ export class GelatoDatabase extends Dexie {
       throw new Error('Formato de backup inválido: campos de receitas e ingredientes ausentes.');
     }
 
+    let stockImported = false;
+    let stockItemsCount = 0;
+    let batchesCount = 0;
+    let salesCount = 0;
+    let preparationsCount = 0;
+
     await this.transaction('rw', [this.ingredients, this.recipes, this.preparations, this.settings, this.productionBatches, this.stockItems, this.salesTransactions, this.stockAdjustments], async () => {
       if (mode === 'replace') {
         await this.ingredients.clear();
         await this.recipes.clear();
         await this.preparations.clear();
+        await this.settings.clear();
+        await this.productionBatches.clear();
+        await this.stockItems.clear();
+        await this.salesTransactions.clear();
+        await this.stockAdjustments.clear();
       }
 
       // Normalizar nomes de açúcares legados ao importar backup
@@ -2040,13 +2087,35 @@ export class GelatoDatabase extends Dexie {
       await this.ingredients.bulkPut(normalizedIngredients);
       await this.recipes.bulkPut(normalizedRecipes);
 
-      if (normalizedPreps) {
+      if (normalizedPreps && normalizedPreps.length > 0) {
         await this.preparations.bulkPut(normalizedPreps);
+        preparationsCount = normalizedPreps.length;
       }
-      if (data.settings) {
+      if (data.settings && Array.isArray(data.settings)) {
         for (const s of data.settings) {
           await this.settings.put(s);
         }
+      }
+
+      // Importar módulo de estoque, lotes e histórico contábil caso presentes no backup v5
+      if (data.productionBatches && Array.isArray(data.productionBatches) && data.productionBatches.length > 0) {
+        await this.productionBatches.bulkPut(data.productionBatches);
+        batchesCount = data.productionBatches.length;
+        stockImported = true;
+      }
+      if (data.stockItems && Array.isArray(data.stockItems) && data.stockItems.length > 0) {
+        await this.stockItems.bulkPut(data.stockItems);
+        stockItemsCount = data.stockItems.length;
+        stockImported = true;
+      }
+      if (data.salesTransactions && Array.isArray(data.salesTransactions) && data.salesTransactions.length > 0) {
+        await this.salesTransactions.bulkPut(data.salesTransactions);
+        salesCount = data.salesTransactions.length;
+        stockImported = true;
+      }
+      if (data.stockAdjustments && Array.isArray(data.stockAdjustments) && data.stockAdjustments.length > 0) {
+        await this.stockAdjustments.bulkPut(data.stockAdjustments);
+        stockImported = true;
       }
     });
 
@@ -2098,18 +2167,36 @@ export class GelatoDatabase extends Dexie {
     return {
       recipesCount: data.recipes.length,
       ingredientsCount: data.ingredients.length,
+      preparationsCount,
+      stockItemsCount,
+      batchesCount,
+      salesCount,
       pricingImported,
       themeImported,
-      customStylesImported
+      customStylesImported,
+      stockImported
     };
   }
 
   async restoreFactoryDefaults(): Promise<void> {
-    await this.transaction('rw', this.ingredients, this.recipes, this.preparations, this.settings, async () => {
+    await this.transaction('rw', [
+      this.ingredients,
+      this.recipes,
+      this.preparations,
+      this.settings,
+      this.productionBatches,
+      this.stockItems,
+      this.salesTransactions,
+      this.stockAdjustments
+    ], async () => {
       await this.ingredients.clear();
       await this.recipes.clear();
       await this.preparations.clear();
       await this.settings.clear();
+      await this.productionBatches.clear();
+      await this.stockItems.clear();
+      await this.salesTransactions.clear();
+      await this.stockAdjustments.clear();
 
       await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
       await this.recipes.bulkPut(initialRecipes as Recipe[]);

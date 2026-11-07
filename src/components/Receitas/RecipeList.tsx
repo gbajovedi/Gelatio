@@ -730,7 +730,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                           className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 hover:border-amber-400 text-amber-400 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-sm shrink-0"
                           aria-label="Ajuste recomendado na fórmula"
                         >
-                          <AlertCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-amber-400 stroke-[2.3]" />
+                          <AlertCircle className="w-4 h-4 text-amber-400 stroke-[2.3]" />
                         </button>
                       )}
                     </div>

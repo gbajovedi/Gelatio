@@ -578,13 +578,18 @@ export function calculateBatchAnalysis(
   const totalDeductionsAndMargin = targetMarginDecimal + totalSalesDeductions;
   const marginDivisor = 1 - totalDeductionsAndMargin;
   const netRevenueFactor = Math.max(0.01, 1 - totalSalesDeductions);
+  const isMarginViable = isMarkup || (totalDeductionsAndMargin < 0.999 && marginDivisor > 0.001);
+  const maxViableMarginPercent = Math.max(0, Math.floor((1 - totalSalesDeductions) * 1000) / 10);
+  const marginWarning = !isMarginViable
+    ? `Margem sobre venda inviável (${pricing.targetProfitMarginPercent || 0}% + ${(totalSalesDeductions * 100).toFixed(1)}% de deduções somam ≥ 100%). Teto máximo viável: ${maxViableMarginPercent}%. Calculado provisoriamente via Markup.`
+    : undefined;
 
   const suggestedPrice500g =
     totalCostWithOverhead <= 0
       ? 0
       : isMarkup
       ? (totalCostWithOverhead * (1 + targetMarginDecimal)) / netRevenueFactor
-      : marginDivisor > 0 && totalDeductionsAndMargin < 1
+      : isMarginViable
       ? totalCostWithOverhead / marginDivisor
       : (totalCostWithOverhead * (1 + targetMarginDecimal)) / netRevenueFactor;
   const variegatoRatioPercent = finalWeightGrams > 0 ? (totalVariegatoGrams / finalWeightGrams) * 100 : 0;
@@ -632,7 +637,9 @@ export function calculateBatchAnalysis(
       suggestedPrice500g: Math.round(suggestedPrice500g * 100) / 100,
       variegatoRatioPercent: Math.round(variegatoRatioPercent * 10) / 10,
       totalVariegatoGrams,
-      totalVariegatoCost: Math.round(totalVariegatoCost * 100) / 100
+      totalVariegatoCost: Math.round(totalVariegatoCost * 100) / 100,
+      isMarginViable,
+      marginWarning
     }
   };
 }

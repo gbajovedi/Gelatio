@@ -159,58 +159,75 @@ export function calculateAnvisaNutrition(
     const cat = (ing.category || '').toLowerCase();
     const name = (ing.name || '').toLowerCase();
 
-    // 1. Fator de gordura saturada conforme a fonte lipídica
-    let satRatio = 0.60; // Padrão
-    if (name.includes('coco') || cat.includes('coco')) {
-      satRatio = 0.90;
-    } else if (name.includes('cacau') || name.includes('chocolate') || cat.includes('cacau')) {
-      satRatio = 0.60;
-    } else if (
-      cat.includes('castanha') ||
-      cat.includes('oleaginosa') ||
-      name.includes('pistache') ||
-      name.includes('avelã') ||
-      name.includes('avela') ||
-      name.includes('amendoim') ||
-      name.includes('noz')
-    ) {
-      satRatio = 0.12;
-    } else if (
-      cat.includes('leite') ||
-      name.includes('leite') ||
-      name.includes('creme') ||
-      name.includes('nata') ||
-      name.includes('manteiga')
-    ) {
-      satRatio = 0.65;
+    // 1. Fator de gordura saturada conforme a fonte lipídica (analítico se preenchido, senão heurístico)
+    let satRatio = ing.saturatedFatRatio !== undefined && ing.saturatedFatRatio >= 0 ? ing.saturatedFatRatio : 0.60;
+    if (ing.saturatedFatRatio === undefined) {
+      if (name.includes('coco') || cat.includes('coco')) {
+        satRatio = 0.90;
+      } else if (name.includes('cacau') || name.includes('chocolate') || cat.includes('cacau')) {
+        satRatio = 0.60;
+      } else if (
+        cat.includes('castanha') ||
+        cat.includes('oleaginosa') ||
+        name.includes('pistache') ||
+        name.includes('avelã') ||
+        name.includes('avela') ||
+        name.includes('amendoim') ||
+        name.includes('noz')
+      ) {
+        satRatio = 0.12;
+      } else if (
+        cat.includes('leite') ||
+        name.includes('leite') ||
+        name.includes('creme') ||
+        name.includes('nata') ||
+        name.includes('manteiga')
+      ) {
+        satRatio = 0.65;
+      }
     }
     totalSaturatedFat += ingFat * satRatio;
 
     // 2. Fibras alimentares e açúcares intrínsecos de frutas intactas
-    if (cat.includes('fruta') || cat.includes('polpa')) {
-      totalFiber += g * 0.02; // Média 2% fibras em polpas de frutas
-      intrinsicFruitSugars += ingSugars; // Frutas intactas não contam como açúcar adicionado pela ANVISA
-    } else if (name.includes('cacau')) {
-      totalFiber += g * 0.30; // Cacau em pó 100% tem ~30% fibras solúveis/insolúveis
-    } else if (name.includes('inulina') || name.includes('polidextrose') || name.includes('fibra')) {
-      totalFiber += g * 0.90;
+    if (ing.fiberRatio !== undefined && ing.fiberRatio >= 0) {
+      totalFiber += g * ing.fiberRatio;
+      if (cat.includes('fruta') || cat.includes('polpa')) {
+        intrinsicFruitSugars += ingSugars;
+      }
+    } else {
+      if (cat.includes('fruta') || cat.includes('polpa')) {
+        totalFiber += g * 0.02; // Média 2% fibras em polpas de frutas
+        intrinsicFruitSugars += ingSugars; // Frutas intactas não contam como açúcar adicionado pela ANVISA
+      } else if (name.includes('cacau')) {
+        totalFiber += g * 0.30; // Cacau em pó 100% tem ~30% fibras solúveis/insolúveis
+      } else if (name.includes('inulina') || name.includes('polidextrose') || name.includes('fibra')) {
+        totalFiber += g * 0.90;
+      }
     }
 
     // 3. Sódio regulamentar
-    if (name.includes('sal') || name.includes('cloreto')) {
-      totalSodiumMg += g * 390; // 1g de sal refinado = ~390mg de sódio
-    } else if (name.includes('leite em pó') || name.includes('leite em po')) {
-      totalSodiumMg += (g / 100) * 550; // Leite em pó desnatado = ~550mg Na / 100g
-    } else if (cat.includes('leite') || name.includes('leite') || name.includes('creme')) {
-      totalSodiumMg += (g / 100) * 50; // Leite bovino integral / creme = ~50mg Na / 100g
+    if (ing.sodiumMgPer100g !== undefined && ing.sodiumMgPer100g >= 0) {
+      totalSodiumMg += (g / 100) * ing.sodiumMgPer100g;
     } else {
-      totalSodiumMg += (g / 100) * 5; // Traços naturais em outros alimentos
+      if (name.includes('sal') || name.includes('cloreto')) {
+        totalSodiumMg += g * 390; // 1g de sal refinado = ~390mg de sódio
+      } else if (name.includes('leite em pó') || name.includes('leite em po')) {
+        totalSodiumMg += (g / 100) * 550; // Leite em pó desnatado = ~550mg Na / 100g
+      } else if (cat.includes('leite') || name.includes('leite') || name.includes('creme')) {
+        totalSodiumMg += (g / 100) * 50; // Leite bovino integral / creme = ~50mg Na / 100g
+      } else {
+        totalSodiumMg += (g / 100) * 5; // Traços naturais em outros alimentos
+      }
     }
   });
 
   if (totalRecipeWeight <= 0) {
     totalRecipeWeight = 1000;
   }
+
+  // Sanitização defensiva contra entradas <= 0 ou NaN/Infinity
+  const safePortionGrams = Number.isFinite(portionGrams) && portionGrams > 0 ? portionGrams : 60;
+  const safeContainerGrams = Number.isFinite(containerWeightGrams) && containerWeightGrams > 0 ? containerWeightGrams : 500;
 
   // Lactose do leite (O SNGL contém ~52% de lactose)
   const lactoseGrams = totalMsnf * 0.52;
@@ -226,8 +243,8 @@ export function calculateAnvisaNutrition(
 
   // Escala para 100g
   const scale100 = 100 / totalRecipeWeight;
-  // Escala para a porção
-  const scalePortion = portionGrams / totalRecipeWeight;
+  // Escala para a porção protegida
+  const scalePortion = safePortionGrams / totalRecipeWeight;
 
   // Valores por 100g
   const carbs100 = totalCarbs * scale100;
@@ -255,8 +272,8 @@ export function calculateAnvisaNutrition(
   const energyKcalPortion = (carbsPortion * 4) + (proteinPortion * 4) + (fatPortion * 9) + (fiberPortion * 2);
   const energyKjPortion = energyKcalPortion * 4.184;
 
-  // Porções por embalagem
-  const servingsPerContainer = Math.max(1, Math.round(containerWeightGrams / portionGrams));
+  // Porções por embalagem garantidamente finitas
+  const servingsPerContainer = Math.max(1, Math.round(safeContainerGrams / safePortionGrams));
 
   // Verificação da Rotulagem Frontal (Lupa ANVISA - limites por 100g)
   const highAddedSugars = addedSugars100 >= ANVISA_FOP_LIMITS.addedSugarsGramsPer100g;
@@ -359,12 +376,12 @@ export function calculateAnvisaNutrition(
   declaration += hasGluten ? ' CONTÉM GLÚTEN.' : ' NÃO CONTÉM GLÚTEN.';
 
   return {
-    portionGrams,
+    portionGrams: safePortionGrams,
     portionHousehold: customHouseholdMeasure && customHouseholdMeasure.trim()
-      ? `${portionGrams} g (${customHouseholdMeasure.trim()})`
-      : `${portionGrams} g (${portionGrams === 60 ? '1 bola' : portionGrams === 120 ? '2 bolas' : 'porção'})`,
+      ? `${safePortionGrams} g (${customHouseholdMeasure.trim()})`
+      : `${safePortionGrams} g (${safePortionGrams === 60 ? '1 bola' : safePortionGrams === 120 ? '2 bolas' : 'porção'})`,
     servingsPerContainer,
-    containerWeightGrams,
+    containerWeightGrams: safeContainerGrams,
     items,
     frontOfPack: {
       hasAny: fopCount > 0,

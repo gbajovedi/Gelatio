@@ -810,6 +810,13 @@ export const AnvisaNutritionalModal: React.FC<AnvisaNutritionalModalProps> = ({
               </span>
             </div>
 
+            {/* 8. NOTA METODOLÓGICA & DISCLAIMER REGULAMENTAR (RDC 429/2020) */}
+            <div className="mt-2.5 pt-2 border-t border-black/40 text-[9px] text-black/80 leading-tight select-none">
+              <p>
+                * Valores nutricionais estimados por cálculo teórico fundamentado na composição físico-química dos insumos e tabelas de composição de alimentos (conforme expressamente admitido pelo Art. 6º da RDC 429/2020 da ANVISA). Para fins de rotulagem comercial definitiva de produtos industrializados comercializados na ausência do consumidor, recomenda-se confirmação via laudo analítico laboratorial.
+              </p>
+            </div>
+
           </div>
 
         </div>

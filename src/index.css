@@ -667,11 +667,8 @@ html.light .nutrient-needle-err {
 
 /* Marcador do Simulador Térmico da Vitrine */
 html.light .vitrine-marker-ring {
-  border-color: #0f172a !important;
-}
-
-html.light .vitrine-marker-dot {
-  background-color: #0f172a !important;
+  border-color: #78350f !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.75) !important;
 }
 
 /* ==========================================================================

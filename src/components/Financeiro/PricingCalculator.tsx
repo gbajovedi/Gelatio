@@ -420,13 +420,15 @@ export const PricingCalculator: React.FC = () => {
   //    Preço = [ CustoTotal * (1 + Markup% / 100) ] / [ (100 - (Taxas% + Impostos%)) / 100 ]
   const isMarkup = pricingMethod === 'markup';
   const netRevenueFactor = Math.max(0.01, (100 - totalSalesDeductionsPercent) / 100);
+  const isMarginViable = isMarkup || (totalDeductionsAndMarginPercent < 99.9 && marginDivisor > 0.001);
+  const maxViableMargin = Math.max(0, Math.floor((100 - totalSalesDeductionsPercent) * 10) / 10);
 
   const suggestedTubPrice =
     totalCostWithOverhead <= 0
       ? 0
       : isMarkup
       ? (totalCostWithOverhead * (1 + targetMargin / 100)) / netRevenueFactor
-      : marginDivisor > 0 && totalDeductionsAndMarginPercent < 100
+      : isMarginViable
       ? totalCostWithOverhead / marginDivisor
       : (totalCostWithOverhead * (1 + targetMargin / 100)) / netRevenueFactor;
 
@@ -1502,6 +1504,12 @@ export const PricingCalculator: React.FC = () => {
                       />
                       <span className="absolute right-2.5 top-2 text-slate-500 font-bold text-xs pointer-events-none">%</span>
                     </div>
+
+                    {!isMarginViable && pricingMethod === 'margin' && (
+                      <div className="text-[10px] text-amber-300 bg-amber-500/15 p-1.5 rounded-lg border border-amber-500/30 text-center leading-tight">
+                        ⚠️ Margem inviável: deduções ({totalSalesDeductionsPercent.toFixed(1)}%) + margem ({targetMargin}%) somam ≥ 100%. Teto viável: <strong>{maxViableMargin}%</strong>. Calculado provisoriamente via Markup.
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-2 space-y-1.5 min-h-[46px]">

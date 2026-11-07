@@ -16315,5 +16315,4256 @@
         "id": "rec_188_step_6"
       }
     ]
+  },
+  {
+    "id": "rec_189",
+    "name": "Gelato Fior di Latte (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 611
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 154
+      },
+      {
+        "name": "Açúcar",
+        "grams": 130
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 37
+      },
+      {
+        "name": "Dextrose",
+        "grams": 32
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 31
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_01_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_01_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_01_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_01_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_01_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_01_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_01_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_190",
+    "name": "Gelato de Crema à Moda Italiana (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 589
+      },
+      {
+        "name": "Açúcar",
+        "grams": 131
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 115
+      },
+      {
+        "name": "Gema Do Ovo Pasteurizada",
+        "grams": 59
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 41
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 36
+      },
+      {
+        "name": "Dextrose",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 4
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_02_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_02_step_2",
+        "order": 2,
+        "title": "Pasteurização Segura de Gemas a 80°C–82°C",
+        "category": "aquecimento",
+        "temperature": "80°C–82°C",
+        "duration": "15 min",
+        "description": "Aquecer a base láctea. Aos 40°C, verter os secos. Ao atingir 60°C, incorporar as gemas batidas com mixer. Elevar a temperatura sob agitação constante até 80°C–82°C para pasteurização sanitária de Salmonella e ativação da lecitina sem talhar."
+      },
+      {
+        "id": "rec_gir_02_step_3",
+        "order": 3,
+        "title": "Protocolo de Infusão Aromática e Coagem",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "30 min a 12h",
+        "description": "Casca de laranja fresca, 1 fava de baunilha aberta, 1 anis-estrelado e grãos de café inteiros na caixinha aromatizadora/cesto da pasteurizadora a 85°C. Coar antes de mantecar. Manter em recipiente vedado para preservar compostos voláteis e coar completamente antes de avançar para a maturação."
+      },
+      {
+        "id": "rec_gir_02_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_02_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_02_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_02_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_191",
+    "name": "Gelato de Torrone (Gelato Irresistível)",
+    "category": "Gelatos de Oleaginosas",
+    "targetStyle": "Gelatos de Oleaginosas",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 682
+      },
+      {
+        "name": "Açúcar",
+        "grams": 97
+      },
+      {
+        "name": "Torrone",
+        "grams": 70
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 55
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 31
+      },
+      {
+        "name": "Mel",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 30
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_03_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_03_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_03_step_3",
+        "order": 3,
+        "title": "Incorporação e Emulsão Fina da Pasta Pura",
+        "category": "emulsao",
+        "temperature": "50°C",
+        "duration": "5 min",
+        "description": "Adicionar a pasta pura de oleaginosa na calda a 50°C. Emulsionar vigorosamente com mixer por 2 minutos para micronizar os glóbulos de lipídios vegetais."
+      },
+      {
+        "id": "rec_gir_03_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_03_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_03_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_03_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 80g/kg de Torrone Artesanal Picado. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Torrone Artesanal Picado",
+        "grams": 80
+      }
+    ]
+  },
+  {
+    "id": "rec_192",
+    "name": "Gelato de Chocolate Meio Amargo com Laranja (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 629
+      },
+      {
+        "name": "Chocolate Amargo 70%",
+        "grams": 166
+      },
+      {
+        "name": "Açúcar",
+        "grams": 86
+      },
+      {
+        "name": "Dextrose",
+        "grams": 51
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 45
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 18
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_04_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_04_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_04_step_3",
+        "order": 3,
+        "title": "Protocolo de Infusão Aromática e Coagem",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "30 min a 12h",
+        "description": "8g de casca de laranja orgânica adicionadas na pasteurização e coadas antes do batimento. Manter em recipiente vedado para preservar compostos voláteis e coar completamente antes de avançar para a maturação."
+      },
+      {
+        "id": "rec_gir_04_step_4",
+        "order": 4,
+        "title": "Fusão do Chocolate Off-Heat a 65°C",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "5 min",
+        "description": "Retirar a panela do fogo. Deixar a calda estabilizar em 65°C (off-heat) e verter sobre o chocolate nobre, emulsionando com mixer vertical de alta rotação até total dissolução dos sólidos e brilho acetinado."
+      },
+      {
+        "id": "rec_gir_04_step_5",
+        "order": 5,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_04_step_6",
+        "order": 6,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_04_step_7",
+        "order": 7,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_04_step_8",
+        "order": 8,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_193",
+    "name": "Gelato de Avelã Tostada (Gelato Irresistível)",
+    "category": "Gelatos de Oleaginosas",
+    "targetStyle": "Gelatos de Oleaginosas",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 669
+      },
+      {
+        "name": "Açúcar",
+        "grams": 137
+      },
+      {
+        "name": "Pasta De Avelã s/ açúcar",
+        "grams": 103
+      },
+      {
+        "name": "Dextrose",
+        "grams": 40
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 31
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 15
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_05_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_05_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_05_step_3",
+        "order": 3,
+        "title": "Incorporação e Emulsão Fina da Pasta Pura",
+        "category": "emulsao",
+        "temperature": "50°C",
+        "duration": "5 min",
+        "description": "Adicionar a pasta pura de oleaginosa na calda a 50°C. Emulsionar vigorosamente com mixer por 2 minutos para micronizar os glóbulos de lipídios vegetais."
+      },
+      {
+        "id": "rec_gir_05_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_05_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_05_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_05_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 70g/kg de Avelãs Tostadas Picadas. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Avelãs Tostadas Picadas",
+        "grams": 70
+      }
+    ]
+  },
+  {
+    "id": "rec_194",
+    "name": "Gelato de Pistache Puro (Gelato Irresistível)",
+    "category": "Gelatos de Oleaginosas",
+    "targetStyle": "Gelatos de Oleaginosas",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 680
+      },
+      {
+        "name": "Açúcar",
+        "grams": 137
+      },
+      {
+        "name": "Pasta de Pistache 100%",
+        "grams": 93
+      },
+      {
+        "name": "Dextrose",
+        "grams": 40
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 15
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_06_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_06_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_06_step_3",
+        "order": 3,
+        "title": "Incorporação e Emulsão Fina da Pasta Pura",
+        "category": "emulsao",
+        "temperature": "50°C",
+        "duration": "5 min",
+        "description": "Adicionar a pasta pura de oleaginosa na calda a 50°C. Emulsionar vigorosamente com mixer por 2 minutos para micronizar os glóbulos de lipídios vegetais."
+      },
+      {
+        "id": "rec_gir_06_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_06_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_06_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_06_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 20g/kg de Pistache Cru Granulado. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Pistache Cru Granulado",
+        "grams": 20
+      }
+    ]
+  },
+  {
+    "id": "rec_195",
+    "name": "Gelato de Amêndoa (Gelato Irresistível)",
+    "category": "Gelatos de Oleaginosas",
+    "targetStyle": "Gelatos de Oleaginosas",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 670
+      },
+      {
+        "name": "Açúcar",
+        "grams": 142
+      },
+      {
+        "name": "Pasta De Amêndoas s/ açúcar",
+        "grams": 102
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 31
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_07_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_07_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_07_step_3",
+        "order": 3,
+        "title": "Incorporação e Emulsão Fina da Pasta Pura",
+        "category": "emulsao",
+        "temperature": "50°C",
+        "duration": "5 min",
+        "description": "Adicionar a pasta pura de oleaginosa na calda a 50°C. Emulsionar vigorosamente com mixer por 2 minutos para micronizar os glóbulos de lipídios vegetais."
+      },
+      {
+        "id": "rec_gir_07_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_07_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_07_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_07_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_196",
+    "name": "Gelato de Gianduia Piemontês (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 618
+      },
+      {
+        "name": "Açúcar",
+        "grams": 142
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 66
+      },
+      {
+        "name": "Pasta De Avelã s/ açúcar",
+        "grams": 48
+      },
+      {
+        "name": "Cacau Em Pó 11% gordura",
+        "grams": 40
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 31
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_08_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_08_step_2",
+        "order": 2,
+        "title": "Pasteurização Alta e Hidratação do Cacau a 90°C",
+        "category": "aquecimento",
+        "temperature": "90°C",
+        "duration": "15 min",
+        "description": "Aquecer a base líquida. Aos 40°C, introduzir os secos e o cacau em pó alcalino. Elevar até 90°C para gelatinização do amido de cacau e hidratação profunda dos sólidos insolúveis."
+      },
+      {
+        "id": "rec_gir_08_step_3",
+        "order": 3,
+        "title": "Incorporação e Emulsão Fina da Pasta Pura",
+        "category": "emulsao",
+        "temperature": "50°C",
+        "duration": "5 min",
+        "description": "Adicionar a pasta pura de oleaginosa na calda a 50°C. Emulsionar vigorosamente com mixer por 2 minutos para micronizar os glóbulos de lipídios vegetais."
+      },
+      {
+        "id": "rec_gir_08_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_08_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_08_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_08_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_197",
+    "name": "Sorbet de Morango Fresco (Gelato Irresistível)",
+    "category": "Sorbets Polposos / Frutas Densas",
+    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "ingredients": [
+      {
+        "name": "Morango",
+        "grams": 500
+      },
+      {
+        "name": "Água",
+        "grams": 226
+      },
+      {
+        "name": "Açúcar",
+        "grams": 157
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 70
+      },
+      {
+        "name": "Dextrose",
+        "grams": 31
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 11
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_09_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_09_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_09_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_09_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_09_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_09_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_09_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_198",
+    "name": "Gelato de Café Espresso Puro (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Café Expresso",
+        "grams": 506
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 229
+      },
+      {
+        "name": "Açúcar",
+        "grams": 132
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 68
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_10_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_10_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_10_step_3",
+        "order": 3,
+        "title": "Protocolo de Infusão Aromática e Coagem",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "30 min a 12h",
+        "description": "5g a 10g de grãos de café moídos finos adicionados na extração para aroma intenso e textura rugosa artesanal. Manter em recipiente vedado para preservar compostos voláteis e coar completamente antes de avançar para a maturação."
+      },
+      {
+        "id": "rec_gir_10_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_10_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_10_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_10_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_199",
+    "name": "Gelato de Stracciatella Clássica (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 576
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 199
+      },
+      {
+        "name": "Açúcar",
+        "grams": 130
+      },
+      {
+        "name": "Dextrose",
+        "grams": 32
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 31
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 27
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_11_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_11_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_11_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_11_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_11_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_11_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_11_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 90g/kg de Flocagem de Chocolate Meio Amargo (Stracciatella). Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Flocagem de Chocolate Meio Amargo (Stracciatella)",
+        "grams": 90
+      }
+    ]
+  },
+  {
+    "id": "rec_200",
+    "name": "Gelato de Chocolate ao Leite (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 579
+      },
+      {
+        "name": "Açúcar",
+        "grams": 144
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 139
+      },
+      {
+        "name": "Cacau Em Pó 11% gordura",
+        "grams": 55
+      },
+      {
+        "name": "Dextrose",
+        "grams": 38
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 20
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_12_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_12_step_2",
+        "order": 2,
+        "title": "Pasteurização Alta e Hidratação do Cacau a 90°C",
+        "category": "aquecimento",
+        "temperature": "90°C",
+        "duration": "15 min",
+        "description": "Aquecer a base líquida. Aos 40°C, introduzir os secos e o cacau em pó alcalino. Elevar até 90°C para gelatinização do amido de cacau e hidratação profunda dos sólidos insolúveis."
+      },
+      {
+        "id": "rec_gir_12_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_12_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_12_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_12_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_12_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_201",
+    "name": "Sorbet de Limão Siciliano com Raspas (Gelato Irresistível)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 475
+      },
+      {
+        "name": "Limão Siciliano",
+        "grams": 217
+      },
+      {
+        "name": "Açúcar",
+        "grams": 213
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 30
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 30
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_13_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_13_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_13_step_3",
+        "order": 3,
+        "title": "Protocolo de Infusão Aromática e Coagem",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "30 min a 12h",
+        "description": "Raspas finas da casca de 1 limão siciliano orgânico adicionadas na saída do gelato. Manter em recipiente vedado para preservar compostos voláteis e coar completamente antes de avançar para a maturação."
+      },
+      {
+        "id": "rec_gir_13_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_13_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_13_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_13_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_202",
+    "name": "Gelato de Zabaione ao Vinho Marsala (Gelato Irresistível)",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 461
+      },
+      {
+        "name": "Vinho Marsala (ou Vinho do Porto)",
+        "grams": 125
+      },
+      {
+        "name": "Açúcar",
+        "grams": 122
+      },
+      {
+        "name": "Gema Do Ovo Pasteurizada",
+        "grams": 98
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 94
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 60
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 34
+      },
+      {
+        "name": "Neutro",
+        "grams": 6
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_14_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_14_step_2",
+        "order": 2,
+        "title": "Pasteurização Segura de Gemas a 80°C–82°C",
+        "category": "aquecimento",
+        "temperature": "80°C–82°C",
+        "duration": "15 min",
+        "description": "Aquecer a base láctea. Aos 40°C, verter os secos. Ao atingir 60°C, incorporar as gemas batidas com mixer. Elevar a temperatura sob agitação constante até 80°C–82°C para pasteurização sanitária de Salmonella e ativação da lecitina sem talhar."
+      },
+      {
+        "id": "rec_gir_14_step_3",
+        "order": 3,
+        "title": "Adição do Destilado/Licor a Frio",
+        "category": "emulsao",
+        "temperature": "15°C",
+        "duration": "3 min",
+        "description": "Adicionar a bebida alcoólica com a calda já resfriada (abaixo de 15°C) antes da maturação, evitando a evaporação de etanol e preservando o PAC anticongelante do álcool."
+      },
+      {
+        "id": "rec_gir_14_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_14_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_14_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_14_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_203",
+    "name": "Gelato de Iogurte com Amarenas (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Fruta",
+    "targetStyle": "Gelatos de Leite com Fruta",
+    "ingredients": [
+      {
+        "name": "Iogurte Integral",
+        "grams": 400
+      },
+      {
+        "name": "Leite Integral",
+        "grams": 222
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 147
+      },
+      {
+        "name": "Açúcar",
+        "grams": 137
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 34
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_15_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_15_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_15_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_15_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_15_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_15_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_15_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 80g/kg de Variegato de Amarenas Selvagens. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Variegato de Amarenas Selvagens",
+        "grams": 80
+      }
+    ]
+  },
+  {
+    "id": "rec_204",
+    "name": "Gelato de Doce de Leite Cremoso (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 399
+      },
+      {
+        "name": "Doce de leite artesanal (sem amido)",
+        "grams": 297
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 200
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 49
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_16_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_16_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_16_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_16_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_16_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_16_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_16_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_205",
+    "name": "Gelato de Arroz-Doce com Canela (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 396
+      },
+      {
+        "name": "Arroz-Doce Artesanal Cozido com Canela (Pré-Preparo)",
+        "grams": 280
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 174
+      },
+      {
+        "name": "Açúcar",
+        "grams": 69
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 31
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 15
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_17_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_17_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_17_step_3",
+        "order": 3,
+        "title": "Protocolo de Infusão Aromática e Coagem",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "30 min a 12h",
+        "description": "1 a 2 paus de canela no cozimento do arroz doce. Manter em recipiente vedado para preservar compostos voláteis e coar completamente antes de avançar para a maturação."
+      },
+      {
+        "id": "rec_gir_17_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_17_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_17_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_17_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_206",
+    "name": "Gelato de Rapadura com Cachaça (Gelato Irresistível)",
+    "category": "Gelatos Alcoólicos",
+    "targetStyle": "Gelatos Alcoólicos",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 504
+      },
+      {
+        "name": "Rapadura Artesanal",
+        "grams": 203
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 177
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 50
+      },
+      {
+        "name": "Cachaça",
+        "grams": 30
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 30
+      },
+      {
+        "name": "Neutro",
+        "grams": 6
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_18_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_18_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_18_step_3",
+        "order": 3,
+        "title": "Adição do Destilado/Licor a Frio",
+        "category": "emulsao",
+        "temperature": "15°C",
+        "duration": "3 min",
+        "description": "Adicionar a bebida alcoólica com a calda já resfriada (abaixo de 15°C) antes da maturação, evitando a evaporação de etanol e preservando o PAC anticongelante do álcool."
+      },
+      {
+        "id": "rec_gir_18_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_18_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_18_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_18_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_207",
+    "name": "Gelato de Queijo Minas Meia Cura com Goiabada (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 597
+      },
+      {
+        "name": "Queijo Meia Cura Artesanal",
+        "grams": 181
+      },
+      {
+        "name": "Dextrose",
+        "grams": 92
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 50
+      },
+      {
+        "name": "Açúcar",
+        "grams": 38
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 35
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      },
+      {
+        "name": "Sal",
+        "grams": 2
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_19_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_19_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_19_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_19_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_19_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_19_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_19_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 80g/kg de Goiabada Cremosa Artesanal. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Goiabada Cremosa Artesanal",
+        "grams": 80
+      }
+    ]
+  },
+  {
+    "id": "rec_208",
+    "name": "Gelato de Brigadeiro Tradicional (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 624
+      },
+      {
+        "name": "Leite Condensado",
+        "grams": 141
+      },
+      {
+        "name": "Açúcar",
+        "grams": 95
+      },
+      {
+        "name": "Cacau Em Pó 11% gordura",
+        "grams": 45
+      },
+      {
+        "name": "Manteiga",
+        "grams": 44
+      },
+      {
+        "name": "Dextrose",
+        "grams": 23
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 23
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_20_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_20_step_2",
+        "order": 2,
+        "title": "Pasteurização Alta e Hidratação do Cacau a 90°C",
+        "category": "aquecimento",
+        "temperature": "90°C",
+        "duration": "15 min",
+        "description": "Aquecer a base líquida. Aos 40°C, introduzir os secos e o cacau em pó alcalino. Elevar até 90°C para gelatinização do amido de cacau e hidratação profunda dos sólidos insolúveis."
+      },
+      {
+        "id": "rec_gir_20_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_20_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_20_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_20_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_20_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 40g/kg de Granulado Nobre de Chocolate. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Granulado Nobre de Chocolate",
+        "grams": 40
+      }
+    ]
+  },
+  {
+    "id": "rec_209",
+    "name": "Gelato de Rocambole de Doce de Leite (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 350
+      },
+      {
+        "name": "Água",
+        "grams": 208
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 151
+      },
+      {
+        "name": "Açúcar",
+        "grams": 112
+      },
+      {
+        "name": "Doce de leite artesanal (sem amido)",
+        "grams": 100
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 29
+      },
+      {
+        "name": "Dextrose",
+        "grams": 25
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_21_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_21_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_21_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_21_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_21_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_21_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_21_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 50g/kg de Cubos de Rocambole de Doce de Leite. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Cubos de Rocambole de Doce de Leite",
+        "grams": 50
+      }
+    ]
+  },
+  {
+    "id": "rec_210",
+    "name": "Gelato de Caramelo com Flor de Sal (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 369
+      },
+      {
+        "name": "Caramelo Artesanal a 175°C com Flor de Sal (Pré-Preparo)",
+        "grams": 350
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 180
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 43
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 30
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      },
+      {
+        "name": "Sal",
+        "grams": 3
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_22_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_22_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_22_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_22_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_22_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_22_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_22_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 70g/kg de Calda Extra de Caramelo Salgado (Variegato). Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Calda Extra de Caramelo Salgado (Variegato)",
+        "grams": 70
+      }
+    ]
+  },
+  {
+    "id": "rec_211",
+    "name": "Sorbet de Tangerina com Gengibre (Gelato Irresistível)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Tangerina / Mexerica",
+        "grams": 550
+      },
+      {
+        "name": "Água",
+        "grams": 234
+      },
+      {
+        "name": "Açúcar",
+        "grams": 124
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 45
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      },
+      {
+        "name": "Gengibre em Pó",
+        "grams": 2
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_23_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_23_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_23_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_23_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_23_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_23_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_23_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_212",
+    "name": "Sorbet de Cupuaçu Puro (Gelato Irresistível)",
+    "category": "Sorbets Polposos / Frutas Densas",
+    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "ingredients": [
+      {
+        "name": "Polpa Cupuaçu",
+        "grams": 500
+      },
+      {
+        "name": "Água",
+        "grams": 244
+      },
+      {
+        "name": "Açúcar",
+        "grams": 144
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 69
+      },
+      {
+        "name": "Dextrose",
+        "grams": 19
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 19
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_24_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_24_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_24_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_24_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_24_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_24_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_24_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_213",
+    "name": "Sorbet de Banana-Prata (Gelato Irresistível)",
+    "category": "Sorbets Polposos / Frutas Densas",
+    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "ingredients": [
+      {
+        "name": "Banana",
+        "grams": 500
+      },
+      {
+        "name": "Água",
+        "grams": 297
+      },
+      {
+        "name": "Açúcar",
+        "grams": 137
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 61
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_25_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_25_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_25_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_25_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_25_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_25_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_25_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_214",
+    "name": "Gelato de Paçoca Cremosa (Gelato Irresistível)",
+    "category": "Gelatos de Oleaginosas",
+    "targetStyle": "Gelatos de Oleaginosas",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 632
+      },
+      {
+        "name": "Pasta de amendoim 100%",
+        "grams": 151
+      },
+      {
+        "name": "Açúcar",
+        "grams": 133
+      },
+      {
+        "name": "Dextrose",
+        "grams": 28
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 26
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_26_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_26_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_26_step_3",
+        "order": 3,
+        "title": "Incorporação e Emulsão Fina da Pasta Pura",
+        "category": "emulsao",
+        "temperature": "50°C",
+        "duration": "5 min",
+        "description": "Adicionar a pasta pura de oleaginosa na calda a 50°C. Emulsionar vigorosamente com mixer por 2 minutos para micronizar os glóbulos de lipídios vegetais."
+      },
+      {
+        "id": "rec_gir_26_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_26_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_26_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_26_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 60g/kg de Paçoca Rolha Esfarelada. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Paçoca Rolha Esfarelada",
+        "grams": 60
+      }
+    ]
+  },
+  {
+    "id": "rec_215",
+    "name": "Sorbet de Maracujá com Sementes (Gelato Irresistível)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 484
+      },
+      {
+        "name": "Maracujá",
+        "grams": 217
+      },
+      {
+        "name": "Açúcar",
+        "grams": 200
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 34
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 30
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_27_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_27_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_27_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_27_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_27_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_27_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_27_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 30g/kg de Calda de Sementes de Maracujá. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Calda de Sementes de Maracujá",
+        "grams": 30
+      }
+    ]
+  },
+  {
+    "id": "rec_216",
+    "name": "Sorbet de Goiaba Vermelha (Gelato Irresistível)",
+    "category": "Sorbets Polposos / Frutas Densas",
+    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "ingredients": [
+      {
+        "name": "Goiaba",
+        "grams": 500
+      },
+      {
+        "name": "Água",
+        "grams": 213
+      },
+      {
+        "name": "Açúcar",
+        "grams": 171
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 61
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_28_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_28_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_28_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_28_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_28_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_28_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_28_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_217",
+    "name": "Sorbet Tropicana Multifrute (Gelato Irresistível)",
+    "category": "Sorbets Polposos / Frutas Densas",
+    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "ingredients": [
+      {
+        "name": "Manga",
+        "grams": 370
+      },
+      {
+        "name": "Água",
+        "grams": 272
+      },
+      {
+        "name": "Açúcar",
+        "grams": 143
+      },
+      {
+        "name": "Suco de Laranja",
+        "grams": 70
+      },
+      {
+        "name": "Maracujá",
+        "grams": 60
+      },
+      {
+        "name": "Dextrose",
+        "grams": 35
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 30
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 15
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_29_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_29_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_29_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_29_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_29_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_29_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_29_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_218",
+    "name": "Sorbet de Limão com Maracujá (Gelato Irresistível)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 476
+      },
+      {
+        "name": "Açúcar",
+        "grams": 208
+      },
+      {
+        "name": "Maracujá",
+        "grams": 110
+      },
+      {
+        "name": "Limão Siciliano",
+        "grams": 110
+      },
+      {
+        "name": "Dextrose",
+        "grams": 31
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 30
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_30_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_30_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_30_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_30_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_30_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_30_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_30_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_219",
+    "name": "Sorbet de Abacaxi com Hortelã Fresca (Gelato Irresistível)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Abacaxi",
+        "grams": 500
+      },
+      {
+        "name": "Água",
+        "grams": 238
+      },
+      {
+        "name": "Açúcar",
+        "grams": 147
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 71
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 15
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      },
+      {
+        "name": "Hortelã",
+        "grams": 4
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_31_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_31_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_31_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_31_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_31_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_31_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_31_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_220",
+    "name": "Sorbet de Chocolate Puro 70% Base Água (Gelato Irresistível)",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 610
+      },
+      {
+        "name": "Chocolate Amargo 70%",
+        "grams": 140
+      },
+      {
+        "name": "Açúcar",
+        "grams": 101
+      },
+      {
+        "name": "Dextrose",
+        "grams": 95
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 49
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_32_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_32_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_32_step_3",
+        "order": 3,
+        "title": "Fusão do Chocolate Off-Heat a 65°C",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "5 min",
+        "description": "Retirar a panela do fogo. Deixar a calda estabilizar em 65°C (off-heat) e verter sobre o chocolate nobre, emulsionando com mixer vertical de alta rotação até total dissolução dos sólidos e brilho acetinado."
+      },
+      {
+        "id": "rec_gir_32_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_32_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_32_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_32_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_221",
+    "name": "Gelato de Nozes com Geleia de Figo (Gelato Irresistível)",
+    "category": "Gelatos de Oleaginosas",
+    "targetStyle": "Gelatos de Oleaginosas",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 679
+      },
+      {
+        "name": "Açúcar",
+        "grams": 137
+      },
+      {
+        "name": "Pasta de nozes 100%",
+        "grams": 94
+      },
+      {
+        "name": "Dextrose",
+        "grams": 40
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 15
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_33_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_33_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_33_step_3",
+        "order": 3,
+        "title": "Incorporação e Emulsão Fina da Pasta Pura",
+        "category": "emulsao",
+        "temperature": "50°C",
+        "duration": "5 min",
+        "description": "Adicionar a pasta pura de oleaginosa na calda a 50°C. Emulsionar vigorosamente com mixer por 2 minutos para micronizar os glóbulos de lipídios vegetais."
+      },
+      {
+        "id": "rec_gir_33_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_33_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_33_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_33_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 80g/kg de Geleia Artesanal de Figo Turco. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Geleia Artesanal de Figo Turco",
+        "grams": 80
+      }
+    ]
+  },
+  {
+    "id": "rec_222",
+    "name": "Gelato de Chocolate Branco com Sal Rosa (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 603
+      },
+      {
+        "name": "Chocolate Branco",
+        "grams": 202
+      },
+      {
+        "name": "Dextrose",
+        "grams": 100
+      },
+      {
+        "name": "Açúcar",
+        "grams": 52
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 36
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      },
+      {
+        "name": "Sal Rosa do Himalaia",
+        "grams": 2
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_34_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_34_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_34_step_3",
+        "order": 3,
+        "title": "Fusão do Chocolate Off-Heat a 65°C",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "5 min",
+        "description": "Retirar a panela do fogo. Deixar a calda estabilizar em 65°C (off-heat) e verter sobre o chocolate nobre, emulsionando com mixer vertical de alta rotação até total dissolução dos sólidos e brilho acetinado."
+      },
+      {
+        "id": "rec_gir_34_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_34_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_34_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_34_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
+  },
+  {
+    "id": "rec_223",
+    "name": "Gelato de Stracciatella Invertida (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 584
+      },
+      {
+        "name": "Açúcar",
+        "grams": 146
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 135
+      },
+      {
+        "name": "Cacau Em Pó 11% gordura",
+        "grams": 70
+      },
+      {
+        "name": "Dextrose",
+        "grams": 40
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_35_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_35_step_2",
+        "order": 2,
+        "title": "Pasteurização Alta e Hidratação do Cacau a 90°C",
+        "category": "aquecimento",
+        "temperature": "90°C",
+        "duration": "15 min",
+        "description": "Aquecer a base líquida. Aos 40°C, introduzir os secos e o cacau em pó alcalino. Elevar até 90°C para gelatinização do amido de cacau e hidratação profunda dos sólidos insolúveis."
+      },
+      {
+        "id": "rec_gir_35_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_35_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_35_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_35_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_35_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 90g/kg de Flocagem de Chocolate Branco Nobre. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Flocagem de Chocolate Branco Nobre",
+        "grams": 90
+      }
+    ]
+  },
+  {
+    "id": "rec_224",
+    "name": "Sorbet de Abacate com Geleia de Mirtilo (Gelato Irresistível)",
+    "category": "Gelatos Veganos",
+    "targetStyle": "Gelatos Veganos",
+    "ingredients": [
+      {
+        "name": "Água",
+        "grams": 388
+      },
+      {
+        "name": "Abacate",
+        "grams": 350
+      },
+      {
+        "name": "Açúcar",
+        "grams": 160
+      },
+      {
+        "name": "Dextrose",
+        "grams": 77
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 20
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_36_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_36_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_36_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_36_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_36_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_36_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_36_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 70g/kg de Geleia Artesanal de Mirtilos. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Geleia Artesanal de Mirtilos",
+        "grams": 70
+      }
+    ]
+  },
+  {
+    "id": "rec_225",
+    "name": "Gelato Fiordipanna com Laranja e Crocante de Gergelim Preto (Gelato Irresistível)",
+    "category": "Gelatos de Leite",
+    "targetStyle": "Gelatos de Leite",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 532
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 232
+      },
+      {
+        "name": "Açúcar",
+        "grams": 143
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 29
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 29
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_37_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_37_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_37_step_3",
+        "order": 3,
+        "title": "Protocolo de Infusão Aromática e Coagem",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "30 min a 12h",
+        "description": "8g de casca de laranja fresca orgânica na pasteurização a 85°C, coada antes de mantecar. Manter em recipiente vedado para preservar compostos voláteis e coar completamente antes de avançar para a maturação."
+      },
+      {
+        "id": "rec_gir_37_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_37_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_37_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_37_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 100g/kg de Crocante Artesanal de Gergelim Preto. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Crocante Artesanal de Gergelim Preto",
+        "grams": 100
+      }
+    ]
+  },
+  {
+    "id": "rec_226",
+    "name": "Gelato de Cioccomenta com Flocos Brancos (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Chocolate",
+    "targetStyle": "Gelatos de Leite com Chocolate",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 595
+      },
+      {
+        "name": "Creme De Leite Fresco 35%",
+        "grams": 170
+      },
+      {
+        "name": "Açúcar",
+        "grams": 140
+      },
+      {
+        "name": "Dextrose",
+        "grams": 32
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 31
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 27
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_38_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_38_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_38_step_3",
+        "order": 3,
+        "title": "Protocolo de Infusão Aromática e Coagem",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "30 min a 12h",
+        "description": "Infusão a frio de 12g de hortelã fresca por kg de leite durante 48 horas sob refrigeração. Coar antes de pasteurizar. Manter em recipiente vedado para preservar compostos voláteis e coar completamente antes de avançar para a maturação."
+      },
+      {
+        "id": "rec_gir_38_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_38_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_38_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_38_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 90g/kg de Flocagem de Chocolate Branco Nobre. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Flocagem de Chocolate Branco Nobre",
+        "grams": 90
+      }
+    ]
+  },
+  {
+    "id": "rec_227",
+    "name": "Gelato de Cheesecake com Geleia de Amora e Biscoito (Gelato Irresistível)",
+    "category": "Gelatos de Leite com Fruta",
+    "targetStyle": "Gelatos de Leite com Fruta",
+    "ingredients": [
+      {
+        "name": "Leite Integral",
+        "grams": 574
+      },
+      {
+        "name": "Cream cheese",
+        "grams": 205
+      },
+      {
+        "name": "Açúcar",
+        "grams": 131
+      },
+      {
+        "name": "Leite Em Pó Desnatado",
+        "grams": 30
+      },
+      {
+        "name": "Dextrose",
+        "grams": 30
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 25
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_39_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_39_step_2",
+        "order": 2,
+        "title": "Pasteurização Clássica da Calda Láctea a 85°C",
+        "category": "aquecimento",
+        "temperature": "85°C",
+        "duration": "15 min",
+        "description": "Aquecer leite e creme em fogo moderado. Aos 40°C, verter os secos em chuva agitando com fouet. Elevar a 85°C para desnaturação das proteínas do soro e completa dissolução dos açúcares."
+      },
+      {
+        "id": "rec_gir_39_step_3",
+        "order": 3,
+        "title": "Emulsão e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "65°C",
+        "duration": "3 min",
+        "description": "Aplicar mixer de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para quebrar os glóbulos de gordura e refinar a textura sedosa da calda."
+      },
+      {
+        "id": "rec_gir_39_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_39_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_39_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_39_step_7",
+        "order": 7,
+        "title": "Mesclagem na Extração e Decoração de Vitrine",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "5 min",
+        "description": "Na saída da máquina para a cuba pré-resfriada, intercalar o gelato em camadas com 70g/kg de Geleia Artesanal de Amoras, 30g/kg de Biscoito Amanteigado Triturado. Levar ao ultracongelador por 10 min a -35°C para selar e expor na vitrine a -12°C."
+      }
+    ],
+    "variegatos": [
+      {
+        "name": "Geleia Artesanal de Amoras",
+        "grams": 70
+      },
+      {
+        "name": "Biscoito Amanteigado Triturado",
+        "grams": 30
+      }
+    ]
+  },
+  {
+    "id": "rec_228",
+    "name": "Sorbet de Frutas Vermelhas com Alecrim (Gelato Irresistível)",
+    "category": "Sorbets Cítricos / Frutas Ácidas",
+    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "ingredients": [
+      {
+        "name": "Frutas Vermelhas",
+        "grams": 450
+      },
+      {
+        "name": "Água",
+        "grams": 270
+      },
+      {
+        "name": "Açúcar",
+        "grams": 175
+      },
+      {
+        "name": "Glucose em pó",
+        "grams": 65
+      },
+      {
+        "name": "Dextrose",
+        "grams": 20
+      },
+      {
+        "name": "Inulina - Fibra Vegetal",
+        "grams": 15
+      },
+      {
+        "name": "Neutro",
+        "grams": 5
+      }
+    ],
+    "totalGrams": 1000,
+    "preparationSteps": [
+      {
+        "id": "rec_gir_40_step_1",
+        "order": 1,
+        "title": "Pesagem de Precisão e Pré-Dispersão dos Secos",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Pesar rigorosamente os pós secos (açúcares, estabilizante neutro e fibras) em balança de precisão decimal. Misturar a seco em tigela para dispersão homogênea e prevenção de grumos."
+      },
+      {
+        "id": "rec_gir_40_step_2",
+        "order": 2,
+        "title": "Dispersão a Frio e Homogeneização com Mixer",
+        "category": "emulsao",
+        "temperature": "Ambiente",
+        "duration": "10 min",
+        "description": "Dispersar a mistura de secos na água e polpa da fruta fresca utilizando mixer de imersão de alta rotação (8.000 a 10.000 RPM) por 2 a 3 minutos para hidratação das gomas sem aquecer a fruta."
+      },
+      {
+        "id": "rec_gir_40_step_3",
+        "order": 3,
+        "title": "Protocolo de Infusão Aromática e Coagem",
+        "category": "emulsao",
+        "temperature": "60°C",
+        "duration": "30 min a 12h",
+        "description": "Ferver 270g de água e infusionar 1 ramo fresco de alecrim (10g) por 1 hora. Coar e utilizar como a fase aquosa do sorbet. Manter em recipiente vedado para preservar compostos voláteis e coar completamente antes de avançar para a maturação."
+      },
+      {
+        "id": "rec_gir_40_step_4",
+        "order": 4,
+        "title": "Resfriamento Rápido em Banho de Gelo (<10°C)",
+        "category": "maturacao",
+        "temperature": "<10°C",
+        "duration": "15 min",
+        "description": "Transferir a calda para banho-maria invertido com bastante gelo e sal grosso, agitando vigorosamente até baixar a temperatura abaixo de 10°C em menos de 15 minutos."
+      },
+      {
+        "id": "rec_gir_40_step_5",
+        "order": 5,
+        "title": "Maturação Estática sob Refrigeração a 4°C",
+        "category": "maturacao",
+        "temperature": "4°C",
+        "duration": "4h a 12h",
+        "description": "Armazenar a calda coberta com filme em contato a 4°C por 4 a 12 horas para estabilização coloidal, hidratação plena dos hidrocoloides e cristalização parcial dos glóbulos de gordura."
+      },
+      {
+        "id": "rec_gir_40_step_6",
+        "order": 6,
+        "title": "Mantecação Dinâmica na Sorveteira (-7°C)",
+        "category": "batimento",
+        "temperature": "-7°C",
+        "duration": "30 a 45 min",
+        "description": "Bater na sorveteira pré-resfriada até consistência aveludada, firme e incorporação controlada de ar (overrun 25-35%)."
+      },
+      {
+        "id": "rec_gir_40_step_7",
+        "order": 7,
+        "title": "Abatimento Térmico e Exposição em Vitrine (-12°C)",
+        "category": "abatimento",
+        "temperature": "-12°C",
+        "duration": "10 min",
+        "description": "Extrair diretamente em cuba resfriada, levar ao ultracongelador a -35°C por 10 minutos para formar a casquinha superficial estabilizadora e servir na vitrine comercial a -12°C."
+      }
+    ]
   }
 ]

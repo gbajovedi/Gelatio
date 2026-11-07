@@ -42,10 +42,20 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
   const [cachedJson, setCachedJson] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [counts, setCounts] = useState<{ recipes: number; ingredients: number; preps: number }>({
+  const [counts, setCounts] = useState<{
+    recipes: number;
+    ingredients: number;
+    preps: number;
+    stock: number;
+    batches: number;
+    sales: number;
+  }>({
     recipes: 0,
     ingredients: 0,
-    preps: 0
+    preps: 0,
+    stock: 0,
+    batches: 0,
+    sales: 0
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,12 +63,15 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
   // Carrega a contagem atual de itens no banco para exibir no resumo
   useEffect(() => {
     if (isOpen) {
-      db.recipes.count().then(recipes => {
-        db.ingredients.count().then(ingredients => {
-          db.preparations.count().then(preps => {
-            setCounts({ recipes, ingredients, preps });
-          });
-        });
+      Promise.all([
+        db.recipes.count(),
+        db.ingredients.count(),
+        db.preparations.count(),
+        db.stockItems.count(),
+        db.productionBatches.count(),
+        db.salesTransactions.count()
+      ]).then(([recipes, ingredients, preps, stock, batches, sales]) => {
+        setCounts({ recipes, ingredients, preps, stock, batches, sales });
       }).catch(console.error);
     }
   }, [isOpen]);
@@ -135,13 +148,16 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
       });
       onDataChanged();
       // Atualiza os contadores locais
-      db.recipes.count().then(recipes => {
-        db.ingredients.count().then(ingredients => {
-          db.preparations.count().then(preps => {
-            setCounts({ recipes, ingredients, preps });
-          });
-        });
-      });
+      Promise.all([
+        db.recipes.count(),
+        db.ingredients.count(),
+        db.preparations.count(),
+        db.stockItems.count(),
+        db.productionBatches.count(),
+        db.salesTransactions.count()
+      ]).then(([recipes, ingredients, preps, stock, batches, sales]) => {
+        setCounts({ recipes, ingredients, preps, stock, batches, sales });
+      }).catch(console.error);
     } catch (err) {
       setStatusMessage({ text: 'Erro ao importar arquivo: ' + err, type: 'error' });
     } finally {
@@ -376,6 +392,26 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
                       <span className="text-[10px] text-slate-400">Balanceamento custom</span>
                     </div>
                   </div>
+
+                  <div className="bg-slate-950/70 p-2 rounded-lg border border-slate-800/80 flex items-center gap-2">
+                    <span className="text-base">📦</span>
+                    <div>
+                      <span className="font-bold text-emerald-400 block leading-tight font-mono">
+                        {counts.stock} potes
+                      </span>
+                      <span className="text-[10px] text-slate-400">{counts.batches} lotes produzidos</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-950/70 p-2 rounded-lg border border-slate-800/80 flex items-center gap-2">
+                    <span className="text-base">🏷️</span>
+                    <div>
+                      <span className="font-bold text-sky-400 block leading-tight font-mono">
+                        {counts.sales} vendas
+                      </span>
+                      <span className="text-[10px] text-slate-400">Histórico de PDV & lucros</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -569,7 +605,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
                       {importMode === 'replace' && <span className="w-2 h-2 rounded-full bg-rose-400" />}
                     </div>
                     <p className="text-[11px] text-slate-400 mt-1 leading-tight">
-                      Apaga os dados atuais e substitui integralmente pelo conteúdo do backup.
+                      Apaga integralmente todos os dados locais (receitas, insumos, estoque, vendas e configurações) e restaura exatamente o conteúdo do arquivo importado.
                     </p>
                   </button>
                 </div>

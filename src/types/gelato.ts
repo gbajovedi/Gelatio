@@ -21,6 +21,10 @@ export interface Ingredient {
   preparationId?: string;
   density?: number; // Densidade intrínseca ou aparente em g/ml ou kg/L
   overrun?: number; // % de aeração mecânica ou processo (ex: 20 para mixer)
+  saturatedFatRatio?: number; // Proporção de gordura saturada sobre a gordura total (0 a 1)
+  fiberRatio?: number;        // Gramas de fibra alimentar por grama de insumo (0 a 1)
+  sodiumMgPer100g?: number;   // Miligramas de sódio por 100g de insumo
+  transFatRatio?: number;     // Proporção de gordura trans sobre a gordura total (0 a 1)
 }
 
 export interface NutrientValues {
@@ -216,6 +220,8 @@ export interface BatchAnalysis {
     variegatoRatioPercent: number;
     totalVariegatoGrams?: number;
     totalVariegatoCost?: number;
+    isMarginViable?: boolean;
+    marginWarning?: string;
   };
 }
 

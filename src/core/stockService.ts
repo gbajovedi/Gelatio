@@ -186,6 +186,16 @@ export async function recordSale(params: {
 }): Promise<SaleTransaction> {
   const { stockItem, unitsSold, unitPrice, paymentMethod, pricingParams, notes } = params;
 
+  if (!stockItem || !stockItem.id) {
+    throw new Error('Item de estoque inválido ou ausente para registrar venda.');
+  }
+  if (!Number.isFinite(unitsSold) || unitsSold <= 0) {
+    throw new Error('A quantidade de unidades vendidas deve ser um número maior que zero.');
+  }
+  if (!Number.isFinite(unitPrice) || unitPrice < 0) {
+    throw new Error('O preço unitário de venda deve ser maior ou igual a zero.');
+  }
+
   const grossRevenue = unitPrice * unitsSold;
   const cardFeeRate = getPaymentMethodFeeRate(paymentMethod, pricingParams);
   const cardFeeAmount = grossRevenue * (cardFeeRate / 100);
@@ -228,11 +238,12 @@ export async function recordSale(params: {
 
     // Baixa do estoque
     const current = await db.stockItems.get(stockItem.id);
-    if (current) {
-      await db.stockItems.update(stockItem.id, {
-        currentUnits: current.currentUnits - unitsSold
-      });
+    if (!current) {
+      throw new Error(`Item de estoque ${stockItem.id} não localizado no banco de dados.`);
     }
+    await db.stockItems.update(stockItem.id, {
+      currentUnits: current.currentUnits - unitsSold
+    });
   });
 
   dispatchStockUpdated();
@@ -249,6 +260,14 @@ export async function recordStockAdjustment(params: {
   notes: string;
 }): Promise<StockAdjustment> {
   const { stockItem, type, quantityChange, notes } = params;
+
+  if (!stockItem || !stockItem.id) {
+    throw new Error('Item de estoque inválido ou ausente para ajuste.');
+  }
+  if (!Number.isFinite(quantityChange) || quantityChange === 0) {
+    throw new Error('A alteração de quantidade no ajuste deve ser um número diferente de zero.');
+  }
+
   const unitCost = stockItem.avgCostUnit || 0;
   const totalCostImpact = Math.abs(quantityChange) * unitCost;
 

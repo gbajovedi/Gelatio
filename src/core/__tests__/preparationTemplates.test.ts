@@ -178,8 +178,8 @@ describe('preparationTemplates', () => {
     expect(suggestPreparationTemplate(proEggRecipe).id).toBe('gelato_crema_gemas_profissional');
   });
 
-  it('deve garantir que 100% das 159 receitas do catálogo possuem preparationSteps válidos', () => {
-    expect(allRecipes.length).toBe(159);
+  it('deve garantir que 100% das receitas do catálogo possuem preparationSteps válidos', () => {
+    expect(allRecipes.length).toBeGreaterThanOrEqual(159);
 
     for (const recipe of allRecipes as Recipe[]) {
       expect(recipe.preparationSteps, `Receita ${recipe.id} (${recipe.name}) sem preparationSteps`).toBeDefined();

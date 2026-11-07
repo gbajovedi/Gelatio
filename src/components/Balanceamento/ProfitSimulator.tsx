@@ -256,9 +256,11 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
 
   // 1. Cálculo por Margem de Lucro (% sobre a venda - Divisor Sebrae c/ Debounce 50ms)
   const totalMarginAndDeductions = (debouncedMargin / 100) + salesDeductionsRate;
+  const isMarginViable = totalMarginAndDeductions < 0.999;
+  const maxViableMargin = Math.max(0, Math.floor((1 - salesDeductionsRate) * 1000) / 10);
   const marginDivisor = Math.max(0.001, 1 - totalMarginAndDeductions);
   const priceFromMargin =
-    totalMarginAndDeductions < 1
+    isMarginViable
       ? totalCostUnit / marginDivisor
       : (totalCostUnit * (1 + debouncedMargin / 100)) / Math.max(0.01, 1 - salesDeductionsRate);
 
@@ -815,6 +817,12 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
                 <div className="text-[11px] font-mono text-slate-400 bg-slate-950/60 p-2 rounded-lg border border-slate-800/80 text-center">
                   Markup equivalente: <strong className="text-purple-300">~{effectiveMarkup.toFixed(0)}% ({effectiveFactor.toFixed(2)}×)</strong>
                 </div>
+
+                {!isMarginViable && (
+                  <div className="text-[11px] text-amber-300 bg-amber-500/15 p-2 rounded-lg border border-amber-500/30 text-center leading-tight">
+                    ⚠️ Margem inviável: deduções ({(salesDeductionsRate * 100).toFixed(1)}%) + margem ({simulatedMargin}%) somam ≥ 100%. Teto viável: <strong>{maxViableMargin}%</strong>. Calculado provisoriamente via Markup.
+                  </div>
+                )}
               </div>
             )}
 
