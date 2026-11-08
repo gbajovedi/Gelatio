@@ -1,9 +1,9 @@
 import React from 'react';
-import { Scale, BookOpen, Utensils, ChefHat, DollarSign, Database, Package } from 'lucide-react';
+import { Scale, BookOpen, Utensils, ChefHat, DollarSign, Database, Package, Sparkles } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import gelatioLogo from '../assets/gelatio-logo.png';
 
-export type NavTab = 'balanceamento' | 'receitas' | 'ingredientes' | 'preparos' | 'financeiro' | 'estoque';
+export type NavTab = 'balanceamento' | 'variegatos' | 'receitas' | 'ingredientes' | 'preparos' | 'financeiro' | 'estoque';
 
 interface NavbarProps {
   activeTab: NavTab;
@@ -14,6 +14,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBackup }) => {
   const tabs = [
     { id: 'balanceamento', label: 'Balanceamento', shortLabel: 'Balanceamento', icon: Scale },
+    { id: 'variegatos', label: 'Variegatos & Mesclas', shortLabel: 'Variegatos', icon: Sparkles },
     { id: 'receitas', label: 'Livro de Receitas', shortLabel: 'Receitas', icon: BookOpen },
     { id: 'ingredientes', label: 'Insumos & Custos', shortLabel: 'Insumos', icon: Utensils },
     { id: 'preparos', label: 'Pré-preparos', shortLabel: 'Pré-preparos', icon: ChefHat },
@@ -69,6 +70,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
                     <>
                       <span className="hidden xl:inline">Balanceamento</span>
                       <span className="xl:hidden">Balancear</span>
+                    </>
+                  ) : tab.id === 'variegatos' ? (
+                    <>
+                      <span className="hidden 2xl:inline">Variegatos & </span>Mesclas
                     </>
                   ) : tab.id === 'receitas' ? (
                     <>

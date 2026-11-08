@@ -1,0 +1,121 @@
+import { VariegatoStyleStandard, VariegatoStyleId } from '../types/variegato';
+
+export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, VariegatoStyleStandard> = {
+  fruta_suave: {
+    id: 'fruta_suave',
+    name: 'Fruta Suave (Alta Fluidez)',
+    description: 'Calda límpida e maleável a frio, ideal para escorrer e mesclar suavemente em gelato de frutas ou bases brancas.',
+    defaultBrixTarget: 62,
+    defaultRheology: 'fluid',
+    min: {
+      brix: 60.0,
+      pac: 520,
+      sugars: 50.0,
+      fat: 0.0,
+      hydrocolloids: 0.15,
+      maxSucroseRatio: 55.0,
+      water: 32.0,
+      aw: 0.70,
+    },
+    max: {
+      brix: 65.0,
+      pac: 650,
+      sugars: 62.0,
+      fat: 2.0,
+      hydrocolloids: 0.40,
+      maxSucroseRatio: 55.0,
+      water: 40.0,
+      aw: 0.85,
+    },
+  },
+  fruta_gelificada: {
+    id: 'fruta_gelificada',
+    name: 'Fruta Clássica Gelificada (Pectina LM)',
+    description: 'Geleia artesanal encorpada com pedaços e gel termoirreversível estável em cuba, sem decantar no fundo.',
+    defaultBrixTarget: 68,
+    defaultRheology: 'balanced',
+    min: {
+      brix: 65.0,
+      pac: 480,
+      sugars: 55.0,
+      fat: 0.0,
+      hydrocolloids: 0.40,
+      maxSucroseRatio: 60.0,
+      water: 26.0,
+      aw: 0.65,
+    },
+    max: {
+      brix: 72.0,
+      pac: 600,
+      sugars: 68.0,
+      fat: 2.0,
+      hydrocolloids: 0.85,
+      maxSucroseRatio: 60.0,
+      water: 35.0,
+      aw: 0.80,
+    },
+  },
+  caramelo_toffee: {
+    id: 'caramelo_toffee',
+    name: 'Caramelo / Toffee Elástico',
+    description: 'Toffee amanteigado com textura elástica e puxa suave a -12°C, rico em sólidos lácteos e gordura nobre.',
+    defaultBrixTarget: 75,
+    defaultRheology: 'balanced',
+    min: {
+      brix: 72.0,
+      pac: 450,
+      sugars: 55.0,
+      fat: 8.0,
+      hydrocolloids: 0.10,
+      maxSucroseRatio: 58.0,
+      water: 18.0,
+      aw: 0.60,
+    },
+    max: {
+      brix: 78.0,
+      pac: 580,
+      sugars: 70.0,
+      fat: 20.0,
+      hydrocolloids: 0.50,
+      maxSucroseRatio: 58.0,
+      water: 26.0,
+      aw: 0.75,
+    },
+  },
+  creme_trufado: {
+    id: 'creme_trufado',
+    name: 'Creme Base Gordurosa / Trufado',
+    description: 'Pastas trufadas, creminos e cremes untuosos (tipo gianduia/avelã/pistache) com alta fração lipídica e baixa umidade.',
+    defaultBrixTarget: 65,
+    defaultRheology: 'structured',
+    min: {
+      brix: 60.0,
+      pac: 420,
+      sugars: 35.0,
+      fat: 20.0,
+      hydrocolloids: 0.0,
+      maxSucroseRatio: 60.0,
+      water: 2.0,
+      aw: 0.40,
+    },
+    max: {
+      brix: 72.0,
+      pac: 560,
+      sugars: 55.0,
+      fat: 40.0,
+      hydrocolloids: 0.40,
+      maxSucroseRatio: 60.0,
+      water: 20.0,
+      aw: 0.70,
+    },
+  },
+};
+
+export const DEFAULT_VARIEGATO_STYLE = VARIEGATO_STYLES.fruta_gelificada;
+
+export function getVariegatoStyle(styleId: VariegatoStyleId): VariegatoStyleStandard {
+  if (styleId !== 'custom' && VARIEGATO_STYLES[styleId]) {
+    return VARIEGATO_STYLES[styleId];
+  }
+  return DEFAULT_VARIEGATO_STYLE;
+}
