@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Preparation } from '../../types/gelato';
 import { getInitialPreparationSteps } from '../preparationStepMigration';
+import { isNeutroIngredient, roundIngredientGrams } from '../calculator';
 
 const STORAGE_EXPANDED_INGREDIENTS = 'gelatio_preparations_expanded_ingredients';
 
@@ -216,5 +217,83 @@ describe('Pré-preparos: Persistência de Expansão de Ingredientes & Métricas'
     // Todas + Sem Preparo
     const allPending = filterFn('Todas', 'sem_preparo');
     expect(allPending.map(p => p.id)).toEqual(['p1', 'p4']);
+  });
+
+  describe('Modo Cozinha: Escalonamento de Lote, Custos e Checklist de Pesagem', () => {
+    it('deve calcular corretamente o escalonamento proporcional do lote e custo proporcional', () => {
+      const samplePrep: Preparation = {
+        id: 'prep_doce_leite',
+        name: 'Doce de Leite Artesanal',
+        category: 'Pré-preparo',
+        instructions: 'Cozinhar lentamente',
+        ingredients: [
+          { name: 'Leite Integral', grams: 800 },
+          { name: 'Açúcar Cristal', grams: 200 }
+        ]
+      };
+
+      const baseWeight = samplePrep.ingredients.reduce((acc, curr) => acc + curr.grams, 0);
+      expect(baseWeight).toBe(1000);
+
+      // Escala para lote alvo de 2.500 g (2,5 kg)
+      const targetBatchGrams = 2500;
+      const scaleRatio = targetBatchGrams / baseWeight;
+      expect(scaleRatio).toBe(2.5);
+
+      const scaledIngredients = samplePrep.ingredients.map(ing => ({
+        name: ing.name,
+        grams: ing.grams * scaleRatio
+      }));
+
+      expect(scaledIngredients[0].grams).toBe(2000);
+      expect(scaledIngredients[1].grams).toBe(500);
+
+      // Custo: supondo custo de R$ 15,00/kg
+      const costKg = 15.0;
+      const totalBatchCost = (targetBatchGrams * costKg) / 1000;
+      expect(totalBatchCost).toBe(37.5);
+    });
+
+    it('deve preservar 1 casa decimal para insumos neutros/estabilizantes mesmo com valores arredondados', () => {
+      const isNeutro = isNeutroIngredient('Neutro para Gelato', 'Neutros e Estabilizantes');
+      expect(isNeutro).toBe(true);
+
+      // Formulação com 5 g em 1.000 g -> em lote de 750 g = 3.75 g
+      const scaledRaw = 3.75;
+      const roundedVal = roundIngredientGrams(scaledRaw, isNeutro, true);
+      // Como é neutro, mesmo com showRounded=true, deve preservar 1 casa decimal (3.8)
+      expect(roundedVal).toBe(3.8);
+
+      // Insumo normal (não neutro) com showRounded=true deve arredondar para inteiro
+      const normalVal = roundIngredientGrams(125.4, false, true);
+      expect(normalVal).toBe(125);
+    });
+
+    it('deve alternar e resetar itens do checklist de pesagem de bancada', () => {
+      let checkedState: Record<string, boolean> = {};
+
+      const toggleCheck = (name: string) => {
+        checkedState = { ...checkedState, [name]: !checkedState[name] };
+      };
+
+      const resetChecks = () => {
+        checkedState = {};
+      };
+
+      toggleCheck('Leite Integral');
+      expect(checkedState['Leite Integral']).toBe(true);
+      expect(checkedState['Açúcar']).toBeFalsy();
+
+      toggleCheck('Açúcar');
+      expect(checkedState['Leite Integral']).toBe(true);
+      expect(checkedState['Açúcar']).toBe(true);
+
+      toggleCheck('Leite Integral');
+      expect(checkedState['Leite Integral']).toBe(false);
+      expect(checkedState['Açúcar']).toBe(true);
+
+      resetChecks();
+      expect(Object.keys(checkedState).length).toBe(0);
+    });
   });
 });

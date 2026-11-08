@@ -1,9 +1,14 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Preparation, Ingredient, PreparationStep } from '../../types/gelato';
 import { useModalDismiss } from '../../core/useModalDismiss';
 import { calculatePreparationNutrients } from '../../core/preparationSync';
 import { getInitialPreparationSteps } from '../../core/preparationStepMigration';
 import { STEP_CATEGORIES_META } from '../../core/preparationTemplates';
+import {
+  isNeutroIngredient,
+  roundIngredientGrams,
+  STORAGE_KEY_SHOW_ROUNDED
+} from '../../core/calculator';
 import {
   X,
   ChefHat,
@@ -15,7 +20,11 @@ import {
   Clock,
   Sparkles,
   ListChecks,
-  FileText
+  FileText,
+  Layers,
+  CheckCircle2,
+  Circle,
+  RotateCcw
 } from 'lucide-react';
 
 interface PrePreparoViewerModalProps {
@@ -36,8 +45,61 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
   // Acessibilidade e fechamento universal (ESC, clique externo no backdrop e trava de scroll)
   useModalDismiss(isOpen, onClose);
 
-  // Estado interativo do checklist de bancada para o operador na cozinha
+  // Mapa de insumos para consulta rápida de categorias e proteção de neutros
+  const ingredientsMap = useMemo(() => {
+    const map = new Map<string, Ingredient>();
+    (availableIngredients || []).forEach(ing => {
+      if (ing.name) map.set(ing.name.toLowerCase().trim(), ing);
+    });
+    return map;
+  }, [availableIngredients]);
+
+  // Peso nominal original da formulação cadastrada
+  const baseWeight = useMemo(() => {
+    if (!prep || !prep.ingredients) return 0;
+    return prep.ingredients.reduce((acc, curr) => acc + (Number(curr.grams) || 0), 0);
+  }, [prep]);
+
+  // Estado de escalonamento de lote (Modo Cozinha)
+  const [targetBatchGrams, setTargetBatchGrams] = useState<number>(baseWeight);
+
+  // Estado interativo de checklist de ingredientes a pesar
+  const [checkedIngredients, setCheckedIngredients] = useState<Record<string, boolean>>({});
+
+  // Preferência de visualização de valores arredondados vs decimais exatos
+  const [showRoundedValues, setShowRoundedValues] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_SHOW_ROUNDED);
+      return saved !== null ? saved === 'true' : false;
+    } catch {
+      return false;
+    }
+  });
+
+  // Estado interativo do checklist de passos operacionais
   const [checkedSteps, setCheckedSteps] = useState<Record<string, boolean>>({});
+
+  // Sincronizar targetBatchGrams e resetar checklists ao abrir ou alternar de pré-preparo
+  useEffect(() => {
+    if (baseWeight > 0) {
+      setTargetBatchGrams(baseWeight);
+      setCheckedIngredients({});
+      setCheckedSteps({});
+    }
+  }, [prep?.id, baseWeight]);
+
+  // Fator proporcional de escala
+  const scaleRatio = baseWeight > 0 ? (targetBatchGrams || baseWeight) / baseWeight : 1;
+
+  // Atalhos ergonômicos de lote padrão (inclui a batelada original)
+  const presets = useMemo(() => {
+    const standard = [500, 1000, 2000, 2500, 3000, 4000, 5000];
+    const baseRound = Math.round(baseWeight);
+    if (baseRound > 0 && !standard.includes(baseRound)) {
+      return [baseRound, ...standard].sort((a, b) => a - b);
+    }
+    return standard;
+  }, [baseWeight]);
 
   const toggleStepCheck = (stepId: string) => {
     setCheckedSteps(prev => ({
@@ -46,21 +108,33 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
     }));
   };
 
+  const toggleIngredientCheck = (ingName: string) => {
+    setCheckedIngredients(prev => ({
+      ...prev,
+      [ingName]: !prev[ingName]
+    }));
+  };
+
+  const handleResetIngredientsChecklist = () => {
+    setCheckedIngredients({});
+  };
+
   const handleEditClick = () => {
     if (!prep) return;
     onClose();
     onOpenEdit(prep);
   };
 
-  const totalGrams = useMemo(() => {
-    if (!prep || !prep.ingredients) return 0;
-    return prep.ingredients.reduce((acc, curr) => acc + (Number(curr.grams) || 0), 0);
-  }, [prep]);
-
   const prepProfile = useMemo(() => {
     if (!prep) return { costKg: 0, sugars: 0, fat: 0, msnf: 0, totalSolids: 0, pac: 0, pod: 0 };
     return calculatePreparationNutrients(prep, availableIngredients);
   }, [prep, availableIngredients]);
+
+  // Custo total proporcional ao peso atual do lote
+  const totalBatchCost = useMemo(() => {
+    const currentWeight = targetBatchGrams || baseWeight;
+    return (currentWeight * prepProfile.costKg) / 1000;
+  }, [targetBatchGrams, baseWeight, prepProfile.costKg]);
 
   const steps: PreparationStep[] = useMemo(() => {
     if (!prep) return [];
@@ -139,11 +213,16 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           <div className="bg-slate-950/70 p-3 rounded-2xl border border-slate-800/80 text-center">
             <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
-              Peso da Batelada
+              Peso do Lote
             </span>
             <span className="text-base sm:text-lg font-mono font-black text-white">
-              {Math.round(totalGrams)} <span className="text-xs font-normal text-slate-400">g</span>
+              {Math.round(targetBatchGrams || baseWeight)} <span className="text-xs font-normal text-slate-400">g</span>
             </span>
+            {Math.round(targetBatchGrams || baseWeight) !== Math.round(baseWeight) && (
+              <span className="text-[10px] text-amber-400 font-mono block mt-0.5" title="Peso nominal original da fórmula">
+                Base: {Math.round(baseWeight)}g ({scaleRatio.toFixed(2)}x)
+              </span>
+            )}
           </div>
 
           <div className="bg-slate-950/70 p-3 rounded-2xl border border-slate-800/80 text-center">
@@ -152,6 +231,9 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
             </span>
             <span className="text-base sm:text-lg font-mono font-black text-emerald-400">
               R$ {prepProfile.costKg.toFixed(2)}<span className="text-xs font-normal text-emerald-400/80">/kg</span>
+            </span>
+            <span className="text-[10px] text-emerald-300 font-mono block mt-0.5 font-bold" title="Custo proporcional total do lote selecionado">
+              Lote: R$ {totalBatchCost.toFixed(2)}
             </span>
           </div>
 
@@ -162,6 +244,9 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
             <span className="text-base sm:text-lg font-mono font-black text-amber-300">
               {prep.ingredients.length} <span className="text-xs font-normal text-slate-400">itens</span>
             </span>
+            <span className="text-[10px] text-slate-400 font-mono block mt-0.5">
+              {Object.values(checkedIngredients).filter(Boolean).length}/{prep.ingredients.length} pesados
+            </span>
           </div>
 
           <div className="bg-slate-950/70 p-3 rounded-2xl border border-slate-800/80 text-center">
@@ -171,59 +256,194 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
             <span className="text-base sm:text-lg font-mono font-black text-sky-400">
               {hasSteps ? `${steps.length} passos` : hasTextInstructions ? 'Texto livre' : 'Não cadastrado'}
             </span>
+            {hasSteps && (
+              <span className="text-[10px] text-slate-400 font-mono block mt-0.5">
+                {Object.values(checkedSteps).filter(Boolean).length}/{steps.length} concluídos
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Seção 1: Ingredientes e Formulação em Proporção */}
-        <div className="bg-slate-950/70 rounded-2xl border border-slate-800/80 p-4 space-y-3 shadow-inner">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Utensils className="w-4 h-4 text-amber-400" />
-              <span className="text-xs font-black uppercase text-white tracking-wider">
-                Ingredientes & Formulação
-              </span>
-            </div>
-            <span className="text-xs font-mono font-bold text-slate-400">
-              Total: {Math.round(totalGrams)} g
+        {/* Controle de Escala de Lote / Peso Desejado */}
+        <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-3 shadow-md">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+              <Scale className="w-4 h-4 text-amber-400" />
+              <span>Peso Desejado do Lote:</span>
             </span>
+            <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1">
+              <input
+                type="number"
+                min="10"
+                step="50"
+                value={targetBatchGrams || ''}
+                onChange={e => setTargetBatchGrams(Math.max(0, parseFloat(e.target.value) || 0))}
+                className="w-24 bg-transparent text-right text-base font-black font-mono text-amber-300 focus:outline-none"
+              />
+              <span className="text-xs font-mono font-bold text-slate-400">g</span>
+            </div>
           </div>
 
-          <div className="divide-y divide-slate-800/70 overflow-hidden rounded-xl border border-slate-800">
-            <div className="bg-slate-900/90 px-3 py-2 flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-              <span>Ingrediente</span>
-              <div className="flex items-center gap-5 sm:gap-8">
-                <span className="w-16 text-right">Peso</span>
-                <span className="w-14 text-right">Proporção</span>
-              </div>
+          {/* Atalhos Rápidos de Escala */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+            <span className="text-[11px] text-slate-400 font-semibold uppercase pr-1 shrink-0">
+              Atalhos:
+            </span>
+            {presets.map(grams => {
+              const isBase = grams === Math.round(baseWeight);
+              const isSelected = targetBatchGrams === grams;
+              const label = isBase
+                ? `${grams >= 1000 ? `${grams / 1000} kg` : `${grams} g`} (Base)`
+                : grams >= 1000
+                ? `${grams / 1000} kg`
+                : `${grams} g`;
+
+              return (
+                <button
+                  key={grams}
+                  type="button"
+                  onClick={() => setTargetBatchGrams(grams)}
+                  className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                    isSelected
+                      ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                      : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-600'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Seção 1: Ingredientes a Pesar (Checklist Interativo de Bancada) */}
+        <div className="bg-slate-950/70 rounded-2xl border border-slate-800/80 p-4 space-y-3.5 shadow-inner">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <Layers className="w-4 h-4 text-amber-400" />
+              <span className="text-xs font-black uppercase text-white tracking-wider">
+                Ingredientes a Pesar ({prep.ingredients.length})
+              </span>
             </div>
 
-            <div className="max-h-52 overflow-y-auto divide-y divide-slate-800/50 bg-slate-900/40">
-              {prep.ingredients.map((ing, idx) => {
-                const percentage = totalGrams > 0 ? ((Number(ing.grams) / totalGrams) * 100).toFixed(1) : '0.0';
-                return (
-                  <div
-                    key={idx}
-                    className="px-3 py-2 flex items-center justify-between text-xs sm:text-sm text-slate-200 hover:bg-slate-800/40 transition-colors"
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !showRoundedValues;
+                  setShowRoundedValues(next);
+                  try {
+                    localStorage.setItem(STORAGE_KEY_SHOW_ROUNDED, String(next));
+                  } catch {}
+                }}
+                className={`px-2.5 py-1 rounded-lg border text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer select-none ${
+                  showRoundedValues
+                    ? 'border-amber-500/70 bg-amber-500/20 text-amber-300'
+                    : 'border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white'
+                }`}
+                title={
+                  showRoundedValues
+                    ? 'Valores arredondados ATIVOS (Neutros preservam decimais). Clique para ver decimais exatos.'
+                    : 'Clique para mostrar valores arredondados para inteiros (Neutros nunca são arredondados).'
+                }
+              >
+                <span className="font-mono text-xs font-bold">≈</span>
+                <span>{showRoundedValues ? 'Arredondado' : 'Decimais'}</span>
+                {showRoundedValues && (
+                  <span
+                    className="text-[9px] bg-teal-500/20 text-teal-300 border border-teal-500/40 rounded px-1 font-mono font-bold"
+                    title="Ingredientes neutros e estabilizantes protegidos com 1 casa decimal"
                   >
-                    <span className="font-medium text-white">{ing.name}</span>
-                    <div className="flex items-center gap-5 sm:gap-8 font-mono">
-                      <span className="w-16 text-right font-bold text-amber-300">
-                        {ing.grams} g
+                    Neutro .0g
+                  </span>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResetIngredientsChecklist}
+                className="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer px-1.5 py-1"
+                title="Desmarcar todos os ingredientes"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Desmarcar todos</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-slate-900/70 rounded-2xl border border-slate-800/80 divide-y divide-slate-800/60 overflow-hidden shadow-lg">
+            {prep.ingredients.map((ing, idx) => {
+              const ingMatch = ingredientsMap.get((ing.name || '').toLowerCase().trim());
+              const isNeutro = isNeutroIngredient(ing.name, ingMatch?.category);
+              const scaledGrams = roundIngredientGrams(
+                Number(ing.grams) * scaleRatio,
+                isNeutro,
+                showRoundedValues
+              );
+              const percentage =
+                baseWeight > 0 ? ((Number(ing.grams) / baseWeight) * 100).toFixed(1) : '0.0';
+              const isChecked = !!checkedIngredients[ing.name];
+
+              return (
+                <div
+                  key={idx}
+                  onClick={() => toggleIngredientCheck(ing.name)}
+                  className={`p-3.5 sm:p-4 flex items-center justify-between gap-3 cursor-pointer select-none transition-colors ${
+                    isChecked
+                      ? 'bg-emerald-950/20 text-slate-500'
+                      : 'hover:bg-slate-800/50 text-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div
+                      className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all ${
+                        isChecked
+                          ? 'text-emerald-400 bg-emerald-500/20 border border-emerald-500/40'
+                          : 'text-slate-500 hover:text-slate-400 border border-slate-600'
+                      }`}
+                    >
+                      {isChecked ? (
+                        <CheckCircle2 className="w-5 h-5" />
+                      ) : (
+                        <Circle className="w-4 h-4" />
+                      )}
+                    </div>
+
+                    <div className="min-w-0">
+                      <span
+                        className={`text-sm sm:text-base font-bold block break-words ${
+                          isChecked ? 'line-through text-slate-500' : 'text-white'
+                        }`}
+                        title={ing.name}
+                      >
+                        {ing.name}
                       </span>
-                      <span className="w-14 text-right font-semibold text-slate-400">
-                        {percentage}%
+                      <span className="text-xs text-slate-400 font-mono">
+                        {percentage}% da fórmula
                       </span>
                     </div>
                   </div>
-                );
-              })}
-            </div>
 
-            <div className="bg-slate-900/90 px-3 py-2.5 flex items-center justify-between text-xs sm:text-sm font-black text-white">
-              <span>Peso Total da Formulação:</span>
-              <div className="flex items-center gap-5 sm:gap-8 font-mono">
-                <span className="w-16 text-right text-emerald-400 font-bold">{Math.round(totalGrams)} g</span>
-                <span className="w-14 text-right text-emerald-400 font-bold">100.0%</span>
+                  {/* Peso Destacado para Balança */}
+                  <div className="text-right shrink-0">
+                    <div
+                      className={`text-lg sm:text-2xl font-black font-mono tracking-tight ${
+                        isChecked ? 'line-through text-slate-500' : 'text-amber-300'
+                      }`}
+                    >
+                      {scaledGrams}
+                      <span className="text-xs sm:text-sm font-bold text-slate-400 ml-1">g</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            <div className="bg-slate-900/90 px-4 py-3 flex items-center justify-between text-xs sm:text-sm font-black text-white border-t border-slate-800">
+              <span className="uppercase tracking-wider text-slate-400 text-xs">Total do Lote:</span>
+              <div className="font-mono text-emerald-400 text-base sm:text-lg">
+                {Math.round(targetBatchGrams || baseWeight)} g{' '}
+                <span className="text-xs text-slate-400 font-normal">(100.0%)</span>
               </div>
             </div>
           </div>
