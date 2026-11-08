@@ -295,5 +295,40 @@ describe('Pré-preparos: Persistência de Expansão de Ingredientes & Métricas'
       resetChecks();
       expect(Object.keys(checkedState).length).toBe(0);
     });
+
+    it('deve calcular múltiplos ergonômicos da receita base para preparos com pesos artesanais variados', () => {
+      // Exemplo real: Pudim com 2.110 g
+      const pudimPrep: Preparation = {
+        id: 'prep_pudim',
+        name: 'Pudim',
+        category: 'Pré-preparo',
+        instructions: 'Assar em banho-maria',
+        ingredients: [
+          { name: 'Ovo Galinha', grams: 350 },
+          { name: 'Leite Condensado', grams: 800 },
+          { name: 'Leite Integral', grams: 800 },
+          { name: 'Açúcar', grams: 160 }
+        ]
+      };
+
+      const baseWeight = pudimPrep.ingredients.reduce((acc, curr) => acc + curr.grams, 0);
+      expect(baseWeight).toBe(2110);
+
+      const multipliers = [0.5, 1, 1.5, 2, 3, 4, 5];
+
+      // Verificando os pesos calculados para cada multiplicador
+      const calculatedWeights = multipliers.map(m => Math.round(baseWeight * m));
+      expect(calculatedWeights).toEqual([1055, 2110, 3165, 4220, 6330, 8440, 10550]);
+
+      // Verificando pesagem de meia receita (0.5x)
+      const halfScaleRatio = 1055 / baseWeight;
+      const halfOvos = pudimPrep.ingredients.find(i => i.name === 'Ovo Galinha')!.grams * halfScaleRatio;
+      expect(halfOvos).toBe(175); // exatamente metade de 350g
+
+      // Verificando pesagem de dobro (2x)
+      const doubleScaleRatio = 4220 / baseWeight;
+      const doubleLeiteCond = pudimPrep.ingredients.find(i => i.name === 'Leite Condensado')!.grams * doubleScaleRatio;
+      expect(doubleLeiteCond).toBe(1600); // 800 * 2 = 1600g (2 latas de 800g)
+    });
   });
 });

@@ -91,15 +91,19 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
   // Fator proporcional de escala
   const scaleRatio = baseWeight > 0 ? (targetBatchGrams || baseWeight) / baseWeight : 1;
 
-  // Atalhos ergonômicos de lote padrão (inclui a batelada original)
-  const presets = useMemo(() => {
-    const standard = [500, 1000, 2000, 2500, 3000, 4000, 5000];
-    const baseRound = Math.round(baseWeight);
-    if (baseRound > 0 && !standard.includes(baseRound)) {
-      return [baseRound, ...standard].sort((a, b) => a - b);
-    }
-    return standard;
-  }, [baseWeight]);
+  // Multiplicadores da receita base (confeitaria/pré-preparo artesanal)
+  const RECIPE_MULTIPLIERS = useMemo(
+    () => [
+      { mult: 0.5, label: '½x' },
+      { mult: 1, label: '1x (Base)' },
+      { mult: 1.5, label: '1.5x' },
+      { mult: 2, label: '2x' },
+      { mult: 3, label: '3x' },
+      { mult: 4, label: '4x' },
+      { mult: 5, label: '5x' }
+    ],
+    []
+  );
 
   const toggleStepCheck = (stepId: string) => {
     setCheckedSteps(prev => ({
@@ -266,11 +270,18 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
 
         {/* Controle de Escala de Lote / Peso Desejado */}
         <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-3 shadow-md">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-              <Scale className="w-4 h-4 text-amber-400" />
-              <span>Peso Desejado do Lote:</span>
-            </span>
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <Scale className="w-4 h-4 text-amber-400" />
+                <span>Peso Desejado do Lote:</span>
+              </span>
+              {baseWeight > 0 && Math.abs(scaleRatio - 1) > 0.01 && (
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                  {scaleRatio.toFixed(scaleRatio % 1 === 0 ? 0 : 2)}x da base
+                </span>
+              )}
+            </div>
             <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1">
               <input
                 type="number"
@@ -284,32 +295,39 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
             </div>
           </div>
 
-          {/* Atalhos Rápidos de Escala */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+          {/* Atalhos por Múltiplos da Receita Base */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin">
             <span className="text-[11px] text-slate-400 font-semibold uppercase pr-1 shrink-0">
-              Atalhos:
+              Múltiplos:
             </span>
-            {presets.map(grams => {
-              const isBase = grams === Math.round(baseWeight);
-              const isSelected = targetBatchGrams === grams;
-              const label = isBase
-                ? `${grams >= 1000 ? `${grams / 1000} kg` : `${grams} g`} (Base)`
-                : grams >= 1000
-                ? `${grams / 1000} kg`
-                : `${grams} g`;
+            {RECIPE_MULTIPLIERS.map(({ mult, label }) => {
+              const calculatedGrams = Math.round(baseWeight * mult);
+              const isSelected = Math.abs(targetBatchGrams - calculatedGrams) <= 1;
+              const formattedWeight =
+                calculatedGrams >= 1000
+                  ? `${(calculatedGrams / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 2 })} kg`
+                  : `${calculatedGrams} g`;
 
               return (
                 <button
-                  key={grams}
+                  key={mult}
                   type="button"
-                  onClick={() => setTargetBatchGrams(grams)}
-                  className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                  onClick={() => setTargetBatchGrams(calculatedGrams)}
+                  className={`px-2.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1.5 ${
                     isSelected
-                      ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                      ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20 font-black'
                       : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-600'
                   }`}
+                  title={`${label}: ${calculatedGrams} g`}
                 >
-                  {label}
+                  <span>{label}</span>
+                  <span
+                    className={`text-[10px] ${
+                      isSelected ? 'text-slate-900/80 font-bold' : 'text-slate-400 font-normal'
+                    }`}
+                  >
+                    ({formattedWeight})
+                  </span>
                 </button>
               );
             })}
