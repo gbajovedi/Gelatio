@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Preparation } from '../../types/gelato';
 import { VariegatoStyleId } from '../../types/variegato';
 import { VARIEGATO_STYLES } from '../../core/variegatoStyles';
@@ -11,7 +11,9 @@ import {
   SlidersHorizontal,
   Sparkles,
   BookOpen,
-  ChevronDown
+  ChevronDown,
+  Search,
+  X
 } from 'lucide-react';
 
 interface VariegatoHeaderProps {
@@ -41,11 +43,13 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
   onOpenStyleModal,
   isDirty
 }) => {
-  const [isCatalogOpen, setIsCatalogOpen] = React.useState<boolean>(false);
-  const catalogRef = React.useRef<HTMLDivElement>(null);
+  const [isCatalogOpen, setIsCatalogOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const catalogRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Close catalog dropdown on outside click
-  React.useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) {
         setIsCatalogOpen(false);
@@ -54,6 +58,27 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Focar no campo de busca ao abrir o dropdown
+  useEffect(() => {
+    if (isCatalogOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 50);
+    } else {
+      setSearchTerm('');
+    }
+  }, [isCatalogOpen]);
+
+  // Filtragem das receitas/variegatos pelo termo digitado
+  const filteredPreparations = useMemo(() => {
+    if (!searchTerm.trim()) return catalogPreparations;
+    const term = searchTerm.toLowerCase().trim();
+    return catalogPreparations.filter(prep => {
+      const matchName = prep.name.toLowerCase().includes(term);
+      const matchCategory = prep.category?.toLowerCase().includes(term);
+      const matchIngs = prep.ingredients?.some(i => i.name?.toLowerCase().includes(term));
+      return matchName || matchCategory || matchIngs;
+    });
+  }, [catalogPreparations, searchTerm]);
 
   const stylesList = Object.values(VARIEGATO_STYLES);
 
@@ -77,62 +102,159 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
         )}
       </div>
 
-      {/* LINHA 1: Caixa de Nome + Catálogo alinhada com os Botões de Ação */}
+      {/* LINHA 1: Caixa de Nome + Catálogo Integrado alinhada com os Botões de Ação */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-        <div className="flex-1 max-w-2xl flex items-center gap-2">
-          <input
-            type="text"
-            value={recipeName}
-            onChange={e => onRecipeNameChange(e.target.value)}
-            placeholder="Nome da Mescla / Variegato..."
-            className="flex-1 min-w-0 text-base sm:text-lg font-black bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-inner"
-          />
+        {/* Bloco Unificado: Input de Nome + Botão Catálogo com Dropdown Pesquisável */}
+        <div ref={catalogRef} className="relative flex-1 min-w-[260px] sm:min-w-[340px] max-w-2xl">
+          <div
+            className={`flex items-center bg-slate-900 border ${
+              isCatalogOpen
+                ? 'border-amber-500 ring-2 ring-amber-500/20'
+                : 'border-slate-700 hover:border-slate-600 focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20'
+            } rounded-xl shadow-inner transition-all overflow-hidden`}
+          >
+            <input
+              type="text"
+              value={recipeName}
+              onChange={e => onRecipeNameChange(e.target.value)}
+              placeholder="Nome da Mescla / Variegato..."
+              className="flex-1 min-w-0 bg-transparent px-4 py-2.5 text-base sm:text-lg font-bold text-amber-300 placeholder-slate-500 focus:outline-none"
+              title="Clique para editar o nome do variegato na bancada"
+            />
 
-          {/* Dropdown de Catálogo de Variegatos integrado */}
-          <div className="relative shrink-0" ref={catalogRef}>
             <button
               type="button"
               onClick={() => setIsCatalogOpen(!isCatalogOpen)}
-              className="h-10 px-3 rounded-xl border border-slate-700 bg-slate-900/90 text-slate-300 hover:text-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
-              title="Carregar um variegato do catálogo existente"
+              className={`px-3 sm:px-3.5 py-2.5 border-l border-slate-700/80 bg-slate-800/70 hover:bg-slate-700/80 text-xs font-bold text-slate-300 hover:text-amber-300 flex items-center gap-1.5 transition-colors shrink-0 ${
+                isCatalogOpen ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : ''
+              }`}
+              title={`Abrir catálogo e buscar receitas (${catalogPreparations.length} mesclas cadastradas)`}
             >
-              <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-              <span>Catálogo ({catalogPreparations.length})</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+              <Search className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="hidden sm:inline">Catálogo ({catalogPreparations.length})</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${
+                  isCatalogOpen ? 'rotate-180 text-amber-400' : ''
+                }`}
+              />
             </button>
+          </div>
 
-            {isCatalogOpen && (
-              <div className="absolute right-0 top-12 z-50 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-2 max-h-72 overflow-y-auto animate-in fade-in duration-150">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 block border-b border-slate-800">
-                  Variegatos Cadastrados
-                </span>
-                {catalogPreparations.length === 0 ? (
-                  <div className="p-3 text-xs text-slate-500 text-center">
-                    Nenhum variegato cadastrado no momento.
+          {/* Dropdown Menu com Busca e Lista */}
+          {isCatalogOpen && (
+            <div className="absolute left-0 top-full mt-2 w-full sm:w-[460px] bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[440px] animate-in fade-in zoom-in-95 duration-150">
+              {/* Campo de Busca */}
+              <div className="p-3 border-b border-slate-800 bg-slate-900/95 sticky top-0 z-10 space-y-2">
+                <div className="relative">
+                  <Search className="w-4 h-4 text-amber-400 absolute left-3 top-3" />
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    placeholder="Digite o nome (ex: morango, trufado, caramelo)..."
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-8 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-medium"
+                  />
+                  {searchTerm && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchTerm('')}
+                      className="absolute right-2.5 top-2.5 p-0.5 text-slate-400 hover:text-white rounded"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                  <span>{filteredPreparations.length} variegatos encontrados</span>
+                  <span>Clique para carregar na bancada</span>
+                </div>
+              </div>
+
+              {/* Lista de Opções */}
+              <div className="overflow-y-auto divide-y divide-slate-800/60 p-1.5 space-y-1">
+                {/* Opção Criar Nova Mescla do zero */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onNewRecipe();
+                    setIsCatalogOpen(false);
+                  }}
+                  className="w-full text-left p-3 rounded-xl transition-all flex items-center justify-between hover:bg-slate-800/80 text-slate-200"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                      <Plus className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-amber-300">
+                        Iniciar Nova Mescla Personalizada
+                      </div>
+                      <div className="text-xs text-slate-400">
+                        Comece do zero com a bancada em branco
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                {filteredPreparations.length === 0 ? (
+                  <div className="p-6 text-center text-sm text-slate-500">
+                    Nenhum variegato encontrado com &quot;{searchTerm}&quot;
                   </div>
                 ) : (
-                  catalogPreparations.map(prep => (
-                    <button
-                      key={prep.id}
-                      type="button"
-                      onClick={() => {
-                        onLoadPreparation(prep);
-                        setIsCatalogOpen(false);
-                      }}
-                      className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs text-slate-200 hover:bg-slate-800 hover:text-amber-300 flex items-center justify-between transition-colors"
-                    >
-                      <span className="truncate">{prep.name}</span>
-                      {prep.costKg && (
-                        <span className="text-[10px] font-mono text-emerald-400 shrink-0 ml-2">
-                          R${prep.costKg.toFixed(1)}/kg
-                        </span>
-                      )}
-                    </button>
-                  ))
+                  filteredPreparations.map(prep => {
+                    const isSelected = prep.name.trim().toLowerCase() === recipeName.trim().toLowerCase();
+                    return (
+                      <button
+                        key={prep.id}
+                        type="button"
+                        onClick={() => {
+                          onLoadPreparation(prep);
+                          setIsCatalogOpen(false);
+                        }}
+                        className={`w-full text-left p-2.5 sm:p-3 rounded-xl transition-all flex items-center justify-between ${
+                          isSelected
+                            ? 'bg-amber-500/20 border border-amber-500/40 text-amber-300'
+                            : 'hover:bg-slate-800/80 text-slate-200'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0 pr-2">
+                          <div
+                            className={`w-2 h-2 rounded-full shrink-0 ${
+                              isSelected ? 'bg-amber-400 ring-2 ring-amber-400/40' : 'bg-slate-600'
+                            }`}
+                          />
+                          <div className="min-w-0">
+                            <div className="text-sm font-semibold truncate">
+                              {prep.name}
+                            </div>
+                            <div className="text-[11px] text-slate-400 flex items-center gap-2">
+                              <span>{prep.ingredients?.length || 0} insumos</span>
+                              {prep.category && (
+                                <>
+                                  <span>•</span>
+                                  <span className="capitalize">{prep.category}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {prep.costKg != null && prep.costKg > 0 && (
+                          <div className="text-right shrink-0">
+                            <div className="text-xs font-bold font-mono text-emerald-400">
+                              R$ {prep.costKg.toFixed(2)}/kg
+                            </div>
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Action Buttons */}
@@ -144,7 +266,7 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
             title="Iniciar uma nova mescla do zero"
           >
             <Plus className="w-4 h-4 text-amber-400" />
-            <span>+ Nova Mescla</span>
+            <span>Nova Mescla</span>
           </button>
 
           <button
