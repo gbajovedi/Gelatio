@@ -2097,6 +2097,24 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'catalog_sync_phase_11', value: 1 });
       }
 
+      // Sincronizar saneamento de allergenDetails como array (prevenção de crash no PrePreparosList)
+      const allergenFixSetting = await this.settings.get('allergen_details_array_fix_v1');
+      if (!allergenFixSetting) {
+        console.log('Sincronizando saneamento de alérgenos como array nos insumos...');
+        const currentIngs = await this.ingredients.toArray();
+        for (const ing of currentIngs) {
+          if (ing.allergenDetails && !Array.isArray(ing.allergenDetails)) {
+            const raw = ing.allergenDetails as any;
+            const normalized = typeof raw === 'string'
+              ? raw.split(/,\s*|\s+e\s+/).map((s: string) => s.replace(/^Contém\s+/i, '').trim()).filter(Boolean)
+              : [String(raw)];
+            await this.ingredients.update(ing.id, { allergenDetails: normalized });
+          }
+        }
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.settings.put({ key: 'allergen_details_array_fix_v1', value: 1 });
+      }
+
 
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();

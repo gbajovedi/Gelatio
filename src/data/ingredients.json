@@ -3971,7 +3971,9 @@
     "pac": 0.038,
     "protein": 0.027,
     "hasAllergen": true,
-    "allergenDetails": "Contém Leite"
+    "allergenDetails": [
+      "Leite / Lactose"
+    ]
   },
   {
     "id": "ing_252",
@@ -3988,7 +3990,11 @@
     "pac": 0.56,
     "protein": 0.06,
     "hasAllergen": true,
-    "allergenDetails": "Contém Avelã, Leite e Soja"
+    "allergenDetails": [
+      "Leite / Lactose",
+      "Castanhas & Nozes",
+      "Soja"
+    ]
   },
   {
     "id": "ing_253",
@@ -4005,7 +4011,9 @@
     "pac": 0.04,
     "protein": 0.15,
     "hasAllergen": true,
-    "allergenDetails": "Contém Avelã"
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   },
   {
     "id": "ing_254",
@@ -4022,7 +4030,9 @@
     "pac": 0.04,
     "protein": 0.21,
     "hasAllergen": true,
-    "allergenDetails": "Contém Amêndoa"
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   },
   {
     "id": "ing_255",
@@ -4039,7 +4049,9 @@
     "pac": 0.04,
     "protein": 0.15,
     "hasAllergen": true,
-    "allergenDetails": "Contém Avelã"
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   },
   {
     "id": "ing_256",
@@ -4056,7 +4068,9 @@
     "pac": 0.03,
     "protein": 0.14,
     "hasAllergen": true,
-    "allergenDetails": "Contém Castanha-do-Pará"
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   },
   {
     "id": "ing_257",
@@ -4089,7 +4103,9 @@
     "pac": 0.08,
     "protein": 0.2,
     "hasAllergen": true,
-    "allergenDetails": "Contém Pistache"
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   },
   {
     "id": "ing_259",
@@ -4106,7 +4122,9 @@
     "pac": 0.03,
     "protein": 0.15,
     "hasAllergen": true,
-    "allergenDetails": "Contém Nozes"
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   },
   {
     "id": "ing_260",
@@ -4123,7 +4141,9 @@
     "pac": 0.01,
     "protein": 0.18,
     "hasAllergen": true,
-    "allergenDetails": "Contém Gergelim"
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   },
   {
     "id": "ing_261",
@@ -4140,7 +4160,9 @@
     "pac": 0,
     "protein": 0,
     "hasAllergen": true,
-    "allergenDetails": "Contém Gergelim"
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   },
   {
     "id": "ing_262",
@@ -4189,7 +4211,9 @@
     "pac": 0.35,
     "protein": 0.05,
     "hasAllergen": true,
-    "allergenDetails": "Contém Glúten e Derivados de Milho"
+    "allergenDetails": [
+      "Glúten"
+    ]
   },
   {
     "id": "ing_265",
@@ -4222,7 +4246,9 @@
     "pac": 0.233,
     "protein": 0.035,
     "hasAllergen": true,
-    "allergenDetails": "Contém Leite e Derivados"
+    "allergenDetails": [
+      "Leite / Lactose"
+    ]
   },
   {
     "id": "ing_267",
@@ -4239,7 +4265,9 @@
     "pac": 0.14,
     "protein": 0.04,
     "hasAllergen": true,
-    "allergenDetails": "Contém Leite e Derivados"
+    "allergenDetails": [
+      "Leite / Lactose"
+    ]
   },
   {
     "id": "ing_268",
@@ -4256,7 +4284,9 @@
     "pac": 0.54,
     "protein": 0.008,
     "hasAllergen": true,
-    "allergenDetails": "Contém Leite e Derivados"
+    "allergenDetails": [
+      "Leite / Lactose"
+    ]
   },
   {
     "id": "ing_269",

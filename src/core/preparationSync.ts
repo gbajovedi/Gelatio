@@ -68,8 +68,14 @@ export function calculatePreparationNutrients(
       if (ing.hasAllergen) {
         hasAllergen = true;
       }
-      if (ing.allergenDetails && ing.allergenDetails.length > 0) {
-        ing.allergenDetails.forEach(d => allergenDetailsSet.add(d));
+      if (ing.allergenDetails) {
+        if (Array.isArray(ing.allergenDetails)) {
+          ing.allergenDetails.forEach(d => {
+            if (typeof d === 'string' && d.trim().length > 0) allergenDetailsSet.add(d.trim());
+          });
+        } else if (typeof ing.allergenDetails === 'string' && (ing.allergenDetails as string).trim().length > 0) {
+          allergenDetailsSet.add((ing.allergenDetails as string).trim());
+        }
       }
     }
   }

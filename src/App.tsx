@@ -6,6 +6,7 @@ import { Recipe, Ingredient, Preparation } from './types/gelato';
 import { Navbar, NavTab } from './components/Navbar';
 import { BalancingScreen } from './components/Balanceamento/BalancingScreen';
 import { RecipeList } from './components/Receitas/RecipeList';
+import { ErrorBoundary } from './components/Common/ErrorBoundary';
 
 // Code-splitting via lazy loading para otimização do bundle inicial
 const VariegatoBalancingScreen = lazy(() => import('./components/Variegatos/VariegatoBalancingScreen').then(m => ({ default: m.VariegatoBalancingScreen })));
@@ -243,19 +244,21 @@ export function App() {
           style={{ display: activeTab === 'balanceamento' ? 'block' : 'none' }}
         >
           {visitedTabs.has('balanceamento') && (
-            <BalancingScreen
-              recipes={recipes}
-              ingredients={ingredients}
-              initialRecipeId={activeRecipeId}
-              recipeSelectionToken={recipeSelectionToken}
-              onRecipeSaved={refreshData}
-              onActiveRecipeChange={(id) => {
-                setActiveRecipeId(id);
-                try {
-                  localStorage.setItem(STORAGE_RECIPE_KEY, id);
-                } catch {}
-              }}
-            />
+            <ErrorBoundary tabName="Balanceamento" onResetToDefaultTab={() => handleTabChange('balanceamento')}>
+              <BalancingScreen
+                recipes={recipes}
+                ingredients={ingredients}
+                initialRecipeId={activeRecipeId}
+                recipeSelectionToken={recipeSelectionToken}
+                onRecipeSaved={refreshData}
+                onActiveRecipeChange={(id) => {
+                  setActiveRecipeId(id);
+                  try {
+                    localStorage.setItem(STORAGE_RECIPE_KEY, id);
+                  } catch {}
+                }}
+              />
+            </ErrorBoundary>
           )}
         </div>
 
@@ -266,13 +269,15 @@ export function App() {
           style={{ display: activeTab === 'variegatos' ? 'block' : 'none' }}
         >
           {visitedTabs.has('variegatos') && (
-            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando Bancada de Variegatos & Mesclas...</div>}>
-              <VariegatoBalancingScreen
-                ingredients={ingredients}
-                preparations={preparations}
-                onRefresh={refreshData}
-              />
-            </Suspense>
+            <ErrorBoundary tabName="Bancada de Variegatos & Mesclas" onResetToDefaultTab={() => handleTabChange('balanceamento')}>
+              <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando Bancada de Variegatos & Mesclas...</div>}>
+                <VariegatoBalancingScreen
+                  ingredients={ingredients}
+                  preparations={preparations}
+                  onRefresh={refreshData}
+                />
+              </Suspense>
+            </ErrorBoundary>
           )}
         </div>
 
@@ -283,13 +288,15 @@ export function App() {
           style={{ display: activeTab === 'receitas' ? 'block' : 'none' }}
         >
           {visitedTabs.has('receitas') && (
-            <RecipeList
-              recipes={recipes}
-              ingredients={ingredients}
-              onSelectRecipe={handleSelectRecipeFromCatalog}
-              onProduceRecipe={handleProduceRecipeFromCatalog}
-              onRefresh={refreshData}
-            />
+            <ErrorBoundary tabName="Catálogo de Receitas" onResetToDefaultTab={() => handleTabChange('balanceamento')}>
+              <RecipeList
+                recipes={recipes}
+                ingredients={ingredients}
+                onSelectRecipe={handleSelectRecipeFromCatalog}
+                onProduceRecipe={handleProduceRecipeFromCatalog}
+                onRefresh={refreshData}
+              />
+            </ErrorBoundary>
           )}
         </div>
 
@@ -300,12 +307,14 @@ export function App() {
           style={{ display: activeTab === 'ingredientes' ? 'block' : 'none' }}
         >
           {visitedTabs.has('ingredientes') && (
-            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando catálogo de insumos...</div>}>
-              <IngredientManager
-                ingredients={ingredients}
-                onRefresh={refreshData}
-              />
-            </Suspense>
+            <ErrorBoundary tabName="Catálogo de Insumos" onResetToDefaultTab={() => handleTabChange('balanceamento')}>
+              <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando catálogo de insumos...</div>}>
+                <IngredientManager
+                  ingredients={ingredients}
+                  onRefresh={refreshData}
+                />
+              </Suspense>
+            </ErrorBoundary>
           )}
         </div>
 
@@ -316,14 +325,16 @@ export function App() {
           style={{ display: activeTab === 'preparos' ? 'block' : 'none' }}
         >
           {visitedTabs.has('preparos') && (
-            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando pré-preparos...</div>}>
-              <PrePreparosList
-                preparations={preparations}
-                availableIngredients={ingredients}
-                recipes={recipes}
-                onRefresh={refreshData}
-              />
-            </Suspense>
+            <ErrorBoundary tabName="Pré-preparos, Bases & Variegatos" onResetToDefaultTab={() => handleTabChange('balanceamento')}>
+              <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando pré-preparos...</div>}>
+                <PrePreparosList
+                  preparations={preparations}
+                  availableIngredients={ingredients}
+                  recipes={recipes}
+                  onRefresh={refreshData}
+                />
+              </Suspense>
+            </ErrorBoundary>
           )}
         </div>
 
@@ -334,9 +345,11 @@ export function App() {
           style={{ display: activeTab === 'financeiro' ? 'block' : 'none' }}
         >
           {visitedTabs.has('financeiro') && (
-            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando calculadora de custos...</div>}>
-              <PricingCalculator />
-            </Suspense>
+            <ErrorBoundary tabName="Calculadora de Custos" onResetToDefaultTab={() => handleTabChange('balanceamento')}>
+              <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando calculadora de custos...</div>}>
+                <PricingCalculator />
+              </Suspense>
+            </ErrorBoundary>
           )}
         </div>
 
@@ -347,14 +360,16 @@ export function App() {
           style={{ display: activeTab === 'estoque' ? 'block' : 'none' }}
         >
           {visitedTabs.has('estoque') && (
-            <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando módulo de estoque...</div>}>
-              <StockScreen
-                recipes={recipes}
-                ingredients={ingredients}
-                initialProduceRecipeId={produceRecipeId}
-                onClearInitialProduceRecipeId={() => setProduceRecipeId(undefined)}
-              />
-            </Suspense>
+            <ErrorBoundary tabName="Módulo de Estoque" onResetToDefaultTab={() => handleTabChange('balanceamento')}>
+              <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando módulo de estoque...</div>}>
+                <StockScreen
+                  recipes={recipes}
+                  ingredients={ingredients}
+                  initialProduceRecipeId={produceRecipeId}
+                  onClearInitialProduceRecipeId={() => setProduceRecipeId(undefined)}
+                />
+              </Suspense>
+            </ErrorBoundary>
           )}
         </div>
       </main>

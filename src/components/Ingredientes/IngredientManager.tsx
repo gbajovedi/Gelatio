@@ -214,7 +214,13 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
     setNewPod(ing.pod || 0);
     setNewPac(ing.pac || 0);
     setNewHasAllergen(!!ing.hasAllergen);
-    setSelectedAllergens(ing.allergenDetails || []);
+    setSelectedAllergens(
+      Array.isArray(ing.allergenDetails)
+        ? ing.allergenDetails
+        : typeof ing.allergenDetails === 'string'
+        ? [ing.allergenDetails]
+        : []
+    );
     setIsAddModalOpen(true);
   };
 

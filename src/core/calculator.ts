@@ -82,11 +82,18 @@ export function extractItemAllergens(
   };
 
   // 1. Prioridade máxima: detalhes de alérgenos cadastrados no insumo (ex: Nutella -> Leite, Castanhas & Nozes, Soja)
-  if (ing?.allergenDetails && ing.allergenDetails.length > 0) {
-    for (const d of ing.allergenDetails) {
-      allergens.push(normalizeAllergen(d));
-      if (/leite|lactose/i.test(d)) hasLactose = true;
-      if (/glúten|trigo|aveia|cevada/i.test(d)) hasGluten = true;
+  if (ing?.allergenDetails) {
+    const details = Array.isArray(ing.allergenDetails)
+      ? ing.allergenDetails
+      : typeof ing.allergenDetails === 'string'
+      ? [(ing.allergenDetails as string)]
+      : [];
+    for (const d of details) {
+      if (typeof d === 'string' && d.trim().length > 0) {
+        allergens.push(normalizeAllergen(d));
+        if (/leite|lactose/i.test(d)) hasLactose = true;
+        if (/glúten|trigo|aveia|cevada/i.test(d)) hasGluten = true;
+      }
     }
   }
 
