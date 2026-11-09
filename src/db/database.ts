@@ -2097,6 +2097,47 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'catalog_sync_phase_11', value: 1 });
       }
 
+      // Sincronizar simplificação de categorias de Sorbets e fusão de Gelatos Tradicionais de Leite (Fase 12)
+      const phase12Setting = await this.settings.get('catalog_sync_phase_12_sorbets_and_milk');
+      if (!phase12Setting) {
+        console.log('Sincronizando simplificação de Sorbets Cítricos, Sorbets Polposos e Gelatos de Leite (Fase 12)...');
+        const allDbRecipes = await this.recipes.toArray();
+        for (const rec of allDbRecipes) {
+          let needUpdate = false;
+          let newCategory = rec.category;
+          let newTargetStyle = rec.targetStyle;
+
+          if (rec.category === 'Gelatos Tradicionais de Leite') {
+            newCategory = 'Gelatos de Leite';
+            needUpdate = true;
+          }
+          if (rec.category === 'Sorbets Cítricos / Frutas Ácidas') {
+            newCategory = 'Sorbets Cítricos';
+            needUpdate = true;
+          }
+          if (rec.targetStyle === 'Sorbets Cítricos / Frutas Ácidas') {
+            newTargetStyle = 'Sorbets Cítricos';
+            needUpdate = true;
+          }
+          if (rec.category === 'Sorbets Polposos / Frutas Densas') {
+            newCategory = 'Sorbets Polposos';
+            needUpdate = true;
+          }
+          if (rec.targetStyle === 'Sorbets Polposos / Frutas Densas') {
+            newTargetStyle = 'Sorbets Polposos';
+            needUpdate = true;
+          }
+
+          if (needUpdate) {
+            await this.recipes.update(rec.id, {
+              category: newCategory,
+              targetStyle: newTargetStyle
+            });
+          }
+        }
+        await this.settings.put({ key: 'catalog_sync_phase_12_sorbets_and_milk', value: 1 });
+      }
+
       // Sincronizar saneamento de allergenDetails como array (prevenção de crash no PrePreparosList)
       const allergenFixSetting = await this.settings.get('allergen_details_array_fix_v1');
       if (!allergenFixSetting) {

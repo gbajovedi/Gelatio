@@ -1,5 +1,5 @@
 import React from 'react';
-import { Scale, BookOpen, Utensils, ChefHat, DollarSign, Database, Package, Sparkles } from 'lucide-react';
+import { Scale, BookOpen, Utensils, ChefHat, DollarSign, Database, Package, Blend } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import gelatioLogo from '../assets/gelatio-logo.png';
 
@@ -13,13 +13,13 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBackup }) => {
   const tabs = [
-    { id: 'balanceamento', label: 'Balanceamento', shortLabel: 'Balanceamento', icon: Scale },
-    { id: 'variegatos', label: 'Variegatos & Mesclas', shortLabel: 'Variegatos', icon: Sparkles },
-    { id: 'receitas', label: 'Livro de Receitas', shortLabel: 'Receitas', icon: BookOpen },
-    { id: 'ingredientes', label: 'Insumos & Custos', shortLabel: 'Insumos', icon: Utensils },
-    { id: 'preparos', label: 'Pré-preparos', shortLabel: 'Pré-preparos', icon: ChefHat },
-    { id: 'financeiro', label: 'Precificação', shortLabel: 'Precificação', icon: DollarSign },
-    { id: 'estoque', label: 'Estoque & PDV', shortLabel: 'Estoque', icon: Package },
+    { id: 'balanceamento', label: 'Balanceamento', shortLabel: 'Balancear', icon: Scale },
+    { id: 'variegatos', label: 'Mesclas', shortLabel: 'Mesclas', icon: Blend },
+    { id: 'ingredientes', label: 'Insumos', shortLabel: 'Insumos', icon: Utensils },
+    { id: 'preparos', label: 'Preparos', shortLabel: 'Preparos', icon: ChefHat },
+    { id: 'receitas', label: 'Receitas', shortLabel: 'Receitas', icon: BookOpen },
+    { id: 'financeiro', label: 'Precificação', shortLabel: 'Custos', icon: DollarSign },
+    { id: 'estoque', label: 'Estoque', shortLabel: 'Estoque', icon: Package },
   ] as const;
 
   return (
@@ -71,18 +71,6 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
                       <span className="hidden xl:inline">Balanceamento</span>
                       <span className="xl:hidden">Balancear</span>
                     </>
-                  ) : tab.id === 'variegatos' ? (
-                    <>
-                      <span className="hidden 2xl:inline">Variegatos & </span>Mesclas
-                    </>
-                  ) : tab.id === 'receitas' ? (
-                    <>
-                      <span className="hidden 2xl:inline">Livro de </span>Receitas
-                    </>
-                  ) : tab.id === 'ingredientes' ? (
-                    <>
-                      Insumos<span className="hidden 2xl:inline"> & Custos</span>
-                    </>
                   ) : (
                     tab.label
                   )}
@@ -102,9 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
             title="Importar ou Exportar Dados (.JSON)"
           >
             <Database className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
-            <span>
-              Backup<span className="hidden 2xl:inline"> / Dados</span>
-            </span>
+            <span>Backup</span>
           </button>
         </nav>
 

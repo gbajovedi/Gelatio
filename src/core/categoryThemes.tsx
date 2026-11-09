@@ -114,7 +114,7 @@ export const getCategoryTheme = (category: string = ''): CategoryTheme => {
     };
   }
 
-  // 6. Sorbets Cítricos / Frutas Ácidas -> Citrus (Fatia de cítrico fresca)
+  // 6. Sorbets Cítricos -> Citrus (Fatia de cítrico fresca)
   if (cat.includes('cítric') || cat.includes('citric') || cat.includes('ácid') || cat.includes('acida')) {
     return {
       gradient: 'from-amber-400 via-lime-400 to-emerald-400',
@@ -123,7 +123,7 @@ export const getCategoryTheme = (category: string = ''): CategoryTheme => {
     };
   }
 
-  // 7. Sorbets Polposos / Frutas Densas -> Palmtree (Palmeira tropical)
+  // 7. Sorbets Polposos -> Palmtree (Palmeira tropical)
   if (cat.includes('polpos') || cat.includes('densa') || cat.includes('tropical')) {
     return {
       gradient: 'from-amber-500 via-orange-500 to-rose-400',

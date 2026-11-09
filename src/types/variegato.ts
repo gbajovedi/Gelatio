@@ -23,6 +23,8 @@ export interface VariegatoItemRow {
 export interface VariegatoStyleLimits {
   brix: number;
   pac: number;
+  pacOnWater?: number;
+  pod?: number;
   sugars: number;
   fat: number;
   hydrocolloids: number;
@@ -44,6 +46,8 @@ export interface VariegatoStyleStandard {
 export interface VariegatoAnalysisPercentages {
   brix: number;             // % sólidos solúveis pós-evaporação
   pac: number;              // PAC efetivo relativo pós-cocção (base 1.000g)
+  pacOnWater: number;       // PAC sobre a fase aquosa: (Pontos PAC / Água g) * 100
+  pod: number;              // POD (Poder Adoçante Relativo) concentrado pós-cocção
   sugars: number;           // % de açúcares totais na mescla final
   fat: number;              // % de lipídeos totais
   hydrocolloids: number;    // % de pectina, gomas, amidos
@@ -56,6 +60,7 @@ export interface VariegatoThermalStatus {
   application: VariegatoThermalApplication;
   targetTemp: number; // -12 ou -18
   pacValue: number;
+  pacOnWater: number;
   status: 'ideal' | 'freezing_risk' | 'too_fluid';
   label: string;
   description: string;

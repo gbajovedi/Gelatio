@@ -244,6 +244,10 @@ describe('Variegato Balancer Calculator Engine', () => {
     // Pectina no peso final: 6g / 644.7g = ~0.93%
     expect(result.percentages.hydrocolloids).toBeCloseTo(0.93, 2);
 
+    // Métricas novas: PAC sobre Água e POD
+    expect(result.percentages.pacOnWater).toBeGreaterThan(0);
+    expect(result.percentages.pod).toBeGreaterThan(0);
+
     // Açúcares e Sacarose Ratio:
     // Açúcar morango (600*0.08=48g) + Açúcar refinado (250g) + Glicose (150*0.42=63g) = 361g
     // Sacarose total = 250g

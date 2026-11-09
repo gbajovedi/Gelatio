@@ -128,6 +128,58 @@ export const VariegatoStyleModal: React.FC<VariegatoStyleModalProps> = ({
               </div>
             </div>
 
+            {/* PAC sobre Água Livre */}
+            <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div>
+                <span className="text-xs font-bold text-slate-200">PAC sobre Água Livre</span>
+                <p className="text-[10px] text-slate-400">Poder anticongelante na fase aquosa real</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  step="10"
+                  value={formData.min.pacOnWater || 180}
+                  onChange={e => handleChangeMinMax('pacOnWater', 'min', parseFloat(e.target.value) || 0)}
+                  className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold text-white text-center"
+                />
+                <span className="text-xs text-slate-500">até</span>
+                <input
+                  type="number"
+                  step="10"
+                  value={formData.max.pacOnWater || 340}
+                  onChange={e => handleChangeMinMax('pacOnWater', 'max', parseFloat(e.target.value) || 0)}
+                  className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold text-white text-center"
+                />
+                <span className="text-xs text-teal-400">pts</span>
+              </div>
+            </div>
+
+            {/* POD Concentrado */}
+            <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div>
+                <span className="text-xs font-bold text-slate-200">POD Concentrado (Doçura Relativa)</span>
+                <p className="text-[10px] text-slate-400">Poder adoçante sobre sacarose pura</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  step="1"
+                  value={formData.min.pod || 38}
+                  onChange={e => handleChangeMinMax('pod', 'min', parseFloat(e.target.value) || 0)}
+                  className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold text-white text-center"
+                />
+                <span className="text-xs text-slate-500">até</span>
+                <input
+                  type="number"
+                  step="1"
+                  value={formData.max.pod || 60}
+                  onChange={e => handleChangeMinMax('pod', 'max', parseFloat(e.target.value) || 0)}
+                  className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold text-white text-center"
+                />
+                <span className="text-xs text-pink-400">%</span>
+              </div>
+            </div>
+
             {/* Açúcares */}
             <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800 flex items-center justify-between">
               <div>

@@ -89,17 +89,20 @@ export const VariegatoThermalCard: React.FC<VariegatoThermalCardProps> = ({
       {/* Main Metric Value */}
       <div className="flex items-baseline justify-between pt-1">
         <div>
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">PAC da Mescla Concentrada</span>
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">PAC Concentrado (1kg)</span>
           <div className="flex items-baseline gap-2 mt-0.5">
             <span className="text-2xl font-mono font-black text-cyan-300">{thermalStatus.pacValue}</span>
             <span className="text-xs font-semibold text-slate-400">pontos</span>
           </div>
         </div>
         <div className="text-right">
-          <span className="text-[10px] text-slate-400">Faixa Segura:</span>
-          <div className="text-xs font-mono font-bold text-slate-300">
-            {isVitrine ? '480 – 650 PAC' : '550 – 750 PAC'}
+          <span className="text-[10px] text-slate-400">PAC sobre Água Livre:</span>
+          <div className="text-sm font-mono font-black text-teal-300 mt-0.5">
+            {thermalStatus.pacOnWater || 0} pts
           </div>
+          <span className="text-[10px] text-slate-500 font-mono">
+            {isVitrine ? 'Alvo: 180–320' : 'Alvo: 250–450'}
+          </span>
         </div>
       </div>
 

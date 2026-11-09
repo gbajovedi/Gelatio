@@ -20,8 +20,8 @@ export const STYLES_WITH_CARPIGIANI_DATA = new Set<string>([
   'Gelatos de Oleaginosas',
   'Gelatos de Leite com Fruta',
   'Sorbets',
-  'Sorbets Cítricos / Frutas Ácidas',
-  'Sorbets Polposos / Frutas Densas'
+  'Sorbets Cítricos',
+  'Sorbets Polposos'
 ]);
 
 export function hasCarpigianiData(styleName: string): boolean {
@@ -123,8 +123,8 @@ export const CARPIGIANI_STRICT_STYLES: Record<string, StyleStandard> = {
       protein: 0
     }
   },
-  'Sorbets Cítricos / Frutas Ácidas': {
-    name: 'Sorbets Cítricos / Frutas Ácidas',
+  'Sorbets Cítricos': {
+    name: 'Sorbets Cítricos',
     pacDivisor: 24,
     min: {
       sugars: 0.26,
@@ -149,8 +149,8 @@ export const CARPIGIANI_STRICT_STYLES: Record<string, StyleStandard> = {
       protein: 0
     }
   },
-  'Sorbets Polposos / Frutas Densas': {
-    name: 'Sorbets Polposos / Frutas Densas',
+  'Sorbets Polposos': {
+    name: 'Sorbets Polposos',
     pacDivisor: 24,
     min: {
       sugars: 0.26,

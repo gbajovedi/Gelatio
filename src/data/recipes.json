@@ -1601,7 +1601,7 @@
   {
     "id": "rec_16",
     "name": "Gelato de Cereal Matinal Tostado (Sucrilhos / Corn Flakes) (Direto ao Ponto)",
-    "category": "Gelatos Tradicionais de Leite",
+    "category": "Gelatos de Leite",
     "targetStyle": "Gelatos de Leite",
     "totalGrams": 1001,
     "description": "Gelato com sabor reconfortante de leite com cereal matinal tostado, obtido por infusão coada de flocos de milho na calda base e mesclado com cereais crocantes impermeabilizados com manteiga de cacau.",
@@ -7005,8 +7005,8 @@
   {
     "id": "rec_71",
     "name": "Sorbet de Cupuaçu (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Polpa Cupuaçu",
@@ -7102,8 +7102,8 @@
   {
     "id": "rec_72",
     "name": "Sorbet de Manga com Maracujá (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Manga",
@@ -7214,8 +7214,8 @@
   {
     "id": "rec_73",
     "name": "Sorbet de Limão (Direto ao Ponto)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Suco de Limão",
@@ -7307,8 +7307,8 @@
   {
     "id": "rec_74",
     "name": "Sorbet de Framboesa (Direto ao Ponto)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Framboesa",
@@ -7404,8 +7404,8 @@
   {
     "id": "rec_75",
     "name": "Sorbet de Banana (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Banana",
@@ -7501,8 +7501,8 @@
   {
     "id": "rec_76",
     "name": "Sorbet de Melancia Refrescante (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Melancia",
@@ -7598,8 +7598,8 @@
   {
     "id": "rec_77",
     "name": "Sorbet de Maracujá com Pêssego (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Maracujá",
@@ -7695,8 +7695,8 @@
   {
     "id": "rec_78",
     "name": "Sorbet de Mexerica (Tangerina) (Direto ao Ponto)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Tangerina / Mexerica",
@@ -7792,8 +7792,8 @@
   {
     "id": "rec_79",
     "name": "Sorbet de Açaí Tradicional (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Polpa de Açaí (10-14% Sólidos)",
@@ -7889,8 +7889,8 @@
   {
     "id": "rec_80",
     "name": "Sorbet de Açaí com Frutas (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Polpa de Açaí (10-14% Sólidos)",
@@ -7990,8 +7990,8 @@
   {
     "id": "rec_81",
     "name": "Sorbet Mix de Frutas Vermelhas (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Frutas Vermelhas",
@@ -8087,8 +8087,8 @@
   {
     "id": "rec_82",
     "name": "Sorbet Pink Lemonade (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Água",
@@ -8188,8 +8188,8 @@
   {
     "id": "rec_83",
     "name": "Sorbet de Abacaxi e Hortelã (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Abacaxi",
@@ -8285,8 +8285,8 @@
   {
     "id": "rec_84",
     "name": "Sorbet de Atemoia (Addolcire)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Atemoia",
@@ -8382,8 +8382,8 @@
   {
     "id": "rec_85",
     "name": "Sorbet de Caqui (Addolcire)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Caqui",
@@ -8475,8 +8475,8 @@
   {
     "id": "rec_86",
     "name": "Sorbet de Figo (Addolcire)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Figo",
@@ -8572,8 +8572,8 @@
   {
     "id": "rec_87",
     "name": "Sorbet de Frutas Vermelhas (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Frutas Vermelhas",
@@ -8669,8 +8669,8 @@
   {
     "id": "rec_88",
     "name": "Sorbet de Jabuticaba (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Jabuticaba",
@@ -8762,8 +8762,8 @@
   {
     "id": "rec_89",
     "name": "Sorbet de Laranja e Gengibre (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Suco de Laranja",
@@ -8855,8 +8855,8 @@
   {
     "id": "rec_90",
     "name": "Sorbet de Mamão (Addolcire)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Mamão",
@@ -8952,8 +8952,8 @@
   {
     "id": "rec_91",
     "name": "Sorbet de Mamão e Laranja (Addolcire)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Mamão",
@@ -9049,8 +9049,8 @@
   {
     "id": "rec_92",
     "name": "Sorbet de Manga (Addolcire)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Manga",
@@ -9146,8 +9146,8 @@
   {
     "id": "rec_93",
     "name": "Sorbet de Maracujá (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Maracujá",
@@ -9239,8 +9239,8 @@
   {
     "id": "rec_94",
     "name": "Sorbet de Melancia e Hortelã (Addolcire)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Água",
@@ -9336,8 +9336,8 @@
   {
     "id": "rec_95",
     "name": "Sorbet de Mexerica (Addolcire)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Tangerina / Mexerica",
@@ -9433,8 +9433,8 @@
   {
     "id": "rec_96",
     "name": "Sorbet de Pêssego e Lavanda (Addolcire)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Pêssego",
@@ -15955,8 +15955,8 @@
   {
     "id": "rec_184",
     "name": "Sorbet de Manga Refrescante com Açúcar de Maçã (Redução de Açúcar) (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "totalGrams": 1000,
     "ingredients": [
       {
@@ -16044,8 +16044,8 @@
   {
     "id": "rec_185",
     "name": "Sorbet de Açaí com Morango com Açúcar de Maçã (Redução de Açúcar) (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "totalGrams": 1000,
     "ingredients": [
       {
@@ -16137,8 +16137,8 @@
   {
     "id": "rec_186",
     "name": "Sorbet de Maracujá com Polidextrose e Açúcar de Maçã (Redução de Açúcar) (Direto ao Ponto)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "totalGrams": 1000,
     "ingredients": [
       {
@@ -16230,8 +16230,8 @@
   {
     "id": "rec_187",
     "name": "Sorbet de Framboesa com Açúcar de Maçã (Redução de Açúcar) (Direto ao Ponto)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "totalGrams": 1000,
     "ingredients": [
       {
@@ -16323,8 +16323,8 @@
   {
     "id": "rec_188",
     "name": "Sorbet de Pitaya Vermelha e Mel com Açúcar de Maçã (Redução de Açúcar) (Direto ao Ponto)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "totalGrams": 1000,
     "ingredients": [
       {
@@ -17279,8 +17279,8 @@
   {
     "id": "rec_197",
     "name": "Sorbet de Morango Fresco (Gelato Irresistível)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Morango",
@@ -17697,8 +17697,8 @@
   {
     "id": "rec_201",
     "name": "Sorbet de Limão Siciliano com Raspas (Gelato Irresistível)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Água",
@@ -18779,8 +18779,8 @@
   {
     "id": "rec_211",
     "name": "Sorbet de Tangerina com Gengibre (Gelato Irresistível)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Tangerina / Mexerica",
@@ -18885,8 +18885,8 @@
   {
     "id": "rec_212",
     "name": "Sorbet de Cupuaçu Puro (Gelato Irresistível)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Polpa Cupuaçu",
@@ -18987,8 +18987,8 @@
   {
     "id": "rec_213",
     "name": "Sorbet de Banana-Prata (Gelato Irresistível)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Banana",
@@ -19189,8 +19189,8 @@
   {
     "id": "rec_215",
     "name": "Sorbet de Maracujá com Sementes (Gelato Irresistível)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Água",
@@ -19297,8 +19297,8 @@
   {
     "id": "rec_216",
     "name": "Sorbet de Goiaba Vermelha (Gelato Irresistível)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Goiaba",
@@ -19399,8 +19399,8 @@
   {
     "id": "rec_217",
     "name": "Sorbet Tropicana Multifrute (Gelato Irresistível)",
-    "category": "Sorbets Polposos / Frutas Densas",
-    "targetStyle": "Sorbets Polposos / Frutas Densas",
+    "category": "Sorbets Polposos",
+    "targetStyle": "Sorbets Polposos",
     "ingredients": [
       {
         "name": "Manga",
@@ -19509,8 +19509,8 @@
   {
     "id": "rec_218",
     "name": "Sorbet de Limão com Maracujá (Gelato Irresistível)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Água",
@@ -19615,8 +19615,8 @@
   {
     "id": "rec_219",
     "name": "Sorbet de Abacaxi com Hortelã Fresca (Gelato Irresistível)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Abacaxi",
@@ -20569,8 +20569,8 @@
   {
     "id": "rec_228",
     "name": "Sorbet de Frutas Vermelhas com Alecrim (Gelato Irresistível)",
-    "category": "Sorbets Cítricos / Frutas Ácidas",
-    "targetStyle": "Sorbets Cítricos / Frutas Ácidas",
+    "category": "Sorbets Cítricos",
+    "targetStyle": "Sorbets Cítricos",
     "ingredients": [
       {
         "name": "Frutas Vermelhas",

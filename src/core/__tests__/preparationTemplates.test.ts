@@ -90,7 +90,7 @@ describe('preparationTemplates', () => {
     const homeSorbetRecipe: Recipe = {
       id: '3',
       name: 'Sorbet de Limão Siciliano',
-      category: 'Sorbets Cítricos / Frutas Ácidas',
+      category: 'Sorbets Cítricos',
       targetStyle: 'Sorbets',
       ingredients: [],
       totalGrams: 1000

@@ -56,8 +56,30 @@ export const VariegatoNutrientGrid: React.FC<VariegatoNutrientGridProps> = ({
       min: style.min.pac,
       max: style.max.pac,
       decimals: 0,
-      description: 'Maleabilidade e ponto anticongelante',
+      description: 'Maleabilidade e anticongelamento base 1kg',
       accentColor: 'from-cyan-500 to-sky-400'
+    },
+    {
+      title: 'PAC sobre Água Livre',
+      icon: <Snowflake className="w-4 h-4 text-teal-400" />,
+      value: percentages.pacOnWater,
+      unit: 'pts',
+      min: style.min.pacOnWater || 180,
+      max: style.max.pacOnWater || 340,
+      decimals: 0,
+      description: 'Poder anticongelante na fase aquosa real',
+      accentColor: 'from-teal-500 to-cyan-300'
+    },
+    {
+      title: 'POD Concentrado (Doçura)',
+      icon: <Candy className="w-4 h-4 text-pink-400" />,
+      value: percentages.pod,
+      unit: '%',
+      min: style.min.pod || 38,
+      max: style.max.pod || 60,
+      decimals: 1,
+      description: 'Poder adoçante relativo pós-cocção',
+      accentColor: 'from-pink-500 to-rose-400'
     },
     {
       title: 'Açúcares Totais',
@@ -169,17 +191,17 @@ export const VariegatoNutrientGrid: React.FC<VariegatoNutrientGridProps> = ({
                     : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                 }`}
               >
-                {allOk ? '✓ 8/8 No Alvo' : `⚠ ${okCount}/8 No Alvo`}
+                {allOk ? `✓ ${cards.length}/${cards.length} No Alvo` : `⚠ ${okCount}/${cards.length} No Alvo`}
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-300 mt-1">
-              Sólidos solúveis (°Brix), açúcares, PAC concentrado, hidrocolóides, sacarose e atividade de água (aw) pós-cocção.
+              Sólidos solúveis (°Brix), PAC (1kg e sobre água), POD relativo, açúcares, gorduras, hidrocolóides, sacarose e atividade de água (aw).
             </p>
           </div>
         </div>
 
-        {/* Grid dos 8 Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {/* Grid dos 10 Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {cards.map((card, idx) => {
             const isOk = card.isMaxLimitOnly
               ? card.value <= card.max

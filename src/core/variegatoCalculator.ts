@@ -91,28 +91,32 @@ export function calculateEstimatedAw(brix: number): number {
 
 /**
  * Analisa a performance térmica (-12°C Vitrine vs -18°C Freezer) e plasticidade
+ * Avalia tanto o PAC base 1.000g quanto o PAC sobre a Água Residual (PAC/água * 100)
  */
 export function evaluateThermalStatus(
   pacValue: number,
-  application: VariegatoThermalApplication
+  application: VariegatoThermalApplication,
+  pacOnWater: number = 0
 ): VariegatoThermalStatus {
   if (application === 'vitrine') {
-    // Alvo Vitrine (-12°C): 480 a 650 PAC
-    if (pacValue < 460) {
+    // Alvo Vitrine (-12°C): 480 a 650 PAC (ou 180 a 320 de PAC/Água)
+    if (pacValue < 460 || (pacOnWater > 0 && pacOnWater < 160)) {
       return {
         application,
         targetTemp: -12,
         pacValue,
+        pacOnWater,
         status: 'freezing_risk',
         label: 'Risco de Congelamento Vítreo',
         description: 'PAC insuficiente para vitrine (-12°C). A mescla ficará excessivamente rígida e quebradiça ao contato com a espátula.'
       };
     }
-    if (pacValue > 680) {
+    if (pacValue > 680 || (pacOnWater > 0 && pacOnWater > 380)) {
       return {
         application,
         targetTemp: -12,
         pacValue,
+        pacOnWater,
         status: 'too_fluid',
         label: 'Excesso de Fluidez',
         description: 'PAC muito elevado. A mescla escorrerá pelas laterais da cuba e sangrará para o fundo da vitrine.'
@@ -122,27 +126,30 @@ export function evaluateThermalStatus(
       application,
       targetTemp: -12,
       pacValue,
+      pacOnWater,
       status: 'ideal',
       label: 'Plasticidade Ideal',
       description: 'Maleabilidade perfeita a -12°C. Mantém consistência aveludada e corta com facilidade sem sangrar.'
     };
   } else {
-    // Alvo Freezer de Pote (-18°C): 550 a 750 PAC
-    if (pacValue < 540) {
+    // Alvo Freezer de Pote (-18°C): 550 a 750 PAC (ou 250 a 450 de PAC/Água)
+    if (pacValue < 540 || (pacOnWater > 0 && pacOnWater < 220)) {
       return {
         application,
         targetTemp: -18,
         pacValue,
+        pacOnWater,
         status: 'freezing_risk',
         label: 'Risco de Congelamento Vítreo',
         description: 'PAC insuficiente para freezer (-18°C). No pote para consumo direto em casa, a mescla congelará em bloco.'
       };
     }
-    if (pacValue > 780) {
+    if (pacValue > 780 || (pacOnWater > 0 && pacOnWater > 480)) {
       return {
         application,
         targetTemp: -18,
         pacValue,
+        pacOnWater,
         status: 'too_fluid',
         label: 'Excesso de Fluidez',
         description: 'PAC muito alto para freezer. A mescla não congelará adequadamente e vazará ao abrir a tampa do pote.'
@@ -152,6 +159,7 @@ export function evaluateThermalStatus(
       application,
       targetTemp: -18,
       pacValue,
+      pacOnWater,
       status: 'ideal',
       label: 'Plasticidade Ideal',
       description: 'Colherabilidade impecável a -18°C. Permite ao consumidor degustar o pote diretamente do freezer.'
@@ -294,6 +302,7 @@ export function calculateVariegatoBatchAnalysis(
   let totalHydrocolloidsGrams = 0;
   let totalSucroseGrams = 0;
   let totalPacPoints = 0;
+  let totalPodPoints = 0;
   let totalSolubleSolidsGrams = 0;
   let totalRawSolidsGrams = 0;
   let totalWaterInBatchGrams = 0;
@@ -317,6 +326,7 @@ export function calculateVariegatoBatchAnalysis(
 
       const pacFactor = item.customPac !== undefined ? item.customPac : ing.pac;
       totalPacPoints += g * pacFactor;
+      totalPodPoints += g * ing.pod;
 
       if (isHydrocolloidIngredient(item.name, ing.category)) {
         totalHydrocolloidsGrams += g;
@@ -336,6 +346,7 @@ export function calculateVariegatoBatchAnalysis(
         totalHydrocolloidsGrams += g;
       }
       totalPacPoints += g * 1.0;
+      totalPodPoints += g * 1.0;
     }
   }
 
@@ -378,6 +389,7 @@ export function calculateVariegatoBatchAnalysis(
   // 2. Porcentagens concentradas na formulação final
   const finalBrix = (totalSolubleSolidsGrams / safeFinalWeight) * 100;
   const finalPac = (totalPacPoints / safeFinalWeight) * 1000;
+  const finalPod = (totalPodPoints / safeFinalWeight) * 100;
   const finalSugars = (totalSugarsGrams / safeFinalWeight) * 100;
   const finalFat = (totalFatGrams / safeFinalWeight) * 100;
   const finalHydrocolloids = (totalHydrocolloidsGrams / safeFinalWeight) * 100;
@@ -385,9 +397,16 @@ export function calculateVariegatoBatchAnalysis(
   const finalWater = Math.max(0, 100 - (totalRawSolidsGrams / safeFinalWeight) * 100);
   const estimatedAw = calculateEstimatedAw(finalBrix);
 
+  // Água absoluta residual em gramas no lote final
+  const finalWaterGrams = safeFinalWeight * (finalWater / 100);
+  // PAC sobre a água residual: (totalPacPoints / finalWaterGrams) * 100
+  const pacOnWater = finalWaterGrams > 0 ? (totalPacPoints / finalWaterGrams) * 100 : 0;
+
   const percentages: VariegatoAnalysisPercentages = {
     brix: Math.round(finalBrix * 10) / 10,
     pac: Math.round(finalPac),
+    pacOnWater: Math.round(pacOnWater),
+    pod: Math.round(finalPod * 10) / 10,
     sugars: Math.round(finalSugars * 10) / 10,
     fat: Math.round(finalFat * 10) / 10,
     hydrocolloids: Math.round(finalHydrocolloids * 100) / 100,
@@ -397,7 +416,7 @@ export function calculateVariegatoBatchAnalysis(
   };
 
   // 3. Status Térmico e Reológico
-  const thermalStatus = evaluateThermalStatus(percentages.pac, thermalApp);
+  const thermalStatus = evaluateThermalStatus(percentages.pac, thermalApp, percentages.pacOnWater);
   const rheologyStatus = evaluateRheologyStatus(rheologyLevel, percentages.hydrocolloids);
 
   // 4. Custos e Rendimento
@@ -427,6 +446,7 @@ export function calculateVariegatoBatchAnalysis(
   const lowBrixRisk = percentages.brix < 58.0 && cookingState === 'active_reduction';
   const highSucroseRisk = sucroseRatio > 60.0;
   const excessFluidityRisk = thermalStatus.status === 'too_fluid';
+  const highPodRisk = percentages.pod > 62.0;
 
   if (crystallizationRisk) {
     alertMessages.push(
@@ -441,6 +461,11 @@ export function calculateVariegatoBatchAnalysis(
   if (excessFluidityRisk) {
     alertMessages.push(
       `Alerta de Escorrimento: PAC concentrado em ${percentages.pac} excede a tolerância do ponto térmico (${thermalApp === 'vitrine' ? '-12°C' : '-18°C'}). A mescla perderá sustentação.`
+    );
+  }
+  if (highPodRisk) {
+    alertMessages.push(
+      `Alerta de Doçura Excessiva (POD ${percentages.pod.toFixed(1)}%): Risco de mascarar as notas gustativas e deixar a mescla enjoativa. Considere substituir fração da sacarose por glicose 40 DE ou maltodextrina.`
     );
   }
 

@@ -207,8 +207,8 @@
       "protein": 0.105
     }
   },
-  "Sorbets Cítricos / Frutas Ácidas": {
-    "name": "Sorbets Cítricos / Frutas Ácidas",
+  "Sorbets Cítricos": {
+    "name": "Sorbets Cítricos",
     "pacDivisor": 24,
     "min": {
       "sugars": 0.22,
@@ -233,8 +233,8 @@
       "protein": 0
     }
   },
-  "Sorbets Polposos / Frutas Densas": {
-    "name": "Sorbets Polposos / Frutas Densas",
+  "Sorbets Polposos": {
+    "name": "Sorbets Polposos",
     "pacDivisor": 24,
     "min": {
       "sugars": 0.22,

@@ -682,7 +682,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               type="button"
               onClick={handleReset}
               disabled={selectedRecipeId === 'new'}
-              className="px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700/60 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-bold transition-colors flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700/60 disabled:opacity-40 disabled:cursor-not-allowed text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm"
               title="Reverter alterações e voltar à receita original"
             >
               <RotateCcw className="w-4 h-4" />
@@ -701,7 +701,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             <button
               type="button"
               onClick={() => window.print()}
-              className="px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-300 hover:text-white text-xs font-bold transition-colors flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm"
               title="Imprimir Ficha Técnica de Produção"
             >
               <Printer className="w-4 h-4" />

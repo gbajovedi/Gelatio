@@ -67,10 +67,10 @@ export const RecipeSearchCombobox: React.FC<RecipeSearchComboboxProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="relative flex-1 min-w-[260px] sm:min-w-[340px] max-w-xl">
+    <div ref={containerRef} className="relative flex-1 min-w-[260px] sm:min-w-[340px] max-w-2xl">
       {/* Integrated Recipe Name Input + Catalog Trigger */}
       <div
-        className={`flex items-center bg-slate-900 border ${
+        className={`flex items-stretch bg-slate-900 border ${
           isOpen
             ? 'border-amber-500 ring-2 ring-amber-500/20'
             : 'border-slate-700 hover:border-slate-600 focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20'
@@ -88,13 +88,13 @@ export const RecipeSearchCombobox: React.FC<RecipeSearchComboboxProps> = ({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`px-3 sm:px-3.5 py-2.5 border-l border-slate-700/80 bg-slate-800/70 hover:bg-slate-700/80 text-xs font-bold text-slate-300 hover:text-amber-300 flex items-center gap-1.5 transition-colors shrink-0 ${
+          className={`px-3 sm:px-3.5 py-2.5 border-l border-slate-700/80 bg-slate-800/70 hover:bg-slate-700/80 text-xs font-bold text-slate-300 hover:text-amber-300 flex items-center justify-center gap-1.5 transition-colors shrink-0 self-stretch ${
             isOpen ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : ''
           }`}
-          title="Abrir catálogo e buscar receitas (177 receitas cadastradas)"
+          title={`Abrir catálogo e buscar receitas (${recipes.length} receitas cadastradas)`}
         >
           <Search className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-          <span className="hidden sm:inline">Catálogo</span>
+          <span className="hidden sm:inline">Catálogo ({recipes.length})</span>
           <ChevronDown
             className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${
               isOpen ? 'rotate-180 text-amber-400' : ''

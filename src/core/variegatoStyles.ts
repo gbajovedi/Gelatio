@@ -10,6 +10,8 @@ export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, Varie
     min: {
       brix: 60.0,
       pac: 520,
+      pacOnWater: 180,
+      pod: 38.0,
       sugars: 50.0,
       fat: 0.0,
       hydrocolloids: 0.15,
@@ -20,6 +22,8 @@ export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, Varie
     max: {
       brix: 65.0,
       pac: 650,
+      pacOnWater: 320,
+      pod: 55.0,
       sugars: 62.0,
       fat: 2.0,
       hydrocolloids: 0.40,
@@ -37,6 +41,8 @@ export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, Varie
     min: {
       brix: 65.0,
       pac: 480,
+      pacOnWater: 190,
+      pod: 40.0,
       sugars: 55.0,
       fat: 0.0,
       hydrocolloids: 0.40,
@@ -47,6 +53,8 @@ export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, Varie
     max: {
       brix: 72.0,
       pac: 600,
+      pacOnWater: 340,
+      pod: 60.0,
       sugars: 68.0,
       fat: 2.0,
       hydrocolloids: 0.85,
@@ -64,6 +72,8 @@ export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, Varie
     min: {
       brix: 72.0,
       pac: 450,
+      pacOnWater: 200,
+      pod: 42.0,
       sugars: 55.0,
       fat: 8.0,
       hydrocolloids: 0.10,
@@ -74,6 +84,8 @@ export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, Varie
     max: {
       brix: 78.0,
       pac: 580,
+      pacOnWater: 360,
+      pod: 62.0,
       sugars: 70.0,
       fat: 20.0,
       hydrocolloids: 0.50,
@@ -91,6 +103,8 @@ export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, Varie
     min: {
       brix: 60.0,
       pac: 420,
+      pacOnWater: 220,
+      pod: 30.0,
       sugars: 35.0,
       fat: 20.0,
       hydrocolloids: 0.0,
@@ -101,6 +115,8 @@ export const VARIEGATO_STYLES: Record<Exclude<VariegatoStyleId, 'custom'>, Varie
     max: {
       brix: 72.0,
       pac: 560,
+      pacOnWater: 420,
+      pod: 52.0,
       sugars: 55.0,
       fat: 40.0,
       hydrocolloids: 0.40,

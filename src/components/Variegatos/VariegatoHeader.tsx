@@ -107,7 +107,7 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
         {/* Bloco Unificado: Input de Nome + Botão Catálogo com Dropdown Pesquisável */}
         <div ref={catalogRef} className="relative flex-1 min-w-[260px] sm:min-w-[340px] max-w-2xl">
           <div
-            className={`flex items-center bg-slate-900 border ${
+            className={`flex items-stretch bg-slate-900 border ${
               isCatalogOpen
                 ? 'border-amber-500 ring-2 ring-amber-500/20'
                 : 'border-slate-700 hover:border-slate-600 focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-500/20'
@@ -118,14 +118,14 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
               value={recipeName}
               onChange={e => onRecipeNameChange(e.target.value)}
               placeholder="Nome da Mescla / Variegato..."
-              className="flex-1 min-w-0 bg-transparent px-4 py-2.5 text-base sm:text-lg font-bold text-amber-300 placeholder-slate-500 focus:outline-none"
+              className="flex-1 min-w-0 bg-transparent px-4 py-2.5 text-sm sm:text-base font-bold text-amber-300 placeholder-slate-500 focus:outline-none"
               title="Clique para editar o nome do variegato na bancada"
             />
 
             <button
               type="button"
               onClick={() => setIsCatalogOpen(!isCatalogOpen)}
-              className={`px-3 sm:px-3.5 py-2.5 border-l border-slate-700/80 bg-slate-800/70 hover:bg-slate-700/80 text-xs font-bold text-slate-300 hover:text-amber-300 flex items-center gap-1.5 transition-colors shrink-0 ${
+              className={`px-3 sm:px-3.5 py-2.5 border-l border-slate-700/80 bg-slate-800/70 hover:bg-slate-700/80 text-xs font-bold text-slate-300 hover:text-amber-300 flex items-center justify-center gap-1.5 transition-colors shrink-0 self-stretch ${
                 isCatalogOpen ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : ''
               }`}
               title={`Abrir catálogo e buscar receitas (${catalogPreparations.length} mesclas cadastradas)`}
@@ -258,11 +258,11 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           <button
             type="button"
             onClick={onNewRecipe}
-            className="px-3.5 py-2.5 rounded-xl border border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm"
+            className="px-4 py-2.5 rounded-xl border border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm"
             title="Iniciar uma nova mescla do zero"
           >
             <Plus className="w-4 h-4 text-amber-400" />
@@ -272,7 +272,7 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
           <button
             type="button"
             onClick={onResetRecipe}
-            className="px-3.5 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700/60 text-xs font-bold transition-colors flex items-center gap-1.5 active:scale-95"
+            className="px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700/60 text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm"
             title="Reverter para o estado inicial"
           >
             <RotateCcw className="w-4 h-4" />
@@ -291,7 +291,7 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-300 hover:text-white text-xs font-bold transition-colors flex items-center gap-1.5"
+            className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-300 hover:text-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 active:scale-95 shadow-sm"
             title="Imprimir Ficha Técnica de Bancada"
           >
             <Printer className="w-4 h-4" />
