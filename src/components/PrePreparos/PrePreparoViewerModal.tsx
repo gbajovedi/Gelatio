@@ -174,6 +174,12 @@ export const PrePreparoViewerModal: React.FC<PrePreparoViewerModalProps> = ({
                   className={`text-xs px-2.5 py-0.5 rounded-full font-bold border ${
                     prep.category === 'Variegato'
                       ? 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+                      : prep.category === 'Caldas'
+                      ? 'bg-rose-500/15 text-rose-300 border-rose-500/40'
+                      : prep.category === 'Creminos'
+                      ? 'bg-purple-500/15 text-purple-300 border-purple-500/40'
+                      : prep.category === 'Inclusões Crocantes'
+                      ? 'bg-orange-500/15 text-orange-300 border-orange-500/40'
                       : 'bg-blue-500/15 text-blue-300 border-blue-500/40'
                   }`}
                 >

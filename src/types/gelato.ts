@@ -114,7 +114,7 @@ export interface Recipe {
 export interface Preparation {
   id: string;
   name: string;
-  category: 'Pré-preparo' | 'Variegato';
+  category: 'Pré-preparo' | 'Variegato' | 'Caldas' | 'Creminos' | 'Inclusões Crocantes';
   instructions: string;
   preparationSteps?: PreparationStep[];
   ingredients: { name: string; grams: number }[];

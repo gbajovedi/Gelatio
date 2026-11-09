@@ -62,14 +62,14 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
   onRefresh,
 }) => {
   const [search, setSearch] = useState('');
-  const [catFilter, setCatFilter] = useState<'Todas' | 'Pré-preparo' | 'Variegato'>('Todas');
+  const [catFilter, setCatFilter] = useState<'Todas' | Preparation['category']>('Todas');
   const [methodFilter, setMethodFilter] = useState<'todos' | 'com_preparo' | 'sem_preparo'>('todos');
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPrep, setEditingPrep] = useState<Preparation | null>(null);
   const [name, setName] = useState('');
-  const [category, setCategory] = useState<'Pré-preparo' | 'Variegato'>('Pré-preparo');
+  const [category, setCategory] = useState<Preparation['category']>('Pré-preparo');
   const [instructions, setInstructions] = useState('');
   const [steps, setSteps] = useState<PreparationStep[]>([]);
   const [prepInputMode, setPrepInputMode] = useState<'steps' | 'text'>('steps');
@@ -489,7 +489,7 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               {/* Filtro de Categoria */}
-              {(['Todas', 'Pré-preparo', 'Variegato'] as const).map(cat => (
+              {(['Todas', 'Pré-preparo', 'Variegato', 'Caldas', 'Creminos', 'Inclusões Crocantes'] as const).map(cat => (
                 <button
                   key={cat}
                   type="button"
@@ -586,6 +586,12 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                       className={`text-xs px-2.5 py-0.5 rounded-full font-bold border ${
                         prep.category === 'Variegato'
                           ? 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+                          : prep.category === 'Caldas'
+                          ? 'bg-rose-500/15 text-rose-300 border-rose-500/40'
+                          : prep.category === 'Creminos'
+                          ? 'bg-purple-500/15 text-purple-300 border-purple-500/40'
+                          : prep.category === 'Inclusões Crocantes'
+                          ? 'bg-orange-500/15 text-orange-300 border-orange-500/40'
                           : 'bg-blue-500/15 text-blue-300 border-blue-500/40'
                       }`}
                     >
@@ -855,11 +861,14 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                   </label>
                   <select
                     value={category}
-                    onChange={e => setCategory(e.target.value as 'Pré-preparo' | 'Variegato')}
+                    onChange={e => setCategory(e.target.value as Preparation['category'])}
                     className="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-medium focus:border-amber-500 focus:outline-none transition-colors"
                   >
                     <option value="Pré-preparo">Pré-preparo (Base de Calda, Calda Mestre, Pasta)</option>
                     <option value="Variegato">Variegato (Recheio / Mescla de Cuba)</option>
+                    <option value="Caldas">Caldas (Calda Fluida / Cobertura Artesanal)</option>
+                    <option value="Creminos">Creminos (Ganache / Pasta Trufada Macia)</option>
+                    <option value="Inclusões Crocantes">Inclusões Crocantes (Crumble, Crocante, Farofa Selada)</option>
                   </select>
                 </div>
               </div>

@@ -1990,6 +1990,113 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'prep_names_standardized_v25', value: 1 });
       }
 
+      // Sincronizar catálogo das Fases 1 a 6 (Caldas, Creminos, Crumbles, Sorbetos, Proteicos e Base de Leite Direto ao Ponto)
+      const phase6Setting = await this.settings.get('catalog_sync_phase_6');
+      if (!phase6Setting) {
+        console.log('Sincronizando caldas, creminos, crumbles, sorbetos, proteicos e base de leite (Fases 1 a 6)...');
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        const syncRecIds = [
+          'rec_1', 'rec_2', 'rec_3', 'rec_4', 'rec_5', 'rec_6', 'rec_7', 'rec_8',
+          'rec_9', 'rec_10', 'rec_11', 'rec_12', 'rec_13', 'rec_14', 'rec_15', 'rec_16',
+          'rec_17', 'rec_18', 'rec_19', 'rec_43', 'rec_58', 'rec_60', 'rec_61', 'rec_62', 'rec_63',
+          'rec_71', 'rec_72', 'rec_73', 'rec_74', 'rec_75', 'rec_76', 'rec_77', 'rec_78', 'rec_79', 'rec_80',
+          'rec_99', 'rec_100', 'rec_101', 'rec_102', 'rec_103', 'rec_104', 'rec_105', 'rec_109', 'rec_110',
+          'rec_166', 'rec_167', 'rec_168', 'rec_169', 'rec_170', 'rec_171',
+          'rec_172', 'rec_173', 'rec_174', 'rec_175', 'rec_176', 'rec_177'
+        ];
+        const catMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        for (const rId of syncRecIds) {
+          const dbRec = await this.recipes.get(rId);
+          const catR = catMap.get(rId);
+          if (catR) {
+            if (!dbRec || !dbRec.isCustom) {
+              await this.recipes.put(catR);
+            }
+          }
+        }
+        await this.settings.put({ key: 'catalog_sync_phase_6', value: 1 });
+      }
+
+      // Sincronizar catálogo da Fase 7 (Gelatos Sem Açúcar e Redução de Açúcar Direto ao Ponto)
+      const phase7Setting = await this.settings.get('catalog_sync_phase_7');
+      if (!phase7Setting) {
+        console.log('Sincronizando gelatos sem açúcar e com redução de açúcar (Fase 7)...');
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        const syncRecIdsPhase7 = [
+          'rec_144', 'rec_145', 'rec_146', 'rec_147', 'rec_148', 'rec_149',
+          'rec_150', 'rec_151', 'rec_152', 'rec_153', 'rec_154', 'rec_155',
+          'rec_156', 'rec_157', 'rec_158', 'rec_159', 'rec_160', 'rec_161',
+          'rec_162', 'rec_163', 'rec_164', 'rec_165',
+          'rec_179', 'rec_180', 'rec_181', 'rec_182', 'rec_183',
+          'rec_184', 'rec_185', 'rec_186', 'rec_187', 'rec_188'
+        ];
+        const catMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        for (const rId of syncRecIdsPhase7) {
+          const dbRec = await this.recipes.get(rId);
+          const catR = catMap.get(rId);
+          if (catR) {
+            if (!dbRec || !dbRec.isCustom) {
+              await this.recipes.put(catR);
+            }
+          }
+        }
+        await this.settings.put({ key: 'catalog_sync_phase_7', value: 1 });
+      }
+
+      // Sincronizar catálogo da Fase 8 (Carpigiani Gelato University - Bases Canônicas, Xaropes e Formulações Internacionais)
+      const phase8Setting = await this.settings.get('catalog_sync_phase_8');
+      if (!phase8Setting) {
+        console.log('Sincronizando bases canônicas e formulações internacionais (Fase 8 Carpigiani)...');
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+
+        const syncRecIdsPhase8 = [
+          'rec_229', 'rec_230', 'rec_231', 'rec_232', 'rec_233', 'rec_234'
+        ];
+        const catMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        for (const rId of syncRecIdsPhase8) {
+          const dbRec = await this.recipes.get(rId);
+          const catR = catMap.get(rId);
+          if (catR) {
+            if (!dbRec || !dbRec.isCustom) {
+              await this.recipes.put(catR);
+            }
+          }
+        }
+        await this.settings.put({ key: 'catalog_sync_phase_8', value: 1 });
+      }
+
+      // Sincronizar catálogo da Fase 9 (Gelato Profissional Addolcire - Insumos, Preparos e Variegatos)
+      const phase9Setting = await this.settings.get('catalog_sync_phase_9');
+      if (!phase9Setting) {
+        console.log('Sincronizando compêndio Addolcire (Fase 9)...');
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+        await this.settings.put({ key: 'catalog_sync_phase_9', value: 1 });
+      }
+
+      // Sincronizar catálogo da Fase 10 (Tratado Completo Gelato Irresistível - Insumos e Receitas)
+      const phase10Setting = await this.settings.get('catalog_sync_phase_10');
+      if (!phase10Setting) {
+        console.log('Sincronizando tratado Gelato Irresistível (Fase 10)...');
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+        await this.settings.put({ key: 'catalog_sync_phase_10', value: 1 });
+      }
+
+      // Sincronizar catálogo da Fase 11 (Varredura Final de Pré-preparos Autorais)
+      const phase11Setting = await this.settings.get('catalog_sync_phase_11');
+      if (!phase11Setting) {
+        console.log('Sincronizando pré-preparos autorais e varredura final (Fase 11)...');
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+        await this.settings.put({ key: 'catalog_sync_phase_11', value: 1 });
+      }
+
 
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();

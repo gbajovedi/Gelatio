@@ -134,7 +134,12 @@ export async function syncPreparationToIngredient(
     targetIng = availableIngredients.find(i => i.name.trim().toLowerCase() === lowerPrevName);
   }
 
-  const defaultCategory = prep.category === 'Variegato' ? 'Variegatos & Recheios' : 'Bases & Pré-preparos';
+  const defaultCategory =
+    prep.category === 'Variegato' || prep.category === 'Caldas' || prep.category === 'Creminos'
+      ? 'Variegatos & Recheios'
+      : prep.category === 'Inclusões Crocantes'
+      ? 'Confeitaria & Inclusões'
+      : 'Bases & Pré-preparos';
 
   if (targetIng) {
     // Insumo existente: atualizar dados mantendo ID e categoria apropriada

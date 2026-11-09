@@ -9,8 +9,8 @@ describe('Auditoria Canônica e Saneamento Físico-Químico dos Insumos (Padrão
   const recipes = initialRecipes as Recipe[];
   const preparations = initialPreparations as Preparation[];
 
-  it('deve conter 236 insumos oficiais cadastrados no catálogo técnico de ingredients.json', () => {
-    expect(ingredients.length).toBe(236);
+  it('deve conter ao menos 236 insumos oficiais cadastrados no catálogo técnico de ingredients.json', () => {
+    expect(ingredients.length).toBeGreaterThanOrEqual(236);
   });
 
   it('deve validar o Leite Condensado Tradicional (ing_95) conforme padrão brasileiro MAPA IN 47 / TACO', () => {

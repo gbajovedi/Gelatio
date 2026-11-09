@@ -14,7 +14,7 @@ describe('Auditoria Técnica e Refinamento do Compêndio Sorbetos & Gelatos Vega
   it('deve conter o novo pré-preparo Caramelo Artesanal de Maracujá com etapas estruturadas', () => {
     const prep = preparations.find(p => p.id === 'prep_caramelo_maracuja');
     expect(prep, 'Pré-preparo prep_caramelo_maracuja não encontrado').toBeDefined();
-    expect(prep!.name).toBe('Caramelo Artesanal de Maracujá para Gelato');
+    expect(prep!.name).toBe('Caramelo Artesanal de Maracujá para Gelato (Direto ao Ponto)');
     expect(prep!.category).toBe('Variegato');
     expect(prep!.preparationSteps).toBeDefined();
     expect(prep!.preparationSteps!.length).toBe(4);
@@ -76,7 +76,7 @@ describe('Auditoria Técnica e Refinamento do Compêndio Sorbetos & Gelatos Vega
     expect(rec72).toBeDefined();
     expect(rec72!.variegatos).toBeDefined();
     expect(rec72!.variegatos!.length).toBe(1);
-    expect(rec72!.variegatos![0].name).toBe('Caramelo Artesanal de Maracujá');
+    expect(rec72!.variegatos![0].name).toBe('Caramelo Artesanal de Maracujá para Gelato (Direto ao Ponto)');
     expect(rec72!.variegatos![0].grams).toBe(120);
 
     expect(rec72!.preparationSteps!.length).toBe(7);
