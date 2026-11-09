@@ -1,6 +1,6 @@
 import React from 'react';
 import { Preparation } from '../../types/gelato';
-import { VariegatoStyleId, VariegatoStyleStandard } from '../../types/variegato';
+import { VariegatoStyleId } from '../../types/variegato';
 import { VARIEGATO_STYLES } from '../../core/variegatoStyles';
 import {
   ChefHat,
@@ -63,78 +63,76 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
       <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl bg-gradient-to-r from-amber-500 via-rose-500 to-purple-500" />
 
       {/* Identificador no topo: Tag amarela com ícone de pote/espátula */}
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-black px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase tracking-widest flex items-center gap-1.5 shadow-sm shadow-amber-500/10">
-            <ChefHat className="w-4 h-4 text-amber-400" />
-            BANCADA DE VARIEGATOS & MESCLAS
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-black px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase tracking-widest flex items-center gap-1.5 shadow-sm shadow-amber-500/10">
+          <ChefHat className="w-4 h-4 text-amber-400" />
+          BANCADA DE VARIEGATOS & MESCLAS
+        </span>
+
+        {isDirty && (
+          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5 animate-in fade-in">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+            Edições ativas na bancada
           </span>
-
-          {isDirty && (
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5 animate-in fade-in">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-              Edições ativas na bancada
-            </span>
-          )}
-        </div>
-
-        {/* Dropdown de Catálogo de Variegatos */}
-        <div className="relative" ref={catalogRef}>
-          <button
-            type="button"
-            onClick={() => setIsCatalogOpen(!isCatalogOpen)}
-            className="px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-900/90 text-slate-300 hover:text-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
-            title="Carregar um variegato do catálogo existente"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-            <span>Carregar do Catálogo ({catalogPreparations.length})</span>
-            <ChevronDown className="w-3.5 h-3.5 ml-0.5 text-slate-500" />
-          </button>
-
-          {isCatalogOpen && (
-            <div className="absolute right-0 top-10 z-50 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-2 max-h-72 overflow-y-auto animate-in fade-in duration-150">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 block border-b border-slate-800">
-                Variegatos Cadastrados
-              </span>
-              {catalogPreparations.length === 0 ? (
-                <div className="p-3 text-xs text-slate-500 text-center">
-                  Nenhum variegato cadastrado no momento.
-                </div>
-              ) : (
-                catalogPreparations.map(prep => (
-                  <button
-                    key={prep.id}
-                    type="button"
-                    onClick={() => {
-                      onLoadPreparation(prep);
-                      setIsCatalogOpen(false);
-                    }}
-                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs text-slate-200 hover:bg-slate-800 hover:text-amber-300 flex items-center justify-between transition-colors"
-                  >
-                    <span className="truncate">{prep.name}</span>
-                    {prep.costKg && (
-                      <span className="text-[10px] font-mono text-emerald-400 shrink-0 ml-2">
-                        R${prep.costKg.toFixed(1)}/kg
-                      </span>
-                    )}
-                  </button>
-                ))
-              )}
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
-      {/* Linha 1: Input do Nome do Variegato + Botões de Ação */}
+      {/* LINHA 1: Caixa de Nome + Catálogo alinhada com os Botões de Ação */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-        <div className="flex-1 max-w-2xl">
+        <div className="flex-1 max-w-2xl flex items-center gap-2">
           <input
             type="text"
             value={recipeName}
             onChange={e => onRecipeNameChange(e.target.value)}
             placeholder="Nome da Mescla / Variegato..."
-            className="w-full text-lg sm:text-xl font-black bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-inner"
+            className="flex-1 min-w-0 text-base sm:text-lg font-black bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-inner"
           />
+
+          {/* Dropdown de Catálogo de Variegatos integrado */}
+          <div className="relative shrink-0" ref={catalogRef}>
+            <button
+              type="button"
+              onClick={() => setIsCatalogOpen(!isCatalogOpen)}
+              className="h-10 px-3 rounded-xl border border-slate-700 bg-slate-900/90 text-slate-300 hover:text-amber-300 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
+              title="Carregar um variegato do catálogo existente"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+              <span>Catálogo ({catalogPreparations.length})</span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+            </button>
+
+            {isCatalogOpen && (
+              <div className="absolute right-0 top-12 z-50 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-2 max-h-72 overflow-y-auto animate-in fade-in duration-150">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1 block border-b border-slate-800">
+                  Variegatos Cadastrados
+                </span>
+                {catalogPreparations.length === 0 ? (
+                  <div className="p-3 text-xs text-slate-500 text-center">
+                    Nenhum variegato cadastrado no momento.
+                  </div>
+                ) : (
+                  catalogPreparations.map(prep => (
+                    <button
+                      key={prep.id}
+                      type="button"
+                      onClick={() => {
+                        onLoadPreparation(prep);
+                        setIsCatalogOpen(false);
+                      }}
+                      className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs text-slate-200 hover:bg-slate-800 hover:text-amber-300 flex items-center justify-between transition-colors"
+                    >
+                      <span className="truncate">{prep.name}</span>
+                      {prep.costKg && (
+                        <span className="text-[10px] font-mono text-emerald-400 shrink-0 ml-2">
+                          R${prep.costKg.toFixed(1)}/kg
+                        </span>
+                      )}
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Action Buttons */}
@@ -180,7 +178,7 @@ export const VariegatoHeader: React.FC<VariegatoHeaderProps> = ({
         </div>
       </div>
 
-      {/* Linha 2: Seletor de Estilo/Presets (Dropdown + Botões Rápidos) */}
+      {/* LINHA 2: Seletor de Estilo/Presets (Dropdown + Botões Rápidos) */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 pt-3 border-t border-slate-700/60">
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className="text-xs font-bold text-slate-400 mr-1 flex items-center gap-1">

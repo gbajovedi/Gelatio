@@ -10,7 +10,8 @@ import {
   Layers,
   ShieldAlert,
   Sparkles,
-  Percent
+  Percent,
+  FlaskConical
 } from 'lucide-react';
 
 interface VariegatoNutrientGridProps {
@@ -128,82 +129,133 @@ export const VariegatoNutrientGrid: React.FC<VariegatoNutrientGridProps> = ({
     }
   ];
 
+  const okCount = cards.filter(card => {
+    return card.isMaxLimitOnly
+      ? card.value <= card.max
+      : card.value >= card.min && card.value <= card.max;
+  }).length;
+  const allOk = okCount === cards.length;
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-      {cards.map((card, idx) => {
-        const isOk = card.isMaxLimitOnly
-          ? card.value <= card.max
-          : card.value >= card.min && card.value <= card.max;
-
-        // Progress bar percentage calculation
-        const range = card.max - card.min;
-        const progressPct = range > 0
-          ? Math.min(100, Math.max(5, ((card.value - card.min) / range) * 100))
-          : 50;
-
-        return (
+    <div
+      className={`p-5 rounded-2xl border shadow-xl transition-all ${
+        allOk
+          ? 'bg-slate-800/95 border-emerald-500/40'
+          : 'bg-slate-800/95 border-amber-500/40'
+      }`}
+    >
+      <div className="space-y-4">
+        {/* Header Banner: Parâmetros Físico-Químicos */}
+        <div className="flex items-start sm:items-center gap-4">
           <div
-            key={idx}
-            className="bg-slate-900/80 rounded-xl border border-slate-700/70 p-3 shadow-md flex flex-col justify-between hover:border-slate-600 transition-all group"
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${
+              allOk
+                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                : 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+            }`}
           >
-            {/* Top row */}
-            <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
-              <div className="flex items-center gap-1.5">
-                <div className="p-1 rounded-md bg-slate-800 border border-slate-700/80">
-                  {card.icon}
-                </div>
-                <span className="text-[11px] font-bold text-slate-300 leading-tight">
-                  {card.title}
-                </span>
-              </div>
-
-              {isOk ? (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/30">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                  No Alvo
-                </span>
-              ) : (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/30">
-                  <AlertTriangle className="w-3 h-3 text-amber-400" />
-                  Ajustar
-                </span>
-              )}
-            </div>
-
-            {/* Metric Value */}
-            <div className="my-2 flex items-baseline justify-between">
-              <div className="flex items-baseline gap-1">
-                <span className="text-xl font-mono font-black text-white group-hover:text-amber-300 transition-colors">
-                  {card.value.toFixed(card.decimals ?? 1)}
-                </span>
-                <span className="text-xs font-semibold text-slate-400">{card.unit}</span>
-              </div>
-
-              <div className="text-[10px] text-slate-400 font-mono text-right">
-                {card.isMaxLimitOnly ? (
-                  <span>Máx: {card.max}{card.unit}</span>
-                ) : (
-                  <span>{card.min} – {card.max}{card.unit}</span>
-                )}
-              </div>
-            </div>
-
-            {/* Horizontal Mini Range Bar */}
-            <div className="space-y-1">
-              <div className="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
-                <div
-                  className={`h-full bg-gradient-to-r ${card.accentColor} rounded-full transition-all duration-300`}
-                  style={{ width: `${progressPct}%` }}
-                />
-              </div>
-
-              <p className="text-[10px] text-slate-500 truncate" title={card.description}>
-                {card.description}
-              </p>
-            </div>
+            <FlaskConical className="w-6 h-6 text-amber-400" />
           </div>
-        );
-      })}
+
+          <div>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                Parâmetros Físico-Químicos & Reológicos
+              </h3>
+              <span
+                className={`text-xs px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider border ${
+                  allOk
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                    : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                }`}
+              >
+                {allOk ? '✓ 8/8 No Alvo' : `⚠ ${okCount}/8 No Alvo`}
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-300 mt-1">
+              Sólidos solúveis (°Brix), açúcares, PAC concentrado, hidrocolóides, sacarose e atividade de água (aw) pós-cocção.
+            </p>
+          </div>
+        </div>
+
+        {/* Grid dos 8 Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {cards.map((card, idx) => {
+            const isOk = card.isMaxLimitOnly
+              ? card.value <= card.max
+              : card.value >= card.min && card.value <= card.max;
+
+            // Progress bar percentage calculation
+            const range = card.max - card.min;
+            const progressPct = range > 0
+              ? Math.min(100, Math.max(5, ((card.value - card.min) / range) * 100))
+              : 50;
+
+            return (
+              <div
+                key={idx}
+                className="bg-slate-900/80 rounded-xl border border-slate-700/70 p-3 shadow-md flex flex-col justify-between hover:border-slate-600 transition-all group"
+              >
+                {/* Top row */}
+                <div className="flex items-center justify-between pb-1.5 border-b border-slate-800">
+                  <div className="flex items-center gap-1.5">
+                    <div className="p-1 rounded-md bg-slate-800 border border-slate-700/80">
+                      {card.icon}
+                    </div>
+                    <span className="text-[11px] font-bold text-slate-300 leading-tight">
+                      {card.title}
+                    </span>
+                  </div>
+
+                  {isOk ? (
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                      No Alvo
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/30">
+                      <AlertTriangle className="w-3 h-3 text-amber-400" />
+                      Ajustar
+                    </span>
+                  )}
+                </div>
+
+                {/* Metric Value */}
+                <div className="my-2 flex items-baseline justify-between">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xl font-mono font-black text-white group-hover:text-amber-300 transition-colors">
+                      {card.value.toFixed(card.decimals ?? 1)}
+                    </span>
+                    <span className="text-xs font-semibold text-slate-400">{card.unit}</span>
+                  </div>
+
+                  <div className="text-[10px] text-slate-400 font-mono text-right">
+                    {card.isMaxLimitOnly ? (
+                      <span>Máx: {card.max}{card.unit}</span>
+                    ) : (
+                      <span>{card.min} – {card.max}{card.unit}</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Horizontal Mini Range Bar */}
+                <div className="space-y-1">
+                  <div className="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                    <div
+                      className={`h-full bg-gradient-to-r ${card.accentColor} rounded-full transition-all duration-300`}
+                      style={{ width: `${progressPct}%` }}
+                    />
+                  </div>
+
+                  <p className="text-[10px] text-slate-500 truncate" title={card.description}>
+                    {card.description}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };

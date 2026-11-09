@@ -7,9 +7,10 @@ import {
   VariegatoThermalApplication,
   VariegatoStyleStandard
 } from '../../types/variegato';
-import { getVariegatoStyle, VARIEGATO_STYLES } from '../../core/variegatoStyles';
+import { getVariegatoStyle } from '../../core/variegatoStyles';
 import { calculateVariegatoBatchAnalysis } from '../../core/variegatoCalculator';
 import { db } from '../../db/database';
+import { CheckCircle2, AlertCircle } from 'lucide-react';
 import { VariegatoHeader } from './VariegatoHeader';
 import { VariegatoThermalCard } from './VariegatoThermalCard';
 import { VariegatoRheologyCard } from './VariegatoRheologyCard';
@@ -115,6 +116,9 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
     );
   }, [items, targetBrix, rheologyLevel, thermalApp, currentStyle, ingredientsMap, dosagePercent]);
 
+  // Status de equilíbrio geral da mescla
+  const isBalanced = analysis.alerts.messages.length === 0 && analysis.thermalStatus.status === 'ideal';
+
   // Troca de Estilo
   const handleSelectStyle = (styleId: VariegatoStyleId) => {
     setSelectedStyleId(styleId);
@@ -189,7 +193,7 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
   };
 
   return (
-    <div className="space-y-6 pb-20 animate-in fade-in duration-200">
+    <div className="space-y-6 max-w-7xl mx-auto pb-16 animate-in fade-in duration-200">
       {/* 1. Barra Superior de Controle (Header da Bancada) */}
       <VariegatoHeader
         recipeName={recipeName}
@@ -208,49 +212,99 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
         isDirty={isDirty}
       />
 
-      {/* 2. Linha de Métricas Principais (4 Cards Centrais de Performance) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        {/* Card 1: Ponto Térmico de Aplicação */}
-        <VariegatoThermalCard
-          application={thermalApp}
-          onApplicationChange={app => setThermalApp(app)}
-          thermalStatus={analysis.thermalStatus}
-        />
+      {/* 2. Moldura de Performance & Cenário Operacional (Grid 2x2 com Banner de Status) */}
+      <div
+        className={`p-5 rounded-2xl border shadow-xl transition-all ${
+          isBalanced
+            ? 'bg-slate-800/95 border-emerald-500/40'
+            : 'bg-slate-800/95 border-amber-500/40'
+        }`}
+      >
+        <div className="space-y-4">
+          {/* Balance Status Banner */}
+          <div className="flex items-start sm:items-center gap-4">
+            <div
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${
+                isBalanced
+                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                  : 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+              }`}
+            >
+              {isBalanced ? (
+                <CheckCircle2 className="w-7 h-7 animate-pulse text-emerald-400" />
+              ) : (
+                <AlertCircle className="w-7 h-7 text-amber-400" />
+              )}
+            </div>
 
-        {/* Card 2: Controle de Reologia & Viscosidade */}
-        <VariegatoRheologyCard
-          level={rheologyLevel}
-          onLevelChange={lvl => {
-            setRheologyLevel(lvl);
-            setIsDirty(true);
-          }}
-          rheologyStatus={analysis.rheologyStatus}
-          hydrocolloidsPct={analysis.percentages.hydrocolloids}
-        />
+            <div>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                  {isBalanced ? 'Mescla Perfeitamente Balanceada' : 'Ajustes Recomendados na Mescla'}
+                </h3>
+                <span
+                  className={`text-xs px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider border ${
+                    isBalanced
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                      : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  }`}
+                >
+                  {isBalanced ? 'Equilibrado' : 'Revisar Metas'}
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1">
+                {isBalanced
+                  ? 'Todos os parâmetros bromatológicos, reológicos e térmicos estão perfeitamente calibrados para o estilo selecionado.'
+                  : 'Alguns parâmetros estão fora da faixa técnica recomendada. Utilize os controles de peso dos insumos para calibrar a mescla:'}
+              </p>
+            </div>
+          </div>
 
-        {/* Card 3: Balanço de Cocção & Redução */}
-        <VariegatoCookingReductionCard
-          initialWeightGrams={analysis.initialWeightGrams}
-          finalWeightGrams={analysis.finalWeightGrams}
-          waterEvaporatedGrams={analysis.waterEvaporatedGrams}
-          waterEvaporationPercent={analysis.waterEvaporationPercent}
-          totalSolubleSolidsGrams={analysis.totalSolubleSolidsGrams}
-          targetBrix={targetBrix}
-          onTargetBrixChange={val => {
-            setTargetBrix(val);
-            setIsDirty(true);
-          }}
-          cookingState={analysis.cookingState}
-        />
+          {/* Grid 2x2 dos 4 Cards Centrais */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 pt-1 items-stretch">
+            {/* ROW 1 - CARD 1: Ponto Térmico de Aplicação */}
+            <VariegatoThermalCard
+              application={thermalApp}
+              onApplicationChange={app => setThermalApp(app)}
+              thermalStatus={analysis.thermalStatus}
+            />
 
-        {/* Card 4: Custos & Rendimento pós-evaporação */}
-        <VariegatoCostingCard
-          costing={analysis.costing}
-          onDosageChange={val => setDosagePercent(val)}
-        />
+            {/* ROW 1 - CARD 2: Controle de Reologia & Viscosidade */}
+            <VariegatoRheologyCard
+              level={rheologyLevel}
+              onLevelChange={lvl => {
+                setRheologyLevel(lvl);
+                setIsDirty(true);
+              }}
+              rheologyStatus={analysis.rheologyStatus}
+              hydrocolloidsPct={analysis.percentages.hydrocolloids}
+            />
+
+            {/* ROW 2 - CARD 3: Balanço de Cocção & Redução */}
+            <VariegatoCookingReductionCard
+              initialWeightGrams={analysis.initialWeightGrams}
+              finalWeightGrams={analysis.finalWeightGrams}
+              waterEvaporatedGrams={analysis.waterEvaporatedGrams}
+              waterEvaporationPercent={analysis.waterEvaporationPercent}
+              totalSolubleSolidsGrams={analysis.totalSolubleSolidsGrams}
+              targetBrix={targetBrix}
+              onTargetBrixChange={val => {
+                setTargetBrix(val);
+                setIsDirty(true);
+              }}
+              cookingState={analysis.cookingState}
+            />
+
+            {/* ROW 2 - CARD 4: Custos & Rendimento pós-evaporação */}
+            <VariegatoCostingCard
+              costing={analysis.costing}
+              onDosageChange={val => setDosagePercent(val)}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* 3. Grid de Parâmetros Físico-Químicos (8 Cards com Barras de Alvo e Badges) */}
+      {/* 3. Grid de Parâmetros Físico-Químicos (8 Cards dentro de sua moldura padronizada) */}
       <VariegatoNutrientGrid
         percentages={analysis.percentages}
         style={currentStyle}
