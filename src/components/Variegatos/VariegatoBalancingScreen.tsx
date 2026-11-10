@@ -9,6 +9,7 @@ import {
 } from '../../types/variegato';
 import { getVariegatoStyle } from '../../core/variegatoStyles';
 import { calculateVariegatoBatchAnalysis } from '../../core/variegatoCalculator';
+import { getHydrocolloidRangeForRheology, isHydrocolloidIngredient } from '../../core/variegatoAdvisor';
 import { db } from '../../db/database';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 import { VariegatoHeader } from './VariegatoHeader';
@@ -29,12 +30,12 @@ interface VariegatoBalancingScreenProps {
 }
 
 const DEFAULT_INITIAL_ITEMS: VariegatoItemRow[] = [
-  { name: 'Polpa de Morango', grams: 550 },
-  { name: 'Açúcar refinado', grams: 180 },
-  { name: 'Xarope de Glicose 40 DE', grams: 160 },
-  { name: 'Dextrose', grams: 50 },
-  { name: 'Pectina LM', grams: 6 },
-  { name: 'Solução Ácido Cítrico 50%', grams: 4 }
+  { name: 'Morango', grams: 600 },
+  { name: 'Açúcar', grams: 160 },
+  { name: 'Glucose em pó (28-30 DE)', grams: 180 },
+  { name: 'Dextrose', grams: 20 },
+  { name: 'Pectina Cítrica / LM', grams: 4 },
+  { name: 'Suco de Limão', grams: 10 }
 ];
 
 export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> = ({
@@ -116,8 +117,94 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
     );
   }, [items, targetBrix, rheologyLevel, thermalApp, currentStyle, ingredientsMap, dosagePercent]);
 
-  // Status de equilíbrio geral da mescla
-  const isBalanced = analysis.alerts.messages.length === 0 && analysis.thermalStatus.status === 'ideal';
+  // Sincronização dinâmica da grade de nutrientes com o nível de reologia selecionado
+  const effectiveStyle = useMemo<VariegatoStyleStandard>(() => {
+    if (analysis.rheologyGuidance.isFatBasedExempt) {
+      return currentStyle;
+    }
+    const hydroRange = getHydrocolloidRangeForRheology(
+      rheologyLevel,
+      currentStyle.id,
+      analysis.percentages.fat
+    );
+    return {
+      ...currentStyle,
+      min: {
+        ...currentStyle.min,
+        hydrocolloids: hydroRange.minPct
+      },
+      max: {
+        ...currentStyle.max,
+        hydrocolloids: hydroRange.maxPct
+      }
+    };
+  }, [currentStyle, rheologyLevel, analysis.percentages.fat, analysis.rheologyGuidance.isFatBasedExempt]);
+
+  // Status de equilíbrio geral da mescla (inclui reologia + térmico + cristalização)
+  const isBalanced =
+    analysis.alerts.messages.length === 0 &&
+    analysis.thermalStatus.status === 'ideal' &&
+    analysis.rheologyGuidance.status === 'aligned' &&
+    !analysis.rheologyGuidance.acidActivationNeeded;
+
+  // Aplicação em 1 clique da recomendação de hidrocolóide
+  const handleApplyRheologyFix = (ingredientName: string, targetTotalGrams: number) => {
+    const safeTarget = Math.max(0, Math.round(targetTotalGrams * 10) / 10);
+    const targetLower = ingredientName.toLowerCase().trim();
+
+    setItems(prev => {
+      const otherHydroGrams = prev.reduce((acc, item) => {
+        const lower = item.name.toLowerCase().trim();
+        if (lower === targetLower) return acc;
+        const ing = ingredientsMap.get(lower);
+        if (isHydrocolloidIngredient(item.name, ing?.category)) {
+          return acc + item.grams;
+        }
+        return acc;
+      }, 0);
+
+      const adjustedGrams = Math.max(0, Math.round((safeTarget - otherHydroGrams) * 10) / 10);
+      const existingIndex = prev.findIndex(item => item.name.toLowerCase().trim() === targetLower);
+
+      if (existingIndex >= 0) {
+        const next = [...prev];
+        next[existingIndex] = { ...next[existingIndex], grams: adjustedGrams };
+        return next;
+      }
+
+      if (adjustedGrams <= 0) {
+        return prev;
+      }
+
+      return [...prev, { name: ingredientName, grams: adjustedGrams }];
+    });
+
+    setIsDirty(true);
+  };
+
+  // Aplicação em 1 clique do agente ácido ativador da pectina
+  const handleApplyAcidFix = (acidGrams: number) => {
+    const safeAcid = Math.max(0.5, Math.round(acidGrams * 10) / 10);
+    setItems(prev => {
+      const existingIndex = prev.findIndex(item => {
+        const n = item.name.toLowerCase().trim();
+        return n.includes('suco de limão') || n.includes('suco de limao');
+      });
+
+      if (existingIndex >= 0) {
+        const next = [...prev];
+        next[existingIndex] = {
+          ...next[existingIndex],
+          grams: Math.round((next[existingIndex].grams + safeAcid) * 10) / 10
+        };
+        return next;
+      }
+
+      return [...prev, { name: 'Suco de Limão', grams: safeAcid }];
+    });
+
+    setIsDirty(true);
+  };
 
   // Troca de Estilo
   const handleSelectStyle = (styleId: VariegatoStyleId) => {
@@ -157,10 +244,10 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
 
     setRecipeName('Nova Mescla Artesanal');
     setItems([
-      { name: 'Polpa de Fruta', grams: 500 },
-      { name: 'Açúcar refinado', grams: 200 },
-      { name: 'Xarope de Glicose 40 DE', grams: 150 },
-      { name: 'Pectina LM', grams: 5 }
+      { name: 'Morango', grams: 500 },
+      { name: 'Açúcar', grams: 180 },
+      { name: 'Glucose em pó (28-30 DE)', grams: 150 },
+      { name: 'Pectina Cítrica / LM', grams: 4 }
     ]);
     setSelectedStyleId('fruta_gelificada');
     setTargetBrix(68);
@@ -255,7 +342,7 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
               <p className="text-xs sm:text-sm text-slate-300 mt-1">
                 {isBalanced
                   ? 'Todos os parâmetros bromatológicos, reológicos e térmicos estão perfeitamente calibrados para o estilo selecionado.'
-                  : 'Alguns parâmetros estão fora da faixa técnica recomendada. Utilize os controles de peso dos insumos para calibrar a mescla:'}
+                  : 'Siga as orientações prescritivas nos cards abaixo para calibrar viscosidade, ponto térmico ou acidez do lote:'}
               </p>
             </div>
           </div>
@@ -267,6 +354,7 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
               application={thermalApp}
               onApplicationChange={app => setThermalApp(app)}
               thermalStatus={analysis.thermalStatus}
+              thermalGuidance={analysis.thermalGuidance}
             />
 
             {/* ROW 1 - CARD 2: Controle de Reologia & Viscosidade */}
@@ -277,7 +365,11 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
                 setIsDirty(true);
               }}
               rheologyStatus={analysis.rheologyStatus}
+              rheologyGuidance={analysis.rheologyGuidance}
               hydrocolloidsPct={analysis.percentages.hydrocolloids}
+              styleId={currentStyle.id}
+              onApplyRheologyFix={handleApplyRheologyFix}
+              onApplyAcidFix={handleApplyAcidFix}
             />
 
             {/* ROW 2 - CARD 3: Balanço de Cocção & Redução */}
@@ -304,10 +396,10 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
         </div>
       </div>
 
-      {/* 3. Grid de Parâmetros Físico-Químicos (8 Cards dentro de sua moldura padronizada) */}
+      {/* 3. Grid de Parâmetros Físico-Químicos (10 Cards dentro de sua moldura padronizada) */}
       <VariegatoNutrientGrid
         percentages={analysis.percentages}
-        style={currentStyle}
+        style={effectiveStyle}
       />
 
       {/* 4. Layout Principal: Tabela de Insumos (8 cols) e Painéis Laterais (4 cols) */}
@@ -330,6 +422,8 @@ export const VariegatoBalancingScreen: React.FC<VariegatoBalancingScreenProps> =
         <div className="lg:col-span-4 space-y-4">
           <VariegatoSidePanels
             alerts={analysis.alerts}
+            rheologyGuidance={analysis.rheologyGuidance}
+            thermalGuidance={analysis.thermalGuidance}
             cookingInstructions={analysis.cookingInstructions}
             items={items}
             ingredientsMap={ingredientsMap}

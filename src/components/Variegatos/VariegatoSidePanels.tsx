@@ -1,20 +1,23 @@
 import React from 'react';
-import { VariegatoAlerts } from '../../types/variegato';
+import {
+  VariegatoAlerts,
+  VariegatoRheologyGuidance,
+  VariegatoThermalGuidance
+} from '../../types/variegato';
 import { Ingredient } from '../../types/gelato';
 import { extractItemAllergens } from '../../core/calculator';
 import {
   AlertTriangle,
-  Flame,
   CheckCircle2,
   ChefHat,
   ShieldCheck,
-  AlertCircle,
-  Clock,
-  Sparkles
+  AlertCircle
 } from 'lucide-react';
 
 interface VariegatoSidePanelsProps {
   alerts: VariegatoAlerts;
+  rheologyGuidance?: VariegatoRheologyGuidance;
+  thermalGuidance?: VariegatoThermalGuidance;
   cookingInstructions: string[];
   items: { name: string; grams: number }[];
   ingredientsMap: Map<string, Ingredient>;
@@ -22,6 +25,8 @@ interface VariegatoSidePanelsProps {
 
 export const VariegatoSidePanels: React.FC<VariegatoSidePanelsProps> = ({
   alerts,
+  rheologyGuidance,
+  thermalGuidance,
   cookingInstructions,
   items,
   ingredientsMap
@@ -37,17 +42,54 @@ export const VariegatoSidePanels: React.FC<VariegatoSidePanelsProps> = ({
     return Array.from(list);
   }, [items, ingredientsMap]);
 
+  // Agregar diagnósticos físico-químicos, reológicos e térmicos em uma visão unificada
+  const diagnosticMessages = React.useMemo(() => {
+    const list: { key: string; text: string; tone: 'amber' | 'rose' | 'cyan' }[] = [];
+
+    alerts.messages.forEach((msg, idx) => {
+      list.push({ key: `alert_${idx}`, text: msg, tone: 'amber' });
+    });
+
+    if (rheologyGuidance && !rheologyGuidance.isFatBasedExempt && rheologyGuidance.status !== 'aligned') {
+      list.push({
+        key: 'rheology_delta',
+        text: `Reologia (${rheologyGuidance.targetLabel}): ${rheologyGuidance.actionInstruction}`,
+        tone: rheologyGuidance.status === 'above' ? 'rose' : 'amber'
+      });
+    }
+
+    if (rheologyGuidance && rheologyGuidance.acidActivationNeeded) {
+      list.push({
+        key: 'rheology_acid',
+        text: `Ativação de Pectina: Falta meio ácido na formulação. Adicione cerca de ${rheologyGuidance.acidGramsRecommended.toFixed(1)} g de Suco de Limão ao final da cocção para ativar o gel.`,
+        tone: 'amber'
+      });
+    }
+
+    if (thermalGuidance && thermalGuidance.status !== 'ideal') {
+      list.push({
+        key: 'thermal_delta',
+        text: `${thermalGuidance.headline}: ${thermalGuidance.actionInstruction}`,
+        tone: thermalGuidance.status === 'freezing_risk' ? 'cyan' : 'amber'
+      });
+    }
+
+    return list;
+  }, [alerts.messages, rheologyGuidance, thermalGuidance]);
+
+  const hasIssues = diagnosticMessages.length > 0;
+
   return (
     <div className="space-y-4">
       {/* 1. PAINEL DE ALERTAS REOLÓGICOS E CRISTALIZAÇÃO */}
       <div className="bg-slate-900/80 rounded-2xl border border-slate-700/80 p-4 shadow-xl">
         <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
           <div className={`p-1.5 rounded-lg border ${
-            alerts.messages.length > 0
+            hasIssues
               ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
               : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
           }`}>
-            {alerts.messages.length > 0 ? (
+            {hasIssues ? (
               <AlertTriangle className="w-4 h-4 text-amber-400" />
             ) : (
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -58,29 +100,44 @@ export const VariegatoSidePanels: React.FC<VariegatoSidePanelsProps> = ({
               Diagnóstico Reológico & Físico-Químico
             </h4>
             <p className="text-[11px] text-slate-400">
-              {alerts.messages.length > 0
-                ? `${alerts.messages.length} atenção(ões) identificada(s)`
-                : 'Formulação estável e sem defeitos a frio'}
+              {hasIssues
+                ? `${diagnosticMessages.length} atenção(ões) identificada(s)`
+                : 'Formulação estável, alinhada e sem defeitos a frio'}
             </p>
           </div>
         </div>
 
         <div className="mt-3 space-y-2">
-          {alerts.messages.length > 0 ? (
-            alerts.messages.map((msg, i) => (
-              <div
-                key={i}
-                className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200 leading-snug flex items-start gap-2"
-              >
-                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <span>{msg}</span>
-              </div>
-            ))
+          {hasIssues ? (
+            diagnosticMessages.map(diag => {
+              const toneStyle =
+                diag.tone === 'rose'
+                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-200'
+                  : diag.tone === 'cyan'
+                  ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-200'
+                  : 'bg-amber-500/10 border-amber-500/30 text-amber-200';
+              const iconColor =
+                diag.tone === 'rose'
+                  ? 'text-rose-400'
+                  : diag.tone === 'cyan'
+                  ? 'text-cyan-400'
+                  : 'text-amber-400';
+
+              return (
+                <div
+                  key={diag.key}
+                  className={`p-2.5 rounded-xl border text-[11px] leading-snug flex items-start gap-2 ${toneStyle}`}
+                >
+                  <AlertCircle className={`w-4 h-4 shrink-0 mt-0.5 ${iconColor}`} />
+                  <span>{diag.text}</span>
+                </div>
+              );
+            })
           ) : (
             <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] text-emerald-200 leading-snug flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>
-                Excelente equilíbrio! A relação sacarose/anti-cristalizantes impede a precipitação de pedras de açúcar vítreas e mantém textura aveludada.
+                Excelente equilíbrio! A relação sacarose/anti-cristalizantes, a viscosidade alvo e o PAC térmico garantem textura aveludada e sem cristalização.
               </span>
             </div>
           )}

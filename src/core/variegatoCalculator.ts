@@ -13,32 +13,13 @@ import {
   VariegatoCookingState
 } from '../types/variegato';
 import { extractItemAllergens, DEFAULT_PRICING } from './calculator';
+import {
+  isHydrocolloidIngredient,
+  evaluateRheologyGuidance,
+  evaluateThermalGuidance
+} from './variegatoAdvisor';
 
-/**
- * Identifica se um ingrediente atua como agente hidrocolóide / espessante / geleificante
- */
-export function isHydrocolloidIngredient(name: string, category?: string): boolean {
-  const n = (name || '').toLowerCase().trim();
-  const c = (category || '').toLowerCase().trim();
-  return (
-    c.includes('neutro') ||
-    c.includes('goma') ||
-    c.includes('fibra') ||
-    n.includes('pectina') ||
-    n.includes('goma') ||
-    n.includes('xantana') ||
-    n.includes('garrofin') ||
-    n.includes('locust') ||
-    n.includes('guar') ||
-    n.includes('ágar') ||
-    n.includes('agar') ||
-    n.includes('carragenina') ||
-    n.includes('amido') ||
-    n.includes('gelatina') ||
-    n.includes('alginato') ||
-    n.includes('tapioca')
-  );
-}
+export { isHydrocolloidIngredient };
 
 /**
  * Identifica se o ingrediente é sacarose pura ou predominante
@@ -415,9 +396,18 @@ export function calculateVariegatoBatchAnalysis(
     estimatedAw
   };
 
-  // 3. Status Térmico e Reológico
+  // 3. Status Térmico e Reológico + Orientações Prescritivas
   const thermalStatus = evaluateThermalStatus(percentages.pac, thermalApp, percentages.pacOnWater);
   const rheologyStatus = evaluateRheologyStatus(rheologyLevel, percentages.hydrocolloids);
+  const rheologyGuidance = evaluateRheologyGuidance(
+    items,
+    rheologyLevel,
+    style,
+    percentages,
+    safeFinalWeight,
+    ingredientsMap
+  );
+  const thermalGuidance = evaluateThermalGuidance(thermalStatus, safeFinalWeight);
 
   // 4. Custos e Rendimento
   const finalWeightKg = safeFinalWeight / 1000;
@@ -497,6 +487,8 @@ export function calculateVariegatoBatchAnalysis(
     percentages,
     thermalStatus,
     rheologyStatus,
+    rheologyGuidance,
+    thermalGuidance,
     costing,
     alerts,
     cookingInstructions

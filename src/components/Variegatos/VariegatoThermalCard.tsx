@@ -1,17 +1,23 @@
 import React from 'react';
-import { VariegatoThermalApplication, VariegatoThermalStatus } from '../../types/variegato';
+import {
+  VariegatoThermalApplication,
+  VariegatoThermalStatus,
+  VariegatoThermalGuidance
+} from '../../types/variegato';
 import { Store, Snowflake, CheckCircle2, AlertTriangle, AlertCircle, ThermometerSnowflake } from 'lucide-react';
 
 interface VariegatoThermalCardProps {
   application: VariegatoThermalApplication;
   onApplicationChange: (app: VariegatoThermalApplication) => void;
   thermalStatus: VariegatoThermalStatus;
+  thermalGuidance?: VariegatoThermalGuidance;
 }
 
 export const VariegatoThermalCard: React.FC<VariegatoThermalCardProps> = ({
   application,
   onApplicationChange,
-  thermalStatus
+  thermalStatus,
+  thermalGuidance
 }) => {
   const isVitrine = application === 'vitrine';
 
@@ -94,6 +100,9 @@ export const VariegatoThermalCard: React.FC<VariegatoThermalCardProps> = ({
             <span className="text-2xl font-mono font-black text-cyan-300">{thermalStatus.pacValue}</span>
             <span className="text-xs font-semibold text-slate-400">pontos</span>
           </div>
+          <span className="text-[10px] text-slate-500 font-mono">
+            {isVitrine ? 'Alvo: 460–680' : 'Alvo: 540–780'}
+          </span>
         </div>
         <div className="text-right">
           <span className="text-[10px] text-slate-400">PAC sobre Água Livre:</span>
@@ -106,10 +115,30 @@ export const VariegatoThermalCard: React.FC<VariegatoThermalCardProps> = ({
         </div>
       </div>
 
-      {/* Explanatory Description */}
-      <p className="mt-2 text-[11px] leading-tight text-slate-400 border-t border-slate-800/80 pt-2">
-        {thermalStatus.description}
-      </p>
+      {/* Prescriptive Thermal Guidance Box */}
+      <div
+        className={`mt-3 p-3 rounded-xl border space-y-1 ${
+          thermalStatus.status === 'ideal'
+            ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-100'
+            : thermalStatus.status === 'freezing_risk'
+            ? 'bg-cyan-500/10 border-cyan-500/40 text-cyan-100'
+            : 'bg-amber-500/10 border-amber-500/40 text-amber-100'
+        }`}
+      >
+        <div className="text-xs font-bold leading-snug">
+          {thermalGuidance ? thermalGuidance.headline : thermalStatus.label}
+        </div>
+        <p className="text-[11px] leading-relaxed opacity-90">
+          {thermalGuidance && thermalGuidance.status !== 'ideal'
+            ? thermalGuidance.actionInstruction
+            : thermalStatus.description}
+        </p>
+        {thermalGuidance && thermalGuidance.status !== 'ideal' && (
+          <p className="text-[10px] opacity-75 leading-snug pt-0.5">
+            {thermalStatus.description}
+          </p>
+        )}
+      </div>
     </div>
   );
 };

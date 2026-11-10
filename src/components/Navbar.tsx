@@ -3,7 +3,7 @@ import { Scale, BookOpen, Utensils, ChefHat, DollarSign, Database, Package, Blen
 import { ThemeToggle } from './ThemeToggle';
 import gelatioLogo from '../assets/gelatio-logo.png';
 
-export type NavTab = 'balanceamento' | 'variegatos' | 'receitas' | 'ingredientes' | 'preparos' | 'financeiro' | 'estoque';
+export type NavTab = 'balanceamento' | 'variegatos' | 'receitas' | 'preparos' | 'ingredientes' | 'financeiro' | 'estoque';
 
 interface NavbarProps {
   activeTab: NavTab;
@@ -15,9 +15,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
   const tabs = [
     { id: 'balanceamento', label: 'Balanceamento', shortLabel: 'Balancear', icon: Scale },
     { id: 'variegatos', label: 'Mesclas', shortLabel: 'Mesclas', icon: Blend },
-    { id: 'ingredientes', label: 'Insumos', shortLabel: 'Insumos', icon: Utensils },
-    { id: 'preparos', label: 'Preparos', shortLabel: 'Preparos', icon: ChefHat },
     { id: 'receitas', label: 'Receitas', shortLabel: 'Receitas', icon: BookOpen },
+    { id: 'preparos', label: 'Preparos', shortLabel: 'Preparos', icon: ChefHat },
+    { id: 'ingredientes', label: 'Insumos', shortLabel: 'Insumos', icon: Utensils },
     { id: 'financeiro', label: 'Precificação', shortLabel: 'Custos', icon: DollarSign },
     { id: 'estoque', label: 'Estoque', shortLabel: 'Estoque', icon: Package },
   ] as const;

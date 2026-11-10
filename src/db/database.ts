@@ -2138,6 +2138,24 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'catalog_sync_phase_12_sorbets_and_milk', value: 1 });
       }
 
+      // Sincronizar calibração bromatológica de dosagem de neutro (3g, 4g ou 5g) e compensação líquida (Fase 13)
+      const phase13Setting = await this.settings.get('catalog_sync_phase_13_neutro_calibration');
+      if (!phase13Setting) {
+        console.log('Sincronizando calibração bromatológica de neutro e compensação líquida (Fase 13)...');
+        const initialMap = new Map((initialRecipes as Recipe[]).map(r => [r.id, r]));
+        const allDbRecipes = await this.recipes.toArray();
+        for (const rec of allDbRecipes) {
+          const initRec = initialMap.get(rec.id);
+          if (initRec) {
+            await this.recipes.update(rec.id, {
+              ingredients: initRec.ingredients,
+              totalGrams: initRec.totalGrams
+            });
+          }
+        }
+        await this.settings.put({ key: 'catalog_sync_phase_13_neutro_calibration', value: 1 });
+      }
+
       // Sincronizar saneamento de allergenDetails como array (prevenção de crash no PrePreparosList)
       const allergenFixSetting = await this.settings.get('allergen_details_array_fix_v1');
       if (!allergenFixSetting) {

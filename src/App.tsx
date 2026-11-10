@@ -22,7 +22,7 @@ import initialPreparations from './data/preparations.json';
 
 const STORAGE_TAB_KEY = 'gelato_active_tab';
 const STORAGE_RECIPE_KEY = 'gelato_active_recipe_id';
-const VALID_TABS: NavTab[] = ['balanceamento', 'variegatos', 'receitas', 'ingredientes', 'preparos', 'financeiro', 'estoque'];
+const VALID_TABS: NavTab[] = ['balanceamento', 'variegatos', 'receitas', 'preparos', 'ingredientes', 'financeiro', 'estoque'];
 
 const getInitialTab = (): NavTab => {
   if (typeof window !== 'undefined') {

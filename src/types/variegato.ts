@@ -75,6 +75,35 @@ export interface VariegatoRheologyStatus {
   recommendedTexturizer: string;
 }
 
+export interface VariegatoRheologyGuidance {
+  targetLevel: VariegatoRheologyLevel;
+  targetLabel: string;
+  targetMinPct: number;
+  targetMaxPct: number;
+  targetMidPct: number;
+  currentHydrocolloidGrams: number;
+  currentHydrocolloidPct: number;
+  finalWeightGrams: number;
+  isFatBasedExempt: boolean;
+  status: 'below' | 'aligned' | 'above';
+  deltaGrams: number; // positivo = adicionar g, negativo = reduzir g
+  suggestedActionName: string; // Nome canônico ou existente na tabela
+  suggestedActionGrams: number; // Quantidade sugerida absoluta para o ajuste
+  targetGramsMin: number;
+  targetGramsMax: number;
+  alternativeTip: string;
+  acidActivationNeeded: boolean;
+  acidGramsRecommended: number;
+  headline: string;
+  actionInstruction: string;
+}
+
+export interface VariegatoThermalGuidance {
+  status: 'ideal' | 'freezing_risk' | 'too_fluid';
+  headline: string;
+  actionInstruction: string;
+}
+
 export interface VariegatoCostingAnalysis {
   initialCost: number;
   finalCostKg: number;
@@ -102,6 +131,8 @@ export interface VariegatoAnalysis {
   percentages: VariegatoAnalysisPercentages;
   thermalStatus: VariegatoThermalStatus;
   rheologyStatus: VariegatoRheologyStatus;
+  rheologyGuidance: VariegatoRheologyGuidance;
+  thermalGuidance: VariegatoThermalGuidance;
   costing: VariegatoCostingAnalysis;
   alerts: VariegatoAlerts;
   cookingInstructions: string[];
