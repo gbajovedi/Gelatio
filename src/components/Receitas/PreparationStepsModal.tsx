@@ -43,19 +43,17 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
   onClose,
   onSaveSteps
 }) => {
-  if (!isOpen) return null;
-
   // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
   useModalDismiss(isOpen, onClose);
 
   const [steps, setSteps] = useState<PreparationStep[]>(() => {
-    return recipe.preparationSteps && recipe.preparationSteps.length > 0
+    return recipe?.preparationSteps && recipe.preparationSteps.length > 0
       ? JSON.parse(JSON.stringify(recipe.preparationSteps))
       : [];
   });
 
   const [mode, setMode] = useState<'view' | 'edit'>(() => {
-    return recipe.preparationSteps && recipe.preparationSteps.length > 0 ? 'view' : 'edit';
+    return recipe?.preparationSteps && recipe.preparationSteps.length > 0 ? 'view' : 'edit';
   });
 
   const [checkedSteps, setCheckedSteps] = useState<Record<string, boolean>>({});
@@ -65,14 +63,14 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
 
   // Toggle universal para mesclagem/variegato pós-produção
   const [includeVariegato, setIncludeVariegato] = useState<boolean>(() => {
-    const hasExistingVariegatoStep = (recipe.preparationSteps || []).some(s => s.category === 'mesclagem');
-    const hasRecipeVariegatos = Boolean(recipe.variegatos && recipe.variegatos.length > 0);
+    const hasExistingVariegatoStep = (recipe?.preparationSteps || []).some(s => s.category === 'mesclagem');
+    const hasRecipeVariegatos = Boolean(recipe?.variegatos && recipe.variegatos.length > 0);
     return hasExistingVariegatoStep || hasRecipeVariegatos;
   });
 
   // Sincroniza passos quando a receita mudar
   useEffect(() => {
-    const initialSteps = recipe.preparationSteps && recipe.preparationSteps.length > 0
+    const initialSteps = recipe?.preparationSteps && recipe.preparationSteps.length > 0
       ? JSON.parse(JSON.stringify(recipe.preparationSteps))
       : [];
     setSteps(initialSteps);
@@ -81,7 +79,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
     setSaveSuccess(false);
 
     const hasExistingVariegatoStep = initialSteps.some((s: PreparationStep) => s.category === 'mesclagem');
-    const hasRecipeVariegatos = Boolean(recipe.variegatos && recipe.variegatos.length > 0);
+    const hasRecipeVariegatos = Boolean(recipe?.variegatos && recipe.variegatos.length > 0);
     setIncludeVariegato(hasExistingVariegatoStep || hasRecipeVariegatos);
   }, [recipe]);
 
@@ -196,6 +194,8 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
     }
   };
 
+  if (!isOpen || !recipe) return null;
+
   const suggested = suggestPreparationTemplate(recipe);
 
   return (
@@ -266,7 +266,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
               title="Fechar"
             >
               <X className="w-5 h-5" />
@@ -275,7 +275,7 @@ export const PreparationStepsModal: React.FC<PreparationStepsModalProps> = ({
         </div>
 
         {/* Corpo do Modal */}
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-5 flex-1 custom-scrollbar">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-5 flex-1 custom-scrollbar [overscroll-behavior-y:contain] [-webkit-overflow-scrolling:touch]">
 
           {/* MODO 1: VISUALIZAÇÃO / COZINHA */}
           {mode === 'view' && (

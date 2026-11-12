@@ -460,7 +460,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
                         <button
                           type="button"
                           onClick={() => handleOpenCalcModal(ing)}
-                          className="p-1 text-slate-500 hover:text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity rounded"
+                          className="p-1.5 text-slate-400 hover:text-amber-400 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity rounded min-w-[28px] min-h-[28px] flex items-center justify-center"
                           title="Recalcular custo por preço pago e peso em gramas"
                         >
                           <Calculator className="w-3.5 h-3.5" />
@@ -471,7 +471,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
                           title="Clique para editar o custo/kg deste insumo"
                         >
                           <span>R$ {ing.costKg.toFixed(2)}</span>
-                          <Edit2 className="w-3.5 h-3.5 text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <Edit2 className="w-3.5 h-3.5 text-slate-500 opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" />
                         </div>
                       </div>
                     )}

@@ -403,21 +403,21 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
               <button
                 type="button"
                 onClick={() => setUserOverrun(prev => Math.max(10, prev - 2))}
-                className="w-5 h-5 flex items-center justify-center rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-all active:scale-95"
+                className="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-all active:scale-95"
                 title="Diminuir aeração em 2%"
               >
-                <Minus className="w-2.5 h-2.5" />
+                <Minus className="w-3.5 h-3.5" />
               </button>
-              <span className="text-xs font-mono font-black text-white px-1 min-w-[30px] text-center select-none">
+              <span className="text-xs font-mono font-black text-white px-1.5 min-w-[32px] text-center select-none">
                 {userOverrun}%
               </span>
               <button
                 type="button"
                 onClick={() => setUserOverrun(prev => Math.min(70, prev + 2))}
-                className="w-5 h-5 flex items-center justify-center rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-all active:scale-95"
+                className="w-8 h-8 flex items-center justify-center rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-all active:scale-95"
                 title="Aumentar aeração em 2%"
               >
-                <Plus className="w-2.5 h-2.5" />
+                <Plus className="w-3.5 h-3.5" />
               </button>
             </div>
 
@@ -425,14 +425,14 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
               type="button"
               disabled={!densityAndVolume?.baseOverrunPct || userOverrun === densityAndVolume.baseOverrunPct}
               onClick={() => densityAndVolume?.baseOverrunPct && setUserOverrun(densityAndVolume.baseOverrunPct)}
-              className={`w-5 h-5 flex items-center justify-center rounded transition-all shrink-0 ${
+              className={`w-8 h-8 flex items-center justify-center rounded transition-all shrink-0 ${
                 densityAndVolume?.baseOverrunPct && userOverrun !== densityAndVolume.baseOverrunPct
                   ? 'bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 hover:text-white border border-purple-500/40 cursor-pointer shadow-sm'
                   : 'opacity-0 pointer-events-none'
               }`}
               title="Restaurar aeração padrão do estilo"
             >
-              <RotateCcw className="w-2.5 h-2.5" />
+              <RotateCcw className="w-3.5 h-3.5" />
             </button>
           </div>
 

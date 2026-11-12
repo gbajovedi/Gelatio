@@ -101,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
           <button
             type="button"
             onClick={onOpenBackup}
-            className="h-8 sm:h-9 px-2 sm:px-3 bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 text-slate-200 text-xs font-bold rounded-xl transition-all flex lg:hidden items-center gap-1.5 shadow-sm active:scale-95 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+            className="h-9 px-2.5 sm:px-3 bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 text-slate-200 text-xs font-bold rounded-xl transition-all flex lg:hidden items-center gap-1.5 shadow-sm active:scale-95 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             title="Importar ou Exportar Dados (.JSON)"
           >
             <Database className="w-4 h-4 text-amber-400 shrink-0" />
@@ -114,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
       <nav
         role="tablist"
         aria-label="Navegação Móvel"
-        className="flex lg:hidden overflow-x-auto px-3 sm:px-4 py-2 bg-slate-900 border-t border-slate-800 gap-1.5 scrollbar-none"
+        className="flex lg:hidden overflow-x-auto px-3 sm:px-4 py-2 bg-slate-900 border-t border-slate-800 gap-1.5 scrollbar-none [overscroll-behavior-x:contain] [-webkit-overflow-scrolling:touch]"
       >
         {tabs.map(tab => {
           const Icon = tab.icon;
@@ -128,7 +128,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenBa
               onClick={() => onTabChange(tab.id as NavTab)}
               aria-selected={isActive}
               aria-controls={`panel-${tab.id}`}
-              className={`h-9 px-3 sm:px-3.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all shrink-0 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+              className={`h-11 py-2.5 px-3 sm:px-3.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all shrink-0 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                 isActive
                   ? 'bg-amber-500 text-slate-950 font-black shadow-md'
                   : 'text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-750'

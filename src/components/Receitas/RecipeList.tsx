@@ -896,14 +896,16 @@ export const RecipeList: React.FC<RecipeListProps> = ({
       </div>
 
       {/* Full-Screen Kitchen Mode Viewer Modal */}
-      <RecipeViewerModal
-        recipe={viewingRecipe}
-        isOpen={!!viewingRecipe}
-        onClose={() => setViewingRecipe(null)}
-        onOpenInCalculator={onSelectRecipe}
-        onRecipeUpdated={onRefresh}
-        availableIngredients={ingredients}
-      />
+      {viewingRecipe && (
+        <RecipeViewerModal
+          recipe={viewingRecipe}
+          isOpen={!!viewingRecipe}
+          onClose={() => setViewingRecipe(null)}
+          onOpenInCalculator={onSelectRecipe}
+          onRecipeUpdated={onRefresh}
+          availableIngredients={ingredients}
+        />
+      )}
 
       {/* Modal da Tabela Nutricional Oficial ANVISA */}
       <AnvisaNutritionalModal

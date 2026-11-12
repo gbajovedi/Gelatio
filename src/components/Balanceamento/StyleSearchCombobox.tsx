@@ -183,7 +183,7 @@ export const StyleSearchCombobox: React.FC<StyleSearchComboboxProps> = ({
 
       {/* Dropdown Menu Flutuante */}
       {isOpen && (
-        <div className="absolute left-0 top-full mt-2 w-80 sm:w-96 bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute left-0 top-full mt-2 w-full max-w-[calc(100vw-2rem)] sm:w-96 bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-150">
           
           {/* Caixa de Pesquisa no Topo */}
           <div className="p-2.5 border-b border-slate-800 bg-slate-950/70">

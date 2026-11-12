@@ -38,10 +38,8 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   onRecipeUpdated,
   availableIngredients = []
 }) => {
-  if (!isOpen || !recipe) return null;
-
   const baseWeight = useMemo(() => {
-    if (!recipe.ingredients || recipe.ingredients.length === 0) return 1000;
+    if (!recipe?.ingredients || recipe.ingredients.length === 0) return 1000;
     return recipe.ingredients.reduce((acc, item) => acc + item.grams, 0);
   }, [recipe]);
 
@@ -78,6 +76,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   const [isPrepModalOpen, setIsPrepModalOpen] = useState(false);
 
   const handleSavePreparationSteps = async (newSteps: PreparationStep[]) => {
+    if (!recipe) return;
     await db.recipes.update(recipe.id, {
       preparationSteps: newSteps,
       updatedAt: new Date().toISOString()
@@ -103,7 +102,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
   useEffect(() => {
     setTargetBatchGrams(Math.round(baseWeight));
     setCheckedItems({});
-    const initialVars = recipe.variegatos && recipe.variegatos.length > 0
+    const initialVars = recipe?.variegatos && recipe.variegatos.length > 0
       ? JSON.parse(JSON.stringify(recipe.variegatos))
       : [];
     setVariegatos(initialVars);
@@ -207,6 +206,8 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
     }
   };
 
+  if (!isOpen || !recipe) return null;
+
   return (
     <div
       onClick={onClose}
@@ -246,7 +247,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="no-print p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors shrink-0"
+            className="no-print min-w-[44px] min-h-[44px] p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors shrink-0 flex items-center justify-center"
             title="Fechar Visualizador"
           >
             <X className="w-6 h-6" />
@@ -254,7 +255,7 @@ export const RecipeViewerModal: React.FC<RecipeViewerModalProps> = ({
         </div>
 
         {/* Scrollable Content Body */}
-        <div className="print-recipe-body flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
+        <div className="print-recipe-body flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 [overscroll-behavior-y:contain] [-webkit-overflow-scrolling:touch]">
           {/* Batch Scaling Control Bar */}
           <div className="bg-slate-800/90 p-4 rounded-2xl border border-slate-700 space-y-3 shadow-md">
             <div className="flex items-center justify-between gap-2">

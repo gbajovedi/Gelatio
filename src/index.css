@@ -20,9 +20,16 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Prevent mobile zoom on inputs */
-  input, select, textarea {
-    font-size: 14px;
+  /* Prevent mobile zoom on iOS Safari (inputs with font-size < 16px trigger auto-zoom) */
+  @media (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+  }
+  @media (min-width: 769px) {
+    input, select, textarea {
+      font-size: 14px;
+    }
   }
 
   /* Suppress native HTML5 number spin arrows across all browsers */

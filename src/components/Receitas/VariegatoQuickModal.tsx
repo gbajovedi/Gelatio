@@ -20,6 +20,9 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
   onClose,
   onSaved
 }) => {
+  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
+  useModalDismiss(isOpen, onClose);
+
   const [items, setItems] = useState<VariegatoItem[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -49,11 +52,6 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
       )
     );
   }, [availableIngredients]);
-
-  if (!isOpen || !recipe) return null;
-
-  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
-  useModalDismiss(isOpen, onClose);
 
   const handleAdd = () => {
     setItems(prev => [...prev, { name: '', grams: 100, costKg: 0 }]);
@@ -104,7 +102,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
   const { caldaGrams, caldaCost, caldaCostKg } = useMemo(() => {
     let grams = 0;
     let cost = 0;
-    for (const ingItem of recipe.ingredients || []) {
+    for (const ingItem of recipe?.ingredients || []) {
       grams += ingItem.grams || 0;
       const ing = ingredientsMap.get(ingItem.name.toLowerCase().trim());
       if (ing) {
@@ -113,7 +111,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
     }
     const costKg = grams > 0 ? (cost / (grams / 1000)) : 0;
     return { caldaGrams: grams, caldaCost: cost, caldaCostKg: costKg };
-  }, [recipe.ingredients, ingredientsMap]);
+  }, [recipe?.ingredients, ingredientsMap]);
 
   // Cálculo das Mesclas e Totais com Map O(1)
   const { variegatoGrams, variegatoCost, finalWeightGrams, finalTotalCost, finalCostKg } = useMemo(() => {
@@ -139,6 +137,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
   }, [items, caldaGrams, caldaCost, caldaCostKg, ingredientsMap]);
 
   const handleSave = async () => {
+    if (!recipe) return;
     setIsSaving(true);
     try {
       // Filtrar apenas mesclas preenchidas usando lookup O(1)
@@ -168,6 +167,8 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
     }
   };
 
+  if (!isOpen || !recipe) return null;
+
   return (
     <div
       onClick={onClose}
@@ -195,7 +196,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl hover:bg-slate-800 transition-colors"
             aria-label="Fechar diálogo"
           >
             <X className="w-5 h-5" />
@@ -203,7 +204,7 @@ export const VariegatoQuickModal: React.FC<VariegatoQuickModalProps> = ({
         </div>
 
         {/* Content Body (Scrollable) */}
-        <div className="flex-1 overflow-y-auto space-y-4 pr-1">
+        <div className="flex-1 overflow-y-auto space-y-4 pr-1 [overscroll-behavior-y:contain] [-webkit-overflow-scrolling:touch]">
           {/* Cockpit de Simulação de Custos e Pesos */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 bg-slate-800/80 rounded-2xl border border-slate-700/60 font-mono">
             <div className="space-y-0.5">

@@ -19,8 +19,6 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
 }) => {
   useModalDismiss(isOpen && !!stockItem, onClose);
 
-  if (!isOpen || !stockItem) return null;
-
   const [type, setType] = useState<AdjustmentType>('loss');
   const [quantity, setQuantity] = useState<number>(1);
   const [notes, setNotes] = useState<string>('');
@@ -28,7 +26,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (quantity <= 0) return;
+    if (quantity <= 0 || !stockItem) return;
 
     setIsSubmitting(true);
     try {
@@ -60,6 +58,8 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
     }
   };
 
+  if (!isOpen || !stockItem) return null;
+
   return (
     <div
       onClick={onClose}
@@ -79,7 +79,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
             title="Fechar"
             aria-label="Fechar"
           >

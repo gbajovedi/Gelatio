@@ -7,6 +7,7 @@ import { Navbar, NavTab } from './components/Navbar';
 import { BalancingScreen } from './components/Balanceamento/BalancingScreen';
 import { RecipeList } from './components/Receitas/RecipeList';
 import { ErrorBoundary } from './components/Common/ErrorBoundary';
+import { forceUnlockBodyScroll } from './core/useModalDismiss';
 
 // Code-splitting via lazy loading para otimização do bundle inicial
 const VariegatoBalancingScreen = lazy(() => import('./components/Variegatos/VariegatoBalancingScreen').then(m => ({ default: m.VariegatoBalancingScreen })));
@@ -130,6 +131,7 @@ export function App() {
   };
 
   const handleTabChange = (tab: NavTab) => {
+    forceUnlockBodyScroll();
     setActiveTab(tab);
     setVisitedTabs(prev => {
       if (prev.has(tab)) return prev;
@@ -154,6 +156,7 @@ export function App() {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '') as NavTab;
       if (VALID_TABS.includes(hash)) {
+        forceUnlockBodyScroll();
         setActiveTab(hash);
         setVisitedTabs(prev => {
           if (prev.has(hash)) return prev;

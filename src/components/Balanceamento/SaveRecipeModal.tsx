@@ -22,6 +22,9 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
   onUpdateExisting,
   onSaveAsNew,
 }) => {
+  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
+  useModalDismiss(isOpen, onClose);
+
   const [mode, setMode] = useState<'update' | 'new'>(isExisting ? 'update' : 'new');
   const [name, setName] = useState(currentName);
   const [category, setCategory] = useState(currentCategory || 'Gelatos de Leite');
@@ -46,11 +49,6 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
     return names.sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' }));
   }, [isOpen, category]);
 
-  if (!isOpen) return null;
-
-  // Acessibilidade e fechamento seguro do modal (ESC e trava de scroll)
-  useModalDismiss(isOpen, onClose);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -68,6 +66,8 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
     }
   };
 
+  if (!isOpen) return null;
+
   return (
     <div
       onClick={onClose}
@@ -82,7 +82,7 @@ export const SaveRecipeModal: React.FC<SaveRecipeModalProps> = ({
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition-colors"
+          className="absolute top-4 right-4 text-slate-400 hover:text-white p-2 min-w-[44px] min-h-[44px] rounded-xl hover:bg-slate-800 transition-colors flex items-center justify-center"
           aria-label="Fechar diálogo"
         >
           <X className="w-5 h-5" />

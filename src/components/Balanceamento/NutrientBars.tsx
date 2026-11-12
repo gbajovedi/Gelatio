@@ -280,7 +280,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
             activeTooltip === key
               ? 'opacity-100 pointer-events-auto scale-100'
               : 'opacity-0 pointer-events-none group-hover/tip:opacity-100 group-hover/tip:pointer-events-auto scale-95 group-hover/tip:scale-100'
-          } transition-all duration-200 z-50 w-64 p-3 rounded-xl bg-slate-950/95 border ${
+          } transition-all duration-200 z-50 w-64 max-w-[calc(100vw-3rem)] p-3 rounded-xl bg-slate-950/95 border ${
             isAlert ? 'border-amber-500/60 shadow-amber-950/50' : 'border-slate-700/80 shadow-slate-950/70'
           } shadow-2xl backdrop-blur-md text-left text-xs leading-relaxed`}
         >
@@ -536,11 +536,11 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                   </span>
                 </div>
 
-                <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+                <div className="flex flex-wrap sm:flex-nowrap w-full sm:w-auto bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1">
                   <button
                     type="button"
                     onClick={() => setThermalMode('vitrine')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    className={`flex-1 sm:flex-initial px-3 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 min-h-[40px] sm:min-h-0 ${
                       thermalMode === 'vitrine'
                         ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow-sm'
                         : 'text-slate-300 hover:text-white'
@@ -553,7 +553,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                   <button
                     type="button"
                     onClick={() => setThermalMode('freezer')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    className={`flex-1 sm:flex-initial px-3 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 min-h-[40px] sm:min-h-0 ${
                       thermalMode === 'freezer'
                         ? 'bg-amber-500/25 text-amber-200 border border-amber-400/50 shadow-sm'
                         : 'text-slate-300 hover:text-white'
@@ -702,10 +702,13 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                 </div>
                 <div className="relative flex items-center justify-between text-[11px] sm:text-xs text-slate-300 font-medium font-sans">
                   <span>Denso (18%)</span>
-                  <span className="absolute left-1/2 -translate-x-1/2 text-purple-300 font-bold whitespace-nowrap">
+                  <span className="hidden sm:inline absolute left-1/2 -translate-x-1/2 text-purple-300 font-bold whitespace-nowrap">
                     Clássico Italiano (~32%)
                   </span>
                   <span>Aerado (46%)</span>
+                </div>
+                <div className="sm:hidden text-center text-[10px] text-purple-300 font-bold mt-0.5">
+                  Alvo Clássico Italiano: ~32%
                 </div>
               </div>
             </div>

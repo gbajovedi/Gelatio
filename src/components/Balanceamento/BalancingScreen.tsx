@@ -807,9 +807,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           onClick={() => {
             document.getElementById('nutrient-bars-section')?.scrollIntoView({ behavior: 'smooth' });
           }}
-          className="fixed top-16 left-0 right-0 z-30 lg:hidden bg-slate-900/95 backdrop-blur-md border-b border-amber-500/30 px-3 py-1.5 shadow-xl animate-in slide-in-from-top-2 duration-200 cursor-pointer active:bg-slate-850"
+          className="fixed top-16 left-0 right-0 z-30 lg:hidden bg-slate-900/95 backdrop-blur-md border-b border-amber-500/30 px-2 sm:px-3 py-1.5 shadow-xl animate-in slide-in-from-top-2 duration-200 cursor-pointer active:bg-slate-850"
         >
-          <div className="max-w-md mx-auto flex items-center justify-between text-xs font-mono font-bold">
+          <div className="max-w-md mx-auto flex items-center justify-center flex-wrap gap-x-2 gap-y-1 text-xs font-mono font-bold">
             <span className="text-slate-200 flex items-center gap-1" title="Peso Total">
               <span className="text-amber-400">⚖️</span>
               <span>{Math.round(analysis.caldaWeight)}g</span>

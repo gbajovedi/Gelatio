@@ -372,12 +372,14 @@ export const StockOverview: React.FC<StockOverviewProps> = ({
       )}
 
       {/* Modal de Ajuste de Estoque */}
-      <StockAdjustmentModal
-        isOpen={adjustmentTargetItem !== null}
-        stockItem={adjustmentTargetItem}
-        onClose={() => setAdjustmentTargetItem(null)}
-        onSuccess={onRefresh}
-      />
+      {adjustmentTargetItem && (
+        <StockAdjustmentModal
+          isOpen={adjustmentTargetItem !== null}
+          stockItem={adjustmentTargetItem}
+          onClose={() => setAdjustmentTargetItem(null)}
+          onSuccess={onRefresh}
+        />
+      )}
     </div>
   );
 };
