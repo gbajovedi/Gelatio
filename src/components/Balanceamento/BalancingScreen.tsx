@@ -927,6 +927,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                     value={batchScaleInput}
                     onChange={e => setBatchScaleInput(e.target.value)}
                     onKeyDown={e => {
+                      if (e.nativeEvent.isComposing || (e as any).isComposing || e.keyCode === 229) return;
                       if (e.key === 'Enter') {
                         handleApplyBatchScale(parseFloat(batchScaleInput) || 1000);
                       }

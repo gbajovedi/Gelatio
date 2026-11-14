@@ -44,23 +44,52 @@
   }
 }
 
-/* Custom scrollbars for data tables */
-::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+/* ==========================================================================
+   Custom scrollbars (W3C CSS Scrollbars Level 1 & Fallback)
+   Guia W3C 'customize-scrollbar-color-and-thickness' / WCAG 1.4.11 (>= 3:1)
+   ========================================================================== */
+:root,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #64748b #0f172a; /* thumb (#64748b, 3.75:1) track (#0f172a) */
 }
 
-::-webkit-scrollbar-track {
-  background: #0f172a;
+html.light,
+html.light * {
+  scrollbar-color: #8c8577 #f6f5f0; /* thumb (#8c8577, 3.35:1) track (#f6f5f0 Panna Linho) */
 }
 
-::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 9999px;
-}
+/* Fallback para navegadores legados sem suporte a scrollbar-color */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #64748b;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  html.light ::-webkit-scrollbar-track {
+    background: #f6f5f0;
+  }
+
+  html.light ::-webkit-scrollbar-thumb {
+    background: #8c8577;
+  }
+
+  html.light ::-webkit-scrollbar-thumb:hover {
+    background: #78716c;
+  }
 }
 
 /* ==========================================================================
@@ -764,18 +793,6 @@ html.light .theme-switch-inactive:hover {
   background-color: #edeae3 !important;
 }
 
-/* Scrollbars for light mode */
-html.light ::-webkit-scrollbar-track {
-  background: #f6f5f0;
-}
-
-html.light ::-webkit-scrollbar-thumb {
-  background: #dcd8cc;
-}
-
-html.light ::-webkit-scrollbar-thumb:hover {
-  background: #b8b2a5;
-}
 
 /* ==========================================================================
    Estilos de Impressão (Ficha de Produção da Cozinha & Rótulo Oficial ANVISA)

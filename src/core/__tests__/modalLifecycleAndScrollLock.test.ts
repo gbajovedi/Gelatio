@@ -48,8 +48,24 @@ describe('Ciclo de Vida de Modais, Bloqueio de Rolagem e Blindagem Mobile (M1)',
       set overflow(val: string) {
         store['overflow'] = val;
       },
+      get overscrollBehavior() {
+        return store['overscrollBehavior'] ?? store['overscroll-behavior'] ?? '';
+      },
+      set overscrollBehavior(val: string) {
+        store['overscrollBehavior'] = val;
+        store['overscroll-behavior'] = val;
+      },
+      get scrollbarGutter() {
+        return store['scrollbarGutter'] ?? store['scrollbar-gutter'] ?? '';
+      },
+      set scrollbarGutter(val: string) {
+        store['scrollbarGutter'] = val;
+        store['scrollbar-gutter'] = val;
+      },
       removeProperty: (prop: string) => {
         delete store[prop];
+        if (prop === 'overscroll-behavior') delete store['overscrollBehavior'];
+        if (prop === 'scrollbar-gutter') delete store['scrollbarGutter'];
       },
       getPropertyValue: (prop: string) => store[prop] ?? ''
     });
@@ -80,15 +96,23 @@ describe('Ciclo de Vida de Modais, Bloqueio de Rolagem e Blindagem Mobile (M1)',
       const release = acquireModalLock();
       expect(getActiveModalCount()).toBe(1);
       expect(document.body.style.overflow).toBe('hidden');
+      expect((document.body.style as any).overscrollBehavior).toBe('contain');
       expect(document.documentElement.style.overflow).toBe('hidden');
+      expect((document.documentElement.style as any).overscrollBehavior).toBe('contain');
+      expect((document.documentElement.style as any).scrollbarGutter).toBe('stable');
 
       // Fechamento do modal
       release();
       expect(getActiveModalCount()).toBe(0);
       expect(document.body.style.overflow).toBe('');
+      expect((document.body.style as any).overscrollBehavior).toBe('');
       expect(document.documentElement.style.overflow).toBe('');
+      expect((document.documentElement.style as any).overscrollBehavior).toBe('');
+      expect((document.documentElement.style as any).scrollbarGutter).toBe('');
       expect('overflow' in bodyProperties).toBe(false);
       expect('overflow' in htmlProperties).toBe(false);
+      expect('overscroll-behavior' in bodyProperties).toBe(false);
+      expect('scrollbar-gutter' in htmlProperties).toBe(false);
     });
 
     it('gerencia modais aninhados e sucessivos sem restaurar prematuramente a rolagem', () => {
@@ -162,7 +186,12 @@ describe('Ciclo de Vida de Modais, Bloqueio de Rolagem e Blindagem Mobile (M1)',
       forceUnlockBodyScroll();
       expect(getActiveModalCount()).toBe(0);
       expect(document.body.style.overflow).toBe('');
+      expect((document.body.style as any).overscrollBehavior).toBe('');
       expect(document.documentElement.style.overflow).toBe('');
+      expect((document.documentElement.style as any).overscrollBehavior).toBe('');
+      expect((document.documentElement.style as any).scrollbarGutter).toBe('');
+      expect('overscroll-behavior' in bodyProperties).toBe(false);
+      expect('scrollbar-gutter' in htmlProperties).toBe(false);
     });
   });
 

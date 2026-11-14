@@ -20,9 +20,12 @@ export function acquireModalLock(): () => void {
   if (activeModalCount === 1 && typeof document !== 'undefined') {
     if (document.body) {
       document.body.style.overflow = 'hidden';
+      document.body.style.overscrollBehavior = 'contain';
     }
     if (document.documentElement) {
       document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.overscrollBehavior = 'contain';
+      document.documentElement.style.scrollbarGutter = 'stable';
     }
   }
 
@@ -34,9 +37,12 @@ export function acquireModalLock(): () => void {
     if (activeModalCount === 0 && typeof document !== 'undefined') {
       if (document.body) {
         document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('overscroll-behavior');
       }
       if (document.documentElement) {
         document.documentElement.style.removeProperty('overflow');
+        document.documentElement.style.removeProperty('overscroll-behavior');
+        document.documentElement.style.removeProperty('scrollbar-gutter');
       }
     }
   };
@@ -51,9 +57,12 @@ export function forceUnlockBodyScroll(): void {
   if (typeof document !== 'undefined') {
     if (document.body) {
       document.body.style.removeProperty('overflow');
+      document.body.style.removeProperty('overscroll-behavior');
     }
     if (document.documentElement) {
       document.documentElement.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('overscroll-behavior');
+      document.documentElement.style.removeProperty('scrollbar-gutter');
     }
   }
 }
