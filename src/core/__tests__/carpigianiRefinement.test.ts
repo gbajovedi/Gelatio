@@ -46,73 +46,37 @@ describe('Auditoria Técnica e Refinamento do Compêndio Carpigiani Gelato Unive
     }
   });
 
-  it('deve cadastrar as 6 receitas internacionais Carpigiani com batelada de 1.000g, passos estruturados e tag (Carpigiani)', () => {
-    const expectedRecIds = [
+  it('deve garantir a remoção definitiva das 6 receitas Carpigiani do catálogo de receitas e banco de dados', () => {
+    const removedRecIds = [
       'rec_229', 'rec_230', 'rec_231', 'rec_232', 'rec_233', 'rec_234'
     ];
 
-    for (const id of expectedRecIds) {
+    for (const id of removedRecIds) {
       const rec = recipes.find(r => r.id === id);
-      expect(rec, `Receita ${id} não encontrada`).toBeDefined();
-      expect(rec!.name.includes('(Carpigiani)'), `Receita ${rec!.name} deve conter (Carpigiani)`).toBe(true);
-      expect(rec!.totalGrams).toBe(1000);
-
-      const sum = rec!.ingredients.reduce((acc, i) => acc + i.grams, 0);
-      expect(sum, `Soma dos ingredientes de ${rec!.name} deve ser exatamente 1.000g`).toBe(1000);
-
-      expect(rec!.preparationSteps).toBeDefined();
-      expect(rec!.preparationSteps!.length).toBe(6);
-
-      rec!.preparationSteps!.forEach((step, idx) => {
-        expect(step.order).toBe(idx + 1);
-        expect(step.title.length).toBeGreaterThan(0);
-        expect(step.description.length).toBeGreaterThan(0);
-        expect(step.category).toBeDefined();
-      });
+      expect(rec, `Receita ${id} não deveria mais constar no catálogo`).toBeUndefined();
     }
+
+    const anyCarpigianiRecipe = recipes.filter(r => r.name.includes('(Carpigiani)'));
+    expect(anyCarpigianiRecipe.length).toBe(0);
+    expect(recipes.length).toBe(200);
   });
 
-  it('deve conter ingredientes específicos e proporções canônicas de cada formulação Carpigiani', () => {
-    // 1. Yogurt Gelato (rec_229)
-    const rec229 = recipes.find(r => r.id === 'rec_229')!;
-    expect(rec229.ingredients.some(i => i.name.toLowerCase().includes('iogurte') && i.grams === 540)).toBe(true);
-    expect(rec229.ingredients.some(i => i.name.toLowerCase().includes('base bianca') && i.grams === 270)).toBe(true);
-    expect(rec229.ingredients.some(i => i.name.toLowerCase().includes('cítrico'))).toBe(true);
+  it('deve garantir a remoção dos insumos órfãos e validar insumos canônicos restantes', () => {
+    // Insumos órfãos removidos
+    const removedIngIds = ['ing_266', 'ing_267', 'ing_269'];
+    for (const ingId of removedIngIds) {
+      expect(ingredients.find(i => i.id === ingId)).toBeUndefined();
+    }
 
-    // 2. Frozen Yogurt (rec_230)
-    const rec230 = recipes.find(r => r.id === 'rec_230')!;
-    expect(rec230.ingredients.some(i => i.name.toLowerCase().includes('iogurte') && i.grams === 777)).toBe(true);
-
-    // 3. Cheesecake New York (rec_231)
-    const rec231 = recipes.find(r => r.id === 'rec_231')!;
-    expect(rec231.ingredients.some(i => i.name.toLowerCase().includes('cream cheese') && i.grams === 250)).toBe(true);
-    expect(rec231.ingredients.some(i => i.name.toLowerCase().includes('base bianca') && i.grams === 506)).toBe(true);
-
-    // 4. Snickers / Amendoim (rec_232)
-    const rec232 = recipes.find(r => r.id === 'rec_232')!;
-    expect(rec232.ingredients.some(i => i.name.toLowerCase().includes('amendoim') && i.grams === 80)).toBe(true);
-    expect(rec232.ingredients.some(i => i.name.toLowerCase().includes('base bianca') && i.grams === 761)).toBe(true);
-
-    // 5. Crème Caramel (rec_233)
-    const rec233 = recipes.find(r => r.id === 'rec_233')!;
-    expect(rec233.ingredients.some(i => i.name.toLowerCase().includes('mascarpone') && i.grams === 110)).toBe(true);
-
-    // 6. Caramelo Salgado Mou (rec_234)
-    const rec234 = recipes.find(r => r.id === 'rec_234')!;
-    expect(rec234.ingredients.some(i => i.name.toLowerCase().includes('caramelo salgado') && i.grams === 700)).toBe(true);
-    expect(rec234.ingredients.some(i => i.name.toLowerCase().includes('mou') && i.grams === 300)).toBe(true);
-  });
-
-  it('deve garantir que os insumos canônicos e semi-acabados estejam calibrados com preços válidos', () => {
+    // Insumos ativos canônicos calibrados com preços válidos
     const mascarpone = ingredients.find(i => i.id === 'ing_120')!;
     expect(mascarpone.costKg).toBe(115.0);
 
     const citricAcid = ingredients.find(i => i.id === 'ing_265')!;
     expect(citricAcid.costKg).toBe(32.0);
 
-    const baseBianca = ingredients.find(i => i.id === 'ing_266')!;
-    expect(baseBianca.costKg).toBe(14.5);
-    expect(baseBianca.pac).toBeCloseTo(0.233, 2);
+    const mouSauce = ingredients.find(i => i.id === 'ing_268')!;
+    expect(mouSauce.costKg).toBe(26.5);
   });
 
   it('deve assegurar anonimização estrita e ausência de nomes pessoais de autores', () => {

@@ -1,6 +1,6 @@
 # Compêndio Comparativo Técnico entre as 4 Fontes de Receitas
 ### *Auditoria Físico-Química, Precificação Bromatológica e Análise de Superioridade Técnica*
-**Fontes Analisadas:** Autoral | Direto ao Ponto | Gelato Irresistível | Addolcire *(com referências Carpigiani CGU)*  
+**Fontes Analisadas:** Autoral | Direto ao Ponto | Gelato Irresistível | Addolcire  
 **Data da Auditoria:** Novembro de 2026  
 **Sistema:** Gelatio Core Engine — Calibração Padrão Ouro Híbrido Protegido
 
@@ -33,10 +33,10 @@ Este compêndio consolida uma auditoria analítica e bromatológica rigorosa de 
 | **3** | Amendoim Tostado (Base Leite) | Gelatos de Oleaginosas | Direto ao Ponto, Addolcire | R$ 17,90 - R$ 35,47 | **Addolcire** |
 | **4** | Fior di Latte / Base Branca | Gelatos de Leite | Direto ao Ponto, Gelato Irresistível | R$ 11,46 - R$ 11,70 | **Direto ao Ponto** |
 | **5** | Doce de Leite Tradicional | Gelatos de Leite | Direto ao Ponto, Addolcire, Gelato Irresistível | R$ 16,79 - R$ 23,05 | **Addolcire** |
-| **6** | Iogurte Natural / Amarena | Gelatos de Leite / Fruta | Direto ao Ponto, Addolcire, Gelato Irresistível, Carpigiani | R$ 16,51 - R$ 18,89 | **Direto ao Ponto** |
+| **6** | Iogurte Natural / Amarena | Gelatos de Leite / Fruta | Direto ao Ponto, Addolcire, Gelato Irresistível | R$ 16,51 - R$ 18,89 | **Direto ao Ponto** |
 | **7** | Chocolate ao Leite & Gianduia | Gelatos de Leite c/ Chocolate | Addolcire, Gelato Irresistível | R$ 12,05 - R$ 41,90 | **Addolcire** |
 | **8** | Chocolate Meio Amargo / 100% | Gelatos de Leite c/ Chocolate | Direto ao Ponto, Addolcire, Gelato Irresistível | R$ 24,39 - R$ 37,84 | **Direto ao Ponto** |
-| **9** | Cheesecake Tradicional | Gelatos de Leite | Direto ao Ponto, Addolcire, Gelato Irresistível, Carpigiani | R$ 17,30 - R$ 19,46 | **Direto ao Ponto** |
+| **9** | Cheesecake Tradicional | Gelatos de Leite | Direto ao Ponto, Addolcire, Gelato Irresistível | R$ 17,30 - R$ 19,46 | **Direto ao Ponto** |
 | **10** | Café Espresso / Caffè Bianco | Gelatos de Leite | Direto ao Ponto, Addolcire, Gelato Irresistível | R$ 11,73 - R$ 45,90 | **Direto ao Ponto** *(Caffè Bianco)* |
 | **11** | Sorbet de Limão Siciliano | Sorbets Cítricos | Direto ao Ponto, Gelato Irresistível | R$ 10,93 - R$ 12,57 | **Direto ao Ponto** |
 | **12** | Sorbet de Maracujá | Sorbets Cítricos | Addolcire, Gelato Irresistível | R$ 10,81 - R$ 15,43 | **Addolcire** |
@@ -229,7 +229,6 @@ O doce de leite é um dos insumos mais desafiadores da gelateria, pois já carre
 | **Gelato de Iogurte Grego Artesanal (Direto ao Ponto)** (`rec_13`) | **R$ 18.89** | ✅ Conforme | 6.2% | 17.3% | 10.1% | 36.4% | 282.2 | 171.8 |
 | **Gelato de Iogurte com Amarena (Addolcire)** (`rec_22`) | **R$ 17.67** | ✅ Conforme | 7.3% | 18.1% | 9.5% | 35.5% | 252.0 | 162.3 |
 | **Gelato de Iogurte com Amarenas (Gelato Irresistível)** (`rec_203`) | **R$ 16.51** | ❌ Desvio | 7.5% | 18.9% | 9.9% | 36.8% | 254.7 | 175.3 |
-| **Gelato de Iogurte Nobre (Yogurt Gelato) (Carpigiani)** (`rec_229`) | **R$ 17.59** | ❌ Desvio | 4.0% | 20.5% | 10.5% | 36.0% | 278.1 | 202.0 |
 
 ### Detalhamento dos Ingredientes por Batelada (1.000g)
 
@@ -245,19 +244,11 @@ O doce de leite é um dos insumos mais desafiadores da gelateria, pois já carre
 > ⚠️ **Diagnóstico de Desvios vs Padrão Ouro:**  
 • *msnf*: valor atual 9.9% fora da faixa recomendada [6.5% a 9.0%]
 
-**Gelato de Iogurte Nobre (Yogurt Gelato) (Carpigiani):**  
-> Iogurte Integral (540g) • Base Bianca Oficial CGU (Carpigiani) (270g) • Açúcar (136g) • Leite Em Pó Desnatado (26g) • Dextrose (22g) • Neutro (5g) • Ácido Cítrico Anidro Alimentício (1g)
-
-> ⚠️ **Diagnóstico de Desvios vs Padrão Ouro:**  
-• *fat*: valor atual 4.0% fora da faixa recomendada [6.0% a 10.5%]  
-• *pod*: valor atual 202.0 fora da faixa recomendada [145 a 185]
-
 ### Análise Comparativa de Bancada
 O gelato de iogurte exige equilíbrio entre acidez lática fresca, textura aveludada e preservação das bactérias benéficas sem quebrar a emulsão láctea.
 - **Direto ao Ponto (`rec_13`):** Utiliza **35% de iogurte grego artesanal (350g)** incorporado a frio após a pasteurização da base branca. O iogurte grego entra com alta carga proteica e menor umidade livre. PAC 282.2 e POD 171.8.
 - **Addolcire (`rec_22`):** Utiliza 30% de iogurte natural comercial com 45% de leite integral e creme de leite. PAC 252.0 e POD 162.3.
 - **Gelato Irresistível (`rec_203`):** 30% de iogurte com adição de amarenas em pasta. Desvio leve de SLNG (9.9% vs máx 9.0% da categoria com frutas).
-- **Carpigiani (`rec_229`):** O clássico *Yogurt Gelato* da CGU com iogurte integral concentrado e dextrose balanceada.
 
 ### Veredito Técnico de Superioridade
 🏆 **Veredito Técnico:** **Direto ao Ponto (`rec_13`)** é **Tecnicamente Superior** pela nobreza do Iogurte Grego em dosagem generosa (35%), garantindo sabor lático autêntico, denso e refrescante.
@@ -350,7 +341,6 @@ O chocolate amargo / meio amargo é o teste de fogo da reologia: a manteiga de c
 | **Gelato de Cheesecake (Cream Cheese ao Leite) (Direto ao Ponto)** (`rec_9`) | **R$ 19.46** | ✅ Conforme | 9.6% | 17.7% | 10.4% | 38.4% | 261.6 | 175.5 |
 | **Gelato de Cheesecake (Addolcire)** (`rec_23`) | **R$ 17.30** | ✅ Conforme | 9.8% | 17.7% | 10.4% | 38.3% | 239.8 | 169.2 |
 | **Gelato de Cheesecake com Geleia de Amora e Biscoito (Gelato Irresistível)** (`rec_227`) | **R$ 17.53** | ❌ Desvio | 8.4% | 18.3% | 10.1% | 37.3% | 238.2 | 167.3 |
-| **Gelato de Cheesecake New York (Carpigiani)** (`rec_231`) | **R$ 22.54** | ❌ Desvio | 15.0% | 18.5% | 8.9% | 43.1% | 217.1 | 177.3 |
 
 ### Detalhamento dos Ingredientes por Batelada (1.000g)
 
@@ -367,20 +357,11 @@ O chocolate amargo / meio amargo é o teste de fogo da reologia: a manteiga de c
 • *fat*: valor atual 8.4% fora da faixa recomendada [4.5% a 7.5%]  
 • *msnf*: valor atual 10.1% fora da faixa recomendada [6.5% a 9.0%]
 
-**Gelato de Cheesecake New York (Carpigiani):**  
-> Base Bianca Oficial CGU (Carpigiani) (506g) • Cream cheese (250g) • Creme De Leite Fresco 35% (100g) • Açúcar (94g) • Iogurte Integral (50g)
-
-> ⚠️ **Diagnóstico de Desvios vs Padrão Ouro:**  
-• *fat*: valor atual 15.0% fora da faixa recomendada [6.0% a 10.5%]  
-• *totalSolids*: valor atual 43.1% fora da faixa recomendada [35.0% a 41.0%]  
-• *pac*: valor atual 217.1 fora da faixa recomendada [230 a 285]
-
 ### Análise Comparativa de Bancada
 O cheesecake depende da textura untuosa do cream cheese (rico em gordura e ácido lático) e da perfeita emulsificação para não separar soro.
 - **Direto ao Ponto (`rec_9`):** 18% de cream cheese (180g), leite integral (56.5%), creme 35% (7%), leite em pó (6%), sacarose (8%) e dextrose (4%). Sólidos de 38.4%, PAC 261.6 e POD 175.5.
 - **Addolcire (`rec_23`):** 16% de cream cheese (160g). PAC 239.8, POD 169.2 e custo de R$ 17,30/kg.
 - **Gelato Irresistível (`rec_227`):** 12% de cream cheese com adição de biscoito e geleia. Desvio de gordura e SLNG.
-- **Carpigiani (`rec_231`):** Padrão acadêmico internacional com pasta base de queijo.
 
 ### Veredito Técnico de Superioridade
 🏆 **Veredito Técnico:** **Direto ao Ponto (`rec_9`)** é **Tecnicamente Superior** pela maior concentração de cream cheese autêntico (18%) e PAC de 261.6 perfeitamente dimensionado para manter o gelato macio e acetinado.

@@ -2220,6 +2220,23 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'catalog_sync_phase_15_remove_bases', value: 1 });
       }
 
+      // Remoção das receitas internacionais da Carpigiani e insumos órfãos (Fase 16)
+      const phase16Setting = await this.settings.get('catalog_sync_phase_16_remove_carpigiani_recipes');
+      if (!phase16Setting) {
+        console.log('Removendo receitas da Carpigiani e insumos órfãos (Fase 16)...');
+        const carpigianiRecipeIdsToRemove = [
+          'rec_229', 'rec_230', 'rec_231', 'rec_232', 'rec_233', 'rec_234'
+        ];
+        for (const recId of carpigianiRecipeIdsToRemove) {
+          await this.recipes.delete(recId);
+        }
+        const carpigianiIngIdsToRemove = ['ing_266', 'ing_267', 'ing_269'];
+        for (const ingId of carpigianiIngIdsToRemove) {
+          await this.ingredients.delete(ingId);
+        }
+        await this.settings.put({ key: 'catalog_sync_phase_16_remove_carpigiani_recipes', value: 1 });
+      }
+
 
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
