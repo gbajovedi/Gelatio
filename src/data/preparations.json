@@ -4945,7 +4945,7 @@
     "id": "prep_granella_crocante_pistache",
     "name": "Granella Crocante de Pistache (Autoral)",
     "category": "Crumbles",
-    "instructions": "Granella artesanal de pistache caramelizado em calda rala (80g de pistache, 28g de açúcar, 16g de água, 1,2g de sal fino). Picar em cubinhos uniformes de 2 a 4 mm e passar por peneira grossa para descartar o pó fino. Envolver os grãos na calda quente (~105°C) e assar em forno baixo pré-aquecido a 140°C–150°C por 12 a 16 minutos até secar a casquinha sem alterar o tom verde vivo nem oxidar os óleos. Resfriar totalmente sobre assadeira para ganho de crocância vítrea. Adicionar apenas na extração da produtora para proteger contra a umidade da calda do gelato. Armazenar em recipiente hermético com sachê de sílica alimentar.",
+    "instructions": "Granella artesanal de pistache caramelizado em calda rala (80g de pistache, 28g de açúcar, 16g de água, 1,2g de sal fino). Picar em cubinhos uniformes de 2 a 4 mm e passar por peneira grossa para descartar o pó fino. Envolver os grãos na calda quente (~105°C) e assar em forno baixo pré-aquecido a 140°C–150°C por 12 a 16 minutos até secar a casquinha sem alterar o tom verde vivo nem oxidar os óleos. Resfriar totalmente sobre assadeira para ganho de crocância vítrea. Adicionar apenas na extração da produtora para proteger contra a umidade da calda do gelato. Armazenar em recipiente hermético com sachê de sílica alimentar. (Opcional): Impermeabilizar a granella fria com 8% a 10% de manteiga de cacau fundida a 35°C–40°C e refrigerar por 10 min para formar barreira hidrofóbica anti-umidade prolongada.",
     "preparationSteps": [
       {
         "id": "step_gcp_1",
@@ -4991,6 +4991,15 @@
         "temperature": "Ambiente",
         "duration": "20 min",
         "description": "Retirar do forno assim que a calda secar sobre os grãos e o pistache exalar aroma tostado (sem deixar ficar marrom escuro). Deixar esfriar totalmente em temperatura ambiente sobre a assadeira — a crocância final aparece conforme esfria. Incorporar a granella fria apenas na extração da produtora (intercalando camadas na cuba ou pote) para não dissolver a casquinha protetora. Armazenar em pote hermético com sachê de sílica alimentar longe de umidade."
+      },
+      {
+        "id": "step_gcp_6",
+        "order": 6,
+        "title": "Impermeabilização Lipídica Hidrofóbica (Opcional)",
+        "category": "emulsao",
+        "temperature": "35°C a 40°C",
+        "duration": "10 min",
+        "description": "Derreter 8% a 10% do peso da granella em manteiga de cacau (ex.: 8g a 10g de manteiga de cacau para 100g de granella) a cerca de 35°C – 40°C. (Opcionalmente, chocolate branco ou cobertura fracionada branca cumprem papel parecido, mas alteram mais o sabor e o dulçor; a manteiga de cacau pura é neutra). Misturar bem até todos os pedaços ficarem brilhantes e impermeabilizados, espalhar em uma assadeira e levar à geladeira por 10 minutos para cristalizar a gordura antes de mesclar no gelato. Formará uma camada hidrofóbica que garantirá que a granella fique crocante por muito mais tempo na vitrine."
       }
     ],
     "ingredients": [

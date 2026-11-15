@@ -53,10 +53,10 @@ describe('Crumbles category rename and Granella de Pistache recipe', () => {
 
     // Check preparation steps
     expect(granella.preparationSteps).toBeDefined();
-    expect(granella.preparationSteps!.length).toBeGreaterThanOrEqual(5);
+    expect(granella.preparationSteps!.length).toBeGreaterThanOrEqual(6);
 
     const stepOrders = granella.preparationSteps!.map(s => s.order);
-    expect(stepOrders).toEqual([1, 2, 3, 4, 5]);
+    expect(stepOrders).toEqual([1, 2, 3, 4, 5, 6]);
 
     // Check step content covers required technical phases
     const allStepText = granella.preparationSteps!.map(s => s.description).join(' ');
@@ -65,6 +65,8 @@ describe('Crumbles category rename and Granella de Pistache recipe', () => {
     expect(allStepText).toContain('clorofila');
     expect(allStepText).toContain('extração');
     expect(allStepText).toContain('peneira');
+    expect(allStepText).toContain('manteiga de cacau');
+    expect(allStepText).toContain('hidrofóbica');
   });
 
   it('should calculate valid nutrients and allergens for Granella de Pistache', () => {
