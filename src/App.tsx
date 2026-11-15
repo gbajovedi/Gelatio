@@ -10,7 +10,6 @@ import { ErrorBoundary } from './components/Common/ErrorBoundary';
 import { forceUnlockBodyScroll } from './core/useModalDismiss';
 
 // Code-splitting via lazy loading para otimização do bundle inicial
-const VariegatoBalancingScreen = lazy(() => import('./components/Variegatos/VariegatoBalancingScreen').then(m => ({ default: m.VariegatoBalancingScreen })));
 const IngredientManager = lazy(() => import('./components/Ingredientes/IngredientManager').then(m => ({ default: m.IngredientManager })));
 const PrePreparosList = lazy(() => import('./components/PrePreparos/PrePreparosList').then(m => ({ default: m.PrePreparosList })));
 const PricingCalculator = lazy(() => import('./components/Financeiro/PricingCalculator').then(m => ({ default: m.PricingCalculator })));
@@ -23,7 +22,7 @@ import initialPreparations from './data/preparations.json';
 
 const STORAGE_TAB_KEY = 'gelato_active_tab';
 const STORAGE_RECIPE_KEY = 'gelato_active_recipe_id';
-const VALID_TABS: NavTab[] = ['balanceamento', 'variegatos', 'receitas', 'preparos', 'ingredientes', 'financeiro', 'estoque'];
+const VALID_TABS: NavTab[] = ['balanceamento', 'receitas', 'preparos', 'ingredientes', 'financeiro', 'estoque'];
 
 const getInitialTab = (): NavTab => {
   if (typeof window !== 'undefined') {
@@ -261,25 +260,6 @@ export function App() {
                   } catch {}
                 }}
               />
-            </ErrorBoundary>
-          )}
-        </div>
-
-        <div
-          id="panel-variegatos"
-          role="tabpanel"
-          aria-labelledby="tab-variegatos"
-          style={{ display: activeTab === 'variegatos' ? 'block' : 'none' }}
-        >
-          {visitedTabs.has('variegatos') && (
-            <ErrorBoundary tabName="Bancada de Variegatos & Mesclas" onResetToDefaultTab={() => handleTabChange('balanceamento')}>
-              <Suspense fallback={<div className="py-12 text-center text-slate-400 font-mono text-sm">Carregando Bancada de Variegatos & Mesclas...</div>}>
-                <VariegatoBalancingScreen
-                  ingredients={ingredients}
-                  preparations={preparations}
-                  onRefresh={refreshData}
-                />
-              </Suspense>
             </ErrorBoundary>
           )}
         </div>
