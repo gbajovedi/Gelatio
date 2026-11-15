@@ -9,29 +9,15 @@ describe('Auditoria Técnica e Refinamento do Compêndio Carpigiani Gelato Unive
   const preparations = allPreparations as Preparation[];
   const ingredients = allIngredients as Ingredient[];
 
-  it('deve conter os xaropes e caldas canônicas CGU com passos estruturados e tag (Carpigiani)', () => {
-    const expectedPrepIds = [
+  it('deve garantir a remoção definitiva de todas as caldas e xaropes da Carpigiani do banco de preparações', () => {
+    const removedPrepIds = [
       'prep_sciroppo_zucchero_70_cgu',
       'prep_sciroppo_stabilizzato_50_cgu',
       'prep_calda_caramelo_salgado_mou_cgu'
     ];
 
-    for (const prepId of expectedPrepIds) {
-      const prep = preparations.find(p => p.id === prepId);
-      expect(prep, `Pré-preparo ${prepId} não encontrado`).toBeDefined();
-      expect(prep!.name.includes('(Carpigiani)'), `Nome de ${prep!.name} deve conter (Carpigiani)`).toBe(true);
-      const totalYield = prep!.ingredients.reduce((acc, i) => acc + i.grams, 0);
-      expect(totalYield).toBeGreaterThan(0);
-      expect(['Pré-preparo', 'Caldas']).toContain(prep!.category);
-      expect(prep!.preparationSteps).toBeDefined();
-      expect(prep!.preparationSteps!.length).toBeGreaterThanOrEqual(3);
-
-      prep!.preparationSteps!.forEach((step, idx) => {
-        expect(step.order).toBe(idx + 1);
-        expect(step.title.length).toBeGreaterThan(0);
-        expect(step.description.length).toBeGreaterThan(0);
-        expect(step.category).toBeDefined();
-      });
+    for (const prepId of removedPrepIds) {
+      expect(preparations.find(p => p.id === prepId), `Pré-preparo ${prepId} não deveria mais constar`).toBeUndefined();
     }
 
     // Validação da remoção das 4 bases CGU de pré-preparos obsoletas
@@ -44,6 +30,11 @@ describe('Auditoria Técnica e Refinamento do Compêndio Carpigiani Gelato Unive
     for (const baseId of removedBases) {
       expect(preparations.find(p => p.id === baseId)).toBeUndefined();
     }
+
+    // Nenhuma preparação remanescente deve carregar a tag (Carpigiani)
+    const anyCarpigianiPrep = preparations.filter(p => p.name.includes('(Carpigiani)'));
+    expect(anyCarpigianiPrep.length).toBe(0);
+    expect(preparations.length).toBe(79);
   });
 
   it('deve garantir a remoção definitiva das 6 receitas Carpigiani do catálogo de receitas e banco de dados', () => {
@@ -63,7 +54,7 @@ describe('Auditoria Técnica e Refinamento do Compêndio Carpigiani Gelato Unive
 
   it('deve garantir a remoção dos insumos órfãos e validar insumos canônicos restantes', () => {
     // Insumos órfãos removidos
-    const removedIngIds = ['ing_266', 'ing_267', 'ing_269'];
+    const removedIngIds = ['ing_266', 'ing_267', 'ing_268', 'ing_269'];
     for (const ingId of removedIngIds) {
       expect(ingredients.find(i => i.id === ingId)).toBeUndefined();
     }
@@ -74,9 +65,6 @@ describe('Auditoria Técnica e Refinamento do Compêndio Carpigiani Gelato Unive
 
     const citricAcid = ingredients.find(i => i.id === 'ing_265')!;
     expect(citricAcid.costKg).toBe(32.0);
-
-    const mouSauce = ingredients.find(i => i.id === 'ing_268')!;
-    expect(mouSauce.costKg).toBe(26.5);
   });
 
   it('deve assegurar anonimização estrita e ausência de nomes pessoais de autores', () => {

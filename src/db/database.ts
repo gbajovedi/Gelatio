@@ -2237,6 +2237,22 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'catalog_sync_phase_16_remove_carpigiani_recipes', value: 1 });
       }
 
+      // Remoção das caldas da Carpigiani e insumo vinculado (Fase 17)
+      const phase17Setting = await this.settings.get('catalog_sync_phase_17_remove_carpigiani_caldas');
+      if (!phase17Setting) {
+        console.log('Removendo caldas da Carpigiani e insumo vinculado (Fase 17)...');
+        const carpigianiCaldasIdsToRemove = [
+          'prep_calda_caramelo_salgado_mou_cgu',
+          'prep_sciroppo_stabilizzato_50_cgu',
+          'prep_sciroppo_zucchero_70_cgu'
+        ];
+        for (const prepId of carpigianiCaldasIdsToRemove) {
+          await this.preparations.delete(prepId);
+        }
+        await this.ingredients.delete('ing_268');
+        await this.settings.put({ key: 'catalog_sync_phase_17_remove_carpigiani_caldas', value: 1 });
+      }
+
 
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();

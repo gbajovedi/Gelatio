@@ -76,11 +76,21 @@ describe('PrePreparos crash diagnosis', () => {
     for (const baseId of removedBaseIds) {
       expect(preparations.find(p => p.id === baseId)).toBeUndefined();
     }
-    expect(preparations.length).toBe(82);
 
-    // Insumos legados vinculados às bases autorais também devem ter sido saneados
+    // Caldas Carpigiani também removidas
+    const removedCaldaIds = [
+      'prep_calda_caramelo_salgado_mou_cgu',
+      'prep_sciroppo_stabilizzato_50_cgu',
+      'prep_sciroppo_zucchero_70_cgu'
+    ];
+    for (const caldaId of removedCaldaIds) {
+      expect(preparations.find(p => p.id === caldaId)).toBeUndefined();
+    }
+    expect(preparations.length).toBe(79);
+
+    // Insumos legados vinculados às bases autorais e caldas também devem ter sido saneados
     const ingredients = initialIngredients as Ingredient[];
-    const removedIngIds = ['ing_24', 'ing_25', 'ing_26', 'ing_27'];
+    const removedIngIds = ['ing_24', 'ing_25', 'ing_26', 'ing_27', 'ing_268'];
     for (const ingId of removedIngIds) {
       expect(ingredients.find(i => i.id === ingId)).toBeUndefined();
     }

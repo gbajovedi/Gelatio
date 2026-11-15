@@ -4164,25 +4164,6 @@
     "hasAllergen": false
   },
   {
-    "id": "ing_268",
-    "name": "Calda de Caramelo Salgado Tradicional Mou (Carpigiani)",
-    "category": "Caldas",
-    "costKg": 26.5,
-    "sugars": 0.495,
-    "fat": 0.22,
-    "msnf": 0.022,
-    "otherSolids": 0.01,
-    "totalSolids": 0.747,
-    "water": 0.253,
-    "pod": 0.5,
-    "pac": 0.54,
-    "protein": 0.008,
-    "hasAllergen": true,
-    "allergenDetails": [
-      "Leite / Lactose"
-    ]
-  },
-  {
     "id": "ing_270",
     "name": "Pistache Cru sem Sal",
     "category": "Pastas & Oleaginosas",
