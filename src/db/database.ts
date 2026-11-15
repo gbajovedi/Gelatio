@@ -2195,6 +2195,31 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'catalog_sync_phase_14_crumbles', value: 1 });
       }
 
+      // Remoção dos pré-preparos de Bases obsoletas (Fase 15)
+      const phase15Setting = await this.settings.get('catalog_sync_phase_15_remove_bases');
+      if (!phase15Setting) {
+        console.log('Removendo pré-preparos de bases obsoletas (Fase 15)...');
+        const basePrepIdsToRemove = [
+          'prep_base_bianca_caramelo_salgado_cgu',
+          'prep_base_bianca_cgu',
+          'prep_base_cioccolato_cgu',
+          'prep_base_de_gua',
+          'prep_base_de_leite',
+          'prep_base_de_leite_creme_de_leite_17_uht_',
+          'prep_base_de_leite_fior_di_latte_',
+          'prep_base_gialla_cgu',
+          'prep_calda_base_agua_universal'
+        ];
+        for (const prepId of basePrepIdsToRemove) {
+          await this.preparations.delete(prepId);
+        }
+        const baseIngIdsToRemove = ['ing_24', 'ing_25', 'ing_26', 'ing_27'];
+        for (const ingId of baseIngIdsToRemove) {
+          await this.ingredients.delete(ingId);
+        }
+        await this.settings.put({ key: 'catalog_sync_phase_15_remove_bases', value: 1 });
+      }
+
 
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();

@@ -9,14 +9,10 @@ describe('Auditoria Técnica e Refinamento do Compêndio Carpigiani Gelato Unive
   const preparations = allPreparations as Preparation[];
   const ingredients = allIngredients as Ingredient[];
 
-  it('deve conter as 7 novas bases, xaropes e caldas canônicas CGU com passos estruturados e tag (Carpigiani)', () => {
+  it('deve conter os xaropes e caldas canônicas CGU com passos estruturados e tag (Carpigiani)', () => {
     const expectedPrepIds = [
-      'prep_base_bianca_cgu',
-      'prep_base_gialla_cgu',
-      'prep_base_cioccolato_cgu',
       'prep_sciroppo_zucchero_70_cgu',
       'prep_sciroppo_stabilizzato_50_cgu',
-      'prep_base_bianca_caramelo_salgado_cgu',
       'prep_calda_caramelo_salgado_mou_cgu'
     ];
 
@@ -36,6 +32,17 @@ describe('Auditoria Técnica e Refinamento do Compêndio Carpigiani Gelato Unive
         expect(step.description.length).toBeGreaterThan(0);
         expect(step.category).toBeDefined();
       });
+    }
+
+    // Validação da remoção das 4 bases CGU de pré-preparos obsoletas
+    const removedBases = [
+      'prep_base_bianca_cgu',
+      'prep_base_gialla_cgu',
+      'prep_base_cioccolato_cgu',
+      'prep_base_bianca_caramelo_salgado_cgu'
+    ];
+    for (const baseId of removedBases) {
+      expect(preparations.find(p => p.id === baseId)).toBeUndefined();
     }
   });
 
