@@ -3642,7 +3642,7 @@
   {
     "id": "ing_233",
     "name": "Crocante Artesanal de Gergelim Preto (Pré-Preparo)",
-    "category": "Inclusões Crocantes",
+    "category": "Confeitaria & Inclusões",
     "costKg": 35.0,
     "sugars": 0.45,
     "fat": 0.28,
@@ -4303,5 +4303,24 @@
     "pac": 0.45,
     "protein": 0.02,
     "hasAllergen": false
+  },
+  {
+    "id": "ing_270",
+    "name": "Pistache Cru sem Sal",
+    "category": "Pastas & Oleaginosas",
+    "costKg": 160.0,
+    "sugars": 0.08,
+    "fat": 0.45,
+    "msnf": 0.0,
+    "otherSolids": 0.23,
+    "totalSolids": 0.96,
+    "water": 0.04,
+    "pod": 0.08,
+    "pac": 0.08,
+    "protein": 0.2,
+    "hasAllergen": true,
+    "allergenDetails": [
+      "Castanhas & Nozes"
+    ]
   }
 ]

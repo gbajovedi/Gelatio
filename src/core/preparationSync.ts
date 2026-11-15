@@ -143,7 +143,7 @@ export async function syncPreparationToIngredient(
   const defaultCategory =
     prep.category === 'Variegato' || prep.category === 'Caldas' || prep.category === 'Creminos'
       ? 'Variegatos & Recheios'
-      : prep.category === 'Inclusões Crocantes'
+      : prep.category === 'Crumbles'
       ? 'Confeitaria & Inclusões'
       : 'Bases & Pré-preparos';
 

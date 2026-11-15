@@ -489,7 +489,7 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               {/* Filtro de Categoria */}
-              {(['Todas', 'Pré-preparo', 'Variegato', 'Caldas', 'Creminos', 'Inclusões Crocantes'] as const).map(cat => (
+              {(['Todas', 'Pré-preparo', 'Variegato', 'Caldas', 'Creminos', 'Crumbles'] as const).map(cat => (
                 <button
                   key={cat}
                   type="button"
@@ -590,7 +590,7 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                           ? 'bg-rose-500/15 text-rose-300 border-rose-500/40'
                           : prep.category === 'Creminos'
                           ? 'bg-purple-500/15 text-purple-300 border-purple-500/40'
-                          : prep.category === 'Inclusões Crocantes'
+                          : prep.category === 'Crumbles'
                           ? 'bg-orange-500/15 text-orange-300 border-orange-500/40'
                           : 'bg-blue-500/15 text-blue-300 border-blue-500/40'
                       }`}
@@ -868,7 +868,7 @@ export const PrePreparosList: React.FC<PrePreparosListProps> = ({
                     <option value="Variegato">Variegato (Recheio / Mescla de Cuba)</option>
                     <option value="Caldas">Caldas (Calda Fluida / Cobertura Artesanal)</option>
                     <option value="Creminos">Creminos (Ganache / Pasta Trufada Macia)</option>
-                    <option value="Inclusões Crocantes">Inclusões Crocantes (Crumble, Crocante, Farofa Selada)</option>
+                    <option value="Crumbles">Crumbles (Crumble, Crocante, Farofa Selada)</option>
                   </select>
                 </div>
               </div>

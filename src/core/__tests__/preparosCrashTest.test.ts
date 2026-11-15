@@ -29,7 +29,7 @@ describe('PrePreparos crash diagnosis', () => {
 
   it('should test filtering logic with empty search, category filters and method filters', () => {
     const preparations = initialPreparations as Preparation[];
-    const categories = ['Todas', 'Pré-preparo', 'Variegato', 'Caldas', 'Creminos', 'Inclusões Crocantes'] as const;
+    const categories = ['Todas', 'Pré-preparo', 'Variegato', 'Caldas', 'Creminos', 'Crumbles'] as const;
     const methods = ['todos', 'com_preparo', 'sem_preparo'] as const;
 
     for (const catFilter of categories) {

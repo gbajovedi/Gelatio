@@ -662,7 +662,7 @@
   {
     "id": "prep_gostosuras_cookies_brownie",
     "name": "Gostosuras de Confeitaria (Cookies & Brownies) (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Picar os cookies e brownies artesanais em cubos regulares de 8mm a 10mm. Distribuir em assadeira forrada com papel manteiga e levar ao freezer a -18°C por no mínimo 2 horas para enrijecer completamente. Essa etapa é indispensável para que as inclusões permaneçam inteiras e não se desmanchem em migalhas na hora de mesclar.",
     "preparationSteps": [
       {
@@ -875,7 +875,7 @@
   {
     "id": "prep_sucrilhos_crocantes_selados",
     "name": "Cereal Crunch Selado (Anti-Umidade) (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Derreter manteiga de cacau ou óleo de coco desodorizado a 45°C. Envolver os flocos de milho tostados suavemente com espátula até que uma fina película lipídica cubra 100% da superfície de cada floco. Polvilhar flor de sal fino. Resfriar em esteira/assadeira para cristalizar a gordura. Cria uma barreira impermeável que mantém a crocância extrema mesmo em contato com a umidade do gelato.",
     "preparationSteps": [
       {
@@ -1104,7 +1104,7 @@
   {
     "id": "prep_castanha_peca_caramelizada_selada",
     "name": "Pecã Caramelizada e Selada (Anti-Umidade) (Autoral)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Picar nozes pecãs grosseiramente sem formar farelos. Caramelizar açúcar a seco em frigideira até dourado. Juntar as castanhas mexendo até ficarem caramelizadas. Espalhar em silpat e, ainda mornas, envolver com óleo de coco ou manteiga de cacau derretida para criar película protetora anti-umidade.",
     "preparationSteps": [
       {
@@ -1153,7 +1153,7 @@
   {
     "id": "prep_crumble_tradicional",
     "name": "Crumble Crocante Tradicional (Autoral)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Misturar farinha de trigo, açúcar refinado e sal. Adicionar manteiga gelada em cubos e beliscar com as pontas dos dedos até obter uma areia úmida aglutinada. Espalhar em assadeira com silpat e assar a 180°C por 10 minutos até dourar. Esfriar antes de usar.",
     "preparationSteps": [
       {
@@ -1206,7 +1206,7 @@
   {
     "id": "prep_crumble_especiarias",
     "name": "Crumble com Especiarias Finas (Autoral)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Elaborar o crumble tradicional incorporando canela, cravo, noz moscada e gengibre em pó aos secos. Assar a 180°C por 10 minutos. Confere textura crocante e notas aromáticas de pão de especiarias / gingerbread.",
     "preparationSteps": [
       {
@@ -1856,7 +1856,7 @@
   {
     "id": "prep_cookie_proteico_amendoim",
     "name": "Cookie Proteico Crocante de Amendoim (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Misturar a farinha de amendoim torrado, o Whey Protein 80%, a farinha de aveia, canela, sal e bicarbonato em um bowl. Adicionar o óleo de coco e o maltitol (ou açúcar mascavo), massageando até formar uma massa modelável de textura areada úmida. Moldar pequenos cookies planos e dispor em assadeira forrada com papel manteiga. Assar em forno pré-aquecido a 160°C por 12 a 15 minutos até secar e dourar levemente. Deixar esfriar completamente na grade para atingir crocância máxima e picar em pedaços de 6mm para mesclagem pós-mantecação.",
     "preparationSteps": [
       {
@@ -1934,7 +1934,7 @@
   {
     "id": "prep_crumble_proteico_aveia",
     "name": "Crumble Proteico de Aveia (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Combinar aveia em flocos finos, Whey Protein ou isolado vegetal, farinha de amêndoas, eritritol (ou açúcar demerara) e uma pitada de sal. Esfregar o óleo de coco gelado com as pontas dos dedos até produzir grânulos crocantes irregulares (streusel). Espalhar sobre tapete de silicone e assar a 150°C por 15 minutos até tostar suavemente e perder toda a umidade. Resfriar e vedar para mescla crocante em gelatos funcionais.",
     "preparationSteps": [
       {
@@ -2680,7 +2680,7 @@
   {
     "id": "prep_gir_crocante_gergelim_preto",
     "name": "Crocante Artesanal de Gergelim Preto (Gelato Irresistível)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Crocante caramelizado a seco de sementes pretas de gergelim para mesclar no gelato Fiordipanna.",
     "ingredients": [
       {
@@ -2725,7 +2725,7 @@
   {
     "id": "prep_gir_avelas_tostadas",
     "name": "Avelãs Tostadas e Caramelizadas em Pedaços (Gelato Irresistível)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Avelãs em grãos crocantes para mesclar no gelato de Gianduia e Avelã.",
     "ingredients": [
       {
@@ -2761,7 +2761,7 @@
   {
     "id": "prep_gir_torrone_cubos",
     "name": "Torrone Artesanal em Cubos Crocantes (Gelato Irresistível)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Cubinhos de torrone crocante para mescla e decoração de vitrine.",
     "ingredients": [
       {
@@ -2857,7 +2857,7 @@
   {
     "id": "prep_gir_rocambole_cubos",
     "name": "Cubos Artesanais de Rocambole de Doce de Leite (Gelato Irresistível)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Cubos de rocambole macio para finalização e mescla em cubas de gelato.",
     "ingredients": [
       {
@@ -3675,7 +3675,7 @@
   {
     "id": "prep_crumble_classico_baunilha_amendoas",
     "name": "Crumble Clássico de Baunilha e Amêndoas (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Em bowl amplo, homogeneizar a farinha de amêndoas fina, a farinha de trigo, o açúcar refinado e o sal. Adicionar a manteiga sem sal bem gelada cortada em cubos pequenos e a pasta pura de baunilha. Realizar a técnica de sablage, esfregando a manteiga contra os secos com as pontas dos dedos até obter textura de farofa úmida e pedaçuda, sem sovar. Espalhar em assadeira com silpat e assar em forno pré-aquecido a 170°C por 15 a 20 minutos até coloração âmbar homogênea. Esfriar totalmente antes de aplicar como topping ou inclusão.",
     "preparationSteps": [
       {
@@ -3745,7 +3745,7 @@
   {
     "id": "prep_crumble_cacau_avela",
     "name": "Crumble de Cacau com Avelã (Perfil Brownie Crocante) (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Misturar a farinha de avelã tostada, o açúcar, a farinha de trigo, o cacau em pó alcalino e o sal fino. Adicionar a manteiga gelada em cubos pequenos e realizar o areamento (sablage) rápido até formar grumos rústicos escuros de cacau com avelã. Distribuir em camada uniforme em assadeira forrada com silpat. Assar a 160°C por 18 minutos, revolvendo suavemente na metade do tempo. Deixar esfriar completamente para atingir textura crocante tipo brownie assado.",
     "preparationSteps": [
       {
@@ -3815,7 +3815,7 @@
   {
     "id": "prep_crumble_rustico_aveia_canela",
     "name": "Crumble Rústico de Aveia e Canela (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Juntar os flocos médios de aveia, farinha de trigo, açúcar branco, açúcar mascavo úmido, canela em pó e sal marinho. Esfregar a manteiga gelada aos secos até criar uma farofa rústica com grumos aglutinados fibrosos. Levar ao forno pré-aquecido a 175°C por 15 a 18 minutos até dourar e perfumar intensamente. Esfriar para cristalização crocante.",
     "preparationSteps": [
       {
@@ -3889,7 +3889,7 @@
   {
     "id": "prep_crumble_castanha_para_melado",
     "name": "Crumble Regional de Castanha-do-Pará e Melado (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Misturar a farinha de castanha-do-pará fresca, a farinha de trigo, o açúcar e o sal. Esfregar a manteiga gelada em cubos até textura de areia grossa. Regar o melado de cana em fios finos sobre a farofa e misturar suavemente com ponta dos dedos para aglutinar grumos rústicos caramelizados. Assar a 165°C por 16 a 20 minutos com atenção à caramelização profunda do melado. Esfriar sobre silpat.",
     "preparationSteps": [
       {
@@ -3959,7 +3959,7 @@
   {
     "id": "prep_crumble_citrico_limao_siciliano",
     "name": "Crumble Cítrico de Limão-Siciliano (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Friccionar com as pontas dos dedos o açúcar refinado com as raspas frescas de limão-siciliano para liberar os óleos essenciais da casca. Juntar a farinha de amêndoas, o trigo e o sal. Adicionar a manteiga gelada e trabalhar em sablage rápido até formar grumos crocantes e aromáticos. Assar a 170°C por 15 a 18 minutos até douramento tênue. Deixar esfriar antes de aplicar.",
     "preparationSteps": [
       {
@@ -4029,7 +4029,7 @@
   {
     "id": "prep_crumble_pistache_cardamomo",
     "name": "Crumble de Pistache e Cardamomo (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Reunir farinha de trigo, açúcar, pistache tostado triturado fino, cardamomo em pó moído fresco e sal fino. Incorporar a manteiga gelada em cubos esfarelando até textura de farofa esmeralda pedaçuda. Espalhar em assadeira e assar a 165°C por 15 a 18 minutos, preservando o tom esverdeado e aroma resinoso oriental. Resfriar completamente.",
     "preparationSteps": [
       {
@@ -4099,7 +4099,7 @@
   {
     "id": "prep_crumble_nozes_caramelizadas",
     "name": "Crumble de Nozes Caramelizadas (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Misturar a farinha de trigo com o açúcar mascavo, as nozes chilenas selecionadas trituradas grosseiramente e o sal. Integrar a manteiga gelada cortada em dados pequenos, operando rapidamente a sablage para formar torrões rústicos amanteigados. Assar a 170°C por 15 a 20 minutos até caramelização crocante do mascavo com as nozes. Deixar esfriar totalmente.",
     "preparationSteps": [
       {
@@ -4165,7 +4165,7 @@
   {
     "id": "prep_crumble_tropical_coco",
     "name": "Crumble Tropical de Coco (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Em uma tigela ampla, reunir o coco ralado seco médio, a sacarose, a farinha de trigo e o sal refinado. Adicionar a manteiga gelada em cubos e proceder ao areamento delicado até obter grumos soltos e úmidos. Distribuir em assadeira forrada e assar a 165°C por 15 minutos, mexendo delicadamente aos 8 minutos para tostar o coco por igual sem queimar as pontas. Esfriar para crocância perfeita.",
     "preparationSteps": [
       {
@@ -4231,7 +4231,7 @@
   {
     "id": "prep_crumble_gergelim_mel",
     "name": "Crumble de Gergelim Tostado e Mel (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Misturar a farinha de trigo, o gergelim branco tostado e moído, o açúcar e o sal fino. Adicionar a manteiga em cubos fria e processar em sablage. Adicionar o mel puro de abelha e o óleo de gergelim torrado em fios, integrando delicadamente até formar grumos elásticos aromáticos com perfil de tahine tostado. Assar a 160°C por 16 minutos. Resfriar em silpat.",
     "preparationSteps": [
       {
@@ -4305,7 +4305,7 @@
   {
     "id": "prep_crumble_speculoos_especiarias",
     "name": "Crumble de Biscoito Speculoos e Especiarias Finas (Direto ao Ponto)",
-    "category": "Inclusões Crocantes",
+    "category": "Crumbles",
     "instructions": "Peneirar a farinha de trigo com o açúcar refinado, açúcar mascavo, farinha de amêndoas, blend de especiarias europeias (canela, gengibre em pó, cravo moído e cardamomo) e o sal. Adicionar a manteiga gelada e realizar sablage rápida com as pontas dos dedos até obter farofa aromática pedaçuda clássica de Speculoos. Assar em forno a 170°C por 18 minutos. Esfriar totalmente antes de armazenar hermeticamente.",
     "preparationSteps": [
       {
@@ -4938,6 +4938,77 @@
         "category": "maturacao",
         "temperature": 4,
         "durationMinutes": 240
+      }
+    ]
+  },
+  {
+    "id": "prep_granella_crocante_pistache",
+    "name": "Granella Crocante de Pistache (Autoral)",
+    "category": "Crumbles",
+    "instructions": "Granella artesanal de pistache caramelizado em calda rala (80g de pistache, 28g de açúcar, 16g de água, 1,2g de sal fino). Picar em cubinhos uniformes de 2 a 4 mm e passar por peneira grossa para descartar o pó fino. Envolver os grãos na calda quente (~105°C) e assar em forno baixo pré-aquecido a 140°C–150°C por 12 a 16 minutos até secar a casquinha sem alterar o tom verde vivo nem oxidar os óleos. Resfriar totalmente sobre assadeira para ganho de crocância vítrea. Adicionar apenas na extração da produtora para proteger contra a umidade da calda do gelato. Armazenar em recipiente hermético com sachê de sílica alimentar.",
+    "preparationSteps": [
+      {
+        "id": "step_gcp_1",
+        "order": 1,
+        "title": "Corte e Peneiramento do Pistache",
+        "category": "pesagem",
+        "temperature": "Ambiente",
+        "duration": "5 min",
+        "description": "Picar os grãos de pistache cru (80g) na faca em cubinhos pequenos e uniformes de 2 a 4 mm (\"em quadradinhos\", estilo xerém). Passar rapidamente por uma peneira grossa para descartar o pó fino, que queima rápido no forno e amarga a preparação."
+      },
+      {
+        "id": "step_gcp_2",
+        "order": 2,
+        "title": "Preparo da Calda Rala de Cristalização",
+        "category": "aquecimento",
+        "temperature": "105°C",
+        "duration": "4 min",
+        "description": "Em uma panela pequena, misturar a água filtrada (16g), o açúcar refinado ou cristal (28g) e o sal fino (1,2g). Levar ao fogo médio até levantar fervura e dissolver completamente o açúcar (cerca de 105°C — ponto de calda rala, sem deixar dourar)."
+      },
+      {
+        "id": "step_gcp_3",
+        "order": 3,
+        "title": "Envelopamento do Pistache na Calda Quente",
+        "category": "aquecimento",
+        "temperature": "95°C",
+        "duration": "2 min",
+        "description": "Desligar o fogo, jogar o pistache picado na calda quente e misturar bem com uma espátula de silicone até que todos os pedaços fiquem brilhantes e umedecidos por igual."
+      },
+      {
+        "id": "step_gcp_4",
+        "order": 4,
+        "title": "Cocção e Secagem em Forno Baixo",
+        "category": "aquecimento",
+        "temperature": "140°C a 150°C",
+        "duration": "12 a 16 min",
+        "description": "Espalhar o pistache em camada única e bem aberta sobre um tapete de silicone (Silpat) ou papel-manteiga untado muito levemente. Levar ao forno preaquecido a 140°C – 150°C por 12 a 16 minutos, mexendo na metade do tempo para soltar os grãos e assar por igual. (Atenção: assar no máximo a 150°C, pois acima de 160°C a clorofila do pistache degrada e os óleos naturais oxidam)."
+      },
+      {
+        "id": "step_gcp_5",
+        "order": 5,
+        "title": "Resfriamento, Cristalização e Armazenamento",
+        "category": "maturacao",
+        "temperature": "Ambiente",
+        "duration": "20 min",
+        "description": "Retirar do forno assim que a calda secar sobre os grãos e o pistache exalar aroma tostado (sem deixar ficar marrom escuro). Deixar esfriar totalmente em temperatura ambiente sobre a assadeira — a crocância final aparece conforme esfria. Incorporar a granella fria apenas na extração da produtora (intercalando camadas na cuba ou pote) para não dissolver a casquinha protetora. Armazenar em pote hermético com sachê de sílica alimentar longe de umidade."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Pistache Cru sem Sal",
+        "grams": 80
+      },
+      {
+        "name": "Açúcar",
+        "grams": 28
+      },
+      {
+        "name": "Água",
+        "grams": 16
+      },
+      {
+        "name": "Sal",
+        "grams": 1.2
       }
     ]
   }

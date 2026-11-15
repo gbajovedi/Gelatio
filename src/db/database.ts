@@ -2174,6 +2174,27 @@ export class GelatoDatabase extends Dexie {
         await this.settings.put({ key: 'allergen_details_array_fix_v1', value: 1 });
       }
 
+      // Sincronizar renomeação de categoria 'Inclusões Crocantes' para 'Crumbles' e novos preparos (Fase 14)
+      const phase14Setting = await this.settings.get('catalog_sync_phase_14_crumbles');
+      if (!phase14Setting) {
+        console.log('Sincronizando renomeação da categoria Inclusões Crocantes para Crumbles (Fase 14)...');
+        const allDbPreps = await this.preparations.toArray();
+        for (const prep of allDbPreps) {
+          if ((prep.category as string) === 'Inclusões Crocantes') {
+            await this.preparations.update(prep.id, { category: 'Crumbles' });
+          }
+        }
+        const allDbIngs = await this.ingredients.toArray();
+        for (const ing of allDbIngs) {
+          if ((ing.category as string) === 'Inclusões Crocantes') {
+            await this.ingredients.update(ing.id, { category: 'Confeitaria & Inclusões' });
+          }
+        }
+        await this.preparations.bulkPut(initialPreparations as Preparation[]);
+        await this.ingredients.bulkPut(initialIngredients as Ingredient[]);
+        await this.settings.put({ key: 'catalog_sync_phase_14_crumbles', value: 1 });
+      }
+
 
       // 4. Parâmetros de Precificação
       const settingsCount = await this.settings.count();
