@@ -15,6 +15,7 @@ import anvisaNutritionalModalRaw from '../../components/Receitas/AnvisaNutrition
 import preparationStepsModalRaw from '../../components/Receitas/PreparationStepsModal.tsx?raw';
 import recipeViewerModalRaw from '../../components/Receitas/RecipeViewerModal.tsx?raw';
 import variegatoQuickModalRaw from '../../components/Receitas/VariegatoQuickModal.tsx?raw';
+import ingredientSlideOverRaw from '../../components/Balanceamento/IngredientSlideOver.tsx?raw';
 import navbarRaw from '../../components/Navbar.tsx?raw';
 import balancingRaw from '../../components/Balanceamento/BalancingScreen.tsx?raw';
 import comboboxRaw from '../../components/Balanceamento/StyleSearchCombobox.tsx?raw';
@@ -195,7 +196,7 @@ describe('Ciclo de Vida de Modais, Bloqueio de Rolagem e Blindagem Mobile (M1)',
     });
   });
 
-  describe('Pilar 2: Auditoria Estática de Rules of Hooks em Todos os 9 Modais', () => {
+  describe('Pilar 2: Auditoria Estática de Rules of Hooks em Todos os Modais e Slide-Overs', () => {
     const allModals = [
       { name: 'RecipeViewerModal', content: recipeViewerModalRaw },
       { name: 'SaveRecipeModal', content: saveRecipeModalRaw },
@@ -205,7 +206,8 @@ describe('Ciclo de Vida de Modais, Bloqueio de Rolagem e Blindagem Mobile (M1)',
       { name: 'StyleSettingsModal', content: styleSettingsModalRaw },
       { name: 'ImportExportModal', content: importExportModalRaw },
       { name: 'PrePreparoViewerModal', content: prePreparoViewerModalRaw },
-      { name: 'AnvisaNutritionalModal', content: anvisaNutritionalModalRaw }
+      { name: 'AnvisaNutritionalModal', content: anvisaNutritionalModalRaw },
+      { name: 'IngredientSlideOver', content: ingredientSlideOverRaw }
     ];
 
     it('garante que nenhum modal possua if (!isOpen...) return null antes de useModalDismiss', () => {

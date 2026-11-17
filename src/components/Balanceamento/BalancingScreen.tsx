@@ -23,6 +23,7 @@ import { RecipeSearchCombobox } from './RecipeSearchCombobox';
 import { ProfitSimulator } from './ProfitSimulator';
 import { StyleSettingsModal } from './StyleSettingsModal';
 import { StyleSearchCombobox } from './StyleSearchCombobox';
+import { IngredientSlideOver } from './IngredientSlideOver';
 import { CategoryBadge, getCategoryTheme } from '../../core/categoryThemes';
 import {
   Save,
@@ -187,6 +188,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   const [isDirty, setIsDirty] = useState<boolean>(() => initialRecipeId === 'new');
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isStyleModalOpen, setIsStyleModalOpen] = useState<boolean>(false);
+  const [isSlideOverOpen, setIsSlideOverOpen] = useState<boolean>(false);
   const [styleModalInitialName, setStyleModalInitialName] = useState<string | undefined>(undefined);
   const [styleModalCreateMode, setStyleModalCreateMode] = useState<boolean>(false);
   const [stylesRevision, setStylesRevision] = useState<number>(0);
@@ -503,6 +505,29 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   const handleAddRow = () => {
     setItems([...items, { name: '', grams: 50 }]);
     setIsDirty(true);
+  };
+
+  // Select ingredient from Slide-Over catalog
+  const handleSelectIngredientFromSlideOver = (selected: Ingredient) => {
+    const existingIdx = items.findIndex(
+      i => i.name.toLowerCase().trim() === selected.name.toLowerCase().trim()
+    );
+    if (existingIdx >= 0) {
+      const isNeutro = isNeutroIngredient(selected.name, selected.category);
+      handleGramsChange(existingIdx, items[existingIdx].grams + (isNeutro ? 1 : 50));
+    } else {
+      const emptyIdx = items.findIndex(i => !i.name.trim());
+      const isNeutro = isNeutroIngredient(selected.name, selected.category);
+      const initialGrams = isNeutro ? 5 : 50;
+      if (emptyIdx >= 0) {
+        const next = [...items];
+        next[emptyIdx] = { name: selected.name, grams: initialGrams };
+        setItems(next);
+      } else {
+        setItems(prev => [...prev, { name: selected.name, grams: initialGrams }]);
+      }
+      setIsDirty(true);
+    }
   };
 
   // Remove row
@@ -1208,15 +1233,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               </table>
             </div>
 
-            {/* Add Row Button */}
-            <div className="pt-2">
+            {/* Ação: Adicionar Insumo do Catálogo */}
+            <div className="pt-2 flex items-center justify-start">
               <button
                 type="button"
-                onClick={handleAddRow}
-                className="w-full py-3 border-2 border-dashed border-slate-700 hover:border-amber-500/70 rounded-xl text-xs sm:text-sm font-bold text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 transition-all flex items-center justify-center gap-2"
+                onClick={() => setIsSlideOverOpen(true)}
+                className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-xs sm:text-sm shadow-md transition-all select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
               >
-                <Plus className="w-4 h-4" />
-                <span>Adicionar Novo Insumo na Calda</span>
+                Adicionar Insumo do Catálogo
               </button>
             </div>
           </div>
@@ -1341,6 +1365,15 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             setIsDirty(true);
           }
         }}
+      />
+
+      {/* Gaveta Lateral do Catálogo de Matérias-Primas (Slide-Over) */}
+      <IngredientSlideOver
+        isOpen={isSlideOverOpen}
+        onClose={() => setIsSlideOverOpen(false)}
+        onSelectIngredient={handleSelectIngredientFromSlideOver}
+        availableIngredients={ingredients}
+        existingIngredientIds={items.map(i => ingredientsMap.get(i.name.toLowerCase().trim())?.id).filter(Boolean) as string[]}
       />
 
       {/* Botão Flutuante: Voltar ao Topo (Mobile & Desktop com scroll > 400px) */}
