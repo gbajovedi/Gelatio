@@ -984,7 +984,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                 <thead>
                   <tr className="text-slate-400 border-b border-slate-700 text-xs uppercase tracking-wider font-bold">
                     <th className="py-3 pl-2">Ingrediente / Matéria-Prima</th>
-                    <th className="py-3 text-right w-48">Peso (g)</th>
+                    <th className="py-3 text-right min-w-[240px] w-64">Peso (g)</th>
                     <th className="py-3 text-right w-24">% Calda</th>
                     <th className="py-3 text-right w-28">Custo R$</th>
                     <th className="py-3 text-center w-12">Ação</th>
@@ -1042,36 +1042,128 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                           </div>
                         </td>
                         <td className="py-2 text-right whitespace-nowrap">
-                          <div className="flex items-center justify-end gap-1">
-                            <button
-                              type="button"
-                              onClick={() => handleGramsChange(originalIndex, Math.max(0, item.grams - 5))}
-                              className="min-w-[32px] h-8 sm:w-7 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white hover:border-amber-500/60 hover:bg-slate-800 text-xs font-bold active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
-                              title="Diminuir 5g (-5g)"
-                              aria-label={`Diminuir 5g de ${item.name || 'ingrediente'}`}
-                            >
-                              -5
-                            </button>
-                            <input
-                              type="number"
-                              step={isNeutro ? "0.1" : (showRoundedValues ? "1" : "0.1")}
-                              value={item.grams === 0 ? '' : displayedGrams}
-                              onChange={e => handleGramsChange(originalIndex, parseFloat(e.target.value) || 0)}
-                              className={`w-24 sm:w-28 bg-slate-900 border ${
-                                isNeutro ? 'border-teal-500/60 text-teal-100' : 'border-slate-700 text-white'
-                              } rounded-lg px-2 py-1.5 text-right font-mono font-bold tabular-nums tracking-tight focus:outline-none focus:border-amber-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${getGramsInputFontSize(displayedGrams)}`}
-                              placeholder="0"
+                          <div className="flex items-center justify-end gap-1 sm:gap-1.5">
+                            {/* Negative Steppers: -1g / -0.1g for Neutro micro-dosing, -10g / -1g for standard */}
+                            {isNeutro ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleGramsChange(originalIndex, Math.max(0, Math.round((item.grams - 1) * 10) / 10))}
+                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-teal-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none shadow-sm group/btn"
+                                  title="Diminuir 1g (-1g)"
+                                  aria-label={`Diminuir 1g de ${item.name || 'ingrediente'}`}
+                                >
+                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">-1</span>
+                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleGramsChange(originalIndex, Math.max(0, Math.round((item.grams - 0.1) * 10) / 10))}
+                                  className="h-8 px-1.5 sm:px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-teal-500/40 hover:border-teal-400 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none shadow-sm group/btn"
+                                  title="Diminuir 0.1g (-0.1g Micro-dose)"
+                                  aria-label={`Diminuir 0.1g de ${item.name || 'ingrediente'}`}
+                                >
+                                  <span className="font-mono font-bold text-xs text-teal-300 group-hover/btn:text-white transition-colors">-0.1</span>
+                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleGramsChange(originalIndex, Math.max(0, item.grams - 10))}
+                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm group/btn"
+                                  title="Diminuir 10g (-10g)"
+                                  aria-label={`Diminuir 10g de ${item.name || 'ingrediente'}`}
+                                >
+                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">-10</span>
+                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleGramsChange(originalIndex, Math.max(0, item.grams - 1))}
+                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm group/btn"
+                                  title="Diminuir 1g (-1g)"
+                                  aria-label={`Diminuir 1g de ${item.name || 'ingrediente'}`}
+                                >
+                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">-1</span>
+                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                </button>
+                              </>
+                            )}
+
+                            {/* Pill Input with embedded 'g' suffix */}
+                            <div
+                              className={`h-8 px-2.5 sm:px-3 rounded-full flex items-center justify-end bg-slate-900 border ${
+                                isNeutro
+                                  ? 'border-teal-500/60 focus-within:border-teal-400 focus-within:ring-1 focus-within:ring-teal-400/50'
+                                  : 'border-slate-700 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/50'
+                              } transition-all shadow-inner`}
                               title={isNeutro ? 'Ingrediente Neutro: dosagem microcrítica protegida com precisão decimal (0.1g)' : undefined}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleGramsChange(originalIndex, item.grams + 5)}
-                              className="min-w-[32px] h-8 sm:w-7 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-white hover:border-amber-500/60 hover:bg-slate-800 text-xs font-bold active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
-                              title="Aumentar 5g (+5g)"
-                              aria-label={`Aumentar 5g de ${item.name || 'ingrediente'}`}
                             >
-                              +5
-                            </button>
+                              <input
+                                type="number"
+                                step={isNeutro ? "0.1" : (showRoundedValues ? "1" : "0.1")}
+                                value={item.grams === 0 ? '' : displayedGrams}
+                                onChange={e => handleGramsChange(originalIndex, parseFloat(e.target.value) || 0)}
+                                className={`w-14 sm:w-16 bg-transparent text-right font-mono font-bold tabular-nums tracking-tight focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                                  isNeutro ? 'text-teal-200' : 'text-white'
+                                } ${getGramsInputFontSize(displayedGrams)}`}
+                                placeholder="0"
+                              />
+                              <span className="text-xs font-mono font-semibold text-slate-400 pl-1 select-none">
+                                g
+                              </span>
+                            </div>
+
+                            {/* Positive Steppers: +0.1g / +1g for Neutro micro-dosing, +1g / +10g for standard */}
+                            {isNeutro ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleGramsChange(originalIndex, Math.round((item.grams + 0.1) * 10) / 10)}
+                                  className="h-8 px-1.5 sm:px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-teal-500/40 hover:border-teal-400 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none shadow-sm group/btn"
+                                  title="Aumentar 0.1g (+0.1g Micro-dose)"
+                                  aria-label={`Aumentar 0.1g de ${item.name || 'ingrediente'}`}
+                                >
+                                  <span className="font-mono font-bold text-xs text-teal-300 group-hover/btn:text-white transition-colors">+0.1</span>
+                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleGramsChange(originalIndex, Math.round((item.grams + 1) * 10) / 10)}
+                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-teal-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none shadow-sm group/btn"
+                                  title="Aumentar 1g (+1g)"
+                                  aria-label={`Aumentar 1g de ${item.name || 'ingrediente'}`}
+                                >
+                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">+1</span>
+                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleGramsChange(originalIndex, item.grams + 1)}
+                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm group/btn"
+                                  title="Aumentar 1g (+1g)"
+                                  aria-label={`Aumentar 1g de ${item.name || 'ingrediente'}`}
+                                >
+                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">+1</span>
+                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleGramsChange(originalIndex, item.grams + 10)}
+                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm group/btn"
+                                  title="Aumentar 10g (+10g)"
+                                  aria-label={`Aumentar 10g de ${item.name || 'ingrediente'}`}
+                                >
+                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">+10</span>
+                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                </button>
+                              </>
+                            )}
                           </div>
                         </td>
                         <td className="py-2 text-right font-mono font-bold text-slate-200 text-sm">
