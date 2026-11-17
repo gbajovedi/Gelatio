@@ -42,8 +42,8 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
     icon: '🍬',
     unit: '%',
     isPercent: true,
-    barGradient: 'from-amber-500 to-amber-300',
-    glowColor: 'shadow-amber-500/20',
+    barGradient: 'from-emerald-400 to-teal-400',
+    glowColor: 'shadow-emerald-500/20',
     accentText: 'text-amber-300',
     description: 'Doçura e controle do congelamento'
   },
@@ -52,8 +52,8 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
     icon: '🧈',
     unit: '%',
     isPercent: true,
-    barGradient: 'from-amber-400 to-yellow-300',
-    glowColor: 'shadow-yellow-500/20',
+    barGradient: 'from-emerald-400 to-teal-400',
+    glowColor: 'shadow-emerald-500/20',
     accentText: 'text-yellow-300',
     description: 'Cremosidade e textura na boca'
   },
@@ -62,8 +62,8 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
     icon: '🥛',
     unit: '%',
     isPercent: true,
-    barGradient: 'from-sky-400 to-blue-500',
-    glowColor: 'shadow-sky-500/20',
+    barGradient: 'from-emerald-400 to-teal-400',
+    glowColor: 'shadow-emerald-500/20',
     accentText: 'text-sky-300',
     description: 'Proteínas lácteas e retenção de água'
   },
@@ -72,8 +72,8 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
     icon: '🌾',
     unit: '%',
     isPercent: true,
-    barGradient: 'from-orange-400 to-amber-500',
-    glowColor: 'shadow-orange-500/20',
+    barGradient: 'from-emerald-400 to-teal-400',
+    glowColor: 'shadow-emerald-500/20',
     accentText: 'text-orange-300',
     description: 'Fibras, amidos e cacau'
   },
@@ -92,8 +92,8 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
     icon: '💧',
     unit: '%',
     isPercent: true,
-    barGradient: 'from-cyan-400 to-sky-400',
-    glowColor: 'shadow-cyan-500/20',
+    barGradient: 'from-emerald-400 to-teal-400',
+    glowColor: 'shadow-emerald-500/20',
     accentText: 'text-cyan-300',
     description: 'Solvente base congelável'
   },
@@ -102,8 +102,8 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
     icon: '🍯',
     unit: '',
     isPercent: false,
-    barGradient: 'from-rose-400 to-pink-500',
-    glowColor: 'shadow-rose-500/20',
+    barGradient: 'from-emerald-400 to-teal-400',
+    glowColor: 'shadow-emerald-500/20',
     accentText: 'text-rose-300',
     description: 'Sensação gustativa de dulçor'
   },
@@ -112,8 +112,8 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
     icon: '❄️',
     unit: '',
     isPercent: false,
-    barGradient: 'from-indigo-400 to-violet-500',
-    glowColor: 'shadow-indigo-500/20',
+    barGradient: 'from-emerald-400 to-teal-400',
+    glowColor: 'shadow-emerald-500/20',
     accentText: 'text-indigo-300',
     description: 'Espatulabilidade e dureza a -12°C'
   },
@@ -122,8 +122,8 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
     icon: '⚡',
     unit: '%',
     isPercent: true,
-    barGradient: 'from-purple-400 to-fuchsia-500',
-    glowColor: 'shadow-purple-500/20',
+    barGradient: 'from-emerald-400 to-teal-400',
+    glowColor: 'shadow-emerald-500/20',
     accentText: 'text-purple-300',
     description: 'Aporte de proteína do leite/vegetal'
   }
