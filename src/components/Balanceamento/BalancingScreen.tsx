@@ -1128,14 +1128,8 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Right Column: Alerts, Post-Production Inclusions & Regulatory Allergens (4 Cols) */}
-        <div className="lg:col-span-4 space-y-4">
-          {/* 1. Calibração Necessária & Alerta de Arenosidade */}
-          <CalibrationAlerts analysis={analysis} />
-
-          {/* 2. Pós-Produção (Variegatos, Mesclas & Inclusões) no espaço lateral */}
+          {/* 2. Pós-Produção (Variegatos, Mesclas & Inclusões) abaixo da calda base */}
           <PostProduction
             variegatos={variegatos}
             availableIngredients={ingredients}
@@ -1146,8 +1140,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             }}
           />
 
-          {/* 3. Rótulo Regulamentar de Alérgenos (abaixo das mesclas) */}
+          {/* 3. Rótulo Regulamentar de Alérgenos */}
           <AllergensBadge allergensLabel={analysis.allergensLabel} />
+        </div>
+
+        {/* Right Column: Alerts & Calibração (4 Cols) */}
+        <div className="lg:col-span-4 space-y-4">
+          {/* 1. Calibração Necessária & Alerta de Arenosidade */}
+          <CalibrationAlerts analysis={analysis} />
         </div>
       </div>
 
