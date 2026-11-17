@@ -202,7 +202,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                   <button
                     type="button"
                     onClick={() => handleRemove(idx)}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-700/80 bg-slate-800 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 hover:border-rose-500/40 transition-colors shrink-0"
+                    className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-700/80 bg-slate-800 text-amber-600 hover:text-amber-400 hover:bg-amber-500/15 hover:border-amber-500/40 transition-colors shrink-0"
                     title="Remover mescla"
                   >
                     <Trash2 className="w-4 h-4" />

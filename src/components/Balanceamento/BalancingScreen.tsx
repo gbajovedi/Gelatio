@@ -1089,7 +1089,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                           <button
                             type="button"
                             onClick={() => handleRemoveRow(originalIndex)}
-                            className="p-2 sm:p-1.5 min-w-[36px] min-h-[36px] sm:min-w-0 sm:min-h-0 flex items-center justify-center text-slate-500 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:outline-none"
+                            className="p-2 sm:p-1.5 min-w-[36px] min-h-[36px] sm:min-w-0 sm:min-h-0 flex items-center justify-center text-amber-600 hover:text-amber-400 hover:bg-amber-500/15 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
                             title="Remover Ingrediente"
                             aria-label={`Remover ${item.name || 'ingrediente'}`}
                           >
