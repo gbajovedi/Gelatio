@@ -854,13 +854,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           analysis={analysis}
           categoryCostBreakdown={categoryCostBreakdown}
           hasVariegatos={variegatos.length > 0}
+          variant="intelligence"
         />
       </div>
 
       {/* Main Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Ingredients Table (8 Cols) */}
-        <div className="lg:col-span-8 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column: Ingredients Table (7 Cols on lg, 8 Cols on xl) */}
+        <div className="lg:col-span-7 xl:col-span-8 space-y-4">
           <div className="bg-slate-800/90 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
             {/* Table Header Controls */}
             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 pb-3 border-b border-slate-700">
@@ -1144,8 +1145,17 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           <AllergensBadge allergensLabel={analysis.allergensLabel} />
         </div>
 
-        {/* Right Column: Alerts & Calibração (4 Cols) */}
-        <div className="lg:col-span-4 space-y-4">
+        {/* Right Column: Parameters (1 per line) & Alerts (5 Cols on lg, 4 Cols on xl) */}
+        <div className="lg:col-span-5 xl:col-span-4 space-y-4">
+          {/* Parâmetros Físico-Químicos (Cards 1 por linha) */}
+          <NutrientBars
+            analysis={analysis}
+            categoryCostBreakdown={categoryCostBreakdown}
+            hasVariegatos={variegatos.length > 0}
+            variant="parameters"
+            columns={1}
+          />
+
           {/* 1. Calibração Necessária & Alerta de Arenosidade */}
           <CalibrationAlerts analysis={analysis} />
         </div>

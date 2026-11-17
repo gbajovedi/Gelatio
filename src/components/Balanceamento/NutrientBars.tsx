@@ -21,6 +21,8 @@ interface NutrientBarsProps {
   analysis: BatchAnalysis;
   categoryCostBreakdown?: CategoryCostItem[];
   hasVariegatos?: boolean;
+  variant?: 'all' | 'intelligence' | 'parameters';
+  columns?: 1 | 2 | 4;
 }
 
 interface NutrientMeta {
@@ -130,7 +132,9 @@ const NUTRIENT_METAS: Record<string, NutrientMeta> = {
 export const NutrientBars: React.FC<NutrientBarsProps> = ({
   analysis,
   categoryCostBreakdown = [],
-  hasVariegatos = false
+  hasVariegatos = false,
+  variant = 'all',
+  columns = 4
 }) => {
   const { validations, isBalanced, servingTemperature } = analysis;
   const [thermalMode, setThermalMode] = useState<'vitrine' | 'freezer'>('vitrine');
@@ -471,11 +475,9 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
     );
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Header status & Showcase Temperature Dashboard */}
-      <div
-        className={`p-5 rounded-2xl border shadow-xl transition-all ${
+  const renderIntelligence = () => (
+    <div
+      className={`p-5 rounded-2xl border shadow-xl transition-all ${
           isBalanced
             ? 'bg-slate-800/95 border-emerald-500/40'
             : 'bg-slate-800/95 border-amber-500/40'
@@ -732,80 +734,96 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
           </div>
         </div>
       </div>
+  );
 
-      {/* Moldura dos Parâmetros Físico-Químicos */}
-      <div
-        className={`p-5 rounded-2xl border shadow-xl transition-all ${
-          allNutrientsOk
-            ? 'bg-slate-800/95 border-emerald-500/40'
-            : 'bg-slate-800/95 border-amber-500/40'
-        }`}
-      >
-        <div className="space-y-4">
-          {/* Header Banner: Parâmetros Físico-Químicos */}
-          <div className="flex items-start sm:items-center gap-4">
-            <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${
-                allNutrientsOk
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                  : 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-              }`}
-            >
-              <FlaskConical className={`w-7 h-7 ${allNutrientsOk ? 'text-emerald-400' : 'text-amber-400'}`} />
-            </div>
-
-            <div>
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
-                  Parâmetros Físico-Químicos
-                </h3>
-                <span
-                  className={`text-xs px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider border flex items-center gap-1 ${
-                    allNutrientsOk
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                      : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                  }`}
-                >
-                  {allNutrientsOk ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" />
-                      <span>{okNutrients}/{totalNutrients} No Alvo</span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                      <span>{okNutrients}/{totalNutrients} No Alvo</span>
-                    </>
-                  )}
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-300 mt-1">
-                {allNutrientsOk
-                  ? 'Todos os parâmetros bromatológicos e moleculares (sólidos, água, gorduras, POD e PAC) estão em conformidade.'
-                  : 'Monitore as faixas técnicas de açúcares, gorduras, sólidos, água e balanço molecular (POD e PAC):'}
-              </p>
-            </div>
+  const renderParameters = () => (
+    <div
+      className={`p-5 rounded-2xl border shadow-xl transition-all ${
+        allNutrientsOk
+          ? 'bg-slate-800/95 border-emerald-500/40'
+          : 'bg-slate-800/95 border-amber-500/40'
+      }`}
+    >
+      <div className="space-y-4">
+        {/* Header Banner: Parâmetros Físico-Químicos */}
+        <div className="flex items-start sm:items-center gap-4">
+          <div
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${
+              allNutrientsOk
+                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                : 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+            }`}
+          >
+            <FlaskConical className={`w-7 h-7 ${allNutrientsOk ? 'text-emerald-400' : 'text-amber-400'}`} />
           </div>
 
-          {/* Grid dos Cards de Nutrientes */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-            {renderBulletCard('sugars', validations.sugars)}
-            {renderBulletCard('fat', validations.fat)}
-            {renderBulletCard('msnf', validations.msnf)}
-            {renderBulletCard('otherSolids', validations.otherSolids)}
-            {renderBulletCard('totalSolids', validations.totalSolids)}
-            {renderBulletCard('water', validations.water)}
-            {renderBulletCard('pod', validations.pod)}
-            {renderBulletCard('pac', validations.pac)}
-          </div>
-
-          {validations.protein.max > 0 && (
-            <div className="pt-1">
-              {renderBulletCard('protein', validations.protein)}
+          <div>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                Parâmetros Físico-Químicos
+              </h3>
+              <span
+                className={`text-xs px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider border flex items-center gap-1 ${
+                  allNutrientsOk
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                    : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                }`}
+              >
+                {allNutrientsOk ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" />
+                    <span>{okNutrients}/{totalNutrients} No Alvo</span>
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{okNutrients}/{totalNutrients} No Alvo</span>
+                  </>
+                )}
+              </span>
             </div>
-          )}
+            <p className="text-xs sm:text-sm text-slate-300 mt-1">
+              {allNutrientsOk
+                ? 'Todos os parâmetros bromatológicos e moleculares (sólidos, água, gorduras, POD e PAC) estão em conformidade.'
+                : 'Monitore as faixas técnicas de açúcares, gorduras, sólidos, água e balanço molecular (POD e PAC):'}
+            </p>
+          </div>
         </div>
+
+        {/* Grid dos Cards de Nutrientes */}
+        <div className={columns === 1 ? 'grid grid-cols-1 gap-3.5' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5'}>
+          {renderBulletCard('sugars', validations.sugars)}
+          {renderBulletCard('fat', validations.fat)}
+          {renderBulletCard('msnf', validations.msnf)}
+          {renderBulletCard('otherSolids', validations.otherSolids)}
+          {renderBulletCard('totalSolids', validations.totalSolids)}
+          {renderBulletCard('water', validations.water)}
+          {renderBulletCard('pod', validations.pod)}
+          {renderBulletCard('pac', validations.pac)}
+          {columns === 1 && validations.protein && validations.protein.max > 0 && renderBulletCard('protein', validations.protein)}
+        </div>
+
+        {columns !== 1 && validations.protein && validations.protein.max > 0 && (
+          <div className="pt-1">
+            {renderBulletCard('protein', validations.protein)}
+          </div>
+        )}
       </div>
+    </div>
+  );
+
+  if (variant === 'intelligence') {
+    return renderIntelligence();
+  }
+
+  if (variant === 'parameters') {
+    return renderParameters();
+  }
+
+  return (
+    <div className="space-y-6">
+      {renderIntelligence()}
+      {renderParameters()}
     </div>
   );
 };
