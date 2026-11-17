@@ -16,7 +16,6 @@ import {
 } from '../../core/stylesStorage';
 import { stylesDataMap, db } from '../../db/database';
 import { NutrientBars } from './NutrientBars';
-import { CalibrationAlerts } from './CalibrationAlerts';
 import { AllergensBadge } from './AllergensBadge';
 import { PostProduction } from './PostProduction';
 import { SaveRecipeModal } from './SaveRecipeModal';
@@ -1145,7 +1144,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
           <AllergensBadge allergensLabel={analysis.allergensLabel} />
         </div>
 
-        {/* Right Column: Parameters (1 per line) & Alerts (5 Cols on lg, 4 Cols on xl) */}
+        {/* Right Column: Parameters (1 per line) (5 Cols on lg, 4 Cols on xl) */}
         <div className="lg:col-span-5 xl:col-span-4 space-y-4">
           {/* Parâmetros Físico-Químicos (Cards 1 por linha) */}
           <NutrientBars
@@ -1155,9 +1154,6 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             variant="parameters"
             columns={1}
           />
-
-          {/* 1. Calibração Necessária & Alerta de Arenosidade */}
-          <CalibrationAlerts analysis={analysis} />
         </div>
       </div>
 
