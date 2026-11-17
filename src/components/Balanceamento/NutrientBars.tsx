@@ -787,6 +787,22 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
           </div>
         </div>
 
+        {/* Alerta de Arenosidade (SLNG vs Água Livre) - Apenas quando necessário */}
+        {sandiness?.isAtRisk && (
+          <div className="p-3.5 bg-amber-950/40 rounded-xl border border-amber-500/50 text-xs text-amber-200 shadow-md space-y-1.5 animate-fadeIn">
+            <div className="flex items-center gap-2 text-amber-300 font-bold">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="text-sm">Alerta de Arenosidade (SLNG vs Água Livre)</span>
+            </div>
+            <p className="text-amber-200/90 leading-relaxed text-xs">
+              O teor de sólidos do leite (<strong className="text-amber-300 font-mono font-bold">SLNG: {(sandiness.currentMsnf * 100).toFixed(1)}%</strong>) ultrapassa o limite seguro de saturação da água livre (<strong className="text-amber-300 font-mono font-bold">máx. {(sandiness.maxSafeMsnf * 100).toFixed(1)}%</strong>).
+            </p>
+            <p className="text-amber-300/80 text-[11px] leading-relaxed">
+              Sob oscilação térmica na vitrine, a lactose pode precipitar em microcristais. Recomenda-se reduzir leite em pó ou elevar a proporção de leite integral/água.
+            </p>
+          </div>
+        )}
+
         {/* Grid dos Cards de Nutrientes */}
         <div className={columns === 1 ? 'grid grid-cols-1 gap-3.5' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5'}>
           {renderBulletCard('sugars', validations.sugars)}
