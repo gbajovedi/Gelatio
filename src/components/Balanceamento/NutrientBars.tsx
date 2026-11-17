@@ -380,54 +380,58 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
     return (
       <div
         key={key}
-        className={`p-4 rounded-2xl border ${cardBorder} transition-all flex flex-col justify-between shadow-lg relative min-h-[148px]`}
+        className={`px-4 py-3 rounded-xl border ${cardBorder} transition-all flex flex-col justify-center gap-2.5 shadow-md relative bg-slate-900/90 hover:border-slate-600`}
       >
-        {/* Top Header: Nutrient Name, Tooltip Indicator & Status */}
-        <div>
-          <div className="flex items-center justify-between gap-1.5 mb-1.5 min-h-[26px]">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="text-sm select-none shrink-0">{meta.icon}</span>
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-300 truncate" title={meta.label}>
-                {meta.label}
+        {/* Linha 1: Título, Valor em Destaque e Badge de Status */}
+        <div className="flex items-center justify-between gap-2">
+          {/* Identificação com Ícone e Tooltip */}
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-sm select-none shrink-0">{meta.icon}</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-200 truncate" title={meta.label}>
+              {meta.label}
+            </span>
+            {renderCardHeaderTooltip(key, meta, valItem, displayVal)}
+          </div>
+
+          {/* Grupo Valor + Badge */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            <div className="flex items-baseline gap-0.5">
+              <span className={`text-lg sm:text-xl font-black font-mono tracking-tight ${valColor}`}>
+                {displayVal}
               </span>
-              {renderCardHeaderTooltip(key, meta, valItem, displayVal)}
+              <span className="text-xs font-bold text-slate-400">{unit}</span>
             </div>
 
-            {/* Status Pill with Actionable Delta */}
+            {/* Status Pill Compacta */}
             {status === 'Ok' ? (
-              <span className="text-xs px-2.5 py-0.5 rounded-full border font-bold bg-emerald-500/15 text-emerald-300 border-emerald-500/30 flex items-center gap-1 whitespace-nowrap shrink-0">
-                <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" />
-                <span>No Alvo</span>
+              <span className="text-[11px] px-2 py-0.5 rounded-full border font-bold bg-emerald-500/15 text-emerald-300 border-emerald-500/30 flex items-center gap-1 whitespace-nowrap">
+                <Check className="w-3 h-3 text-emerald-400 stroke-[3]" />
+                <span className="hidden sm:inline">No Alvo</span>
+                <span className="sm:hidden">OK</span>
               </span>
             ) : status === 'Baixo' ? (
-              <span className="text-xs px-2.5 py-0.5 rounded-full border font-bold bg-amber-500/20 text-amber-300 border-amber-500/40 flex items-center gap-1 animate-pulse whitespace-nowrap shrink-0">
+              <span className="text-[11px] px-2 py-0.5 rounded-full border font-bold bg-amber-500/20 text-amber-300 border-amber-500/40 flex items-center gap-1 animate-pulse whitespace-nowrap">
                 <span>↓ -{deltaStr}</span>
-                <span className="text-[11px] uppercase font-bold">Baixo</span>
               </span>
             ) : (
-              <span className="text-xs px-2.5 py-0.5 rounded-full border font-bold bg-rose-500/20 text-rose-300 border-rose-500/40 flex items-center gap-1 animate-pulse whitespace-nowrap shrink-0">
+              <span className="text-[11px] px-2 py-0.5 rounded-full border font-bold bg-rose-500/20 text-rose-300 border-rose-500/40 flex items-center gap-1 animate-pulse whitespace-nowrap">
                 <span>↑ +{deltaStr}</span>
-                <span className="text-[11px] uppercase font-bold">Alto</span>
               </span>
             )}
           </div>
-
-          {/* Value Display */}
-          <div className="flex items-baseline gap-1 mt-1 mb-2.5">
-            <span className={`text-2xl sm:text-3xl font-black font-mono tracking-tight ${valColor}`}>
-              {displayVal}
-            </span>
-            <span className="text-sm font-bold text-slate-400">{unit}</span>
-          </div>
         </div>
 
-        {/* Precision Target Range Bar & Needle Marker */}
-        <div>
-          <div className="nutrient-progress-track relative w-full h-4 bg-slate-950/90 rounded-full border border-slate-800 shadow-inner flex items-center">
+        {/* Linha 2: Régua Horizontal Inlined (Mínimo - Barra de Progresso - Máximo) */}
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-mono font-medium text-slate-400 shrink-0 min-w-[38px] text-right" title={`Mínimo: ${displayMin}${unit}`}>
+            {displayMin}{unit}
+          </span>
+
+          <div className="nutrient-progress-track relative flex-1 h-2.5 bg-slate-950/90 rounded-full border border-slate-800 shadow-inner flex items-center">
             {/* 1. Faixa Colorida: Intervalo Recomendado [Mínimo -> Máximo] */}
             {(span > 0 || max > 0) && (
               <div
-                className={`absolute top-0.5 bottom-0.5 rounded-full transition-all duration-300 bg-gradient-to-r ${meta.barGradient} shadow-md opacity-90`}
+                className={`absolute top-0 bottom-0 rounded-full transition-all duration-300 bg-gradient-to-r ${meta.barGradient} shadow-md opacity-90`}
                 style={{
                   left: `${minMarkerPct}%`,
                   width: `${bandWidthPct}%`
@@ -435,12 +439,12 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                 title={`Faixa Recomendada: ${displayMin} a ${displayMax}${unit}`}
               >
                 {/* Delimitadores discretos nas pontas da faixa */}
-                <div className="absolute left-0 top-0 bottom-0 w-[1.5px] bg-white/60 rounded-l" />
-                <div className="absolute right-0 top-0 bottom-0 w-[1.5px] bg-white/60 rounded-r" />
+                <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-white/60 rounded-l" />
+                <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-white/60 rounded-r" />
 
-                {/* Centro de referência da faixa (Alvo Médio Ideal) - Discreto e contido na barra */}
+                {/* Centro de referência da faixa (Alvo Médio Ideal) */}
                 <div
-                  className="absolute top-0 bottom-0 w-[1.5px] -translate-x-1/2 left-1/2 bg-white/65 pointer-events-none"
+                  className="absolute top-0 bottom-0 w-[1px] -translate-x-1/2 left-1/2 bg-white/65 pointer-events-none"
                   title={`Centro da Faixa (Alvo Ideal): ${displayMid}${unit}`}
                 />
               </div>
@@ -448,28 +452,21 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
 
             {/* 2. Marcador Vertical Bem Visível (Agulha de Alta Precisão) no Valor Calculado */}
             <div
-              className={`absolute top-[-3px] bottom-[-3px] w-[4px] rounded-full z-20 transition-all duration-300 pointer-events-none ${
+              className={`absolute top-[-3px] bottom-[-3px] w-[3.5px] rounded-full z-20 transition-all duration-300 pointer-events-none ${
                 status === 'Ok'
-                  ? 'nutrient-needle-ok bg-white shadow-[0_0_8px_rgba(255,255,255,1),0_0_14px_rgba(52,211,153,0.9)] ring-1 ring-emerald-400'
+                  ? 'nutrient-needle-ok bg-white shadow-[0_0_6px_rgba(255,255,255,1),0_0_10px_rgba(52,211,153,0.9)] ring-1 ring-emerald-400'
                   : status === 'Baixo'
-                  ? 'nutrient-needle-warn bg-amber-300 shadow-[0_0_10px_rgba(245,158,11,1)] ring-1 ring-amber-400 animate-pulse'
-                  : 'nutrient-needle-err bg-rose-400 shadow-[0_0_10px_rgba(244,63,94,1)] ring-1 ring-rose-500 animate-pulse'
+                  ? 'nutrient-needle-warn bg-amber-300 shadow-[0_0_8px_rgba(245,158,11,1)] ring-1 ring-amber-400 animate-pulse'
+                  : 'nutrient-needle-err bg-rose-400 shadow-[0_0_8px_rgba(244,63,94,1)] ring-1 ring-rose-500 animate-pulse'
               }`}
-              style={{ left: `calc(${progressPct}% - 2px)` }}
+              style={{ left: `calc(${progressPct}% - 1.75px)` }}
               title={`Valor Calculado: ${displayVal}${unit}`}
             />
           </div>
 
-          {/* Clean, Non-Redundant Micro-Scale */}
-          <div className="flex items-center justify-between text-xs text-slate-300 font-mono mt-1.5 px-0.5">
-            <span title={`Mínimo: ${displayMin}${unit}`}>
-              Mín: <strong className="text-white font-bold">{displayMin}{unit}</strong>
-            </span>
-
-            <span title={`Máximo: ${displayMax}${unit}`}>
-              Máx: <strong className="text-white font-bold">{displayMax}{unit}</strong>
-            </span>
-          </div>
+          <span className="text-[11px] font-mono font-medium text-slate-400 shrink-0 min-w-[38px] text-left" title={`Máximo: ${displayMax}${unit}`}>
+            {displayMax}{unit}
+          </span>
         </div>
       </div>
     );
