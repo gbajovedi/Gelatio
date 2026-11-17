@@ -65,56 +65,56 @@ export const ThemeToggle: React.FC = () => {
 
   return (
     <div
-      className="theme-switch-track flex items-center bg-slate-900/90 p-1 rounded-xl border border-slate-700/80 shadow-inner select-none transition-colors shrink-0"
+      className="theme-switch-track flex items-center p-0.5 sm:p-1 rounded-full bg-stone-200/50 dark:bg-slate-950 border border-stone-200/80 dark:border-slate-800 shadow-inner select-none transition-colors shrink-0"
       role="group"
       aria-label="Controle de Tema: Modo Escuro, Automático e Modo Claro"
     >
-      {/* 1. Esquerda: Modo Escuro (Ícone de Lua ampliado) */}
+      {/* 1. Esquerda: Modo Escuro (Ícone de Lua) */}
       <button
         type="button"
         onClick={() => handleSelectMode('dark')}
-        className={`h-8 w-8 sm:w-9 rounded-lg transition-all flex items-center justify-center shrink-0 ${
+        className={`h-7 w-7 sm:h-7 sm:w-7 rounded-full transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
           themeMode === 'dark'
-            ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 scale-[1.03]'
-            : 'theme-switch-inactive text-slate-400 hover:text-white hover:bg-slate-700/50'
+            ? 'bg-amber-500 text-stone-950 shadow-sm shadow-amber-500/20 scale-105'
+            : 'theme-switch-inactive text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-black/5 dark:hover:bg-white/5'
         }`}
         title="Modo Escuro (Fixo)"
         aria-label="Ativar Modo Escuro"
         aria-pressed={themeMode === 'dark'}
       >
-        <Moon className="w-5 h-5 shrink-0" />
+        <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
       </button>
 
       {/* 2. Centro: Automático (Apenas texto Auto) */}
       <button
         type="button"
         onClick={() => handleSelectMode('auto')}
-        className={`h-8 px-2.5 sm:px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center shrink-0 ${
+        className={`h-7 px-2.5 rounded-full text-[11px] font-bold transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
           themeMode === 'auto'
-            ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20 scale-[1.03]'
-            : 'theme-switch-inactive text-slate-400 hover:text-white hover:bg-slate-700/50'
+            ? 'bg-amber-500 text-stone-950 shadow-sm shadow-amber-500/20 scale-105'
+            : 'theme-switch-inactive text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-black/5 dark:hover:bg-white/5'
         }`}
         title={autoTooltip}
         aria-label={autoTooltip}
         aria-pressed={themeMode === 'auto'}
       >
-        <span className="text-xs font-bold tracking-tight">Auto</span>
+        <span>Auto</span>
       </button>
 
-      {/* 3. Direita: Modo Claro (Ícone de Sol ampliado) */}
+      {/* 3. Direita: Modo Claro (Ícone de Sol) */}
       <button
         type="button"
         onClick={() => handleSelectMode('light')}
-        className={`h-8 w-8 sm:w-9 rounded-lg transition-all flex items-center justify-center shrink-0 ${
+        className={`h-7 w-7 sm:h-7 sm:w-7 rounded-full transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
           themeMode === 'light'
-            ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 scale-[1.03]'
-            : 'theme-switch-inactive text-slate-400 hover:text-white hover:bg-slate-700/50'
+            ? 'bg-amber-500 text-stone-950 shadow-sm shadow-amber-500/20 scale-105'
+            : 'theme-switch-inactive text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-black/5 dark:hover:bg-white/5'
         }`}
         title="Modo Claro (Fixo)"
         aria-label="Ativar Modo Claro"
         aria-pressed={themeMode === 'light'}
       >
-        <Sun className="w-5 h-5 shrink-0" />
+        <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
       </button>
     </div>
   );
