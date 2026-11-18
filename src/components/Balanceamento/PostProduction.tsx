@@ -237,7 +237,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                   <th className="py-2.5 px-1.5 text-center w-11 whitespace-nowrap">Ação</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-700/50">
+              <tbody>
                 {variegatos.map((item, idx) => {
                   const ing = ingredientsMap.get((item.name || '').toLowerCase().trim());
                   const physical = resolveVariegatoDensity(item, ing);
@@ -252,70 +252,27 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                   const itemVolMl = item.grams > 0 && physical.density > 0
                     ? Math.round(item.grams / physical.density)
                     : 0;
+                  const isLast = idx === variegatos.length - 1;
 
                   return (
                     <React.Fragment key={idx}>
-                      <tr className="hover:bg-slate-750/40 transition-colors group">
-                        {/* Coluna 1: Input do Nome + Micro-pílulas inline de Mixer e Densidade/Volume */}
-                        <td className="py-2 pl-2 pr-2 align-middle">
-                          <div className="space-y-1.5">
-                            <input
-                              type="text"
-                              list="variegatos-options"
-                              placeholder="Digite ou escolha a mescla..."
-                              value={item.name}
-                              onChange={e => handleChangeName(idx, e.target.value)}
-                              title={item.name || undefined}
-                              className="w-full h-9 bg-slate-900 border border-slate-700 focus:border-amber-500 rounded-xl px-3 text-sm text-white placeholder-slate-500 focus:outline-none font-semibold transition-colors"
-                            />
-
-                            {/* Controles físicos compactos (sem omitir nenhuma informação!) */}
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <button
-                                type="button"
-                                onClick={() => handleToggleMixer(idx)}
-                                className={`px-2 py-0.5 rounded-md text-[10px] font-bold transition-all inline-flex items-center gap-1 border select-none ${
-                                  physical.method === 'mixer'
-                                    ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 shadow-sm'
-                                    : 'bg-slate-900/90 border-slate-700/80 text-slate-400 hover:text-slate-200 hover:border-slate-600'
-                                }`}
-                                title={
-                                  physical.method === 'mixer'
-                                    ? `Mixer ativado (+${physical.overrun}% de aeração mecânica). Clique para desligar.`
-                                    : 'Clique para ativar preparo com Mixer (+20% de aeração mecânica)'
-                                }
-                              >
-                                <span>🌪️</span>
-                                <span>{physical.method === 'mixer' ? `Mixer: +${physical.overrun}%` : 'Mixer: Off'}</span>
-                              </button>
-
-                              <button
-                                type="button"
-                                onClick={() => setCalibratingIndex(prev => (prev === idx ? null : idx))}
-                                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold transition-all inline-flex items-center gap-1 border select-none ${
-                                  calibratingIndex === idx
-                                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-sm'
-                                    : 'bg-slate-900/90 border-slate-700/80 text-slate-300 hover:border-cyan-500/50 hover:text-cyan-200'
-                                }`}
-                                title="Clique para calibrar densidade física com copo dosador ou presets"
-                              >
-                                <Sliders className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
-                                <span>{physical.density.toFixed(2)} g/ml</span>
-                                <span className="text-cyan-300 font-medium">· ~{itemVolMl} ml</span>
-                              </button>
-
-                              <span
-                                className="text-[10px] font-mono text-slate-400 px-1 select-none"
-                                title={`${gPerKg}g de mescla por kg de calda base`}
-                              >
-                                {gPerKg} g/kg
-                              </span>
-                            </div>
-                          </div>
+                      {/* Linha Principal: Input do Nome 100% alinhado verticalmente com Peso, % Calda, Custo e Ação */}
+                      <tr className="hover:bg-slate-750/30 transition-colors group">
+                        {/* Coluna 1: Input do Nome */}
+                        <td className="pt-2.5 pb-1 pl-2 pr-2 align-middle">
+                          <input
+                            type="text"
+                            list="variegatos-options"
+                            placeholder="Digite ou escolha a mescla..."
+                            value={item.name}
+                            onChange={e => handleChangeName(idx, e.target.value)}
+                            title={item.name || undefined}
+                            className="w-full h-9 bg-slate-900 border border-slate-700 focus:border-amber-500 rounded-xl px-3 text-sm text-white placeholder-slate-500 focus:outline-none font-semibold transition-colors"
+                          />
                         </td>
 
                         {/* Coluna 2: Mesma Esteira Simétrica de 5 Controles da Calda Base */}
-                        <td className="py-2 px-2 align-middle whitespace-nowrap">
+                        <td className="pt-2.5 pb-1 px-2 align-middle whitespace-nowrap">
                           <div className="flex items-center justify-center gap-1">
                             <button
                               type="button"
@@ -375,7 +332,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
 
                         {/* Coluna 3: % Calda */}
                         <td
-                          className="py-2 px-2 align-middle text-right font-mono font-bold tabular-nums text-slate-200 text-sm whitespace-nowrap"
+                          className="pt-2.5 pb-1 px-2 align-middle text-right font-mono font-bold tabular-nums text-slate-200 text-sm whitespace-nowrap"
                           title={`${gPerKg} g de mescla por kg de calda base`}
                         >
                           {pctCalda.toFixed(1)}%
@@ -383,7 +340,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
 
                         {/* Coluna 4: Custo R$ */}
                         <td
-                          className="py-2 px-2 align-middle text-right font-mono font-bold tabular-nums text-sm whitespace-nowrap"
+                          className="pt-2.5 pb-1 px-2 align-middle text-right font-mono font-bold tabular-nums text-sm whitespace-nowrap"
                           title={`Custo cadastrado: R$ ${costKg.toFixed(2)}/kg`}
                         >
                           <span className={costKg <= 0 ? 'text-slate-400' : 'text-slate-200'}>
@@ -392,7 +349,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                         </td>
 
                         {/* Coluna 5: Ação (Lixeira centralizada) */}
-                        <td className="py-2 px-1.5 align-middle text-center">
+                        <td className="pt-2.5 pb-1 px-1.5 align-middle text-center">
                           <button
                             type="button"
                             onClick={() => handleRemove(idx)}
@@ -405,10 +362,57 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                         </td>
                       </tr>
 
+                      {/* Sub-linha Técnica Deslocada para Baixo (Mixer, Densidade/Volume e g/kg) */}
+                      <tr className={!isLast && calibratingIndex !== idx ? 'border-b border-slate-700/50' : ''}>
+                        <td colSpan={5} className="pt-1 pb-3 pl-2.5 pr-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <button
+                              type="button"
+                              onClick={() => handleToggleMixer(idx)}
+                              className={`px-2 py-0.5 rounded-md text-[10px] font-bold transition-all inline-flex items-center gap-1 border select-none ${
+                                physical.method === 'mixer'
+                                  ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 shadow-sm'
+                                  : 'bg-slate-900/90 border-slate-700/80 text-slate-400 hover:text-slate-200 hover:border-slate-600'
+                              }`}
+                              title={
+                                physical.method === 'mixer'
+                                  ? `Mixer ativado (+${physical.overrun}% de aeração mecânica). Clique para desligar.`
+                                  : 'Clique para ativar preparo com Mixer (+20% de aeração mecânica)'
+                              }
+                            >
+                              <span>🌪️</span>
+                              <span>{physical.method === 'mixer' ? `Mixer: +${physical.overrun}%` : 'Mixer: Off'}</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => setCalibratingIndex(prev => (prev === idx ? null : idx))}
+                              className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold transition-all inline-flex items-center gap-1 border select-none ${
+                                calibratingIndex === idx
+                                  ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-sm'
+                                  : 'bg-slate-900/90 border-slate-700/80 text-slate-300 hover:border-cyan-500/50 hover:text-cyan-200'
+                              }`}
+                              title="Clique para calibrar densidade física com copo dosador ou presets"
+                            >
+                              <Sliders className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
+                              <span>{physical.density.toFixed(2)} g/ml</span>
+                              <span className="text-cyan-300 font-medium">· ~{itemVolMl} ml</span>
+                            </button>
+
+                            <span
+                              className="text-[10px] font-mono text-slate-400 px-1 select-none"
+                              title={`${gPerKg}g de mescla por kg de calda base`}
+                            >
+                              {gPerKg} g/kg
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+
                       {/* Painel Expansível de Calibração Física (Copo 100ml / Presets) sob demanda */}
                       {calibratingIndex === idx && (
-                        <tr>
-                          <td colSpan={5} className="py-2 px-2">
+                        <tr className={!isLast ? 'border-b border-slate-700/50' : ''}>
+                          <td colSpan={5} className="pt-0 pb-3 px-2">
                             <div className="bg-slate-950/95 border border-cyan-500/40 rounded-xl p-3 shadow-xl space-y-2.5 animate-fade-in text-xs">
                               <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
                                 <div className="flex items-center gap-1.5 font-bold text-slate-200">
