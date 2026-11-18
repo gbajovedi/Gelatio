@@ -1005,14 +1005,14 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
 
             {/* Ingredients Table with readable font sizes and smooth horizontal scroll */}
             <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900 pb-1">
-              <table className="w-full text-left">
+              <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="text-slate-400 border-b border-slate-700 text-xs uppercase tracking-wider font-bold">
-                    <th className="py-3 pl-2">Ingrediente / Matéria-Prima</th>
-                    <th className="py-3 text-right min-w-[240px] w-64">Peso (g)</th>
-                    <th className="py-3 text-right w-24">% Calda</th>
-                    <th className="py-3 text-right w-28">Custo R$</th>
-                    <th className="py-3 text-center w-12">Ação</th>
+                  <tr className="text-slate-400 border-b border-slate-700 text-[11px] uppercase tracking-wider font-bold">
+                    <th className="py-3 pl-2 pr-2 min-w-[200px] whitespace-nowrap">Ingrediente / Matéria-Prima</th>
+                    <th className="py-3 px-2 text-center w-[284px] whitespace-nowrap">Peso (g)</th>
+                    <th className="py-3 px-2 text-right w-[74px] whitespace-nowrap">% Calda</th>
+                    <th className="py-3 px-2 text-right w-[90px] whitespace-nowrap">Custo R$</th>
+                    <th className="py-3 px-1.5 text-center w-11 whitespace-nowrap">Ação</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/50">
@@ -1027,7 +1027,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
 
                     return (
                       <tr key={originalIndex} className="hover:bg-slate-750/40 transition-colors group">
-                        <td className="py-2 pl-2">
+                        <td className="py-2 pl-2 pr-2 align-middle">
                           <div className="relative flex items-center w-full">
                             <input
                               type="text"
@@ -1035,18 +1035,19 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                               value={item.name}
                               onChange={e => handleNameChange(originalIndex, e.target.value)}
                               placeholder="Digite ou escolha o insumo..."
-                              className={`w-full bg-slate-900 border ${
+                              title={item.name || undefined}
+                              className={`w-full h-9 bg-slate-900 border ${
                                 isUnknown ? 'border-amber-500/60 focus:border-amber-500' : 'border-slate-700 focus:border-amber-500'
                               } rounded-xl pl-3 ${
-                                catPill || isUnknown ? 'pr-28 sm:pr-32' : 'pr-3'
-                              } py-2 text-sm text-white focus:outline-none font-semibold transition-colors`}
+                                isUnknown ? 'pr-24 sm:pr-28' : catPill ? 'pr-[82px]' : 'pr-3'
+                              } text-sm text-white focus:outline-none font-semibold transition-colors`}
                             />
 
                             {/* Embedded Category Chip / Warning Pill inside the right end of the input */}
-                            <div className="absolute right-2 flex items-center gap-1.5 pointer-events-none">
+                            <div className="absolute right-1.5 flex items-center gap-1 pointer-events-none">
                               {catPill && (
                                 <span
-                                  className={`px-2 py-0.5 rounded-lg border text-[11px] font-bold flex items-center gap-1 shadow-sm select-none ${catPill.color}`}
+                                  className={`px-1.5 py-0.5 rounded-md border text-[10px] font-bold flex items-center gap-1 shadow-sm select-none ${catPill.color}`}
                                   title={`Categoria: ${ing?.category}`}
                                 >
                                   <span>{catPill.icon}</span>
@@ -1055,7 +1056,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                               )}
                               {isUnknown && (
                                 <span
-                                  className="px-2 py-0.5 rounded-lg border border-amber-500/40 bg-amber-500/15 text-amber-300 text-[11px] font-bold flex items-center gap-1 shadow-sm select-none"
+                                  className="px-1.5 py-0.5 rounded-md border border-amber-500/40 bg-amber-500/15 text-amber-300 text-[10px] font-bold flex items-center gap-1 shadow-sm select-none"
                                   title="Insumo não cadastrado no banco comercial"
                                 >
                                   <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
@@ -1066,30 +1067,28 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                             </div>
                           </div>
                         </td>
-                        <td className="py-2 text-right whitespace-nowrap">
-                          <div className="flex items-center justify-end gap-1 sm:gap-1.5">
+                        <td className="py-2 px-2 align-middle whitespace-nowrap">
+                          <div className="flex items-center justify-center gap-1">
                             {/* Negative Steppers: -1g / -0.1g for Neutro micro-dosing, -10g / -1g for standard */}
                             {isNeutro ? (
                               <>
                                 <button
                                   type="button"
                                   onClick={() => handleGramsChange(originalIndex, Math.max(0, Math.round((item.grams - 1) * 10) / 10))}
-                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-teal-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none shadow-sm group/btn"
+                                  className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
                                   title="Diminuir 1g (-1g)"
                                   aria-label={`Diminuir 1g de ${item.name || 'ingrediente'}`}
                                 >
-                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">-1</span>
-                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                  -1g
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleGramsChange(originalIndex, Math.max(0, Math.round((item.grams - 0.1) * 10) / 10))}
-                                  className="h-8 px-1.5 sm:px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-teal-500/40 hover:border-teal-400 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none shadow-sm group/btn"
+                                  className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[9.5px] tracking-tighter leading-none"
                                   title="Diminuir 0.1g (-0.1g Micro-dose)"
                                   aria-label={`Diminuir 0.1g de ${item.name || 'ingrediente'}`}
                                 >
-                                  <span className="font-mono font-bold text-xs text-teal-300 group-hover/btn:text-white transition-colors">-0.1</span>
-                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                  -0.1g
                                 </button>
                               </>
                             ) : (
@@ -1097,33 +1096,27 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                                 <button
                                   type="button"
                                   onClick={() => handleGramsChange(originalIndex, Math.max(0, item.grams - 10))}
-                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm group/btn"
+                                  className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
                                   title="Diminuir 10g (-10g)"
                                   aria-label={`Diminuir 10g de ${item.name || 'ingrediente'}`}
                                 >
-                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">-10</span>
-                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                  -10g
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleGramsChange(originalIndex, Math.max(0, item.grams - 1))}
-                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm group/btn"
+                                  className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
                                   title="Diminuir 1g (-1g)"
                                   aria-label={`Diminuir 1g de ${item.name || 'ingrediente'}`}
                                 >
-                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">-1</span>
-                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                  -1g
                                 </button>
                               </>
                             )}
 
-                            {/* Pill Input with embedded 'g' suffix */}
+                            {/* Standardized Pill Input with embedded 'g' suffix */}
                             <div
-                              className={`h-8 px-2.5 sm:px-3 rounded-full flex items-center justify-end bg-slate-900 border ${
-                                isNeutro
-                                  ? 'border-teal-500/60 focus-within:border-teal-400 focus-within:ring-1 focus-within:ring-teal-400/50'
-                                  : 'border-slate-700 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/50'
-                              } transition-all shadow-inner`}
+                              className="w-[84px] h-8 shrink-0 px-2.5 rounded-full flex items-center justify-end bg-slate-900 border border-slate-700 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/50 transition-all shadow-inner"
                               title={isNeutro ? 'Ingrediente Neutro: dosagem microcrítica protegida com precisão decimal (0.1g)' : undefined}
                             >
                               <input
@@ -1131,12 +1124,10 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                                 step={isNeutro ? "0.1" : (showRoundedValues ? "1" : "0.1")}
                                 value={item.grams === 0 ? '' : displayedGrams}
                                 onChange={e => handleGramsChange(originalIndex, parseFloat(e.target.value) || 0)}
-                                className={`w-14 sm:w-16 bg-transparent text-right font-mono font-bold tabular-nums tracking-tight focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                                  isNeutro ? 'text-teal-200' : 'text-white'
-                                } ${getGramsInputFontSize(displayedGrams)}`}
+                                className={`w-full min-w-0 bg-transparent text-right font-mono font-bold text-white tabular-nums tracking-tight focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${getGramsInputFontSize(displayedGrams)}`}
                                 placeholder="0"
                               />
-                              <span className="text-xs font-mono font-semibold text-slate-400 pl-1 select-none">
+                              <span className="text-xs font-mono font-semibold text-slate-400 pl-1 select-none shrink-0">
                                 g
                               </span>
                             </div>
@@ -1147,22 +1138,20 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                                 <button
                                   type="button"
                                   onClick={() => handleGramsChange(originalIndex, Math.round((item.grams + 0.1) * 10) / 10)}
-                                  className="h-8 px-1.5 sm:px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-teal-500/40 hover:border-teal-400 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none shadow-sm group/btn"
+                                  className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[9.5px] tracking-tighter leading-none"
                                   title="Aumentar 0.1g (+0.1g Micro-dose)"
                                   aria-label={`Aumentar 0.1g de ${item.name || 'ingrediente'}`}
                                 >
-                                  <span className="font-mono font-bold text-xs text-teal-300 group-hover/btn:text-white transition-colors">+0.1</span>
-                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                  +0.1g
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleGramsChange(originalIndex, Math.round((item.grams + 1) * 10) / 10)}
-                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-teal-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:outline-none shadow-sm group/btn"
+                                  className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
                                   title="Aumentar 1g (+1g)"
                                   aria-label={`Aumentar 1g de ${item.name || 'ingrediente'}`}
                                 >
-                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">+1</span>
-                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                  +1g
                                 </button>
                               </>
                             ) : (
@@ -1170,31 +1159,29 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                                 <button
                                   type="button"
                                   onClick={() => handleGramsChange(originalIndex, item.grams + 1)}
-                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm group/btn"
+                                  className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
                                   title="Aumentar 1g (+1g)"
                                   aria-label={`Aumentar 1g de ${item.name || 'ingrediente'}`}
                                 >
-                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">+1</span>
-                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                  +1g
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleGramsChange(originalIndex, item.grams + 10)}
-                                  className="h-8 px-2 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm group/btn"
+                                  className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
                                   title="Aumentar 10g (+10g)"
                                   aria-label={`Aumentar 10g de ${item.name || 'ingrediente'}`}
                                 >
-                                  <span className="font-mono font-bold text-xs text-sky-300 group-hover/btn:text-white transition-colors">+10</span>
-                                  <span className="font-sans font-bold text-[11px] text-amber-400 ml-0.5">g</span>
+                                  +10g
                                 </button>
                               </>
                             )}
                           </div>
                         </td>
-                        <td className="py-2 text-right font-mono font-bold text-slate-200 text-sm">
+                        <td className="py-2 px-2 align-middle text-right font-mono font-bold tabular-nums text-slate-200 text-sm whitespace-nowrap">
                           {pct.toFixed(1)}%
                         </td>
-                        <td className="py-2 text-right font-mono font-bold text-slate-200 text-sm">
+                        <td className="py-2 px-2 align-middle text-right font-mono font-bold tabular-nums text-slate-200 text-sm whitespace-nowrap">
                           <span
                             title={ing && ing.costKg <= 0 ? 'Sem custo/kg cadastrado' : undefined}
                             className={ing && ing.costKg <= 0 ? 'text-slate-400' : 'text-slate-200'}
@@ -1202,11 +1189,11 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                             R$ {itemCost.toFixed(2)}
                           </span>
                         </td>
-                        <td className="py-2 text-center">
+                        <td className="py-2 px-1.5 align-middle text-center">
                           <button
                             type="button"
                             onClick={() => handleRemoveRow(originalIndex)}
-                            className="p-2 sm:p-1.5 min-w-[36px] min-h-[36px] sm:min-w-0 sm:min-h-0 flex items-center justify-center text-amber-600 hover:text-amber-400 hover:bg-amber-500/15 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+                            className="p-2 sm:p-1.5 min-w-[36px] min-h-[36px] sm:min-w-0 sm:min-h-0 inline-flex items-center justify-center text-amber-600 hover:text-amber-400 hover:bg-amber-500/15 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
                             title="Remover Ingrediente"
                             aria-label={`Remover ${item.name || 'ingrediente'}`}
                           >
@@ -1219,12 +1206,12 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                 </tbody>
                 <tfoot>
                   <tr className="border-t-2 border-slate-600 font-black text-white text-sm">
-                    <td className="py-3.5 pl-2 text-base">Total Calda Base</td>
-                    <td className="py-3.5 text-right font-mono text-amber-300 text-base">
+                    <td className="py-3.5 pl-2 pr-2 text-base whitespace-nowrap">Total Calda Base</td>
+                    <td className="py-3.5 px-2 text-center font-mono tabular-nums text-amber-300 text-base whitespace-nowrap">
                       {Math.round(analysis.caldaWeight)} g
                     </td>
-                    <td className="py-3.5 text-right font-mono text-slate-300">100.0%</td>
-                    <td className="py-3.5 text-right font-mono text-emerald-400 text-base">
+                    <td className="py-3.5 px-2 text-right font-mono tabular-nums text-slate-300 whitespace-nowrap">100.0%</td>
+                    <td className="py-3.5 px-2 text-right font-mono tabular-nums text-emerald-400 text-base whitespace-nowrap">
                       R$ {analysis.totals.cost.toFixed(2)}
                     </td>
                     <td></td>
