@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { VariegatoItem, Ingredient } from '../../types/gelato';
-import { Plus, Trash2, Wind, Sliders, Check, X, Beaker } from 'lucide-react';
+import { Trash2, Sliders, X, Beaker } from 'lucide-react';
 import { resolveVariegatoDensity } from '../../core/calculator';
+import { IngredientSlideOver } from './IngredientSlideOver';
 
 interface PostProductionProps {
   variegatos: VariegatoItem[];
@@ -10,16 +11,25 @@ interface PostProductionProps {
   onUpdateVariegatos: (variegatos: VariegatoItem[]) => void;
 }
 
+const MESCLA_CATEGORY_FILTERS = [
+  'Variegatos & Recheios',
+  'Confeitaria & Inclusões',
+  'Pastas & Oleaginosas',
+  'Chocolates & Cacau',
+  'Frutas & Polpas',
+  'Todos'
+];
+
 export const PostProduction: React.FC<PostProductionProps> = ({
   variegatos,
   availableIngredients,
   caldaWeightGrams = 0,
   onUpdateVariegatos
 }) => {
+  const [isSlideOverOpen, setIsSlideOverOpen] = useState(false);
   const [calibratingIndex, setCalibratingIndex] = useState<number | null>(null);
   const [cupVolumeInput, setCupVolumeInput] = useState<number>(100);
   const [cupWeightInput, setCupWeightInput] = useState<number>(107);
-  const [directDensityInput, setDirectDensityInput] = useState<string>('');
 
   // Mapa hash memoizado O(1) de insumos disponíveis por nome minúsculo
   const ingredientsMap = useMemo(() => {
@@ -30,14 +40,46 @@ export const PostProduction: React.FC<PostProductionProps> = ({
     return map;
   }, [availableIngredients]);
 
-  const handleAdd = () => {
-    onUpdateVariegatos([...variegatos, { name: '', grams: 100, costKg: 0 }]);
+  const handleSelectFromSlideOver = (selected: Ingredient) => {
+    const existingIdx = variegatos.findIndex(
+      v => (v.name || '').toLowerCase().trim() === selected.name.toLowerCase().trim()
+    );
+    if (existingIdx >= 0) {
+      handleChangeGrams(existingIdx, (variegatos[existingIdx].grams || 0) + 50);
+    } else {
+      const emptyIdx = variegatos.findIndex(v => !(v.name || '').trim());
+      if (emptyIdx >= 0) {
+        const next = [...variegatos];
+        next[emptyIdx] = {
+          ...next[emptyIdx],
+          name: selected.name,
+          grams: next[emptyIdx].grams || 100,
+          costKg: selected.costKg
+        };
+        onUpdateVariegatos(next);
+      } else {
+        onUpdateVariegatos([
+          ...variegatos,
+          { name: selected.name, grams: 100, costKg: selected.costKg }
+        ]);
+      }
+    }
+  };
+
+  const handleCreateCustomMescla = (customName: string) => {
+    onUpdateVariegatos([
+      ...variegatos,
+      { name: customName, grams: 100, costKg: 0 }
+    ]);
   };
 
   const handleRemove = (index: number) => {
     const next = [...variegatos];
     next.splice(index, 1);
     if (calibratingIndex === index) setCalibratingIndex(null);
+    else if (calibratingIndex !== null && calibratingIndex > index) {
+      setCalibratingIndex(calibratingIndex - 1);
+    }
     onUpdateVariegatos(next);
   };
 
@@ -73,7 +115,12 @@ export const PostProduction: React.FC<PostProductionProps> = ({
     onUpdateVariegatos(next);
   };
 
-  const handleApplyCalibration = (index: number, density: number, overrun?: number, method?: 'mixer' | 'direct' | 'custom') => {
+  const handleApplyCalibration = (
+    index: number,
+    density: number,
+    overrun?: number,
+    method?: 'mixer' | 'direct' | 'custom'
+  ) => {
     const next = [...variegatos];
     next[index] = {
       ...next[index],
@@ -130,277 +177,366 @@ export const PostProduction: React.FC<PostProductionProps> = ({
     };
   }, [variegatos, ingredientsMap]);
 
+  const totalPctCalda = caldaWeightGrams > 0 ? (totalVariegatosGrams / caldaWeightGrams) * 100 : 0;
+  const totalGPerKg = caldaWeightGrams > 0 ? Math.round((totalVariegatosGrams / caldaWeightGrams) * 1000) : 0;
+
+  const existingMesclaIds = useMemo(
+    () =>
+      variegatos
+        .map(v => ingredientsMap.get((v.name || '').toLowerCase().trim())?.id)
+        .filter(Boolean) as string[],
+    [variegatos, ingredientsMap]
+  );
+
   return (
-    <div className="bg-slate-800/90 p-4 sm:p-5 rounded-2xl border border-slate-700/80 shadow-xl space-y-3.5">
-      {/* Header com Título e Botão de Adição */}
-      <div className="flex items-center justify-between border-b border-slate-700/80 pb-2.5">
-        <div>
-          <h4 className="text-sm sm:text-base font-bold text-white flex items-center gap-1.5">
-            <span>🍯</span>
-            <span>Pós-Produção (Mesclas)</span>
-          </h4>
-          <p className="text-[11px] text-slate-400 mt-0.5">
-            Insumos adicionados após a calda base.
-          </p>
+    <div className="bg-slate-800/90 p-5 rounded-2xl border border-slate-700/80 shadow-xl space-y-4">
+      {/* Header Compacto em Linha Única (alinhado ao estilo de Composição da Calda Base) */}
+      <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-700">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-base leading-none shrink-0">🍯</span>
+          <h3 className="text-base font-bold text-white whitespace-nowrap">Pós-Produção (Mesclas)</h3>
+          <span className="text-xs font-medium text-slate-400 whitespace-nowrap">
+            ({variegatos.length} {variegatos.length === 1 ? 'mescla' : 'mesclas'})
+          </span>
         </div>
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="flex items-center gap-1 px-2.5 py-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-bold transition-all active:scale-95 shadow-sm"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          <span>Mescla</span>
-        </button>
+
+        {variegatos.length > 0 && (
+          <span
+            className="text-xs font-mono font-bold text-cyan-300 bg-slate-900/90 border border-slate-700/80 px-2.5 py-1 rounded-lg whitespace-nowrap shrink-0"
+            title={`${totalGPerKg}g de mesclas por kg de calda base (~${totalPctCalda.toFixed(1)}% do peso da calda)`}
+          >
+            {totalGPerKg} g/kg · ~{totalPctCalda.toFixed(0)}% calda
+          </span>
+        )}
       </div>
 
       {variegatos.length === 0 ? (
-        <div className="text-center py-6 border-2 border-dashed border-slate-700/90 rounded-xl text-xs text-slate-400 space-y-2">
-          <p>Nenhuma mescla ou variegato adicionado.</p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
+          <p className="text-xs sm:text-sm text-slate-400">
+            Nenhuma mescla, variegato ou inclusão adicionada à pós-produção.
+          </p>
           <button
             type="button"
-            onClick={handleAdd}
-            className="text-amber-400 hover:text-amber-300 font-bold underline inline-flex items-center gap-1"
+            onClick={() => setIsSlideOverOpen(true)}
+            className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-xs sm:text-sm shadow-md transition-all select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 shrink-0"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Adicionar mescla (ex: Nutella, Frutas, Doce de Leite)</span>
+            Adicionar Mescla do Catálogo
           </button>
         </div>
       ) : (
-        <div className="space-y-2.5">
-          {variegatos.map((item, idx) => {
-            const ing = ingredientsMap.get((item.name || '').toLowerCase().trim());
-            const physical = resolveVariegatoDensity(item, ing);
-            const costKg = item.costKg ?? (ing ? ing.costKg : 0);
-            const totalItemCost = (item.grams * costKg) / 1000;
-            const gPerKg = caldaWeightGrams > 0
-              ? Math.round((item.grams / caldaWeightGrams) * 1000)
-              : 0;
-            const pctCalda = caldaWeightGrams > 0
-              ? (item.grams / caldaWeightGrams) * 100
-              : 0;
-            const itemVolMl = item.grams > 0 && physical.density > 0
-              ? Math.round(item.grams / physical.density)
-              : 0;
+        <>
+          {/* Tabela Alinhada com as Mesmas Colunas de Composição da Calda Base */}
+          <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900 pb-1">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="text-slate-400 border-b border-slate-700 text-[11px] uppercase tracking-wider font-bold">
+                  <th className="py-2.5 pl-2 pr-2 min-w-[200px] whitespace-nowrap">Mescla / Variegato</th>
+                  <th className="py-2.5 px-2 text-center w-[284px] whitespace-nowrap">Peso (g)</th>
+                  <th className="py-2.5 px-2 text-right w-[74px] whitespace-nowrap">% Calda</th>
+                  <th className="py-2.5 px-2 text-right w-[90px] whitespace-nowrap">Custo R$</th>
+                  <th className="py-2.5 px-1.5 text-center w-11 whitespace-nowrap">Ação</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-700/50">
+                {variegatos.map((item, idx) => {
+                  const ing = ingredientsMap.get((item.name || '').toLowerCase().trim());
+                  const physical = resolveVariegatoDensity(item, ing);
+                  const costKg = item.costKg ?? (ing ? ing.costKg : 0);
+                  const totalItemCost = (item.grams * costKg) / 1000;
+                  const gPerKg = caldaWeightGrams > 0
+                    ? Math.round((item.grams / caldaWeightGrams) * 1000)
+                    : 0;
+                  const pctCalda = caldaWeightGrams > 0
+                    ? (item.grams / caldaWeightGrams) * 100
+                    : 0;
+                  const itemVolMl = item.grams > 0 && physical.density > 0
+                    ? Math.round(item.grams / physical.density)
+                    : 0;
 
-            return (
-              <div
-                key={idx}
-                className="bg-slate-900/90 rounded-xl border border-slate-700/80 p-3 space-y-2.5 shadow-sm hover:border-slate-600 transition-colors"
-              >
-                {/* Linha 1: Nome da Mescla (100% da largura útil) + Botão Excluir */}
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 min-w-0">
-                    <input
-                      type="text"
-                      list="variegatos-options"
-                      placeholder="Nome da mescla (ex: Variegato de Nutella)..."
-                      value={item.name}
-                      onChange={e => handleChangeName(idx, e.target.value)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-semibold text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemove(idx)}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-700/80 bg-slate-800 text-amber-600 hover:text-amber-400 hover:bg-amber-500/15 hover:border-amber-500/40 transition-colors shrink-0"
-                    title="Remover mescla"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+                  return (
+                    <React.Fragment key={idx}>
+                      <tr className="hover:bg-slate-750/40 transition-colors group">
+                        {/* Coluna 1: Input do Nome + Micro-pílulas inline de Mixer e Densidade/Volume */}
+                        <td className="py-2 pl-2 pr-2 align-middle">
+                          <div className="space-y-1.5">
+                            <input
+                              type="text"
+                              list="variegatos-options"
+                              placeholder="Digite ou escolha a mescla..."
+                              value={item.name}
+                              onChange={e => handleChangeName(idx, e.target.value)}
+                              title={item.name || undefined}
+                              className="w-full h-9 bg-slate-900 border border-slate-700 focus:border-amber-500 rounded-xl px-3 text-sm text-white placeholder-slate-500 focus:outline-none font-semibold transition-colors"
+                            />
 
-                {/* Linha 2: Peso no Lote, Dosagem e Custo Distribuídos Simetricamente */}
-                <div className="flex items-center justify-between gap-2 sm:gap-3 pt-0.5">
-                  {/* 1. Bloco de Pesagem */}
-                  <div className="flex items-center bg-slate-800 border border-slate-700 focus-within:border-amber-500 rounded-xl px-2.5 py-1.5 shadow-inner transition-colors shrink-0">
-                    <span className="text-[11px] font-bold text-slate-400 mr-1.5 select-none">Peso:</span>
-                    <input
-                      type="number"
-                      min="0"
-                      step="10"
-                      value={item.grams || ''}
-                      onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
-                      className="w-16 bg-transparent text-sm text-right font-black font-mono text-amber-300 tabular-nums focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      placeholder="0"
-                    />
-                    <span className="text-xs font-mono font-bold text-slate-400 pl-1 select-none">g</span>
-                  </div>
+                            {/* Controles físicos compactos (sem omitir nenhuma informação!) */}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <button
+                                type="button"
+                                onClick={() => handleToggleMixer(idx)}
+                                className={`px-2 py-0.5 rounded-md text-[10px] font-bold transition-all inline-flex items-center gap-1 border select-none ${
+                                  physical.method === 'mixer'
+                                    ? 'bg-amber-500/20 border-amber-500/60 text-amber-300 shadow-sm'
+                                    : 'bg-slate-900/90 border-slate-700/80 text-slate-400 hover:text-slate-200 hover:border-slate-600'
+                                }`}
+                                title={
+                                  physical.method === 'mixer'
+                                    ? `Mixer ativado (+${physical.overrun}% de aeração mecânica). Clique para desligar.`
+                                    : 'Clique para ativar preparo com Mixer (+20% de aeração mecânica)'
+                                }
+                              >
+                                <span>🌪️</span>
+                                <span>{physical.method === 'mixer' ? `Mixer: +${physical.overrun}%` : 'Mixer: Off'}</span>
+                              </button>
 
-                  {/* 2. Bloco de Dosagem (Centralizado Simetricamente) */}
-                  <div
-                    className="text-center text-[11px] font-mono leading-tight px-1"
-                    title={`${gPerKg}g de mescla por 1kg de calda base (~${pctCalda.toFixed(1)}% do peso do lote)`}
-                  >
-                    <span className="text-cyan-300 font-bold block whitespace-nowrap">{gPerKg} g/kg</span>
-                    <span className="text-[10px] text-slate-400 block whitespace-nowrap">~{pctCalda.toFixed(0)}% calda</span>
-                  </div>
+                              <button
+                                type="button"
+                                onClick={() => setCalibratingIndex(prev => (prev === idx ? null : idx))}
+                                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold transition-all inline-flex items-center gap-1 border select-none ${
+                                  calibratingIndex === idx
+                                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-sm'
+                                    : 'bg-slate-900/90 border-slate-700/80 text-slate-300 hover:border-cyan-500/50 hover:text-cyan-200'
+                                }`}
+                                title="Clique para calibrar densidade física com copo dosador ou presets"
+                              >
+                                <Sliders className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
+                                <span>{physical.density.toFixed(2)} g/ml</span>
+                                <span className="text-cyan-300 font-medium">· ~{itemVolMl} ml</span>
+                              </button>
 
-                  {/* 3. Bloco de Custo */}
-                  <div className="text-right shrink-0">
-                    <span className="text-sm font-mono font-black text-emerald-400 block tracking-tight whitespace-nowrap">
-                      R$ {totalItemCost.toFixed(2)}
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-mono block whitespace-nowrap">
-                      R$ {costKg.toFixed(2)}/kg
-                    </span>
-                  </div>
-                </div>
+                              <span
+                                className="text-[10px] font-mono text-slate-400 px-1 select-none"
+                                title={`${gPerKg}g de mescla por kg de calda base`}
+                              >
+                                {gPerKg} g/kg
+                              </span>
+                            </div>
+                          </div>
+                        </td>
 
-                {/* Linha 3: Controles de Física (Mixer & Densidade/Volume) */}
-                <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-800">
-                  {/* Botão Ação Rápida de Mixer com Estado Explícito */}
-                  <button
-                    type="button"
-                    onClick={() => handleToggleMixer(idx)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 ${
-                      physical.method === 'mixer'
-                        ? 'bg-amber-500/20 border border-amber-500/60 text-amber-300 shadow-sm'
-                        : 'bg-slate-800/80 border border-slate-700/80 text-slate-400 hover:text-slate-200 hover:bg-slate-750'
-                    }`}
-                    title={
-                      physical.method === 'mixer'
-                        ? `Mixer ativado (+${physical.overrun}% de aeração mecânica). Clique para desligar.`
-                        : 'Clique para ativar preparo com Mixer (+20% de aeração mecânica)'
-                    }
-                  >
-                    <span>🌪️</span>
-                    <span>{physical.method === 'mixer' ? `Mixer: Ativo (+${physical.overrun}%)` : 'Mixer: Desligado'}</span>
-                  </button>
+                        {/* Coluna 2: Mesma Esteira Simétrica de 5 Controles da Calda Base */}
+                        <td className="py-2 px-2 align-middle whitespace-nowrap">
+                          <div className="flex items-center justify-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleChangeGrams(idx, Math.max(0, (item.grams || 0) - 10))}
+                              className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
+                              title="Diminuir 10g (-10g)"
+                              aria-label={`Diminuir 10g de ${item.name || 'mescla'}`}
+                            >
+                              -10g
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleChangeGrams(idx, Math.max(0, (item.grams || 0) - 1))}
+                              className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
+                              title="Diminuir 1g (-1g)"
+                              aria-label={`Diminuir 1g de ${item.name || 'mescla'}`}
+                            >
+                              -1g
+                            </button>
 
-                  {/* Pílula de Densidade & Volume (com ícone e affordance de clique) */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (calibratingIndex === idx) {
-                        setCalibratingIndex(null);
-                      } else {
-                        setCalibratingIndex(idx);
-                        setDirectDensityInput(String(physical.density));
-                      }
-                    }}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 border shrink-0 ${
-                      calibratingIndex === idx
-                        ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-sm'
-                        : 'bg-slate-800/80 border-slate-700/80 text-amber-300 hover:border-cyan-500/50 hover:bg-cyan-500/10'
-                    }`}
-                    title="Clique para calibrar densidade física com copo dosador ou presets"
-                  >
-                    <Sliders className="w-3 h-3 text-cyan-400" />
-                    <span>{physical.density.toFixed(2)} g/ml</span>
-                    <span className="text-cyan-300 font-medium">· ~{itemVolMl} ml</span>
-                  </button>
-                </div>
+                            <div className="w-[84px] h-8 shrink-0 px-2.5 rounded-full flex items-center justify-end bg-slate-900 border border-slate-700 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/50 transition-all shadow-inner">
+                              <input
+                                type="number"
+                                min="0"
+                                step="5"
+                                value={item.grams === 0 ? '' : item.grams}
+                                onChange={e => handleChangeGrams(idx, parseFloat(e.target.value) || 0)}
+                                className="w-full min-w-0 bg-transparent text-right font-mono font-bold text-sm text-white tabular-nums tracking-tight focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                placeholder="0"
+                                aria-label={`Peso em gramas de ${item.name || 'mescla'}`}
+                              />
+                              <span className="text-xs font-mono font-semibold text-slate-400 pl-1 select-none shrink-0">
+                                g
+                              </span>
+                            </div>
 
-                {/* Painel Expansível de Calibração Física (Copo 100ml / Mixer / Presets) */}
-                {calibratingIndex === idx && (
-                  <div className="bg-slate-950/95 border border-cyan-500/40 rounded-xl p-3 shadow-xl space-y-2.5 animate-fade-in text-xs">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-                      <div className="flex items-center gap-1.5 font-bold text-slate-200">
-                        <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-                        <span>Calibração: <strong className="text-amber-300">{item.name || 'Mescla'}</strong></span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setCalibratingIndex(null)}
-                        className="text-slate-400 hover:text-white p-0.5"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                            <button
+                              type="button"
+                              onClick={() => handleChangeGrams(idx, (item.grams || 0) + 1)}
+                              className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
+                              title="Aumentar 1g (+1g)"
+                              aria-label={`Aumentar 1g de ${item.name || 'mescla'}`}
+                            >
+                              +1g
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleChangeGrams(idx, (item.grams || 0) + 10)}
+                              className="w-[42px] h-8 shrink-0 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700/80 text-white hover:border-amber-500/60 hover:bg-slate-800 active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none shadow-sm font-mono font-bold text-[11px] leading-none"
+                              title="Aumentar 10g (+10g)"
+                              aria-label={`Aumentar 10g de ${item.name || 'mescla'}`}
+                            >
+                              +10g
+                            </button>
+                          </div>
+                        </td>
 
-                    {/* Método A: Copo Dosador */}
-                    <div className="space-y-1.5 bg-slate-900/90 p-2 rounded-lg border border-slate-800">
-                      <div className="flex items-center gap-1 text-[11px] font-bold text-slate-300">
-                        <Beaker className="w-3 h-3 text-cyan-400" />
-                        <span>Aferição com Balança e Copo</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="flex-1 flex items-center bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5">
-                          <span className="text-[10px] text-slate-400 pr-1">Vol:</span>
-                          <input
-                            type="number"
-                            min="10"
-                            max="1000"
-                            value={cupVolumeInput}
-                            onChange={e => setCupVolumeInput(Number(e.target.value) || 100)}
-                            className="w-full bg-transparent text-xs font-mono font-bold text-white text-right focus:outline-none"
-                          />
-                          <span className="text-[10px] text-slate-400 pl-0.5">ml</span>
-                        </div>
-                        <div className="flex-1 flex items-center bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5">
-                          <span className="text-[10px] text-slate-400 pr-1">Peso:</span>
-                          <input
-                            type="number"
-                            min="1"
-                            max="2000"
-                            value={cupWeightInput}
-                            onChange={e => setCupWeightInput(Number(e.target.value) || 107)}
-                            className="w-full bg-transparent text-xs font-mono font-bold text-white text-right focus:outline-none"
-                          />
-                          <span className="text-[10px] text-slate-400 pl-0.5">g</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const d = cupVolumeInput > 0 ? cupWeightInput / cupVolumeInput : 1.25;
-                            handleApplyCalibration(idx, d, undefined, 'custom');
-                          }}
-                          className="px-2 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded text-[11px] font-bold transition-colors shrink-0"
+                        {/* Coluna 3: % Calda */}
+                        <td
+                          className="py-2 px-2 align-middle text-right font-mono font-bold tabular-nums text-slate-200 text-sm whitespace-nowrap"
+                          title={`${gPerKg} g de mescla por kg de calda base`}
                         >
-                          Aplicar
-                        </button>
-                      </div>
-                    </div>
+                          {pctCalda.toFixed(1)}%
+                        </td>
 
-                    {/* Presets Rápidos */}
-                    <div className="flex flex-wrap gap-1 pt-0.5">
-                      <button
-                        type="button"
-                        onClick={() => handleApplyCalibration(idx, 1.07, 20, 'mixer')}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 font-mono border border-slate-700"
-                      >
-                        Nutella Mixer (1.07)
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleApplyCalibration(idx, 1.28, 0, 'direct')}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono border border-slate-700"
-                      >
-                        Nutella Pura (1.28)
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleApplyCalibration(idx, 1.30, 0, 'direct')}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-amber-200 font-mono border border-slate-700"
-                      >
-                        Doce de Leite (1.30)
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleResetCalibration(idx)}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white font-mono border border-slate-700 ml-auto"
-                      >
-                        Padrão
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                        {/* Coluna 4: Custo R$ */}
+                        <td
+                          className="py-2 px-2 align-middle text-right font-mono font-bold tabular-nums text-sm whitespace-nowrap"
+                          title={`Custo cadastrado: R$ ${costKg.toFixed(2)}/kg`}
+                        >
+                          <span className={costKg <= 0 ? 'text-slate-400' : 'text-slate-200'}>
+                            R$ {totalItemCost.toFixed(2)}
+                          </span>
+                        </td>
 
-          {/* Rodapé Sumário de Pós-Produção */}
-          <div className="pt-2.5 border-t border-slate-700/80 flex items-center justify-between text-xs text-slate-300 px-0.5">
-            <span className="font-semibold text-slate-400">Total Mesclas ({variegatos.length}):</span>
-            <div className="flex items-center gap-1.5 font-mono text-xs">
-              <span className="text-amber-300 font-bold">{totalVariegatosGrams} g</span>
-              <span className="text-slate-500">·</span>
-              <span className="text-cyan-300 font-medium">~{totalVariegatosVolMl} ml</span>
-              <span className="text-slate-500">·</span>
-              <span className="text-emerald-400 font-bold">R$ {totalVariegatosCost.toFixed(2)}</span>
-            </div>
+                        {/* Coluna 5: Ação (Lixeira centralizada) */}
+                        <td className="py-2 px-1.5 align-middle text-center">
+                          <button
+                            type="button"
+                            onClick={() => handleRemove(idx)}
+                            className="p-2 sm:p-1.5 min-w-[36px] min-h-[36px] sm:min-w-0 sm:min-h-0 inline-flex items-center justify-center text-amber-600 hover:text-amber-400 hover:bg-amber-500/15 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+                            title="Remover mescla"
+                            aria-label={`Remover ${item.name || 'mescla'}`}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+
+                      {/* Painel Expansível de Calibração Física (Copo 100ml / Presets) sob demanda */}
+                      {calibratingIndex === idx && (
+                        <tr>
+                          <td colSpan={5} className="py-2 px-2">
+                            <div className="bg-slate-950/95 border border-cyan-500/40 rounded-xl p-3 shadow-xl space-y-2.5 animate-fade-in text-xs">
+                              <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                                <div className="flex items-center gap-1.5 font-bold text-slate-200">
+                                  <Sliders className="w-3.5 h-3.5 text-cyan-400" />
+                                  <span>
+                                    Calibração de Densidade: <strong className="text-amber-300">{item.name || 'Mescla'}</strong>
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setCalibratingIndex(null)}
+                                  className="text-slate-400 hover:text-white p-0.5 rounded"
+                                  aria-label="Fechar calibração"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
+                                {/* Aferição com Balança e Copo */}
+                                <div className="flex items-center gap-1.5 flex-wrap sm:flex-nowrap flex-1 bg-slate-900/90 px-2.5 py-1.5 rounded-lg border border-slate-800">
+                                  <Beaker className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                                  <span className="text-[11px] font-bold text-slate-300 whitespace-nowrap">Copo:</span>
+                                  <div className="flex items-center bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 w-20">
+                                    <input
+                                      type="number"
+                                      min="10"
+                                      max="1000"
+                                      value={cupVolumeInput}
+                                      onChange={e => setCupVolumeInput(Number(e.target.value) || 100)}
+                                      className="w-full bg-transparent text-xs font-mono font-bold text-white text-right focus:outline-none"
+                                    />
+                                    <span className="text-[10px] text-slate-400 pl-0.5">ml</span>
+                                  </div>
+                                  <div className="flex items-center bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 w-20">
+                                    <input
+                                      type="number"
+                                      min="1"
+                                      max="2000"
+                                      value={cupWeightInput}
+                                      onChange={e => setCupWeightInput(Number(e.target.value) || 107)}
+                                      className="w-full bg-transparent text-xs font-mono font-bold text-white text-right focus:outline-none"
+                                    />
+                                    <span className="text-[10px] text-slate-400 pl-0.5">g</span>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const d = cupVolumeInput > 0 ? cupWeightInput / cupVolumeInput : 1.25;
+                                      handleApplyCalibration(idx, d, undefined, 'custom');
+                                    }}
+                                    className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded text-[11px] font-bold transition-colors shrink-0"
+                                  >
+                                    Aplicar
+                                  </button>
+                                </div>
+
+                                {/* Presets Rápidos */}
+                                <div className="flex flex-wrap items-center gap-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleApplyCalibration(idx, 1.07, 20, 'mixer')}
+                                    className="text-[10px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 font-mono border border-slate-700"
+                                  >
+                                    Nutella Mixer (1.07)
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleApplyCalibration(idx, 1.28, 0, 'direct')}
+                                    className="text-[10px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono border border-slate-700"
+                                  >
+                                    Nutella Pura (1.28)
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleApplyCalibration(idx, 1.30, 0, 'direct')}
+                                    className="text-[10px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-200 font-mono border border-slate-700"
+                                  >
+                                    Doce de Leite (1.30)
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleResetCalibration(idx)}
+                                    className="text-[10px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white font-mono border border-slate-700"
+                                  >
+                                    Padrão
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+              <tfoot>
+                <tr className="border-t-2 border-slate-600 font-black text-white text-sm">
+                  <td className="py-3 pl-2 pr-2 text-base whitespace-nowrap">Total Mesclas</td>
+                  <td className="py-3 px-2 text-center font-mono tabular-nums text-base whitespace-nowrap">
+                    <span className="text-amber-300">{totalVariegatosGrams} g</span>
+                    <span className="text-slate-500 mx-1.5">·</span>
+                    <span className="text-cyan-300 text-sm font-bold">~{totalVariegatosVolMl} ml</span>
+                  </td>
+                  <td className="py-3 px-2 text-right font-mono tabular-nums text-slate-300 whitespace-nowrap">
+                    {totalPctCalda.toFixed(1)}%
+                  </td>
+                  <td className="py-3 px-2 text-right font-mono tabular-nums text-emerald-400 text-base whitespace-nowrap">
+                    R$ {totalVariegatosCost.toFixed(2)}
+                  </td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
-        </div>
+
+          {/* Ação Alinhada à Direita com Identidade Visual Idêntica ao Botão da Calda Base */}
+          <div className="pt-1 flex items-center justify-end">
+            <button
+              type="button"
+              onClick={() => setIsSlideOverOpen(true)}
+              className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-xs sm:text-sm shadow-md transition-all select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+            >
+              Adicionar Mescla do Catálogo
+            </button>
+          </div>
+        </>
       )}
 
       <datalist id="variegatos-options">
@@ -410,6 +546,20 @@ export const PostProduction: React.FC<PostProductionProps> = ({
           </option>
         ))}
       </datalist>
+
+      {/* Gaveta Lateral do Catálogo de Mesclas & Inclusões (sem expansão em sanfona) */}
+      <IngredientSlideOver
+        isOpen={isSlideOverOpen}
+        onClose={() => setIsSlideOverOpen(false)}
+        onSelectIngredient={handleSelectFromSlideOver}
+        onCreateCustom={handleCreateCustomMescla}
+        availableIngredients={availableIngredients}
+        existingIngredientIds={existingMesclaIds}
+        title="Catálogo de Mesclas & Inclusões"
+        subtitle="Selecione um variegato, recheio ou inclusão para pós-produção"
+        categoryFilters={MESCLA_CATEGORY_FILTERS}
+        defaultCategory="Variegatos & Recheios"
+      />
     </div>
   );
 };

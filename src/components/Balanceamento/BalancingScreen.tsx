@@ -1221,7 +1221,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
             </div>
 
             {/* Ação: Adicionar Insumo do Catálogo */}
-            <div className="pt-2 flex items-center justify-start">
+            <div className="pt-2 flex items-center justify-end">
               <button
                 type="button"
                 onClick={() => setIsSlideOverOpen(true)}

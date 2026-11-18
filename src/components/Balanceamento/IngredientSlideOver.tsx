@@ -10,6 +10,11 @@ export interface IngredientSlideOverProps {
   availableIngredients: Ingredient[];
   existingIngredientIds?: string[];
   className?: string;
+  title?: string;
+  subtitle?: string;
+  categoryFilters?: string[];
+  defaultCategory?: string;
+  onCreateCustom?: (customName: string) => void;
 }
 
 export interface CategoryPillMeta {
@@ -73,34 +78,44 @@ export const IngredientSlideOver: React.FC<IngredientSlideOverProps> = ({
   onSelectIngredient,
   availableIngredients,
   existingIngredientIds = [],
-  className = ''
+  className = '',
+  title = 'Catálogo de Matérias-Primas',
+  subtitle = 'Selecione um insumo balanceado para adicionar à calda',
+  categoryFilters = CATEGORY_FILTERS,
+  defaultCategory = 'Todos',
+  onCreateCustom
 }) => {
   useModalDismiss(isOpen, onClose);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
+      setSelectedCategory(defaultCategory);
       setTimeout(() => searchInputRef.current?.focus(), 50);
     } else {
       setSearchQuery('');
-      setSelectedCategory('Todos');
+      setSelectedCategory(defaultCategory);
     }
-  }, [isOpen]);
+  }, [isOpen, defaultCategory]);
 
   const filteredIngredients = useMemo(() => {
     return availableIngredients.filter(ing => {
-      // Category match
-      if (selectedCategory !== 'Todos') {
+      // Category match (se houver busca digitada, pesquisa em todas as categorias quando nenhum match ou respeita filtro ativo)
+      if (selectedCategory !== 'Todos' && !searchQuery.trim()) {
         if (selectedCategory === 'Outros') {
-          const knownCategories = CATEGORY_FILTERS.filter(c => c !== 'Todos' && c !== 'Outros');
+          const knownCategories = categoryFilters.filter(c => c !== 'Todos' && c !== 'Outros');
           if (knownCategories.includes(ing.category)) return false;
+        } else if (selectedCategory === 'Variegatos & Recheios') {
+          if (ing.category !== 'Variegatos & Recheios' && ing.category !== 'Variegato') return false;
         } else if (selectedCategory === 'Frutas & Polpas') {
           if (ing.category !== 'Frutas' && ing.category !== 'Frutas & Polpas') return false;
         } else if (selectedCategory === 'Neutros & Fibras') {
           if (ing.category !== 'Neutros & Fibras' && ing.category !== 'Neutros, Gomas & Fibras') return false;
+        } else if (selectedCategory === 'Açúcares') {
+          if (ing.category !== 'Açúcares' && ing.category !== 'Açúcares & Adoçantes') return false;
         } else if (ing.category !== selectedCategory) {
           return false;
         }
@@ -115,7 +130,7 @@ export const IngredientSlideOver: React.FC<IngredientSlideOverProps> = ({
         (ing.id && ing.id.toLowerCase().includes(q))
       );
     });
-  }, [availableIngredients, selectedCategory, searchQuery]);
+  }, [availableIngredients, selectedCategory, searchQuery, categoryFilters]);
 
   if (!isOpen) return null;
 
@@ -144,10 +159,10 @@ export const IngredientSlideOver: React.FC<IngredientSlideOverProps> = ({
                   className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2"
                 >
                   <Sparkles className="w-4 h-4 text-amber-400" />
-                  <span>Catálogo de Matérias-Primas</span>
+                  <span>{title}</span>
                 </h2>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Selecione um insumo balanceado para adicionar à calda
+                  {subtitle}
                 </p>
               </div>
 
@@ -186,7 +201,7 @@ export const IngredientSlideOver: React.FC<IngredientSlideOverProps> = ({
 
             {/* Category Filter Pills */}
             <div className="mt-3 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-              {CATEGORY_FILTERS.map(cat => {
+              {categoryFilters.map(cat => {
                 const isSelected = selectedCategory === cat;
                 return (
                   <button
@@ -209,14 +224,29 @@ export const IngredientSlideOver: React.FC<IngredientSlideOverProps> = ({
           {/* List of Ingredients - Non-expandable items: clicking card or '+' directly adds to recipe */}
           <div className="flex-1 overflow-y-auto p-4 space-y-2.5 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900">
             {filteredIngredients.length === 0 ? (
-              <div className="text-center py-12 px-4">
-                <Info className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                <p className="text-sm font-semibold text-slate-200">
-                  Nenhum ingrediente encontrado
-                </p>
-                <p className="text-xs text-slate-400 mt-1">
-                  Tente alterar o filtro ou o termo de pesquisa.
-                </p>
+              <div className="text-center py-12 px-4 space-y-3">
+                <Info className="w-8 h-8 text-slate-400 mx-auto" />
+                <div>
+                  <p className="text-sm font-semibold text-slate-200">
+                    Nenhum item encontrado
+                  </p>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Tente alterar o filtro ou o termo de pesquisa.
+                  </p>
+                </div>
+                {onCreateCustom && searchQuery.trim() && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onCreateCustom(searchQuery.trim());
+                      onClose();
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-xs shadow-md transition-all"
+                  >
+                    <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>Adicionar &ldquo;{searchQuery.trim()}&rdquo; personalizado</span>
+                  </button>
+                )}
               </div>
             ) : (
               filteredIngredients.map(ing => {
