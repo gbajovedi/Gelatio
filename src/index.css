@@ -701,10 +701,11 @@ html.light .nutrient-needle-err {
   box-shadow: 0 0 6px rgba(225, 29, 72, 0.7) !important;
 }
 
-/* Marcador do Simulador Térmico da Vitrine */
+/* Marcador (Agulha de Precisão) do Simulador Térmico da Vitrine no Modo Claro */
 html.light .vitrine-marker-ring {
-  border-color: #78350f !important;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.75) !important;
+  background-color: #0f172a !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 0 6px rgba(15, 23, 42, 0.55) !important;
 }
 
 /* ==========================================================================

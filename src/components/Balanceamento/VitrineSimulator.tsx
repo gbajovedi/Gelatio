@@ -45,8 +45,16 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
     return calculateFreezingState(waterPct, pac, totalSolids, selectedTemp, caldaWeightGrams);
   }, [waterPct, pac, totalSolids, selectedTemp, caldaWeightGrams]);
 
-  // Posição percentual do marcador na barra de textura (45% a 85% de gelo mapeado em 0% a 100%)
-  const markerPosition = Math.max(0, Math.min(100, ((state.icePercent - 45) / (85 - 45)) * 100));
+  // Posição percentual do marcador na escala simétrica (49% a 90% de gelo => centro exato 69.5% = 50% da barra)
+  const markerPosition = Math.max(0, Math.min(100, ((state.icePercent - 49) / (90 - 49)) * 100));
+
+  // Brilho reativo da agulha de precisão conforme o status térmico atual
+  const needleGlowClass =
+    state.status === 'ideal'
+      ? 'bg-white shadow-[0_0_6px_rgba(255,255,255,1),0_0_12px_rgba(52,211,153,0.95)] ring-1 ring-emerald-300'
+      : state.status === 'very_soft' || state.status === 'soft'
+      ? 'bg-white shadow-[0_0_6px_rgba(255,255,255,1),0_0_12px_rgba(245,158,11,0.95)] ring-1 ring-amber-300'
+      : 'bg-white shadow-[0_0_6px_rgba(255,255,255,1),0_0_12px_rgba(56,189,248,0.95)] ring-1 ring-sky-300';
 
   // Quando o usuário seleciona Freezer (-18°C), exibe diagnóstico crioscópico específico de pote de freezer
   const isFreezerRange = selectedTemp <= -16.5 && !!corvittoMetrics;
@@ -215,57 +223,64 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
       </div>
 
-      {/* Linha 3: Barra Única Inline de Equilíbrio (Gelo | Trilho de Textura | Líquido) */}
-      <div className="flex items-center gap-2.5 pt-0.5">
+      {/* Linha 3: Barra de Espatulabilidade (Líquido/Macio ← Gradiente Contínuo com Verde Centralizado → Gelo/Firme) */}
+      <div className="flex items-start gap-2.5 pt-0.5">
         <span
-          className="bg-cyan-500/15 border border-cyan-500/35 text-cyan-300 font-mono font-bold text-[11px] px-2 py-0.5 rounded-lg whitespace-nowrap shrink-0 tabular-nums"
-          title={`${state.frozenWaterGrams}g de água congelada`}
+          className="bg-amber-500/15 border border-amber-500/35 text-amber-300 font-mono font-bold text-[11px] px-2 py-0.5 rounded-lg whitespace-nowrap shrink-0 tabular-nums mt-0.5"
+          title={`${state.liquidWaterGrams}g de água livre (fase xarope não congelada)`}
         >
-          ❄️ {state.icePercent.toFixed(1)}% gelo
+          💧 {state.liquidPercent.toFixed(1)}% líq.
         </span>
 
-        <div className="relative flex-1 py-1 flex items-center">
-          <div className="vitrine-track h-2.5 w-full rounded-full bg-slate-950 border border-slate-700 overflow-hidden flex shadow-inner">
+        <div className="flex-1 min-w-0">
+          {/* Trilho Contínuo Térmico + Delimitadores da Janela Ideal (64%–75%) + Agulha de Precisão */}
+          <div className="relative py-1 flex items-center">
             <div
-              style={{ width: '27.5%' }}
-              className="bg-amber-500/30 border-r border-slate-950/50"
-              title="Muito Macio (< 56%)"
-            />
+              className="vitrine-track relative h-2.5 w-full rounded-full border border-slate-700/90 overflow-hidden shadow-inner"
+              style={{
+                backgroundImage:
+                  'linear-gradient(90deg, #f97316 0%, #f59e0b 23%, #10b981 36.6%, #34d399 50%, #10b981 63.4%, #38bdf8 79%, #6366f1 100%)'
+              }}
+              title="Escala contínua de espatulabilidade (49% a 90% de água congelada · Janela ideal centralizada em 64%–75%)"
+            >
+              {/* Delimitadores translúcidos sutis da zona verde ideal (64% = 36.6% | 75% = 63.4%) */}
+              <div
+                className="absolute top-0 bottom-0 w-[1.5px] bg-white/65 pointer-events-none"
+                style={{ left: '36.6%' }}
+                title="Início da Espatulabilidade Ideal (64% gelo)"
+              />
+              <div
+                className="absolute top-0 bottom-0 w-[1.5px] bg-white/65 pointer-events-none"
+                style={{ left: '63.4%' }}
+                title="Fim da Espatulabilidade Ideal (75% gelo)"
+              />
+            </div>
+
+            {/* Agulha Vertical de Alta Precisão */}
             <div
-              style={{ width: '20%' }}
-              className="bg-amber-500/50 border-r border-slate-950/50"
-              title="Macio & Cremoso (56% a 64%)"
-            />
-            <div
-              style={{ width: '27.5%' }}
-              className="bg-emerald-500/80 border-r border-slate-950/50 ring-1 ring-emerald-400"
-              title="Espatulabilidade Ideal (64% a 75%)"
-            />
-            <div
-              style={{ width: '17.5%' }}
-              className="bg-sky-500/60 border-r border-slate-950/50"
-              title="Firme / Estruturado (75% a 82%)"
-            />
-            <div
-              style={{ width: '7.5%' }}
-              className="bg-purple-500/70"
-              title="Ponto de Freezer (> 82%)"
-            />
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none z-10"
+              style={{ left: `${markerPosition}%` }}
+              title={`Água congelada a ${selectedTemp.toFixed(1)}°C: ${state.icePercent.toFixed(1)}% (${state.statusLabel})`}
+            >
+              <div className={`vitrine-marker-ring w-[4px] h-4 rounded-full ${needleGlowClass}`} />
+            </div>
           </div>
 
-          <div
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none z-10"
-            style={{ left: `${markerPosition}%` }}
-          >
-            <div className="vitrine-marker-ring w-4 h-4 rounded-full bg-gradient-to-b from-amber-300 via-yellow-400 to-amber-500 border-2 border-white shadow-[0_0_10px_rgba(250,204,21,0.95)] ring-1 ring-amber-400/70" />
+          {/* Micro-Legenda Gráfica (Centro Alinhado em 50%) */}
+          <div className="relative flex items-center justify-between text-[9px] leading-none select-none mt-0.5 px-0.5">
+            <span className="text-amber-400/90 font-semibold">Macio</span>
+            <span className="absolute left-1/2 -translate-x-1/2 text-emerald-400 font-bold whitespace-nowrap">
+              Ideal · 64–75% gelo
+            </span>
+            <span className="text-sky-400/90 font-semibold">Firme / Freezer</span>
           </div>
         </div>
 
         <span
-          className="bg-amber-500/15 border border-amber-500/35 text-amber-300 font-mono font-bold text-[11px] px-2 py-0.5 rounded-lg whitespace-nowrap shrink-0 tabular-nums"
-          title={`${state.liquidWaterGrams}g de água livre (não congelada)`}
+          className="bg-cyan-500/15 border border-cyan-500/35 text-cyan-300 font-mono font-bold text-[11px] px-2 py-0.5 rounded-lg whitespace-nowrap shrink-0 tabular-nums mt-0.5"
+          title={`${state.frozenWaterGrams}g de água congelada em microcristais`}
         >
-          💧 {state.liquidPercent.toFixed(1)}% líquido
+          ❄️ {state.icePercent.toFixed(1)}% gelo
         </span>
       </div>
     </div>
