@@ -67,7 +67,7 @@ export const RecipeSearchCombobox: React.FC<RecipeSearchComboboxProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="relative flex-1 min-w-[260px] sm:min-w-[340px] max-w-2xl">
+    <div ref={containerRef} className="relative flex-1 min-w-[260px] sm:min-w-[340px] max-w-3xl">
       {/* Integrated Recipe Name Input + Catalog Trigger */}
       <div
         className={`flex items-stretch bg-slate-900 border ${

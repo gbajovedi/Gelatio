@@ -73,7 +73,7 @@ export const ThemeToggle: React.FC = () => {
       <button
         type="button"
         onClick={() => handleSelectMode('dark')}
-        className={`h-7 w-7 sm:h-7 sm:w-7 rounded-full transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+        className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
           themeMode === 'dark'
             ? 'bg-amber-500 text-stone-950 shadow-sm shadow-amber-500/20 scale-105'
             : 'theme-switch-inactive text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-black/5 dark:hover:bg-white/5'
@@ -89,7 +89,7 @@ export const ThemeToggle: React.FC = () => {
       <button
         type="button"
         onClick={() => handleSelectMode('auto')}
-        className={`h-7 px-2.5 rounded-full text-[11px] font-bold transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+        className={`h-7 sm:h-8 px-2.5 sm:px-3 rounded-full text-xs font-bold transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
           themeMode === 'auto'
             ? 'bg-amber-500 text-stone-950 shadow-sm shadow-amber-500/20 scale-105'
             : 'theme-switch-inactive text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-black/5 dark:hover:bg-white/5'
@@ -105,7 +105,7 @@ export const ThemeToggle: React.FC = () => {
       <button
         type="button"
         onClick={() => handleSelectMode('light')}
-        className={`h-7 w-7 sm:h-7 sm:w-7 rounded-full transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+        className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full transition-all flex items-center justify-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
           themeMode === 'light'
             ? 'bg-amber-500 text-stone-950 shadow-sm shadow-amber-500/20 scale-105'
             : 'theme-switch-inactive text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-black/5 dark:hover:bg-white/5'

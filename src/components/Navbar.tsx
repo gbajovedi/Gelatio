@@ -28,8 +28,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   ] as const;
 
   return (
-    <header className="sticky top-0 z-40 max-w-6xl mx-auto mt-2 sm:mt-3 px-3 sm:px-4 py-2 pointer-events-auto rounded-2xl shadow-lg backdrop-blur-xl bg-white/75 dark:bg-slate-900/90 border border-stone-200/60 dark:border-slate-800 transition-all duration-300 w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)]">
-      <div className="flex items-center justify-between gap-2 sm:gap-3 w-full">
+    <header className="sticky top-0 z-40 max-w-7xl mx-auto mt-2 sm:mt-3 px-4 sm:px-5 py-2.5 pointer-events-auto rounded-2xl shadow-lg backdrop-blur-xl bg-white/75 dark:bg-slate-900/90 border border-stone-200/60 dark:border-slate-800 transition-all duration-300 w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)]">
+      <div className="flex items-center justify-between gap-3 sm:gap-4 w-full">
         {/* Marca / Logo */}
         <div className="flex items-center gap-2 shrink-0">
           <button
@@ -42,12 +42,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <img
               src={gelatioLogo}
               alt="Gelatio"
-              className="h-7 sm:h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-sm"
+              className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-sm"
             />
           </button>
         </div>
 
-        {/* Segmented Control Pills (Desktop Tabs) */}
+        {/* Segmented Control Pills (Desktop Tabs — Apple Dock Style) */}
         <nav
           role="tablist"
           aria-label="Navegação Principal"
@@ -65,13 +65,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => onTabChange(tab.id as NavTab)}
                 aria-selected={isActive}
                 aria-controls={`panel-${tab.id}`}
-                className={`h-8 px-2.5 lg:px-3 rounded-lg text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap select-none transition-all shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+                className={`h-9 px-3 lg:px-4 rounded-lg text-[13px] lg:text-sm font-semibold flex items-center gap-2 whitespace-nowrap select-none transition-all shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                   isActive
                     ? 'bg-amber-500 text-stone-950 font-bold shadow-sm shadow-amber-500/20 scale-[1.02]'
                     : 'text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white hover:bg-stone-200/60 dark:hover:bg-slate-800'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-stone-950' : 'text-stone-400 dark:text-slate-400'}`} />
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-stone-950' : 'text-stone-400 dark:text-slate-400'}`} />
                 <span>{tab.label}</span>
               </button>
             );
@@ -79,16 +79,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Quick Shortcuts: Backup, ThemeToggle */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
           {/* Backup Button */}
           <button
             type="button"
             onClick={onOpenBackup}
-            className="h-8 px-2 sm:px-2.5 rounded-lg text-xs font-semibold text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white bg-stone-100/80 dark:bg-slate-950 hover:bg-stone-200/60 dark:hover:bg-slate-800 border border-stone-200/50 dark:border-slate-800 flex items-center gap-1.5 transition-all select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 group"
+            className="h-9 px-3 sm:px-3.5 rounded-lg text-[13px] lg:text-sm font-semibold text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white bg-stone-100/80 dark:bg-slate-950 hover:bg-stone-200/60 dark:hover:bg-slate-800 border border-stone-200/50 dark:border-slate-800 flex items-center gap-2 transition-all select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 group"
             title="Importar ou Exportar Dados (.JSON)"
             aria-label="Backup e Sincronização de Dados"
           >
-            <Database className="w-3.5 h-3.5 text-amber-500 group-hover:scale-110 transition-transform shrink-0" />
+            <Database className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform shrink-0" />
             <span className="hidden sm:inline">Backup</span>
           </button>
 
@@ -115,13 +115,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onTabChange(tab.id as NavTab)}
               aria-selected={isActive}
               aria-controls={`panel-${tab.id}`}
-              className={`h-11 py-2.5 px-3 sm:px-3.5 rounded-xl text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 transition-all shrink-0 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+              className={`h-11 py-2.5 px-3.5 rounded-xl text-sm font-semibold whitespace-nowrap flex items-center gap-1.5 transition-all shrink-0 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                 isActive
                   ? 'bg-amber-500 text-stone-950 font-bold shadow-sm'
                   : 'text-stone-600 dark:text-slate-300 hover:text-stone-900 dark:hover:text-white bg-stone-100/60 dark:bg-slate-950'
               }`}
             >
-              <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-stone-950' : 'text-stone-400'}`} />
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-stone-950' : 'text-stone-400'}`} />
               <span>{tab.shortLabel}</span>
             </button>
           );

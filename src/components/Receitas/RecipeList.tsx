@@ -367,7 +367,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 
   return (
     <>
-      <div className="no-print space-y-6 max-w-7xl mx-auto pb-16">
+      <div className="no-print space-y-6 max-w-[1600px] mx-auto pb-16">
         {/* Header & Search */}
         <div className="bg-slate-800/95 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -689,7 +689,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
         </div>
 
         {/* Grid of recipe cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
           {sortedAndFilteredRecipes.map(recipe => {
             const m = metrics.get(recipe.id);
             const totalWeight = m?.totalWeight ?? (recipe.ingredients ? recipe.ingredients.reduce((a, b) => a + b.grams, 0) : 0);

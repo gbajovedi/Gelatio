@@ -318,7 +318,7 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-16">
+    <div className="space-y-6 max-w-[1600px] mx-auto pb-16">
       {/* Header Card */}
       <div className="bg-slate-800/95 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

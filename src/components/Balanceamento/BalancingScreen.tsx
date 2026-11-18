@@ -637,7 +637,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-16">
+    <div className="space-y-6 max-w-[1600px] mx-auto pb-16">
       {/* Top Header Card (z-30 so search combobox dropdown floats above subsequent cards without clipping) */}
       <div className="relative z-30 bg-slate-800/95 rounded-2xl border border-slate-700/80 p-5 shadow-xl space-y-3.5">
         {/* Dynamic Category Accent Line */}
@@ -664,7 +664,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
 
         {/* LINHA 1: Caixa de Sabor do Gelato alinhada com os Botões de Ação */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          <div className="flex-1 max-w-2xl">
+          <div className="flex-1 max-w-3xl">
             {/* Recipe Name Input with Integrated Catalog Search */}
             <RecipeSearchCombobox
               recipes={recipes}
