@@ -3,13 +3,8 @@ import { BatchAnalysis, NutrientValidation } from '../../types/gelato';
 import { VitrineSimulator } from './VitrineSimulator';
 import { CustosCard, CategoryCostItem } from './CustosCard';
 import {
-  CheckCircle2,
-  AlertCircle,
-  ThermometerSnowflake,
   Check,
   AlertTriangle,
-  Store,
-  Package,
   Snowflake,
   Wind,
   ShieldCheck,
@@ -136,8 +131,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
   variant = 'all',
   columns = 4
 }) => {
-  const { validations, isBalanced, servingTemperature } = analysis;
-  const [thermalMode, setThermalMode] = useState<'vitrine' | 'freezer'>('vitrine');
+  const { validations, servingTemperature } = analysis;
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
   const corvitto = analysis.corvittoMetrics;
   const sandiness = analysis.sandinessRisk;
@@ -161,38 +155,16 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
   const okNutrients = nutrientKeys.filter(k => validations[k]?.status === 'Ok').length;
   const allNutrientsOk = okNutrients === totalNutrients;
 
-  // Texture and scoopability assessment based on Cryoscopic Serving Temperature
-  const pacValue = analysis.totals.pac;
-  let textureVerdict = {
-    title: 'Espatulabilidade Ideal',
-    desc: 'Ponto de vitrine equilibrado (-11.5°C a -13.2°C: ~75% de água congelada)',
-    badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-  };
-
-  if (servingTemperature > -11.0) {
-    textureVerdict = {
-      title: 'Consistência Firme / Dureza Elevada',
-      desc: 'Pouca água congelada a -12°C; requer vitrine mais amena ou elevar açúcares/PAC',
-      badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-    };
-  } else if (servingTemperature < -13.5) {
-    textureVerdict = {
-      title: 'Massa Macia',
-      desc: 'Maior poder anticongelante; consistência mais suave e aveludada a -12°C',
-      badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-    };
-  }
-
-  let freezerVerdictBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-  if (corvitto?.freezerStatus === 'duro') {
-    freezerVerdictBadge = 'bg-sky-500/20 text-sky-300 border-sky-500/40';
-  } else if (corvitto?.freezerStatus === 'firme') {
-    freezerVerdictBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
-  } else if (corvitto?.freezerStatus === 'colher') {
-    freezerVerdictBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-  } else if (corvitto?.freezerStatus === 'muito_macio') {
-    freezerVerdictBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
-  }
+  const shortEmulsionBadge =
+    emulsion?.status === 'ideal'
+      ? 'Equilibrada'
+      : emulsion?.status === 'gorduroso'
+      ? 'Calda Rica'
+      : emulsion?.status === 'magro'
+      ? 'Aeração Rápida'
+      : emulsion?.status === 'sorbet'
+      ? 'Base Água'
+      : emulsion?.statusLabel || 'Equilibrada';
 
   const renderCardHeaderTooltip = (
     key: string,
@@ -240,7 +212,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
       tooltipBody = `Proporção atual de ${emulsion.fatMsnfRatio} : 1 (faixa ideal: 0.75 a 1.25). Estimativa de aeração calculada em ~${emulsion.overrunEstimatePct}% de ar.`;
       tooltipExtra = (
         <div className="mt-2 pt-1.5 border-t border-purple-500/30 text-[11px] text-purple-300">
-          Consulte o card <em>Emulsão & Overrun</em> logo acima para o diagnóstico completo e gráfico de aeração.
+          Consulte o card <em>Overrun &amp; Emulsão</em> no topo para o gráfico de aeração.
         </div>
       );
     } else if (key === 'pac' && corvitto) {
@@ -253,7 +225,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
       tooltipBody = `Índice de ${corvitto.pacWater} PAC por kg de água pura disponível. Diagnóstico atual: ${corvitto.freezerLabel}.`;
       tooltipExtra = (
         <div className="mt-2 pt-1.5 border-t border-cyan-500/30 text-[11px] text-cyan-300">
-          Alterne para a aba <em>Pote Freezer (-18°C)</em> no painel acima para calibrar receitas de entrega/delivery.
+          Selecione <em>Freezer -18°</em> no card <em>Serviço &amp; Vitrine</em> acima para simular potes de delivery.
         </div>
       );
     }
@@ -473,263 +445,110 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
   };
 
   const renderIntelligence = () => (
-    <div
-      className={`p-3 sm:p-3.5 rounded-2xl border shadow-xl transition-all ${
-        isBalanced
-          ? 'bg-slate-800/95 border-emerald-500/40'
-          : 'bg-slate-800/95 border-amber-500/40'
-      }`}
-    >
-      {/* Header Status & Smart Dashboard Cards (Compact Architecture) */}
-      <div className="space-y-2.5">
-        {/* Slim Balance Status Ribbon */}
-        <div className="flex items-center justify-between gap-2 flex-wrap pb-2 border-b border-slate-700/60">
-          <div className="flex items-center gap-2 min-w-0 flex-wrap">
-            <div
-              className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 shadow-sm ${
-                isBalanced
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                  : 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-              }`}
-            >
-              {isBalanced ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              ) : (
-                <AlertCircle className="w-4 h-4 text-amber-400" />
-              )}
-            </div>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch">
+      {/* PILAR 1 (5 colunas): Serviço & Vitrine (Fusão do Cenário Térmico + Simulador Crioscópico) */}
+      <div className="lg:col-span-5">
+        <VitrineSimulator
+          waterPct={validations.water.val}
+          pac={validations.pac.val}
+          totalSolids={validations.totalSolids.val}
+          caldaWeightGrams={analysis.caldaWeight}
+          servingTemperature={servingTemperature}
+          corvittoMetrics={corvitto}
+        />
+      </div>
 
-            <h3 className="text-sm sm:text-base font-black text-white tracking-tight leading-none">
-              {isBalanced ? 'Receita Perfeitamente Balanceada' : 'Ajustes Recomendados na Fórmula'}
-            </h3>
-
-            <span
-              className={`text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider border leading-none ${
-                isBalanced
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                  : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-              }`}
-            >
-              {isBalanced ? 'Equilibrado' : 'Revisar Metas'}
-            </span>
-
-            <span className="hidden lg:inline text-slate-600 select-none text-xs">•</span>
-            <p className="text-[11px] sm:text-xs text-slate-300 truncate max-w-full">
-              {isBalanced
-                ? 'Todos os parâmetros bromatológicos e térmicos estão calibrados para o estilo selecionado.'
-                : 'Alguns parâmetros estão fora da faixa técnica. Ajuste os pesos na calda.'}
-            </p>
-          </div>
-        </div>
-
-        {/* Compact 2x2 Intelligence Grid: Row 1 (Térmico + Overrun) | Row 2 (Simulador + Custos) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5 items-stretch">
-          {/* CARD 1: Comportamento Térmico de Serviço */}
-          <div className="bg-slate-900/95 px-3.5 py-2.5 rounded-xl border border-slate-700/80 shadow-md flex flex-col justify-between gap-2 h-full">
-            {/* Header Compacto com Toggle Segmentado */}
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <div className="flex items-center gap-1.5 text-cyan-300">
-                <Store className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                <span className="text-[11px] uppercase font-bold tracking-wider text-cyan-200">
-                  Cenário Térmico de Serviço
-                </span>
-              </div>
-
-              <div className="inline-flex bg-slate-950 p-0.5 rounded-lg border border-slate-800 gap-0.5">
-                <button
-                  type="button"
-                  onClick={() => setThermalMode('vitrine')}
-                  className={`px-2 py-1 rounded-md text-[11px] font-bold transition-all flex items-center justify-center gap-1 ${
-                    thermalMode === 'vitrine'
-                      ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow-sm'
-                      : 'text-slate-400 hover:text-white border border-transparent'
-                  }`}
-                  title="Ponto de espatulabilidade para vitrine comercial ventilada (-11°C a -13°C)"
-                >
-                  <Store className="w-3 h-3" />
-                  <span>Vitrine (-12°C)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setThermalMode('freezer')}
-                  className={`px-2 py-1 rounded-md text-[11px] font-bold transition-all flex items-center justify-center gap-1 ${
-                    thermalMode === 'freezer'
-                      ? 'bg-amber-500/25 text-amber-200 border border-amber-400/50 shadow-sm'
-                      : 'text-slate-400 hover:text-white border border-transparent'
-                  }`}
-                  title="Diagnóstico Crioscópico para potes de delivery / freezer doméstico (-18°C)"
-                >
-                  <Package className="w-3 h-3" />
-                  <span>Freezer (-18°C)</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Corpo Inline de Métricas Térmicas */}
-            {thermalMode === 'vitrine' ? (
-              <div className="flex items-center gap-2.5 bg-slate-950/60 px-2.5 py-1.5 rounded-lg border border-slate-800/80">
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/35 flex items-center justify-center shrink-0">
-                  <ThermometerSnowflake className="w-4 h-4 text-cyan-300" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-lg sm:text-xl font-black font-mono text-cyan-300 tracking-tight leading-none">
-                        {servingTemperature} °C
-                      </span>
-                      <span className="text-[11px] text-slate-300 font-mono font-medium">
-                        (PAC: {Math.round(pacValue)})
-                      </span>
-                    </div>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full border font-bold leading-none whitespace-nowrap ${textureVerdict.badgeColor}`}>
-                      {textureVerdict.title}
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-slate-400 truncate mt-1" title={textureVerdict.desc}>
-                    {textureVerdict.desc}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2.5 bg-slate-950/60 px-2.5 py-1.5 rounded-lg border border-slate-800/80">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/35 flex items-center justify-center shrink-0">
-                  <Snowflake className="w-4 h-4 text-amber-300" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-lg sm:text-xl font-black font-mono text-amber-300 tracking-tight leading-none">
-                        {corvitto?.pacWater}
-                      </span>
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-                        PAC Água Livre
-                      </span>
-                    </div>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full border font-bold leading-none whitespace-nowrap ${freezerVerdictBadge}`}>
-                      {corvitto?.freezerLabel}
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-slate-400 truncate mt-1">
-                    {corvitto?.neededPacForFreezer && corvitto.neededPacForFreezer > 0
-                      ? `+${corvitto.neededPacForFreezer} PAC necessários para ponto de colher a -18°C`
-                      : 'Ponto de colher imediato direto do freezer (-18°C)'}
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* CARD 2: Emulsão & Overrun (Aeração) — COMPACTO E SEMPRE VISÍVEL */}
-          <div className="emulsao-overrun-card bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/30 px-3.5 py-2.5 rounded-xl border border-purple-500/30 shadow-md flex flex-col justify-between gap-2 h-full">
-            {/* Header Compacto */}
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <div className="flex items-center gap-1.5 text-purple-300 min-w-0">
-                <Wind className="w-3.5 h-3.5 text-purple-400 shrink-0" />
-                <span className="text-[11px] uppercase font-bold tracking-wider text-purple-200 truncate">
-                  Emulsão & Overrun (Método Italiano)
-                </span>
-              </div>
-
-              <span
-                className={`text-[10px] px-2 py-0.5 rounded-full border font-bold leading-none shadow-sm whitespace-nowrap ${
-                  emulsion?.status === 'ideal'
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                    : emulsion?.status === 'gorduroso'
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                    : emulsion?.status === 'magro'
-                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
-                    : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-                }`}
-                title={emulsion?.advice}
-              >
-                {emulsion?.statusLabel}
+      {/* PILAR 2 (3 colunas): Overrun & Emulsão */}
+      <div className="lg:col-span-3">
+        <div className="emulsao-overrun-card bg-slate-800/95 rounded-2xl border border-slate-700/80 px-4 py-3 shadow-lg flex flex-col justify-between gap-2.5 h-full">
+          {/* Header Compacto */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-cyan-300 min-w-0">
+              <Wind className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span className="text-[11px] uppercase font-bold tracking-wider text-slate-200 truncate leading-none">
+                Overrun &amp; Emulsão
               </span>
             </div>
 
-            {/* Corpo Inline: Overrun + Razão Lipídica */}
-            <div className="flex items-center justify-between gap-3 bg-slate-950/50 px-2.5 py-1.5 rounded-lg border border-purple-500/15">
-              {/* Bloco de Overrun */}
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center shrink-0">
-                  <Wind className="w-3.5 h-3.5 text-purple-300" />
-                </div>
-                <div className="min-w-0">
-                  <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block leading-none">
-                    Overrun Estimado
-                  </span>
-                  <div className="flex items-baseline gap-1.5 mt-0.5">
-                    <span className="text-base sm:text-lg font-black font-mono text-purple-200 tracking-tight leading-none">
-                      ~{emulsion?.overrunEstimatePct}%
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-mono font-medium truncate">
-                      ({emulsion?.overrunRange})
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <span
+              className={`text-[10px] px-2 py-0.5 rounded-full border font-bold leading-none whitespace-nowrap ${
+                emulsion?.status === 'ideal'
+                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                  : emulsion?.status === 'gorduroso'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  : emulsion?.status === 'magro'
+                  ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+                  : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+              }`}
+              title={emulsion?.advice || emulsion?.statusLabel}
+            >
+              {shortEmulsionBadge}
+            </span>
+          </div>
 
-              {/* Divisor vertical sutil */}
-              <div className="h-7 w-[1px] bg-slate-800 shrink-0" />
-
-              {/* Bloco de Razão Lipídica */}
-              <div className="text-right shrink-0">
-                <div className="flex items-center justify-end gap-1.5 leading-none">
-                  <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400">
-                    Gordura : SLNG
-                  </span>
-                  <span className="text-[9px] text-slate-500 font-mono hidden sm:inline">
-                    ({emulsion?.status === 'sorbet' ? 'Base Água' : 'Alvo 0.75–1.25'})
-                  </span>
-                </div>
-                <span className="text-base sm:text-lg font-black font-mono text-white block mt-0.5 tracking-tight leading-none">
-                  {emulsion?.status === 'sorbet' ? 'Sorbet' : `${emulsion?.fatMsnfRatio} : 1`}
-                </span>
-              </div>
+          {/* 2 Colunas KPI com Divisor Vertical Sutil */}
+          <div className="grid grid-cols-2 divide-x divide-slate-700/60 items-center py-0.5">
+            {/* Overrun Estimado */}
+            <div className="pr-2 flex flex-col items-center justify-center text-center gap-0.5">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">
+                Overrun
+              </span>
+              <span className="text-lg xl:text-xl font-black font-mono tabular-nums text-white leading-tight">
+                ~{emulsion?.overrunEstimatePct}%
+              </span>
+              <span className="text-[10px] text-slate-400 font-mono leading-none">
+                ({emulsion?.overrunRange})
+              </span>
             </div>
 
-            {/* Mini-Gauge Compacto de Nível de Aeração */}
-            <div className="space-y-1">
-              <div className="nutrient-progress-track relative w-full h-1.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800 flex items-center">
-                <div
-                  className="h-full bg-gradient-to-r from-sky-400 via-purple-400 to-emerald-400 rounded-full transition-all duration-500 shadow-sm"
-                  style={{
-                    width: `${Math.min(100, Math.max(6, (((emulsion?.overrunEstimatePct || 32) - 18) / 28) * 100))}%`
-                  }}
-                />
-                {/* Marcador de referência aos 32% (Clássico Italiano) */}
-                <div
-                  className="absolute top-0 bottom-0 w-[2px] bg-white/85 shadow-[0_0_4px_rgba(255,255,255,0.9)] z-10 pointer-events-none -translate-x-1/2"
-                  style={{ left: '50%' }}
-                  title="Alvo Clássico Italiano: 32% de overrun (Centro da Escala: 18% a 46%)"
-                />
-              </div>
-              <div className="relative flex items-center justify-between text-[10px] text-slate-400 font-medium font-sans leading-none">
-                <span>Denso (18%)</span>
-                <span className="text-purple-300 font-bold whitespace-nowrap">
-                  Clássico (~32%)
-                </span>
-                <span>Aerado (46%)</span>
-              </div>
+            {/* Razão Gordura : SLNG */}
+            <div className="pl-2 flex flex-col items-center justify-center text-center gap-0.5">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 leading-none">
+                Gordura : SLNG
+              </span>
+              <span className="text-lg xl:text-xl font-black font-mono tabular-nums text-white leading-tight">
+                {emulsion?.status === 'sorbet' ? 'Sorbet' : `${emulsion?.fatMsnfRatio} : 1`}
+              </span>
+              <span className="text-[10px] text-slate-400 font-mono leading-none">
+                {emulsion?.status === 'sorbet' ? 'Base Água' : 'Alvo 0.75–1.25'}
+              </span>
             </div>
           </div>
 
-          {/* ROW 2 - CARD 3: Simulador Térmico da Vitrine */}
-          <VitrineSimulator
-            waterPct={validations.water.val}
-            pac={validations.pac.val}
-            totalSolids={validations.totalSolids.val}
-            caldaWeightGrams={analysis.caldaWeight}
-          />
-
-          {/* ROW 2 - CARD 4: Custos */}
-          <CustosCard
-            costing={analysis.costing}
-            caldaWeight={analysis.caldaWeight}
-            totalsCost={analysis.totals.cost}
-            categoryCostBreakdown={categoryCostBreakdown}
-            hasVariegatos={hasVariegatos}
-          />
+          {/* Mini-Barra de Aeração */}
+          <div className="space-y-1">
+            <div className="nutrient-progress-track relative w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-700/80 flex items-center">
+              <div
+                className="h-full bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400 rounded-full transition-all duration-500"
+                style={{
+                  width: `${Math.min(100, Math.max(6, (((emulsion?.overrunEstimatePct || 32) - 18) / 28) * 100))}%`
+                }}
+              />
+              {/* Marcador central aos 32% (Clássico Italiano) */}
+              <div
+                className="absolute top-0 bottom-0 w-[2.5px] bg-white shadow-[0_0_5px_rgba(255,255,255,0.95)] z-10 pointer-events-none -translate-x-1/2"
+                style={{ left: '50%' }}
+                title="Alvo Clássico Italiano: ~32% de overrun"
+              />
+            </div>
+            <div className="flex items-center justify-between text-[10px] text-slate-400 font-medium leading-none">
+              <span>18%</span>
+              <span className="text-slate-200 font-semibold">Clássico 32%</span>
+              <span>46%</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* PILAR 3 (4 colunas): Custos (CMV) */}
+      <div className="lg:col-span-4">
+        <CustosCard
+          costing={analysis.costing}
+          caldaWeight={analysis.caldaWeight}
+          totalsCost={analysis.totals.cost}
+          categoryCostBreakdown={categoryCostBreakdown}
+          hasVariegatos={hasVariegatos}
+        />
       </div>
     </div>
   );
@@ -770,7 +589,7 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                 {allNutrientsOk ? (
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" />
-                    <span>{okNutrients}/{totalNutrients} No Alvo</span>
+                    <span>{okNutrients}/{totalNutrients} Balanceada</span>
                   </>
                 ) : (
                   <>

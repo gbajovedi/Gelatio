@@ -1,62 +1,42 @@
 import React, { useState, useMemo } from 'react';
 import {
   Thermometer,
-  Wind,
-  Layers,
-  Archive,
-  SunMedium,
   CheckCircle2,
-  Sparkles,
   Info
 } from 'lucide-react';
 import { calculateFreezingState } from '../../core/freezingCurve';
+import { BatchAnalysis } from '../../types/gelato';
 
 interface VitrineSimulatorProps {
   waterPct: number; // 0 a 1 (ex: 0.64)
-  pac: number; // ex: 21.5
+  pac: number; // ex: 250
   totalSolids: number; // 0 a 1 (ex: 0.36)
   caldaWeightGrams: number;
+  servingTemperature?: number | string;
+  corvittoMetrics?: BatchAnalysis['corvittoMetrics'];
 }
 
 interface EquipmentPreset {
   id: string;
-  name: string;
+  label: string;
+  tempLabel: string;
   tempC: number;
-  icon: React.ReactNode;
 }
 
 const EQUIPMENT_PRESETS: EquipmentPreset[] = [
-  {
-    id: 'pozzetti',
-    name: 'Pozzetti -11°',
-    tempC: -11.0,
-    icon: <Layers className="w-3 h-3 text-emerald-400 shrink-0" />
-  },
-  {
-    id: 'ventilated',
-    name: 'Vitrine -12°',
-    tempC: -12.0,
-    icon: <Wind className="w-3 h-3 text-sky-400 shrink-0" />
-  },
-  {
-    id: 'open',
-    name: 'Aberta -14°',
-    tempC: -14.0,
-    icon: <SunMedium className="w-3 h-3 text-amber-400 shrink-0" />
-  },
-  {
-    id: 'freezer',
-    name: 'Freezer -18°',
-    tempC: -18.0,
-    icon: <Archive className="w-3 h-3 text-purple-400 shrink-0" />
-  }
+  { id: 'pozzetti', label: 'Pozzetti', tempLabel: '-11°', tempC: -11.0 },
+  { id: 'ventilated', label: 'Vitrine', tempLabel: '-12°', tempC: -12.0 },
+  { id: 'open', label: 'Aberta', tempLabel: '-14°', tempC: -14.0 },
+  { id: 'freezer', label: 'Freezer', tempLabel: '-18°', tempC: -18.0 }
 ];
 
 export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
   waterPct,
   pac,
   totalSolids,
-  caldaWeightGrams
+  caldaWeightGrams,
+  servingTemperature,
+  corvittoMetrics
 }) => {
   const [selectedTemp, setSelectedTemp] = useState<number>(-12.0);
 
@@ -68,35 +48,67 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
   // Posição percentual do marcador na barra de textura (45% a 85% de gelo mapeado em 0% a 100%)
   const markerPosition = Math.max(0, Math.min(100, ((state.icePercent - 45) / (85 - 45)) * 100));
 
+  // Quando o usuário seleciona Freezer (-18°C), exibe diagnóstico crioscópico específico de pote de freezer
+  const isFreezerRange = selectedTemp <= -16.5 && !!corvittoMetrics;
+
+  let activeBadgeText = state.statusLabel;
+  let activeBadgeClasses = `${state.statusBadgeColor} ${state.statusBorderColor}`;
+
+  if (isFreezerRange && corvittoMetrics) {
+    activeBadgeText = corvittoMetrics.freezerLabel;
+    if (corvittoMetrics.freezerStatus === 'duro') {
+      activeBadgeClasses = 'bg-sky-500/20 text-sky-300 border-sky-500/40';
+    } else if (corvittoMetrics.freezerStatus === 'colher') {
+      activeBadgeClasses = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+    } else {
+      activeBadgeClasses = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+    }
+  }
+
   return (
-    <div className="bg-slate-900/95 rounded-xl border border-slate-700/80 px-3.5 py-2.5 shadow-md flex flex-col justify-between gap-2 h-full">
-      {/* Header Compacto com Título, Status e Popover de Diagnóstico */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-cyan-300 min-w-0">
-          <div className="w-6 h-6 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-            <Thermometer className="w-3.5 h-3.5" />
-          </div>
-          <h4 className="text-[11px] uppercase font-bold tracking-wider text-cyan-200 truncate leading-none">
-            Simulador Térmico da Vitrine
+    <div className="bg-slate-800/95 rounded-2xl border border-slate-700/80 px-4 py-3 shadow-lg flex flex-col justify-between gap-2.5 h-full">
+      {/* Linha 1: Cabeçalho enxuto (Título + Temp. Ideal + Status Único + Info Popover) */}
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="flex items-center gap-2 min-w-0">
+          <Thermometer className="w-4 h-4 text-cyan-400 shrink-0" />
+          <h4 className="text-[11px] uppercase font-bold tracking-wider text-slate-200 whitespace-nowrap leading-none">
+            Serviço &amp; Vitrine
           </h4>
+          {servingTemperature !== undefined && (
+            <span
+              className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/35 whitespace-nowrap leading-none"
+              title="Temperatura ideal estimada de serviço para espatulabilidade ótima na vitrine"
+            >
+              Ideal: {servingTemperature}°C
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-1.5 shrink-0">
           <span
-            className={`text-[10px] px-2 py-0.5 rounded-full font-bold border leading-none shadow-sm ${state.statusBadgeColor} ${state.statusBorderColor}`}
+            className={`text-[11px] px-2.5 py-0.5 rounded-full font-bold border leading-tight shadow-sm whitespace-nowrap ${activeBadgeClasses}`}
+            title={
+              isFreezerRange && corvittoMetrics
+                ? `PAC Água Livre: ${corvittoMetrics.pacWater}${
+                    corvittoMetrics.neededPacForFreezer > 0
+                      ? ` (+${corvittoMetrics.neededPacForFreezer} PAC p/ ponto de colher)`
+                      : ' (ponto de colher imediato)'
+                  }`
+                : state.diagnostic
+            }
           >
-            {state.statusLabel}
+            {activeBadgeText}
           </span>
 
-          {/* Ícone de Diagnóstico & Metodologia (Raoult / Goff & Hartel) com Popover Flutuante */}
+          {/* Ícone de Diagnóstico & Metodologia com Popover Flutuante */}
           <div className="relative group/tip flex items-center">
             <button
               type="button"
-              className="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-colors shadow-inner"
-              title="Ver diagnóstico térmico e metodologia (Goff & Hartel)"
+              className="w-6 h-6 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-colors shadow-inner"
+              title="Ver diagnóstico térmico completo e metodologia"
               aria-label="Ver diagnóstico e metodologia"
             >
-              {state.status === 'ideal' ? (
+              {state.status === 'ideal' && !isFreezerRange ? (
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               ) : (
                 <Info className="w-3.5 h-3.5 text-cyan-400" />
@@ -113,7 +125,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
                 ) : (
                   <Info className="w-4 h-4 text-cyan-400 shrink-0" />
                 )}
-                <span>Diagnóstico Térmico da Receita</span>
+                <span>Diagnóstico Térmico &amp; Crioscópico</span>
               </div>
 
               <p className="text-slate-300 text-xs leading-relaxed">
@@ -122,15 +134,27 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
 
               <div className="pt-1.5 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
                 <div>
-                  🌡️ <strong>Faixa ideal recomendada:</strong>{' '}
+                  🌡️ <strong>Faixa ideal de vitrine:</strong>{' '}
                   <span className="font-mono font-bold text-amber-300">
                     {state.idealTempRange.minTemp.toFixed(1)}°C
                   </span>{' '}
                   a{' '}
                   <span className="font-mono font-bold text-amber-300">
                     {state.idealTempRange.maxTemp.toFixed(1)}°C
-                  </span>.
+                  </span>
                 </div>
+                {corvittoMetrics && (
+                  <div>
+                    ❄️ <strong>Pote Freezer (-18°C):</strong>{' '}
+                    <span className="font-mono font-bold text-cyan-300">
+                      PAC Água Livre {corvittoMetrics.pacWater}
+                    </span>{' '}
+                    — {corvittoMetrics.freezerLabel}
+                    {corvittoMetrics.neededPacForFreezer > 0
+                      ? ` (+${corvittoMetrics.neededPacForFreezer} PAC p/ ponto de colher)`
+                      : ' (ponto de colher imediato)'}
+                  </div>
+                )}
                 <div className="text-[10px] text-slate-500 pt-1 border-t border-slate-800/60">
                   * Estimativa termodinâmica pela <strong>Lei Crioscópica de Raoult</strong> (W<sub>livre</sub> = PAC × 5,434 / |T|) — Goff &amp; Hartel.
                 </div>
@@ -140,10 +164,9 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
       </div>
 
-      {/* Linha de Controles Unificada: Presets de Equipamentos + Stepper Térmico */}
-      <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-1.5 w-full">
-        {/* Seletor de Equipamentos (2x2 mobile, 4 colunas >= sm) */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 flex-1">
+      {/* Linha 2: Presets Segmentados (2x2 mobile, 4 colunas >= sm) + Stepper Fino na mesma linha */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 bg-slate-950/90 p-1 rounded-xl border border-slate-800 shadow-inner flex-1">
           {EQUIPMENT_PRESETS.map(preset => {
             const isActive = Math.abs(selectedTemp - preset.tempC) < 0.1;
             return (
@@ -151,37 +174,39 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
                 key={preset.id}
                 type="button"
                 onClick={() => setSelectedTemp(preset.tempC)}
-                className={`w-full py-1 px-1 rounded-lg text-[10px] tracking-tight font-bold transition-all flex items-center justify-center gap-1 border shadow-inner text-center select-none whitespace-nowrap ${
+                className={`py-1 px-1.5 rounded-lg transition-all flex flex-col items-center justify-center leading-tight select-none border ${
                   isActive
-                    ? 'bg-cyan-500/25 text-white border-cyan-400/60 ring-1 ring-cyan-400/30 font-black'
-                    : 'bg-slate-950/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
+                    ? 'bg-cyan-500/25 text-white border-cyan-400/60 shadow-sm font-bold'
+                    : 'bg-transparent text-slate-300 border-transparent hover:bg-slate-800/80 hover:text-white font-medium'
                 }`}
               >
-                {preset.icon}
-                <span className="truncate">{preset.name}</span>
+                <span className="text-[11px] whitespace-nowrap">{preset.label}</span>
+                <span className={`text-[10px] font-mono ${isActive ? 'text-cyan-200 font-bold' : 'text-slate-400'}`}>
+                  {preset.tempLabel}
+                </span>
               </button>
             );
           })}
         </div>
 
-        {/* Stepper Térmico Integrado */}
-        <div className="inline-flex items-center justify-center gap-1 bg-slate-950 px-1 py-0.5 rounded-lg border border-slate-700/80 shadow-inner shrink-0">
+        {/* Stepper Térmico Compacto */}
+        <div className="inline-flex items-center justify-center gap-1.5 shrink-0">
           <button
             type="button"
             onClick={() => setSelectedTemp(prev => Math.max(-20, +(prev - 0.5).toFixed(1)))}
-            className="w-6 h-6 rounded-md bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors active:scale-95"
+            className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-700 border border-slate-700/80 text-white text-sm font-bold flex items-center justify-center transition-colors active:scale-95"
             title="Diminuir temperatura (-0.5°C)"
             aria-label="Diminuir temperatura em 0.5 graus"
           >
             -
           </button>
-          <span className="font-mono text-xs font-black text-amber-300 tracking-tight px-1 min-w-[48px] text-center">
+          <span className="font-mono text-xs sm:text-sm font-black text-white tabular-nums tracking-tight min-w-[54px] text-center">
             {selectedTemp.toFixed(1)}°C
           </span>
           <button
             type="button"
             onClick={() => setSelectedTemp(prev => Math.min(-8, +(prev + 0.5).toFixed(1)))}
-            className="w-6 h-6 rounded-md bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-black flex items-center justify-center transition-colors active:scale-95"
+            className="w-7 h-7 rounded-lg bg-slate-900 hover:bg-slate-700 border border-slate-700/80 text-white text-sm font-bold flex items-center justify-center transition-colors active:scale-95"
             title="Aumentar temperatura (+0.5°C)"
             aria-label="Aumentar temperatura em 0.5 graus"
           >
@@ -190,27 +215,17 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
         </div>
       </div>
 
-      {/* Caixa Compacta de Fração em Equilíbrio (Gelo vs Fase Líquida + Trilho de Textura) */}
-      <div className="bg-slate-950/80 px-2.5 py-2 rounded-lg border border-slate-800 space-y-1.5">
-        {/* Pílulas de Balanço Dual (Gelo vs Fase Líquida) */}
-        <div className="flex items-center justify-between gap-2 font-mono text-[11px]">
-          <span className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-bold px-2 py-0.5 rounded-md">
-            ❄️ {state.icePercent.toFixed(1)}% gelo{' '}
-            <span className="text-cyan-200/70 font-normal">({state.frozenWaterGrams}g)</span>
-          </span>
-          <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-sans font-semibold text-slate-400">
-            <Sparkles className="w-3 h-3 text-cyan-400/80" />
-            <span>Equilíbrio</span>
-          </span>
-          <span className="bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold px-2 py-0.5 rounded-md">
-            💧 {state.liquidPercent.toFixed(1)}% líquido{' '}
-            <span className="text-amber-200/70 font-normal">({state.liquidWaterGrams}g)</span>
-          </span>
-        </div>
+      {/* Linha 3: Barra Única Inline de Equilíbrio (Gelo | Trilho de Textura | Líquido) */}
+      <div className="flex items-center gap-2.5 pt-0.5">
+        <span
+          className="bg-cyan-500/15 border border-cyan-500/35 text-cyan-300 font-mono font-bold text-[11px] px-2 py-0.5 rounded-lg whitespace-nowrap shrink-0 tabular-nums"
+          title={`${state.frozenWaterGrams}g de água congelada`}
+        >
+          ❄️ {state.icePercent.toFixed(1)}% gelo
+        </span>
 
-        {/* Trilho Visual Compacto com Marcador Dinâmico */}
-        <div className="relative py-1 flex items-center">
-          <div className="vitrine-track h-2 w-full rounded-full bg-slate-900 border border-slate-700 overflow-hidden flex shadow-inner">
+        <div className="relative flex-1 py-1 flex items-center">
+          <div className="vitrine-track h-2.5 w-full rounded-full bg-slate-950 border border-slate-700 overflow-hidden flex shadow-inner">
             <div
               style={{ width: '27.5%' }}
               className="bg-amber-500/30 border-r border-slate-950/50"
@@ -242,18 +257,16 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
             className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none z-10"
             style={{ left: `${markerPosition}%` }}
           >
-            <div className="vitrine-marker-ring w-3.5 h-3.5 rounded-full bg-gradient-to-b from-amber-300 via-yellow-400 to-amber-500 border-2 border-white shadow-[0_0_10px_rgba(250,204,21,0.95)] ring-1 ring-amber-400/70" />
+            <div className="vitrine-marker-ring w-4 h-4 rounded-full bg-gradient-to-b from-amber-300 via-yellow-400 to-amber-500 border-2 border-white shadow-[0_0_10px_rgba(250,204,21,0.95)] ring-1 ring-amber-400/70" />
           </div>
         </div>
 
-        {/* Legenda das Zonas Compacta */}
-        <div className="flex justify-between text-[9px] font-bold text-slate-400 select-none leading-none">
-          <span className="text-amber-400/80">Muito Macio</span>
-          <span className="text-amber-300">Macio</span>
-          <span className="text-emerald-400 font-extrabold">★ Espatulabilidade Ideal</span>
-          <span className="text-sky-300">Firme</span>
-          <span className="text-purple-300">Freezer</span>
-        </div>
+        <span
+          className="bg-amber-500/15 border border-amber-500/35 text-amber-300 font-mono font-bold text-[11px] px-2 py-0.5 rounded-lg whitespace-nowrap shrink-0 tabular-nums"
+          title={`${state.liquidWaterGrams}g de água livre (não congelada)`}
+        >
+          💧 {state.liquidPercent.toFixed(1)}% líquido
+        </span>
       </div>
     </div>
   );
