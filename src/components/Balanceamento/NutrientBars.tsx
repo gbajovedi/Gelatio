@@ -589,12 +589,12 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                 {allNutrientsOk ? (
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-400 stroke-[3]" />
-                    <span>{okNutrients}/{totalNutrients} Balanceada</span>
+                    <span>{okNutrients}/{totalNutrients} Balanceados</span>
                   </>
                 ) : (
                   <>
                     <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{okNutrients}/{totalNutrients} No Alvo</span>
+                    <span>{okNutrients}/{totalNutrients} Balanceados</span>
                   </>
                 )}
               </span>
