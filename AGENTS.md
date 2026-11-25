@@ -44,6 +44,7 @@ Ao auditar ou modificar o código, respeite os invariantes abaixo para evitar fa
 1. **Unidades dos Insumos (`src/types/gelato.ts` / `ingredients.json`):**
    - Frações de composição (`water`, `sugars`, `fat`, `msnf`, `otherSolids`, `protein`, `saturatedFatRatio`, `transFatRatio`, `fiberRatio`) são expressas em razão **`0..1`** (ex.: `0.17` = 17%).
    - Exceções: `sodiumMgPer100g` (em `mg/100g`), `pod` e `pac` (índices relativos à sacarose = `100`).
+   - Nos laticínios de `ingredients.json`, `sugars` representa apenas açúcar adicionado (sacarose), enquanto a lactose é derivada de `msnf` (exceto casos raros de laticínio não adoçado com `sugars > 0` como `ing_251`, já isolados em `anvisaNutrition.ts`).
 2. **Tripartição Físico-Química da Receita:**
    - **Calda Base** (alvo padrão `1.000 g`), **Pré-preparos/Infusões** e **Mesclas/Variegatos pós-produção** (`PostProduction.tsx`).
    - Mesclas sem nome ou com peso `<= 0` não devem contribuir volume físico ao lote.
