@@ -1116,7 +1116,7 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
 
                             {/* Standardized Pill Input with embedded 'g' suffix */}
                             <div
-                              className="w-[84px] h-8 shrink-0 px-2.5 rounded-full flex items-center justify-end bg-slate-900 border border-slate-700 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/50 transition-all shadow-inner"
+                              className="weight-pill-input w-[84px] h-8 shrink-0 px-2.5 rounded-full flex items-center justify-end bg-slate-900 border border-slate-700 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500/50 transition-all shadow-inner"
                               title={isNeutro ? 'Ingrediente Neutro: dosagem microcrítica protegida com precisão decimal (0.1g)' : undefined}
                             >
                               <input

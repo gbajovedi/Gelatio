@@ -693,6 +693,23 @@ html.light .rounded-full.bg-slate-900 {
   box-shadow: inset 0 1px 2px 0 rgb(28 25 23 / 0.05) !important;
 }
 
+/* Pílulas de input de peso (Bancada e Pós-Produção): fundo branco limpo no Modo Claro */
+html.light .weight-pill-input.rounded-full {
+  background-color: #ffffff !important;
+  border-color: #dcd8cc !important;
+  box-shadow: inset 0 1px 2px 0 rgb(28 25 23 / 0.04) !important;
+}
+
+html.light .weight-pill-input.rounded-full:focus-within {
+  border-color: #d97706 !important;
+  box-shadow: 0 0 0 1px #d97706 !important;
+}
+
+html.light .weight-pill-input input {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
 /* Agulhas de Alta Precisão nas Barras de Nutrientes */
 html.light .nutrient-needle-ok {
   background-color: #047857 !important; /* emerald-700 */
