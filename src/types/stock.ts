@@ -43,6 +43,7 @@ export interface StockItem {
   currentUnits: number;
   minStockAlert: number;
   avgCostUnit: number;
+  avgDirectCostUnit?: number;
   suggestedPrice: number;
   lastProducedAt?: string;
 }
@@ -66,6 +67,8 @@ export interface SaleTransaction {
   netRevenue: number;
   unitCost: number;
   totalCostSold: number;
+  directUnitCost?: number;
+  directCostSold?: number;
   netProfit: number;
   marginPercent: number;
   notes?: string;

@@ -40,9 +40,9 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
 }) => {
   const [selectedTemp, setSelectedTemp] = useState<number>(-12.0);
 
-  // Análise termodinâmica instantânea
+  // Análise termodinâmica instantânea (escala explícita per1000g vinda de validations.pac.val)
   const state = useMemo(() => {
-    return calculateFreezingState(waterPct, pac, totalSolids, selectedTemp, caldaWeightGrams);
+    return calculateFreezingState(waterPct, pac, totalSolids, selectedTemp, caldaWeightGrams, 'per1000g');
   }, [waterPct, pac, totalSolids, selectedTemp, caldaWeightGrams]);
 
   // Posição percentual do marcador na escala simétrica (49% a 90% de gelo => centro exato 69.5% = 50% da barra)
@@ -112,7 +112,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
           <div className="relative group/tip flex items-center">
             <button
               type="button"
-              className="w-6 h-6 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-colors shadow-inner"
+              className="w-8 h-8 rounded-lg bg-slate-900 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-colors shadow-inner"
               title="Ver diagnóstico térmico completo e metodologia"
               aria-label="Ver diagnóstico e metodologia"
             >
@@ -143,13 +143,23 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
               <div className="pt-1.5 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
                 <div>
                   🌡️ <strong>Faixa ideal de vitrine:</strong>{' '}
-                  <span className="font-mono font-bold text-amber-300">
-                    {state.idealTempRange.minTemp.toFixed(1)}°C
-                  </span>{' '}
-                  a{' '}
-                  <span className="font-mono font-bold text-amber-300">
-                    {state.idealTempRange.maxTemp.toFixed(1)}°C
-                  </span>
+                  {Math.abs(state.idealTempRange.minTemp - state.idealTempRange.maxTemp) < 0.05 ? (
+                    <span className="font-mono font-bold text-amber-300">
+                      {state.idealTempRange.maxTemp <= -20
+                        ? 'abaixo de -20.0°C (calda muito macia)'
+                        : 'acima de -8.0°C (calda muito firme)'}
+                    </span>
+                  ) : (
+                    <>
+                      <span className="font-mono font-bold text-amber-300">
+                        {state.idealTempRange.minTemp.toFixed(1)}°C
+                      </span>{' '}
+                      a{' '}
+                      <span className="font-mono font-bold text-amber-300">
+                        {state.idealTempRange.maxTemp.toFixed(1)}°C
+                      </span>
+                    </>
+                  )}
                 </div>
                 {corvittoMetrics && (
                   <div>
@@ -163,7 +173,7 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
                       : ' (ponto de colher imediato)'}
                   </div>
                 )}
-                <div className="text-[10px] text-slate-500 pt-1 border-t border-slate-800/60">
+                <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-800/60">
                   * Estimativa termodinâmica pela <strong>Lei Crioscópica de Raoult</strong> (W<sub>livre</sub> = PAC × 5,434 / |T|) — Goff &amp; Hartel.
                 </div>
               </div>
@@ -266,13 +276,17 @@ export const VitrineSimulator: React.FC<VitrineSimulatorProps> = ({
             </div>
           </div>
 
-          {/* Micro-Legenda Gráfica (Centro Alinhado em 50%) */}
-          <div className="relative flex items-center justify-between text-[9px] leading-none select-none mt-0.5 px-0.5">
-            <span className="text-amber-400/90 font-semibold">Macio</span>
-            <span className="absolute left-1/2 -translate-x-1/2 text-emerald-400 font-bold whitespace-nowrap">
-              Ideal · 64–75% gelo
+          {/* Micro-Legenda Gráfica responsiva sem colisão em telas estreitas */}
+          <div className="grid grid-cols-3 items-center text-[9px] leading-none select-none mt-1 px-0.5 gap-1">
+            <span className="text-amber-400/90 font-semibold text-left truncate">Macio</span>
+            <span className="text-emerald-400 font-bold text-center whitespace-nowrap">
+              <span className="sm:hidden">Ideal 64–75%</span>
+              <span className="hidden sm:inline">Ideal · 64–75% gelo</span>
             </span>
-            <span className="text-sky-400/90 font-semibold">Firme / Freezer</span>
+            <span className="text-sky-400/90 font-semibold text-right truncate">
+              <span className="sm:hidden">Firme</span>
+              <span className="hidden sm:inline">Firme / Freezer</span>
+            </span>
           </div>
         </div>
 

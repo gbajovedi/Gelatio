@@ -464,7 +464,7 @@ export const PostProduction: React.FC<PostProductionProps> = ({
                                       const d = cupVolumeInput > 0 ? cupWeightInput / cupVolumeInput : 1.25;
                                       handleApplyCalibration(idx, d, undefined, 'custom');
                                     }}
-                                    className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded text-[11px] font-bold transition-colors shrink-0"
+                                    className="px-2.5 py-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 rounded text-[11px] font-black transition-colors shrink-0"
                                   >
                                     Aplicar
                                   </button>

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateStockKPIs, calculateSalesDRE } from '../stockService';
+import { calculateStockKPIs, calculateSalesDRE, calculateBatchCosts, calculateSuggestedPriceForFormat } from '../stockService';
 import { StockItem, SaleTransaction } from '../../types/stock';
 import { PricingParams, DEFAULT_PRICING_PARAMS } from '../pricingStorage';
 
@@ -97,5 +97,86 @@ describe('Stock & POS Financial Services', () => {
     expect(dre.grossContributionMargin).toBeCloseTo(34.40, 2);
     expect(dre.operatingNetProfit).toBeCloseTo(34.40, 2);
     expect(dre.unitsSoldTotal).toBe(2);
+  });
+
+  it('evita dupla dedução de custo fixo no DRE usando directCostSold e aplica guarda de margem inviável', () => {
+    const batchCosts = calculateBatchCosts(20, 500, 10, 1.50, {
+      tubWeightGrams: 500,
+      tubPackagingCost: 1.50,
+      indirectOverheadPerTub: 4.00,
+      targetProfitMarginPercent: 40,
+      cardFeePercent: 3.0,
+      salesTaxPercent: 0
+    });
+
+    expect(batchCosts.directCostUnit).toBeCloseTo(11.50, 2); // 10 gelato + 1.50 embalagem
+    expect(batchCosts.unitCostTotal).toBeCloseTo(15.50, 2);  // + 4.00 rateio fixo
+
+    const saleWithDirectCost: SaleTransaction[] = [
+      {
+        id: 'sale_direct_1',
+        timestamp: new Date().toISOString(),
+        stockItemId: 'rec1_500',
+        recipeId: 'rec1',
+        recipeName: 'Fior di Latte',
+        category: 'Gelatos de Leite',
+        tubWeightGrams: 500,
+        unitsSold: 10,
+        unitPrice: 35.00,
+        grossRevenue: 350.00,
+        paymentMethod: 'pix',
+        cardFeeRate: 0,
+        cardFeeAmount: 0,
+        salesTaxRate: 0,
+        salesTaxAmount: 0,
+        netRevenue: 350.00,
+        unitCost: 15.50,
+        totalCostSold: 155.00,
+        directUnitCost: 11.50,
+        directCostSold: 115.00,
+        netProfit: 195.00,
+        marginPercent: 55.7
+      }
+    ];
+
+    const fixedParams: PricingParams = {
+      ...DEFAULT_PRICING_PARAMS,
+      rent: 1200,
+      electricity: 0,
+      water: 0,
+      telecom: 0,
+      payroll: 0,
+      ownerSalary: 0,
+      accounting: 0,
+      software: 0,
+      equipmentMaintenance: 0,
+      equipmentDepreciation: 0,
+      cleaningHygiene: 0,
+      secPackaging: 0,
+      fixedTaxes: 0,
+      licensesAndPermits: 0,
+      commercialInsurance: 0,
+      posRentalMonthly: 0,
+      marketing: 0,
+      customCosts: []
+    };
+
+    const dre = calculateSalesDRE(saleWithDirectCost, fixedParams, 30);
+    // CMV deve usar directCostSold (115), não 155, antes de subtrair fixedCostsPeriod (1200)
+    expect(dre.cmvTotal).toBeCloseTo(115.00, 2);
+    expect(dre.grossContributionMargin).toBeCloseTo(235.00, 2);
+    expect(dre.operatingNetProfit).toBeCloseTo(235.00 - 1200.00, 2);
+
+    // Guarda de margem inviável (margem 95% + deduções 5% => divisor <= 0.001 cai para fallback Markup)
+    const fallbackPrice = calculateSuggestedPriceForFormat(15.50, {
+      tubWeightGrams: 500,
+      tubPackagingCost: 1.50,
+      indirectOverheadPerTub: 4.00,
+      targetProfitMarginPercent: 95,
+      cardFeePercent: 5,
+      salesTaxPercent: 0
+    });
+    expect(fallbackPrice).toBeLessThan(100);
+    expect(fallbackPrice).toBeCloseTo((15.50 * 1.95) / 0.95, 2);
   });
 });

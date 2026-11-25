@@ -29,6 +29,14 @@ export interface FreezingStateResult {
   curvePoints: FreezingPointSample[];
 }
 
+export type PacScaleMode = 'auto' | 'percent' | 'per1000g';
+
+function normalizePacScale(pac: number, pacScale: PacScaleMode = 'auto'): number {
+  if (pacScale === 'per1000g') return pac / 10;
+  if (pacScale === 'percent') return pac;
+  return pac > 100 ? pac / 10 : pac;
+}
+
 /**
  * Calcula a fração de água congelada a uma determinada temperatura negativa
  */
@@ -36,7 +44,8 @@ export function calculateIcePercentAtTemp(
   waterPct: number, // 0 a 1 ou 0 a 100
   pac: number, // pode vir em % (ex: 25.5) ou relativo por 1000g (ex: 255)
   totalSolids: number, // 0 a 1 ou 0 a 100
-  tempC: number // ex: -12
+  tempC: number, // ex: -12
+  pacScale: PacScaleMode = 'auto'
 ): { icePercent: number; liquidPercent: number } {
   const absTemp = Math.abs(tempC);
 
@@ -44,7 +53,7 @@ export function calculateIcePercentAtTemp(
   const normalizedWater = waterPct > 1 ? waterPct / 100 : waterPct;
   const normalizedSolids = totalSolids > 1 ? totalSolids / 100 : totalSolids;
   // Se o PAC estiver na escala de 1.000g (ex: 255), converte para porcentagem do lote (25.5%)
-  const normalizedPac = pac > 100 ? pac / 10 : pac;
+  const normalizedPac = normalizePacScale(pac, pacScale);
 
   if (absTemp <= 0.1 || normalizedWater <= 0) {
     return { icePercent: 0, liquidPercent: 100 };
@@ -81,18 +90,20 @@ export function calculateFreezingState(
   pac: number,
   totalSolids: number,
   tempC: number,
-  caldaWeightGrams: number = 1000
+  caldaWeightGrams: number = 1000,
+  pacScale: PacScaleMode = 'auto'
 ): FreezingStateResult {
   // Normalização prévia de escalas
   const normalizedWater = waterPct > 1 ? waterPct / 100 : waterPct;
   const normalizedSolids = totalSolids > 1 ? totalSolids / 100 : totalSolids;
-  const normalizedPac = pac > 100 ? pac / 10 : pac;
+  const normalizedPac = normalizePacScale(pac, pacScale);
 
   const { icePercent, liquidPercent } = calculateIcePercentAtTemp(
     normalizedWater,
     normalizedPac,
     normalizedSolids,
-    tempC
+    tempC,
+    'percent'
   );
 
   const totalWaterGrams = caldaWeightGrams * normalizedWater;
@@ -161,13 +172,11 @@ export function calculateFreezingState(
 
   // Gerar pontos da curva de -8°C a -20°C
   const curvePoints: FreezingPointSample[] = [];
-  let minIdealTemp = -13;
-  let maxIdealTemp = -11;
-  let minIdealFound = false;
-  let maxIdealFound = false;
+  let minIdealTemp: number | null = null;
+  let maxIdealTemp: number | null = null;
 
   for (let t = -8; t >= -20; t -= 0.5) {
-    const pt = calculateIcePercentAtTemp(normalizedWater, normalizedPac, normalizedSolids, t);
+    const pt = calculateIcePercentAtTemp(normalizedWater, normalizedPac, normalizedSolids, t, 'percent');
     const h = Math.max(0, Math.min(100, Math.round((pt.icePercent - 45) * 2.5)));
     curvePoints.push({
       tempC: t,
@@ -176,13 +185,33 @@ export function calculateFreezingState(
       hardnessIndex: h
     });
 
-    if (!maxIdealFound && pt.icePercent >= 64) {
-      maxIdealTemp = t;
-      maxIdealFound = true;
+    if (pt.icePercent >= 64 && pt.icePercent <= 75) {
+      if (maxIdealTemp === null || t > maxIdealTemp) maxIdealTemp = t;
+      if (minIdealTemp === null || t < minIdealTemp) minIdealTemp = t;
     }
-    if (pt.icePercent <= 73) {
-      minIdealTemp = t;
-      minIdealFound = true;
+  }
+
+  let resolvedMinTemp: number;
+  let resolvedMaxTemp: number;
+
+  if (minIdealTemp !== null && maxIdealTemp !== null) {
+    resolvedMinTemp = minIdealTemp;
+    resolvedMaxTemp = maxIdealTemp;
+  } else {
+    // Nunca cruzou 64–75% entre -8°C e -20°C: aponta o extremo físico real mais próximo
+    const iceAtMinus8 = curvePoints[0]?.icePercent ?? 0;
+    const iceAtMinus20 = curvePoints[curvePoints.length - 1]?.icePercent ?? 0;
+    if (iceAtMinus8 > 75) {
+      // Já rígido (>75% gelo) mesmo a -8°C
+      resolvedMinTemp = -8;
+      resolvedMaxTemp = -8;
+    } else if (iceAtMinus20 < 64) {
+      // Permanece macio (<64% gelo) mesmo a -20°C
+      resolvedMinTemp = -20;
+      resolvedMaxTemp = -20;
+    } else {
+      resolvedMinTemp = -20;
+      resolvedMaxTemp = -8;
     }
   }
 
@@ -202,8 +231,8 @@ export function calculateFreezingState(
     statusBoxText,
     diagnostic,
     idealTempRange: {
-      minTemp: Math.min(minIdealTemp, maxIdealTemp),
-      maxTemp: Math.max(minIdealTemp, maxIdealTemp)
+      minTemp: Math.min(resolvedMinTemp, resolvedMaxTemp),
+      maxTemp: Math.max(resolvedMinTemp, resolvedMaxTemp)
     },
     curvePoints
   };

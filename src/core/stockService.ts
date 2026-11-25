@@ -51,16 +51,19 @@ export function calculateBatchCosts(
 ) {
   // Custo do gelato no pote
   const gelatoCostPerTub = recipeCostKg * (tubWeightGrams / 1000);
+  // Custo direto (Gelato + Embalagem) — base real para CMV no DRE
+  const directCostUnit = gelatoCostPerTub + packagingCostUnit;
   // Rateio indireto fixo (proporcional ao peso em relação a 500g)
   const weightRatio = tubWeightGrams / (pricingSettings.tubWeightGrams || 500);
   const fixedOverheadUnit = (pricingSettings.indirectOverheadPerTub || 0) * weightRatio;
-  // Custo total por pote pronto
-  const unitCostTotal = gelatoCostPerTub + packagingCostUnit + fixedOverheadUnit;
+  // Custo total absorvido por pote pronto (inclui rateio fixo para precificação unitária)
+  const unitCostTotal = directCostUnit + fixedOverheadUnit;
   const totalBatchCost = unitCostTotal * unitsProduced;
 
   return {
     gelatoCostPerTub,
     packagingCostUnit,
+    directCostUnit,
     fixedOverheadUnit,
     unitCostTotal,
     totalBatchCost
@@ -79,13 +82,15 @@ export function calculateSuggestedPriceForFormat(
   const totalSalesDeductions = (pricingSettings.cardFeePercent + (pricingSettings.salesTaxPercent || 0)) / 100;
   const targetMarginDecimal = (pricingSettings.targetProfitMarginPercent || 0) / 100;
   const isMarkup = pricingSettings.pricingMethod === 'markup';
+  const totalDeductionsAndMargin = targetMarginDecimal + totalSalesDeductions;
   const netRevenueFactor = Math.max(0.01, 1 - totalSalesDeductions);
-  const marginDivisor = 1 - (targetMarginDecimal + totalSalesDeductions);
+  const marginDivisor = 1 - totalDeductionsAndMargin;
+  const isMarginViable = isMarkup || (totalDeductionsAndMargin < 0.999 && marginDivisor > 0.001);
 
   if (isMarkup) {
     return (unitCostTotal * (1 + targetMarginDecimal)) / netRevenueFactor;
   }
-  return marginDivisor > 0
+  return isMarginViable
     ? unitCostTotal / marginDivisor
     : (unitCostTotal * (1 + targetMarginDecimal)) / netRevenueFactor;
 }
@@ -140,15 +145,21 @@ export async function recordProductionBatch(params: {
 
     const existingStock = await db.stockItems.get(stockItemId);
     if (existingStock) {
-      const prevUnits = Math.max(0, existingStock.currentUnits);
-      const newUnits = prevUnits + unitsProduced;
-      const newAvgCost = newUnits > 0
-        ? (prevUnits * existingStock.avgCostUnit + unitsProduced * costs.unitCostTotal) / newUnits
+      const prevUnitsForAvg = Math.max(0, existingStock.currentUnits);
+      const totalAvgUnits = prevUnitsForAvg + unitsProduced;
+      const newUnits = existingStock.currentUnits + unitsProduced;
+      const newAvgCost = totalAvgUnits > 0
+        ? (prevUnitsForAvg * existingStock.avgCostUnit + unitsProduced * costs.unitCostTotal) / totalAvgUnits
         : costs.unitCostTotal;
+      const prevDirectCost = existingStock.avgDirectCostUnit ?? existingStock.avgCostUnit;
+      const newAvgDirectCost = totalAvgUnits > 0
+        ? (prevUnitsForAvg * prevDirectCost + unitsProduced * costs.directCostUnit) / totalAvgUnits
+        : costs.directCostUnit;
 
       await db.stockItems.update(stockItemId, {
         currentUnits: newUnits,
         avgCostUnit: newAvgCost,
+        avgDirectCostUnit: newAvgDirectCost,
         suggestedPrice: suggestedPrice > 0 ? suggestedPrice : existingStock.suggestedPrice,
         lastProducedAt: now.toISOString()
       });
@@ -162,6 +173,7 @@ export async function recordProductionBatch(params: {
         currentUnits: unitsProduced,
         minStockAlert: 3,
         avgCostUnit: costs.unitCostTotal,
+        avgDirectCostUnit: costs.directCostUnit,
         suggestedPrice,
         lastProducedAt: now.toISOString()
       };
@@ -206,6 +218,8 @@ export async function recordSale(params: {
   const netRevenue = grossRevenue - cardFeeAmount - salesTaxAmount;
   const unitCost = stockItem.avgCostUnit || 0;
   const totalCostSold = unitCost * unitsSold;
+  const directUnitCost = stockItem.avgDirectCostUnit ?? unitCost;
+  const directCostSold = directUnitCost * unitsSold;
   const netProfit = netRevenue - totalCostSold;
   const marginPercent = grossRevenue > 0 ? (netProfit / grossRevenue) * 100 : 0;
 
@@ -228,6 +242,8 @@ export async function recordSale(params: {
     netRevenue,
     unitCost,
     totalCostSold,
+    directUnitCost,
+    directCostSold,
     netProfit,
     marginPercent,
     notes
@@ -380,7 +396,8 @@ export function calculateSalesDRE(
     cardFeesTotal += s.cardFeeAmount;
     salesTaxTotal += s.salesTaxAmount;
     netRevenue += s.netRevenue;
-    cmvTotal += s.totalCostSold;
+    // Utiliza o custo direto (Gelato + Embalagem) quando disponível para evitar dupla dedução do rateio fixo no DRE
+    cmvTotal += (s.directCostSold ?? s.totalCostSold);
     netProfit += s.netProfit;
     unitsSoldTotal += s.unitsSold;
   }

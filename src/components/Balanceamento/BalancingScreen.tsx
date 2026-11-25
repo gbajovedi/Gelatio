@@ -1210,7 +1210,9 @@ export const BalancingScreen: React.FC<BalancingScreenProps> = ({
                     <td className="py-3.5 px-2 text-center font-mono tabular-nums text-amber-300 text-base whitespace-nowrap">
                       {Math.round(analysis.caldaWeight)} g
                     </td>
-                    <td className="py-3.5 px-2 text-right font-mono tabular-nums text-slate-300 whitespace-nowrap">100.0%</td>
+                    <td className="py-3.5 px-2 text-right font-mono tabular-nums text-slate-300 whitespace-nowrap">
+                      {analysis.caldaWeight > 0 ? '100.0%' : '0.0%'}
+                    </td>
                     <td className="py-3.5 px-2 text-right font-mono tabular-nums text-emerald-400 text-base whitespace-nowrap">
                       R$ {analysis.totals.cost.toFixed(2)}
                     </td>

@@ -49,30 +49,37 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
     stock: number;
     batches: number;
     sales: number;
+    adjustments: number;
   }>({
     recipes: 0,
     ingredients: 0,
     preps: 0,
     stock: 0,
     batches: 0,
-    sales: 0
+    sales: 0,
+    adjustments: 0
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Carrega a contagem atual de itens no banco para exibir no resumo
+  const refreshCounts = () => {
+    Promise.all([
+      db.recipes.count(),
+      db.ingredients.count(),
+      db.preparations.count(),
+      db.stockItems.count(),
+      db.productionBatches.count(),
+      db.salesTransactions.count(),
+      db.stockAdjustments.count()
+    ]).then(([recipes, ingredients, preps, stock, batches, sales, adjustments]) => {
+      setCounts({ recipes, ingredients, preps, stock, batches, sales, adjustments });
+    }).catch(console.error);
+  };
+
   useEffect(() => {
     if (isOpen) {
-      Promise.all([
-        db.recipes.count(),
-        db.ingredients.count(),
-        db.preparations.count(),
-        db.stockItems.count(),
-        db.productionBatches.count(),
-        db.salesTransactions.count()
-      ]).then(([recipes, ingredients, preps, stock, batches, sales]) => {
-        setCounts({ recipes, ingredients, preps, stock, batches, sales });
-      }).catch(console.error);
+      refreshCounts();
     }
   }, [isOpen]);
 
@@ -147,17 +154,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
         type: 'success'
       });
       onDataChanged();
-      // Atualiza os contadores locais
-      Promise.all([
-        db.recipes.count(),
-        db.ingredients.count(),
-        db.preparations.count(),
-        db.stockItems.count(),
-        db.productionBatches.count(),
-        db.salesTransactions.count()
-      ]).then(([recipes, ingredients, preps, stock, batches, sales]) => {
-        setCounts({ recipes, ingredients, preps, stock, batches, sales });
-      }).catch(console.error);
+      refreshCounts();
     } catch (err) {
       setStatusMessage({ text: 'Erro ao importar arquivo: ' + err, type: 'error' });
     } finally {
@@ -209,6 +206,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
           type: 'success'
         });
         onDataChanged();
+        refreshCounts();
       } catch (err) {
         setStatusMessage({ text: 'Erro ao restaurar: ' + err, type: 'error' });
       } finally {
@@ -409,7 +407,9 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
                       <span className="font-bold text-sky-400 block leading-tight font-mono">
                         {counts.sales} vendas
                       </span>
-                      <span className="text-[10px] text-slate-400">Histórico de PDV & lucros</span>
+                      <span className="text-[10px] text-slate-400">
+                        PDV · {counts.adjustments} ajustes
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -670,16 +670,6 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({
           </div>
         )}
 
-        {/* Rodapé do Modal */}
-        <div className="flex justify-end pt-2 border-t border-slate-800">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 text-xs sm:text-sm font-bold text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
-          >
-            Fechar
-          </button>
-        </div>
       </div>
     </div>
   );

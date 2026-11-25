@@ -38,7 +38,6 @@ export function calculatePreparationNutrients(
   let sumMsnf = 0;
   let sumOtherSolids = 0;
   let sumTotalSolids = 0;
-  let sumWater = 0;
   let sumPod = 0;
   let sumPac = 0;
   let sumProtein = 0;
@@ -59,7 +58,6 @@ export function calculatePreparationNutrients(
       sumMsnf += g * (ing.msnf || 0);
       sumOtherSolids += g * (ing.otherSolids || 0);
       sumTotalSolids += g * (ing.totalSolids || 0);
-      sumWater += g * (ing.water || 0);
       sumPod += g * (ing.pod || 0);
       sumPac += g * (ing.pac || 0);
       sumProtein += g * (ing.protein || 0);

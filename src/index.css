@@ -42,6 +42,14 @@
     -moz-appearance: textfield;
     appearance: textfield;
   }
+  /* Utility para ocultar barra de rolagem horizontal mantendo scroll por toque */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* ==========================================================================
@@ -131,12 +139,15 @@ html.light .bg-slate-800\/70 {
 html.light .bg-slate-950,
 html.light .bg-slate-950\/95,
 html.light .bg-slate-950\/90,
+html.light .bg-slate-950\/85,
 html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/75,
 html.light .bg-slate-950\/70,
 html.light .bg-slate-950\/60,
 html.light .bg-slate-950\/50,
 html.light .bg-slate-950\/40,
 html.light .bg-slate-950\/30,
+html.light .bg-slate-950\/25,
 html.light .bg-slate-950\/20,
 html.light .bg-slate-950\/10,
 html.light .bg-slate-900\/80,
@@ -786,7 +797,7 @@ html.light .theme-switch-track {
 }
 
 html.light .theme-switch-inactive {
-  color: #78716c !important;
+  color: #57534e !important; /* Stone 600: ~5.5:1 sobre #eae7df */
 }
 
 html.light .theme-switch-inactive:hover {

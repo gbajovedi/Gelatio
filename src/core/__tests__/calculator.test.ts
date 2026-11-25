@@ -264,4 +264,88 @@ describe('Calculator Core Engine', () => {
       expect(roundIngredientGrams(160.7, false, false)).toBe(160.7);
     });
   });
+
+  describe('Edge Cases: Emulsão Vegana, Mescla Sem Nome e Continuidade PAC', () => {
+    it('diagnostica receita vegana sem SLNG como Emulsão Vegetal sem mencionar SLNG lácteo', () => {
+      const veganStyle: StyleStandard = {
+        ...mockStyle,
+        name: 'Gelatos Veganos'
+      };
+      const veganIngs = new Map<string, Ingredient>(ingMap);
+      veganIngs.set('pasta de pistache', {
+        id: 'ing_pist',
+        name: 'Pasta de Pistache',
+        category: 'Pastas & Oleaginosas',
+        water: 0.04,
+        fat: 0.55,
+        msnf: 0,
+        sugars: 0.08,
+        otherSolids: 0.33,
+        totalSolids: 0.96,
+        protein: 0.20,
+        pac: 0.08,
+        pod: 0.08,
+        costKg: 140,
+        hasAllergen: true
+      });
+      veganIngs.set('água', {
+        id: 'ing_agua',
+        name: 'Água',
+        category: 'Líquidos',
+        water: 1,
+        fat: 0,
+        msnf: 0,
+        sugars: 0,
+        otherSolids: 0,
+        totalSolids: 0,
+        protein: 0,
+        pac: 0,
+        pod: 0,
+        costKg: 0,
+        hasAllergen: false
+      });
+
+      const items: RecipeItem[] = [
+        { name: 'Água', grams: 650 },
+        { name: 'Pasta de Pistache', grams: 150 },
+        { name: 'Açúcar', grams: 150 },
+        { name: 'Dextrose', grams: 50 }
+      ];
+
+      const analysis = calculateBatchAnalysis(items, [], veganStyle, veganIngs, DEFAULT_PRICING);
+      expect(analysis.emulsionMetrics?.statusLabel).toContain('Vegetal');
+      expect(analysis.emulsionMetrics?.advice).not.toContain('elevar SLNG');
+    });
+
+    it('ignora mescla sem nome no cálculo de volume e preserva continuidade do pacWater abaixo de 10% água', () => {
+      const items: RecipeItem[] = [
+        { name: 'Açúcar', grams: 910 },
+        { name: 'Água', grams: 90 }
+      ];
+      const ings = new Map<string, Ingredient>(ingMap);
+      ings.set('água', {
+        id: 'ing_agua',
+        name: 'Água',
+        category: 'Líquidos',
+        water: 1,
+        fat: 0,
+        msnf: 0,
+        sugars: 0,
+        otherSolids: 0,
+        totalSolids: 0,
+        protein: 0,
+        pac: 0,
+        pod: 0,
+        costKg: 0,
+        hasAllergen: false
+      });
+
+      const namelessVariegato: VariegatoItem[] = [{ name: '   ', grams: 200 }];
+      const analysis = calculateBatchAnalysis(items, namelessVariegato, mockStyle, ings, DEFAULT_PRICING);
+
+      expect(analysis.densityAndVolume?.variegatoVolumeLiters).toBe(0);
+      // 9% de água usa piso contínuo 10% (relPac ~910 / 0.10 = 9100), sem salto 10x para 910
+      expect(analysis.corvittoMetrics?.pacWater).toBeGreaterThan(5000);
+    });
+  });
 });

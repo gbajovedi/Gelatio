@@ -94,6 +94,38 @@ function findIngredient(
   return undefined;
 }
 
+const isValidNonNeg = (v: unknown): v is number =>
+  typeof v === 'number' && Number.isFinite(v) && v >= 0;
+
+/**
+ * Estima a fração mássica de etanol (g etanol / g ingrediente) para ingredientes alcoólicos.
+ */
+function estimateAlcoholMassRatio(nameLower: string, categoryLower: string): number {
+  const isAlcoholCategory = categoryLower.includes('álcool') || categoryLower.includes('alcool');
+  const alcoholRegex = /(álcool|alcool|cachaça|cachaca|whisky|conhaque|vodka|tequila|rum|vinho|espumante|licor|bailey|marsala|porto|\bgin\b|\bgim\b)/i;
+  if (!isAlcoholCategory && !alcoholRegex.test(nameLower)) {
+    return 0;
+  }
+
+  // Extrair graduação declarada no nome (ex: "96°", "40%")
+  const match = nameLower.match(/(\d+(?:[.,]\d+)?)\s*(?:°|%)/);
+  if (match) {
+    const abv = Math.min(100, Math.max(0, parseFloat(match[1].replace(',', '.')))) / 100;
+    // Conversão aproximada de % v/v para fração mássica m/m (densidade etanol 0.789 g/ml)
+    const ethanolMass = abv * 0.789;
+    const totalMass = ethanolMass + (1 - abv);
+    return totalMass > 0 ? ethanolMass / totalMass : 0;
+  }
+
+  if (nameLower.includes('álcool') || nameLower.includes('alcool')) return 0.95;
+  if (/(cachaça|cachaca|rum|whisky|conhaque|vodka|tequila|\bgin\b|\bgim\b)/i.test(nameLower)) return 0.34;
+  if (nameLower.includes('bailey')) return 0.14;
+  if (nameLower.includes('licor')) return 0.20;
+  if (nameLower.includes('marsala') || nameLower.includes('porto')) return 0.15;
+  if (nameLower.includes('vinho') || nameLower.includes('espumante')) return 0.10;
+  return 0.15;
+}
+
 /**
  * Calcula a tabela nutricional completa no padrão ANVISA (RDC 429/2020 e IN 75/2020)
  */
@@ -108,14 +140,18 @@ export function calculateAnvisaNutrition(
   ingredients.forEach(i => ingMap.set(i.name.toLowerCase().trim(), i));
 
   let totalRecipeWeight = 0;
-  let totalIngredientSugars = 0;
+  let totalAddedSugarsInput = 0;
+  let totalDairyLactose = 0;
   let totalFat = 0;
   let totalProtein = 0;
-  let totalMsnf = 0;
-  let totalOtherSolids = 0;
+  let totalDigestibleOtherCarbs = 0;
+  let totalZeroKcalPolyols = 0;
+  let totalCaloricPolyols = 0;
   let totalFiber = 0;
   let totalSodiumMg = 0;
   let totalSaturatedFat = 0;
+  let totalTransFat = 0;
+  let totalAlcoholGrams = 0;
   let intrinsicFruitSugars = 0;
 
   // Alérgenos acumulados
@@ -150,18 +186,30 @@ export function calculateAnvisaNutrition(
     const ingMsnf = (ing.msnf || 0) * g;
     const ingOtherSolids = (ing.otherSolids || 0) * g;
 
-    totalIngredientSugars += ingSugars;
     totalFat += ingFat;
     totalProtein += ingProtein;
-    totalMsnf += ingMsnf;
-    totalOtherSolids += ingOtherSolids;
 
     const cat = (ing.category || '').toLowerCase();
     const name = (ing.name || '').toLowerCase();
 
-    // 1. Fator de gordura saturada conforme a fonte lipídica (analítico se preenchido, senão heurístico)
-    let satRatio = ing.saturatedFatRatio !== undefined && ing.saturatedFatRatio >= 0 ? ing.saturatedFatRatio : 0.60;
-    if (ing.saturatedFatRatio === undefined) {
+    // Separação rigorosa de açúcares adicionados vs lactose intrínseca de laticínios não adoçados
+    const isDairy =
+      cat.includes('latic') ||
+      (ingMsnf > 0 && /(leite|creme|nata|iogurte|queijo|ricota|mascarpone|soro|manteiga|cream cheese)/i.test(name));
+    const isSweetenedDairy =
+      /(condensad|doce de leite|chocolate|achocolatado|açúcar|acucar|adoçad|adocad|caramelo|brigadeiro|nutella|bailey|bolo)/i.test(name);
+
+    if (isDairy && !isSweetenedDairy) {
+      // Se um laticínio não adoçado trouxer lactose já declarada em sugars (ex: UHT 20%), não somar como açúcar adicionado nem duplicar sobre MSNF
+      totalDairyLactose += ingSugars > 0 ? ingSugars : ingMsnf * 0.52;
+    } else {
+      totalAddedSugarsInput += ingSugars;
+      totalDairyLactose += ingMsnf * 0.52;
+    }
+
+    // 1. Fator de gordura saturada e trans conforme a fonte lipídica
+    let satRatio = isValidNonNeg(ing.saturatedFatRatio) ? ing.saturatedFatRatio : 0.60;
+    if (!isValidNonNeg(ing.saturatedFatRatio)) {
       if (name.includes('coco') || cat.includes('coco')) {
         satRatio = 0.90;
       } else if (name.includes('cacau') || name.includes('chocolate') || cat.includes('cacau')) {
@@ -188,25 +236,64 @@ export function calculateAnvisaNutrition(
     }
     totalSaturatedFat += ingFat * satRatio;
 
+    if (isValidNonNeg(ing.transFatRatio)) {
+      totalTransFat += ingFat * ing.transFatRatio;
+    }
+
     // 2. Fibras alimentares e açúcares intrínsecos de frutas intactas
-    if (ing.fiberRatio !== undefined && ing.fiberRatio >= 0) {
-      totalFiber += g * ing.fiberRatio;
+    let itemFiberGrams = 0;
+    if (isValidNonNeg(ing.fiberRatio)) {
+      itemFiberGrams = g * ing.fiberRatio;
       if (cat.includes('fruta') || cat.includes('polpa')) {
         intrinsicFruitSugars += ingSugars;
       }
     } else {
       if (cat.includes('fruta') || cat.includes('polpa')) {
-        totalFiber += g * 0.02; // Média 2% fibras em polpas de frutas
+        itemFiberGrams = g * 0.02; // Média 2% fibras em polpas de frutas
         intrinsicFruitSugars += ingSugars; // Frutas intactas não contam como açúcar adicionado pela ANVISA
       } else if (name.includes('cacau')) {
-        totalFiber += g * 0.30; // Cacau em pó 100% tem ~30% fibras solúveis/insolúveis
-      } else if (name.includes('inulina') || name.includes('polidextrose') || name.includes('fibra')) {
-        totalFiber += g * 0.90;
+        itemFiberGrams = g * 0.30; // Cacau em pó 100% tem ~30% fibras solúveis/insolúveis
+      } else if (
+        name.includes('inulina') ||
+        name.includes('polidextrose') ||
+        name.includes('fibra') ||
+        name.includes('pectina') ||
+        name.includes('neutro') ||
+        name.includes('goma') ||
+        name.includes('alfarroba') ||
+        name.includes('guar') ||
+        name.includes('tara')
+      ) {
+        itemFiberGrams = g * 0.90;
+      }
+    }
+    totalFiber += itemFiberGrams;
+
+    // 3. Classificação calórica correta de otherSolids (excluindo sal, fibras e polióis dos carboidratos 4 kcal/g)
+    if (ingOtherSolids > 0) {
+      if (name.includes('sal') || name.includes('cloreto')) {
+        // Minerais / sal não são carboidratos e têm 0 kcal/g
+      } else if (name.includes('eritritol')) {
+        // Eritritol entra em carboidratos na ANVISA, porém com fator energético 0 kcal/g (IN 75/2020)
+        totalZeroKcalPolyols += ingOtherSolids;
+      } else if (/(xilitol|maltitol|sorbitol|isomalte|lactitol)/i.test(name)) {
+        // Demais polióis têm fator energético oficial de 2,4 kcal/g (IN 75/2020)
+        totalCaloricPolyols += ingOtherSolids;
+      } else {
+        // Desconta a fração já contabilizada como fibra (2 kcal/g) antes de somar aos carboidratos de 4 kcal/g
+        const fiberFromOtherSolids = Math.min(ingOtherSolids, itemFiberGrams);
+        totalDigestibleOtherCarbs += Math.max(0, ingOtherSolids - fiberFromOtherSolids);
       }
     }
 
-    // 3. Sódio regulamentar
-    if (ing.sodiumMgPer100g !== undefined && ing.sodiumMgPer100g >= 0) {
+    // 4. Álcool etílico (IN 75/2020 Anexo XXII: 7 kcal/g)
+    const alcoholRatio = estimateAlcoholMassRatio(name, cat);
+    if (alcoholRatio > 0) {
+      totalAlcoholGrams += g * alcoholRatio;
+    }
+
+    // 5. Sódio regulamentar
+    if (isValidNonNeg(ing.sodiumMgPer100g)) {
       totalSodiumMg += (g / 100) * ing.sodiumMgPer100g;
     } else {
       if (name.includes('sal') || name.includes('cloreto')) {
@@ -229,17 +316,15 @@ export function calculateAnvisaNutrition(
   const safePortionGrams = Number.isFinite(portionGrams) && portionGrams > 0 ? portionGrams : 60;
   const safeContainerGrams = Number.isFinite(containerWeightGrams) && containerWeightGrams > 0 ? containerWeightGrams : 500;
 
-  // Lactose do leite (O SNGL contém ~52% de lactose)
-  const lactoseGrams = totalMsnf * 0.52;
-
-  // Açúcares adicionados: açúcares derivados de adoçantes e insumos adicionados (exclui açúcares intrínsecos de frutas intactas e lactose)
-  const totalAddedSugars = Math.max(0, totalIngredientSugars - intrinsicFruitSugars);
+  // Açúcares adicionados: exclui açúcares intrínsecos de frutas intactas e lactose
+  const totalAddedSugars = Math.max(0, totalAddedSugarsInput - intrinsicFruitSugars);
 
   // Açúcares totais: soma de açúcares adicionados + lactose + açúcares naturais de frutas
-  const totalSugars = totalAddedSugars + lactoseGrams + intrinsicFruitSugars;
+  const totalSugars = totalAddedSugars + totalDairyLactose + intrinsicFruitSugars;
 
-  // Carboidratos totais (Açúcares + outros carboidratos sólidos como amidos, fibras solúveis e maltodextrinas)
-  const totalCarbs = Math.max(totalSugars, totalSugars + (totalOtherSolids * 0.7));
+  // Carboidratos totais: açúcares + outros carboidratos digeríveis (amidos/maltodextrina) + polióis
+  const totalPolyols = totalZeroKcalPolyols + totalCaloricPolyols;
+  const totalCarbs = totalSugars + totalDigestibleOtherCarbs + totalPolyols;
 
   // Escala para 100g
   const scale100 = 100 / totalRecipeWeight;
@@ -248,28 +333,46 @@ export function calculateAnvisaNutrition(
 
   // Valores por 100g
   const carbs100 = totalCarbs * scale100;
+  const digestibleCarbs100 = (totalSugars + totalDigestibleOtherCarbs) * scale100;
+  const caloricPolyols100 = totalCaloricPolyols * scale100;
   const sugars100 = totalSugars * scale100;
   const addedSugars100 = totalAddedSugars * scale100;
   const protein100 = totalProtein * scale100;
   const fat100 = totalFat * scale100;
   const satFat100 = totalSaturatedFat * scale100;
-  const transFat100 = 0; // Gelato artesanal autêntico
+  const transFat100 = totalTransFat * scale100;
   const fiber100 = totalFiber * scale100;
+  const alcohol100 = totalAlcoholGrams * scale100;
   const sodium100 = totalSodiumMg * scale100;
-  const energyKcal100 = (carbs100 * 4) + (protein100 * 4) + (fat100 * 9) + (fiber100 * 2);
+  const energyKcal100 =
+    (digestibleCarbs100 * 4) +
+    (caloricPolyols100 * 2.4) +
+    (protein100 * 4) +
+    (fat100 * 9) +
+    (fiber100 * 2) +
+    (alcohol100 * 7);
   const energyKj100 = energyKcal100 * 4.184;
 
   // Valores por Porção
   const carbsPortion = totalCarbs * scalePortion;
+  const digestibleCarbsPortion = (totalSugars + totalDigestibleOtherCarbs) * scalePortion;
+  const caloricPolyolsPortion = totalCaloricPolyols * scalePortion;
   const sugarsPortion = totalSugars * scalePortion;
   const addedSugarsPortion = totalAddedSugars * scalePortion;
   const proteinPortion = totalProtein * scalePortion;
   const fatPortion = totalFat * scalePortion;
   const satFatPortion = totalSaturatedFat * scalePortion;
-  const transFatPortion = 0;
+  const transFatPortion = totalTransFat * scalePortion;
   const fiberPortion = totalFiber * scalePortion;
+  const alcoholPortion = totalAlcoholGrams * scalePortion;
   const sodiumPortion = totalSodiumMg * scalePortion;
-  const energyKcalPortion = (carbsPortion * 4) + (proteinPortion * 4) + (fatPortion * 9) + (fiberPortion * 2);
+  const energyKcalPortion =
+    (digestibleCarbsPortion * 4) +
+    (caloricPolyolsPortion * 2.4) +
+    (proteinPortion * 4) +
+    (fatPortion * 9) +
+    (fiberPortion * 2) +
+    (alcoholPortion * 7);
   const energyKjPortion = energyKcalPortion * 4.184;
 
   // Porções por embalagem garantidamente finitas
@@ -342,8 +445,8 @@ export function calculateAnvisaNutrition(
     {
       name: 'Gorduras trans',
       unit: 'g',
-      per100g: 0,
-      perPortion: 0,
+      per100g: +transFat100.toFixed(1),
+      perPortion: +transFatPortion.toFixed(1),
       dailyValuePct: undefined, // ANVISA não possui %VD para gorduras trans
       indent: true
     },

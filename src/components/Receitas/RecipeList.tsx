@@ -812,9 +812,9 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                 {/* Bloco Inferior: Cockpit de Insumos/Peso/Custo + Botões de Ação com mt-auto para alinhamento 100% perfeito */}
                 <div className="mt-auto pt-2 space-y-3" onClick={e => e.stopPropagation()}>
                   {/* Linha unificada: Insumos, Peso base e Custo/kg */}
-                  <div className="flex items-center justify-between gap-2 text-xs sm:text-sm text-slate-400 font-mono font-medium">
+                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 text-xs sm:text-sm text-slate-400 font-mono font-medium">
                     <span
-                      className="flex items-center gap-1.5"
+                      className="flex items-center gap-1.5 whitespace-nowrap"
                       title={m?.variegatoCount ? `${recipe.ingredients?.length ?? 0} insumos na calda base + ${m.variegatoCount} mescla(s) pós-congelamento` : 'Quantidade de insumos na fórmula'}
                     >
                       <Layers className="w-3.5 h-3.5 text-slate-500 shrink-0" />
@@ -827,7 +827,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                     </span>
 
                     <span
-                      className="flex items-center gap-1.5"
+                      className="flex items-center gap-1.5 whitespace-nowrap"
                       title={m?.variegatoWeight ? `Peso total do lote pronto: ${Math.round(m.caldaWeight || 0)}g calda + ${Math.round(m.variegatoWeight)}g mescla` : 'Peso base da calda'}
                     >
                       <Scale className="w-3.5 h-3.5 text-slate-500 shrink-0" />
@@ -837,7 +837,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({
                     </span>
 
                     <span
-                      className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/25 text-amber-300 font-bold text-xs"
+                      className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/25 text-amber-300 font-bold text-xs whitespace-nowrap"
                       title={m?.variegatoWeight ? `Custo consolidado por kg (calda + mesclas somadas)` : 'Custo estimado por kg de insumos'}
                     >
                       <span>

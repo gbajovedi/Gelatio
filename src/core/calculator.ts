@@ -363,8 +363,9 @@ export function calculateBatchAnalysis(
   };
 
   // 2. Diagnóstico Crioscópico de PAC na Água Livre
-  // PAC por kg de água pura = relPac / pctWater
-  const pacWater = pctWater > 0.1 ? Math.round(relPac / pctWater) : Math.round(relPac);
+  // PAC por kg de água pura = relPac / pctWater (com piso contínuo de 10% de água para evitar saltos bruscos)
+  const effectiveWaterForPac = pctWater > 0 ? Math.max(0.10, pctWater) : 1;
+  const pacWater = pctWater > 0 ? Math.round(relPac / effectiveWaterForPac) : Math.round(relPac);
 
   let vitrineStatus: 'firme' | 'ideal' | 'macio' = 'ideal';
   let vitrineLabel = 'Ideal p/ Vitrine (-12°C)';
@@ -416,6 +417,10 @@ export function calculateBatchAnalysis(
   const hasEmulsifier = items.some(it => /gema|ovo|lecitina|emulsificante|mono.*diglicer/i.test(it.name));
   let emulsionMetrics: EmulsionMetrics;
 
+  const isVeganContext =
+    style.name.toLowerCase().includes('vegano') ||
+    (pctMsnf < 0.005 && pctFat >= 0.02);
+
   if (pctMsnf < 0.015 && pctFat < 0.02) {
     // Sorbets de frutas (base água)
     const baseOverrun = Math.round(18 + Math.min(7, pctOtherSolids * 100));
@@ -426,6 +431,18 @@ export function calculateBatchAnalysis(
       overrunEstimatePct: baseOverrun,
       overrunRange: `${baseOverrun - 3}% a ${baseOverrun + 3}%`,
       advice: 'Overrun clássico de sorbet artesanal (18% a 25%), conferindo densidade refrescante e pureza de sabor da fruta.'
+    };
+  } else if (isVeganContext) {
+    // Gelatos Veganos / Plant-Based (gordura vegetal sem SLNG lácteo)
+    const baseOverrun = Math.round(25 + (hasEmulsifier ? 4 : 0) + (pctTotalSolids >= 0.34 ? 2 : 0));
+    const safeOverrun = Math.max(20, Math.min(34, baseOverrun));
+    emulsionMetrics = {
+      fatMsnfRatio: 0,
+      status: 'ideal',
+      statusLabel: 'Emulsão Vegetal (Plant-Based)',
+      overrunEstimatePct: safeOverrun,
+      overrunRange: `${safeOverrun - 3}% a ${safeOverrun + 3}%`,
+      advice: 'Emulsão estruturada sem proteínas lácteas (SLNG = 0%). Utilize fibras solúveis, proteínas vegetais ou lecitina de girassol/soja para estabilizar a água livre e aeração.'
     };
   } else {
     const rawRatio = pctMsnf > 0.005 ? (pctFat / pctMsnf) : (pctFat * 10);
@@ -532,8 +549,8 @@ export function calculateBatchAnalysis(
   let totalVariegatoLiquidVolumeLiters = 0;
 
   for (const v of variegatos) {
-    if (!v.grams || v.grams <= 0) continue;
-    const ing = ingredientsMap.get((v.name || '').toLowerCase().trim());
+    if (!v.name || !v.name.trim() || !v.grams || v.grams <= 0) continue;
+    const ing = ingredientsMap.get(v.name.toLowerCase().trim());
     const physical = resolveVariegatoDensity(v, ing);
     const volAeratedLiters = physical.density > 0 ? ((v.grams / 1000) / physical.density) : 0;
 
@@ -567,6 +584,7 @@ export function calculateBatchAnalysis(
     baseLiquidVolumeLiters: Math.round(baseLiquidVolumeLiters * 1000) / 1000,
     baseVolumeLiters: Math.round(baseVolumeLiters * 1000) / 1000,
     variegatoVolumeLiters: Math.round(totalVariegatoVolumeLiters * 1000) / 1000,
+    variegatoLiquidVolumeLiters: Math.round(totalVariegatoLiquidVolumeLiters * 1000) / 1000,
     totalVolumeLiters: Math.round(totalVolumeLiters * 1000) / 1000,
     baseOverrunPct: Math.round(baseOverrunPct),
     effectiveOverrunPct: Math.round(effectiveOverrunPct * 10) / 10,

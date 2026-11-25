@@ -204,6 +204,7 @@ export interface BatchAnalysis {
     baseLiquidVolumeLiters: number;
     baseVolumeLiters: number;
     variegatoVolumeLiters: number;
+    variegatoLiquidVolumeLiters?: number;
     totalVolumeLiters: number;
     baseOverrunPct: number;
     effectiveOverrunPct: number;

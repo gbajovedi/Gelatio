@@ -6,15 +6,18 @@ import initialIngredients from '../data/ingredients.json';
 import initialRecipes from '../data/recipes.json';
 import initialStyles from '../data/styles.json';
 import initialPreparations from '../data/preparations.json';
-import { DEFAULT_PRICING } from '../core/calculator';
-import { STORAGE_KEY as PRICING_STORAGE_KEY, PRICING_UPDATED_EVENT } from '../core/pricingStorage';
-import { THEME_STORAGE_KEY, THEME_CHANGE_EVENT } from '../core/theme';
+import { DEFAULT_PRICING, STORAGE_KEY_SHOW_ROUNDED, STORAGE_KEY_SORT_BY_WEIGHT } from '../core/calculator';
+import { STORAGE_KEY as PRICING_STORAGE_KEY, PRICING_UPDATED_EVENT, PRICING_UI_PREFS_KEY } from '../core/pricingStorage';
+import { THEME_STORAGE_KEY, THEME_CHANGE_EVENT, applyTheme } from '../core/theme';
 import {
   getUserCustomStyles,
   saveUserCustomStyles,
   getActivePresetId,
   saveStoredStyles,
   applyGoldStandardPreset,
+  applyCarpigianiPreset,
+  GOLD_STANDARD_STYLES,
+  isOfficialStyle,
   STYLES_UPDATED_EVENT,
   USER_CUSTOM_STYLES_KEY,
   STYLES_STORAGE_KEY,
@@ -89,10 +92,12 @@ export interface BackupResult {
   stockItemsCount?: number;
   batchesCount?: number;
   salesCount?: number;
+  adjustmentsCount?: number;
   pricingImported: boolean;
   themeImported: boolean;
   customStylesImported: boolean;
   stockImported?: boolean;
+  uiPreferencesImported?: boolean;
 }
 
 export class GelatoDatabase extends Dexie {
@@ -2293,14 +2298,50 @@ export class GelatoDatabase extends Dexie {
       console.warn('Erro ao ler themeMode para backup:', e);
     }
 
-    // Capturar estilos e balanceamentos personalizados do usuário
-    let customStyles = null;
+    // Capturar apenas estilos personalizados criados ou efetivamente modificados pelo usuário
+    // (evita embutir os 14 estilos oficiais Padrão Ouro intactos dentro do backup)
+    let customStyles: Record<string, StyleStandard> | null = null;
     let activePresetId = null;
     try {
-      customStyles = getUserCustomStyles();
+      const allCustom = getUserCustomStyles();
+      const filteredCustom: Record<string, StyleStandard> = {};
+      for (const [key, style] of Object.entries(allCustom)) {
+        if (!style) continue;
+        if (style.isCustom || !isOfficialStyle(key)) {
+          filteredCustom[key] = style;
+        } else {
+          const official = GOLD_STANDARD_STYLES[key];
+          if (
+            !official ||
+            JSON.stringify(style.min) !== JSON.stringify(official.min) ||
+            JSON.stringify(style.max) !== JSON.stringify(official.max) ||
+            style.pacDivisor !== official.pacDivisor
+          ) {
+            filteredCustom[key] = style;
+          }
+        }
+      }
+      customStyles = filteredCustom;
       activePresetId = getActivePresetId();
     } catch (e) {
       console.warn('Erro ao ler customStyles para backup:', e);
+    }
+
+    // Capturar preferências de UI e navegação armazenadas em localStorage
+    let uiPreferences: Record<string, string | null> | null = null;
+    if (typeof window !== 'undefined') {
+      try {
+        uiPreferences = {
+          [PRICING_UI_PREFS_KEY]: localStorage.getItem(PRICING_UI_PREFS_KEY),
+          gelatio_preparations_expanded_ingredients: localStorage.getItem('gelatio_preparations_expanded_ingredients'),
+          [STORAGE_KEY_SHOW_ROUNDED]: localStorage.getItem(STORAGE_KEY_SHOW_ROUNDED),
+          [STORAGE_KEY_SORT_BY_WEIGHT]: localStorage.getItem(STORAGE_KEY_SORT_BY_WEIGHT),
+          gelato_active_tab: localStorage.getItem('gelato_active_tab'),
+          gelato_active_recipe_id: localStorage.getItem('gelato_active_recipe_id')
+        };
+      } catch (e) {
+        console.warn('Erro ao ler uiPreferences para backup:', e);
+      }
     }
 
     const backup = {
@@ -2317,7 +2358,8 @@ export class GelatoDatabase extends Dexie {
       pricingParams,
       themeMode,
       customStyles,
-      activePresetId
+      activePresetId,
+      uiPreferences
     };
 
     return JSON.stringify(backup, null, 2);
@@ -2334,6 +2376,7 @@ export class GelatoDatabase extends Dexie {
     let stockItemsCount = 0;
     let batchesCount = 0;
     let salesCount = 0;
+    let adjustmentsCount = 0;
     let preparationsCount = 0;
 
     await this.transaction('rw', [this.ingredients, this.recipes, this.preparations, this.settings, this.productionBatches, this.stockItems, this.salesTransactions, this.stockAdjustments], async () => {
@@ -2404,6 +2447,7 @@ export class GelatoDatabase extends Dexie {
       }
       if (data.stockAdjustments && Array.isArray(data.stockAdjustments) && data.stockAdjustments.length > 0) {
         await this.stockAdjustments.bulkPut(data.stockAdjustments);
+        adjustmentsCount = data.stockAdjustments.length;
         stockImported = true;
       }
     });
@@ -2411,6 +2455,32 @@ export class GelatoDatabase extends Dexie {
     let pricingImported = false;
     let themeImported = false;
     let customStylesImported = false;
+    let uiPreferencesImported = false;
+
+    // Restaurar preferências de UI antes de notificar listeners
+    if (data.uiPreferences && typeof data.uiPreferences === 'object' && typeof window !== 'undefined') {
+      try {
+        const allowedKeys = [
+          PRICING_UI_PREFS_KEY,
+          'gelatio_preparations_expanded_ingredients',
+          STORAGE_KEY_SHOW_ROUNDED,
+          STORAGE_KEY_SORT_BY_WEIGHT,
+          'gelato_active_tab',
+          'gelato_active_recipe_id'
+        ];
+        for (const key of allowedKeys) {
+          const val = data.uiPreferences[key];
+          if (typeof val === 'string') {
+            localStorage.setItem(key, val);
+          } else if (val === null && mode === 'replace') {
+            localStorage.removeItem(key);
+          }
+        }
+        uiPreferencesImported = true;
+      } catch (err) {
+        console.warn('Erro ao restaurar uiPreferences do backup:', err);
+      }
+    }
 
     // Restaurar custos fixos e taxas de maquininha caso existam no backup
     if (data.pricingParams && typeof window !== 'undefined') {
@@ -2423,10 +2493,11 @@ export class GelatoDatabase extends Dexie {
       }
     }
 
-    // Restaurar preferência de tema caso exista no backup
+    // Restaurar preferência de tema e aplicar imediatamente no DOM sem exigir F5
     if (data.themeMode && typeof window !== 'undefined') {
       try {
         localStorage.setItem(THEME_STORAGE_KEY, data.themeMode);
+        applyTheme(data.themeMode);
         window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
         themeImported = true;
       } catch (err) {
@@ -2438,7 +2509,7 @@ export class GelatoDatabase extends Dexie {
     if (data.customStyles && typeof window !== 'undefined') {
       try {
         if (mode === 'replace') {
-          saveUserCustomStyles(data.customStyles);
+          saveUserCustomStyles({ ...GOLD_STANDARD_STYLES, ...data.customStyles });
         } else {
           const existing = getUserCustomStyles();
           const merged = { ...existing, ...data.customStyles };
@@ -2446,11 +2517,22 @@ export class GelatoDatabase extends Dexie {
         }
 
         const presetToSet = data.activePresetId || 'custom';
-        saveStoredStyles(getUserCustomStyles(), presetToSet);
+        if (presetToSet === 'gold') {
+          applyGoldStandardPreset();
+        } else if (presetToSet === 'carpigiani') {
+          applyCarpigianiPreset();
+        } else {
+          saveStoredStyles(getUserCustomStyles(), 'custom');
+        }
         customStylesImported = true;
       } catch (err) {
         console.warn('Erro ao restaurar customStyles do backup:', err);
       }
+    }
+
+    // Notificar todas as telas de Estoque, PDV e DRE para recarregamento imediato
+    if ((stockImported || mode === 'replace') && typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('gelato-stock-updated'));
     }
 
     return {
@@ -2460,10 +2542,12 @@ export class GelatoDatabase extends Dexie {
       stockItemsCount,
       batchesCount,
       salesCount,
+      adjustmentsCount,
       pricingImported,
       themeImported,
       customStylesImported,
-      stockImported
+      stockImported,
+      uiPreferencesImported
     };
   }
 
@@ -2507,6 +2591,7 @@ export class GelatoDatabase extends Dexie {
       } catch (e) {
         console.warn('Erro ao resetar customStyles:', e);
       }
+      window.dispatchEvent(new Event('gelato-stock-updated'));
     }
   }
 }

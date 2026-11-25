@@ -18,6 +18,7 @@ export interface DensityAndVolumeMetrics {
   caldaDensity: number;
   baseLiquidVolumeLiters: number;
   baseVolumeLiters: number;
+  variegatoLiquidVolumeLiters?: number;
   variegatoVolumeLiters: number;
   totalVolumeLiters: number;
   baseOverrunPct: number;
@@ -223,10 +224,14 @@ export const ProfitSimulator: React.FC<ProfitSimulatorProps> = ({
     densityAndVolume?.variegatoVolumeLiters !== undefined
       ? densityAndVolume.variegatoVolumeLiters
       : (totalVariegatoGrams > 0 ? (totalVariegatoGrams / 1000) / 1.25 : 0);
+  const variegatoLiquidVolLiters =
+    densityAndVolume?.variegatoLiquidVolumeLiters !== undefined
+      ? densityAndVolume.variegatoLiquidVolumeLiters
+      : variegatoVolLiters;
   const totalBatchVolLiters = baseAeratedVolLiters + variegatoVolLiters;
   const totalBatchVolMl = totalBatchVolLiters * 1000;
 
-  const totalLiquidVolLiters = baseLiquidVolLiters + variegatoVolLiters;
+  const totalLiquidVolLiters = baseLiquidVolLiters + variegatoLiquidVolLiters;
   const effectiveBatchOverrun =
     totalLiquidVolLiters > 0
       ? ((totalBatchVolLiters - totalLiquidVolLiters) / totalLiquidVolLiters) * 100

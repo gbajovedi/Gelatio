@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { StockItem, PaymentMethodType, SaleTransaction } from '../../types/stock';
 import { PricingParams } from '../../core/pricingStorage';
-import { recordSale, voidSaleTransaction, getPaymentMethodFeeRate } from '../../core/stockService';
+import { recordSale, voidSaleTransaction, getPaymentMethodFeeRate, STOCK_UPDATED_EVENT } from '../../core/stockService';
 import { db } from '../../db/database';
 import {
   ShoppingCart,
@@ -66,12 +66,17 @@ export const PosSalesScreen: React.FC<PosSalesScreenProps> = ({
     }
   }, [selectedStockItem]);
 
-  // Carregar histórico de vendas de hoje
+  // Carregar histórico de vendas de hoje (respeitando fuso horário local)
   const loadTodaySales = async () => {
     try {
       const sales = await db.salesTransactions.toArray();
-      const todayStr = new Date().toISOString().slice(0, 10);
-      const filtered = sales.filter(s => s.timestamp.startsWith(todayStr));
+      const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const filtered = sales.filter(s => {
+        const d = new Date(s.timestamp);
+        return d >= startOfToday && d < endOfToday;
+      });
       filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
       setTodaySales(filtered);
     } catch (e) {
@@ -81,6 +86,13 @@ export const PosSalesScreen: React.FC<PosSalesScreenProps> = ({
 
   useEffect(() => {
     loadTodaySales();
+    const handleStockUpdate = () => {
+      loadTodaySales();
+    };
+    window.addEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    return () => {
+      window.removeEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    };
   }, []);
 
   // Filtro de sabores para a grade de seleção rápida

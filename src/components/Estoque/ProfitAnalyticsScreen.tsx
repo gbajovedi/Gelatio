@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { SaleTransaction } from '../../types/stock';
 import { PricingParams } from '../../core/pricingStorage';
-import { calculateSalesDRE } from '../../core/stockService';
+import { calculateSalesDRE, STOCK_UPDATED_EVENT } from '../../core/stockService';
 import { db } from '../../db/database';
 import {
   TrendingUp,
@@ -42,6 +42,13 @@ export const ProfitAnalyticsScreen: React.FC<ProfitAnalyticsScreenProps> = ({ pr
 
   useEffect(() => {
     loadSales();
+    const handleStockUpdate = () => {
+      loadSales();
+    };
+    window.addEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    return () => {
+      window.removeEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    };
   }, []);
 
   // Filtragem de vendas conforme o período selecionado

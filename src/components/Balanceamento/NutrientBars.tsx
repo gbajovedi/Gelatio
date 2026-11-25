@@ -203,13 +203,16 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
         tooltipBody = `SLNG (${displayVal}%) está seguro dentro do teto seguro de ${(sandiness.maxSafeMsnf * 100).toFixed(1)}% para a água disponível. A lactose permanecerá estável em solução.`;
       }
     } else if (key === 'fat' && emulsion && emulsion.status !== 'sorbet') {
+      const isVeganEmulsion = emulsion.statusLabel.includes('Vegetal');
       icon = (
-        <span className="text-purple-400/90 hover:text-purple-300 transition-colors flex items-center" title="Razão Lipídica (Método Italiano)">
+        <span className="text-purple-400/90 hover:text-purple-300 transition-colors flex items-center" title={isVeganEmulsion ? 'Emulsão Vegetal (Plant-Based)' : 'Razão Lipídica (Método Italiano)'}>
           <Wind className="w-3.5 h-3.5" />
         </span>
       );
-      tooltipTitle = 'Razão Lipídica (Gordura : SLNG)';
-      tooltipBody = `Proporção atual de ${emulsion.fatMsnfRatio} : 1 (faixa ideal: 0.75 a 1.25). Estimativa de aeração calculada em ~${emulsion.overrunEstimatePct}% de ar.`;
+      tooltipTitle = isVeganEmulsion ? 'Emulsão Vegetal (Sem SLNG Lácteo)' : 'Razão Lipídica (Gordura : SLNG)';
+      tooltipBody = isVeganEmulsion
+        ? `${emulsion.advice} Estimativa de aeração calculada em ~${emulsion.overrunEstimatePct}% de ar.`
+        : `Proporção atual de ${emulsion.fatMsnfRatio} : 1 (faixa ideal: 0.75 a 1.25). Estimativa de aeração calculada em ~${emulsion.overrunEstimatePct}% de ar.`;
       tooltipExtra = (
         <div className="mt-2 pt-1.5 border-t border-purple-500/30 text-[11px] text-purple-300">
           Consulte o card <em>Overrun &amp; Emulsão</em> no topo para o gráfico de aeração.
@@ -507,10 +510,18 @@ export const NutrientBars: React.FC<NutrientBarsProps> = ({
                 Gordura : SLNG
               </span>
               <span className="text-lg xl:text-xl font-black font-mono tabular-nums text-white leading-tight">
-                {emulsion?.status === 'sorbet' ? 'Sorbet' : `${emulsion?.fatMsnfRatio} : 1`}
+                {emulsion?.status === 'sorbet'
+                  ? 'Sorbet'
+                  : emulsion?.statusLabel.includes('Vegetal')
+                  ? 'Vegetal'
+                  : `${emulsion?.fatMsnfRatio} : 1`}
               </span>
               <span className="text-[10px] text-slate-400 font-mono leading-none">
-                {emulsion?.status === 'sorbet' ? 'Base Água' : 'Alvo 0.75–1.25'}
+                {emulsion?.status === 'sorbet'
+                  ? 'Base Água'
+                  : emulsion?.statusLabel.includes('Vegetal')
+                  ? 'Plant-Based'
+                  : 'Alvo 0.75–1.25'}
               </span>
             </div>
           </div>

@@ -178,7 +178,10 @@ export const IngredientManager: React.FC<IngredientManagerProps> = ({ ingredient
   const handleOpenCalcModal = (ing: Ingredient) => {
     setCalculatorModalIng(ing);
     setCalcModalPrice(ing.packagePrice ?? '');
-    setCalcModalWeightGrams(ing.packageWeight ?? '');
+    const weightG = ing.packageWeight
+      ? (ing.packageUnit === 'kg' ? ing.packageWeight * 1000 : ing.packageWeight)
+      : '';
+    setCalcModalWeightGrams(weightG);
   };
 
   const handleSaveCalcModal = async () => {

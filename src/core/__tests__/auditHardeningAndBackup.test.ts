@@ -177,6 +177,121 @@ describe('Auditoria Técnica: Blindagem, Backup v5, ANVISA e Precificação', ()
       expect(result.items.find(i => i.name === 'Sódio')?.per100g).toBeGreaterThan(0);
     });
 
+    it('protege contra null explícito, honra transFatRatio, evita dupla contagem em laticínio UHT e aplica fatores de eritritol/fibras/álcool', () => {
+      const testIngs: Ingredient[] = [
+        {
+          id: 'uht_20',
+          name: 'Creme de Leite UHT 20%',
+          category: 'Laticínios',
+          costKg: 18,
+          sugars: 0.038,
+          fat: 0.20,
+          msnf: 0.065,
+          otherSolids: 0,
+          totalSolids: 0.27,
+          water: 0.73,
+          pod: 0.006,
+          pac: 0.038,
+          protein: 0.027,
+          hasAllergen: true,
+          saturatedFatRatio: null as unknown as number,
+          fiberRatio: null as unknown as number,
+          sodiumMgPer100g: null as unknown as number,
+          transFatRatio: 0.05
+        },
+        {
+          id: 'eritritol_1',
+          name: 'Eritritol',
+          category: 'Açúcares',
+          costKg: 45,
+          sugars: 0,
+          fat: 0,
+          msnf: 0,
+          otherSolids: 1.0,
+          totalSolids: 1.0,
+          water: 0,
+          pod: 0.7,
+          pac: 2.8,
+          protein: 0,
+          hasAllergen: false
+        },
+        {
+          id: 'sal_1',
+          name: 'Sal',
+          category: 'Outros',
+          costKg: 3,
+          sugars: 0,
+          fat: 0,
+          msnf: 0,
+          otherSolids: 1.0,
+          totalSolids: 1.0,
+          water: 0,
+          pod: 0,
+          pac: 5.5,
+          protein: 0,
+          hasAllergen: false
+        },
+        {
+          id: 'rum_1',
+          name: 'Rum',
+          category: 'Álcoois & Bebidas',
+          costKg: 60,
+          sugars: 0.12,
+          fat: 0,
+          msnf: 0,
+          otherSolids: 0,
+          totalSolids: 0.12,
+          water: 0.88,
+          pod: 0.12,
+          pac: 1.3,
+          protein: 0,
+          hasAllergen: false
+        }
+      ];
+
+      // 1. Laticínio não adoçado com sugars=0.038 + null ratios: não deve zerar satFat/sódio e addedSugars deve ser 0
+      const dairyRec: Recipe = {
+        id: 'rec_uht',
+        name: 'Teste UHT',
+        category: 'Gelatos de Leite',
+        targetStyle: 'Gelatos de Leite',
+        totalGrams: 1000,
+        ingredients: [
+          { name: 'Creme de Leite UHT 20%', grams: 990 },
+          { name: 'Sal', grams: 10 }
+        ]
+      };
+      const dairyNut = calculateAnvisaNutrition(dairyRec, testIngs, 100, 500);
+      expect(dairyNut.frontOfPack.values.addedSugars100g).toBe(0);
+      expect(dairyNut.frontOfPack.values.saturatedFat100g).toBeCloseTo(12.9, 1);
+      expect(dairyNut.items.find(i => i.name === 'Gorduras trans')?.per100g).toBeCloseTo(1.0, 1);
+      expect(dairyNut.frontOfPack.values.sodium100g).toBeGreaterThan(390);
+
+      // 2. Eritritol (0 kcal/g) + Rum (~0.34 etanol * 7 kcal/g)
+      const eritRec: Recipe = {
+        id: 'rec_erit',
+        name: 'Teste Eritritol',
+        category: 'Gelatos Zero Açúcar',
+        targetStyle: 'Gelatos Zero Açúcar',
+        totalGrams: 100,
+        ingredients: [{ name: 'Eritritol', grams: 100 }]
+      };
+      const eritNut = calculateAnvisaNutrition(eritRec, testIngs, 100, 500);
+      expect(eritNut.items.find(i => i.name === 'Valor energético')?.per100g).toBe(0);
+
+      const rumRec: Recipe = {
+        id: 'rec_rum',
+        name: 'Teste Rum',
+        category: 'Gelatos Alcoólicos',
+        targetStyle: 'Gelatos Alcoólicos',
+        totalGrams: 100,
+        ingredients: [{ name: 'Rum', grams: 100 }]
+      };
+      const rumNut = calculateAnvisaNutrition(rumRec, testIngs, 100, 500);
+      // 12g açúcar * 4 (48 kcal) + 34g álcool * 7 (238 kcal) = ~286 kcal
+      expect(rumNut.items.find(i => i.name === 'Valor energético')?.per100g).toBeCloseTo(286, -1);
+    });
+
     it('deve exibir disclaimer regulamentar da RDC 429/2020 na interface da tabela ANVISA', () => {
       expect(anvisaRaw).toContain('RDC 429/2020');
       expect(anvisaRaw).toContain('cálculo teórico fundamentado na composição');
@@ -297,12 +412,15 @@ describe('Auditoria Técnica: Blindagem, Backup v5, ANVISA e Precificação', ()
   });
 
   describe('4. Contrato do Backup Completo v5 e Restauração Segura (Database)', () => {
-    it('exportFullBackup deve gerar versão 5 incluindo as 4 tabelas de estoque e vendas', () => {
+    it('exportFullBackup deve gerar versão 5 incluindo as 4 tabelas de estoque, uiPreferences e filtrar estilos oficiais intactos', () => {
       expect(databaseRaw).toContain('version: 5');
       expect(databaseRaw).toContain('productionBatches');
       expect(databaseRaw).toContain('stockItems');
       expect(databaseRaw).toContain('salesTransactions');
       expect(databaseRaw).toContain('stockAdjustments');
+      expect(databaseRaw).toContain('uiPreferences');
+      expect(databaseRaw).toContain('gelato-stock-updated');
+      expect(databaseRaw).toContain('applyTheme(');
     });
 
     it('importBackup no modo replace deve limpar settings e as 4 tabelas de estoque', () => {

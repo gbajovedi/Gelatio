@@ -254,23 +254,16 @@ export const IngredientSlideOver: React.FC<IngredientSlideOverProps> = ({
                 const isAlreadyInRecipe = existingIngredientIds.includes(ing.id);
 
                 return (
-                  <div
+                  <button
                     key={ing.id}
+                    type="button"
                     onClick={() => {
                       onSelectIngredient(ing);
                       onClose();
                     }}
-                    className="p-3.5 rounded-2xl border border-slate-800 bg-slate-900/90 hover:bg-slate-800/60 hover:border-amber-500/40 transition-all cursor-pointer shadow-sm group select-none"
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        onSelectIngredient(ing);
-                        onClose();
-                      }
-                    }}
+                    className="w-full text-left p-3.5 rounded-2xl border border-slate-800 bg-slate-900/90 hover:bg-slate-800/60 hover:border-amber-500/40 transition-all cursor-pointer shadow-sm group select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
                     title={`Clique para adicionar ${ing.name} à receita`}
+                    aria-label={`Adicionar ${ing.name}`}
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="min-w-0 flex-1">
@@ -303,22 +296,15 @@ export const IngredientSlideOver: React.FC<IngredientSlideOverProps> = ({
                         </div>
                       </div>
 
-                      {/* Quick Add Button */}
-                      <button
-                        type="button"
-                        onClick={e => {
-                          e.stopPropagation();
-                          onSelectIngredient(ing);
-                          onClose();
-                        }}
-                        className="w-9 h-9 flex items-center justify-center bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 rounded-xl transition-all shadow-md shrink-0"
-                        title={`Adicionar ${ing.name} à receita`}
-                        aria-label={`Adicionar ${ing.name}`}
+                      {/* Quick Add Visual Indicator */}
+                      <span
+                        aria-hidden="true"
+                        className="w-9 h-9 flex items-center justify-center bg-amber-500 group-hover:bg-amber-400 group-active:scale-95 text-slate-950 rounded-xl transition-all shadow-md shrink-0"
                       >
                         <Plus className="w-4 h-4 stroke-[2.5]" />
-                      </button>
+                      </span>
                     </div>
-                  </div>
+                  </button>
                 );
               })
             )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   DollarSign,
   RotateCcw,
@@ -37,7 +37,8 @@ import {
   getPricingUIPreferences,
   savePricingUIPreferences,
   PricingUIPreferences,
-  PricingCostGroupExpanded
+  PricingCostGroupExpanded,
+  PRICING_UPDATED_EVENT
 } from '../../core/pricingStorage';
 
 export const PricingCalculator: React.FC = () => {
@@ -307,8 +308,14 @@ export const PricingCalculator: React.FC = () => {
   };
 
 
-  // Persistência automática no localStorage
+  const skipNextAutoSaveRef = useRef(false);
+
+  // Persistência automática no localStorage (ignora ciclo imediatamente após restauração externa/backup)
   useEffect(() => {
+    if (skipNextAutoSaveRef.current) {
+      skipNextAutoSaveRef.current = false;
+      return;
+    }
     saveStoredPricingParams(currentParams);
   }, [
     rent,
@@ -345,6 +352,67 @@ export const PricingCalculator: React.FC = () => {
     salesTaxPercent,
     sampleCaldaCostKg
   ]);
+
+  // Sincronizar estado em memória caso backup ou reset externo atualize o localStorage
+  useEffect(() => {
+    const syncFromStorage = () => {
+      const latest = getStoredPricingParams();
+      if (JSON.stringify(latest) === JSON.stringify(currentParams)) {
+        return;
+      }
+      skipNextAutoSaveRef.current = true;
+      setRent(latest.rent);
+      setElectricity(latest.electricity);
+      setWater(latest.water);
+      setTelecom(latest.telecom);
+      setPayroll(latest.payroll);
+      setOwnerSalary(latest.ownerSalary ?? 0);
+      setAccounting(latest.accounting);
+      setSoftware(latest.software);
+      setEquipmentMaintenance(latest.equipmentMaintenance ?? 250);
+      setEquipmentDepreciation(latest.equipmentDepreciation ?? 350);
+      setCleaningHygiene(latest.cleaningHygiene ?? 150);
+      setSecPackaging(latest.secPackaging);
+      setFixedTaxes(latest.fixedTaxes);
+      setLicensesAndPermits(latest.licensesAndPermits ?? 100);
+      setCommercialInsurance(latest.commercialInsurance ?? 0);
+      setPosRentalMonthly(latest.posRentalMonthly ?? 0);
+      setMarketing(latest.marketing);
+      setCustomCosts(Array.isArray(latest.customCosts) ? latest.customCosts : []);
+      setMonthlyUnits(latest.monthlyUnits);
+      setTubWeightGrams(latest.tubWeightGrams);
+      setTubPackCost(latest.tubPackCost);
+      setTargetMargin(latest.targetMargin);
+      setPricingMethod(latest.pricingMethod || (latest.targetMargin >= 100 ? 'markup' : 'margin'));
+      setCardFeeManual(latest.cardFee ?? 2.03);
+      setUseSalesMix(latest.useSalesMix ?? true);
+      setSelectedPlan(
+        latest.selectedPaymentPlan ||
+          (latest.cieloPlan === 'fluxo' ? 'd30' : latest.cieloPlan === 'negociado' ? 'outro' : 'd1')
+      );
+      if (latest.paymentPlans) {
+        setPaymentPlans({
+          d1: { ...DEFAULT_PAYMENT_PLANS.d1, ...latest.paymentPlans.d1 },
+          d30: { ...DEFAULT_PAYMENT_PLANS.d30, ...latest.paymentPlans.d30 },
+          outro: { ...DEFAULT_PAYMENT_PLANS.outro, ...latest.paymentPlans.outro }
+        });
+      }
+      setMixPix(latest.mixPix ?? 30);
+      setMixDebit(latest.mixDebit ?? 45);
+      setMixCreditSight(latest.mixCreditSight ?? 20);
+      setMixCreditInstallment(latest.mixCreditInstallment ?? 5);
+      setSalesTaxPercent(latest.salesTaxPercent);
+      setSampleCaldaCostKg(latest.sampleCaldaCostKg);
+      setUiPrefs(getPricingUIPreferences());
+    };
+
+    window.addEventListener(PRICING_UPDATED_EVENT, syncFromStorage);
+    window.addEventListener('storage', syncFromStorage);
+    return () => {
+      window.removeEventListener(PRICING_UPDATED_EVENT, syncFromStorage);
+      window.removeEventListener('storage', syncFromStorage);
+    };
+  });
 
   const handleResetToDefaults = () => {
     if (window.confirm('Deseja restaurar todos os custos fixos para os padrões recomendados da gelateria?')) {

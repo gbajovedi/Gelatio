@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Recipe, Ingredient, PricingSettings } from '../../types/gelato';
 import { DEFAULT_PACKAGING_FORMATS, PackagingFormat, ProductionBatch } from '../../types/stock';
-import { recordProductionBatch, calculateBatchCosts, calculateSuggestedPriceForFormat } from '../../core/stockService';
+import { recordProductionBatch, calculateBatchCosts, calculateSuggestedPriceForFormat, STOCK_UPDATED_EVENT } from '../../core/stockService';
 import { db } from '../../db/database';
 import { ChefHat, Package, Plus, Calendar, Clock, DollarSign, Sparkles, Check, History, Layers } from 'lucide-react';
 
@@ -94,6 +94,13 @@ export const ProductionScreen: React.FC<ProductionScreenProps> = ({
 
   useEffect(() => {
     loadRecentBatches();
+    const handleStockUpdate = () => {
+      loadRecentBatches();
+    };
+    window.addEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    return () => {
+      window.removeEventListener(STOCK_UPDATED_EVENT, handleStockUpdate);
+    };
   }, []);
 
   const handleSelectFormat = (fmt: PackagingFormat) => {
